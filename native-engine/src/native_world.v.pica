@@ -1,0 +1,36 @@
+; Model-space world path. Keep clip-space UI/viewmodel shader unchanged.
+.fvec tilt[4]
+.fvec world[80]
+.constf constants(0.0, 1.0, 0.5, -1.0)
+.out outpos position
+.out outcolor color
+.out outuv0 texcoord0
+.out outuv1 texcoord1
+.out outuv2 texcoord2
+.alias inpos v0
+.alias incolor v1
+.alias uv0 v2
+.alias uv1 v3
+.alias uv2 v4
+.proc main
+ ; Position W carries the first row of a rigid-part matrix in the palette.
+ ; Restore homogeneous W before applying that matrix.
+ mova a0.x, inpos.wwww
+ mov r0.xyz, inpos
+ mov r0.w, constants.y
+ dp4 r1.x, world[a0.x], r0
+ dp4 r1.y, world[a0.x+1], r0
+ dp4 r1.z, world[a0.x+2], r0
+ dp4 r1.w, world[a0.x+3], r0
+ dp4 outpos.x, tilt[0], r1
+ dp4 outpos.y, tilt[1], r1
+ ; Row 2 already maps N64 depth to PICA [-W,0]. Avoid float24 Z-W
+ ; cancellation after transforming distant world vertices.
+ mov outpos.z, r1.z
+ mov outpos.w, r1.w
+ mov outcolor, incolor
+ mov outuv0, uv0
+ mov outuv1, uv1
+ mov outuv2, uv2
+ end
+.end

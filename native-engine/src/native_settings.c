@@ -1,0 +1,177 @@
+/* Small native preferences, independent of the N64 EEPROM bit layout. */
+#include "native_settings.h"
+#include "native_console.h"
+#include <errno.h>
+#include <stdio.h>
+#include <string.h>
+static int style=-1,crosshair,watch_colour,aspect=-1,aa=1,fps_limit=60,sensitivity=100,sharpness=0,vignette=0,bloom=0,grain=0,skin=0,glass=1,lod=1,view_distance=2;
+static int dynamic_lod=1,vignette_mode,audio_mixer=1;
+int native_setting_audio_mixer(void){return __atomic_load_n(&audio_mixer,__ATOMIC_RELAXED);}
+static int unlock_all,guard_visibility,guard_ai_hz=30;
+int native_setting_guard_visibility(void){return __atomic_load_n(&guard_visibility,__ATOMIC_RELAXED);}
+int native_setting_guard_ai_hz(void){return __atomic_load_n(&guard_ai_hz,__ATOMIC_RELAXED);}
+int native_setting_unlock_all(void){return __atomic_load_n(&unlock_all,__ATOMIC_RELAXED);}
+static unsigned render_state;
+static int game_values[7]={-1,-1,-1,-1,-1,-1,-1};
+static int volumes[2]={-1,-1};
+static char settings_path[512];
+static int config_missing;
+int native_setting_lod(void){return __atomic_load_n(&lod,__ATOMIC_RELAXED);}
+int native_setting_lod_strength(void){int v=native_setting_lod();return v==4?__atomic_load_n(&dynamic_lod,__ATOMIC_RELAXED):v;}
+void native_setting_dynamic_lod(int v){if(v>=1 && v<=3)__atomic_store_n(&dynamic_lod,v,__ATOMIC_RELAXED);}
+unsigned native_setting_render_state(void){return __atomic_load_n(&render_state,__ATOMIC_RELAXED);}
+void native_setting_set_render_state(unsigned v){__atomic_store_n(&render_state,v,__ATOMIC_RELAXED);}
+int native_setting_vignette_mode(void){return __atomic_load_n(&vignette_mode,__ATOMIC_RELAXED);}
+
+int native_setting_view_distance(void){return __atomic_load_n(&view_distance,__ATOMIC_RELAXED);}
+int native_setting_glass(void){return __atomic_load_n(&glass,__ATOMIC_RELAXED);}
+int native_setting_skin(void){return __atomic_load_n(&skin,__ATOMIC_RELAXED);}
+int native_setting_style(void){return __atomic_load_n(&style,__ATOMIC_RELAXED);}
+int native_setting_crosshair(void){return __atomic_load_n(&crosshair,__ATOMIC_RELAXED);}
+int native_setting_watch(void){return __atomic_load_n(&watch_colour,__ATOMIC_RELAXED);}
+int native_setting_aspect(void){return __atomic_load_n(&aspect,__ATOMIC_RELAXED);}
+int native_setting_vignette(void){return __atomic_load_n(&vignette,__ATOMIC_RELAXED);}
+int native_setting_grain(void){return __atomic_load_n(&grain,__ATOMIC_RELAXED);}
+int native_setting_bloom(void){return __atomic_load_n(&bloom,__ATOMIC_RELAXED);}
+int native_setting_sharpness(void){return __atomic_load_n(&sharpness,__ATOMIC_RELAXED);}
+int native_setting_sensitivity(void){return __atomic_load_n(&sensitivity,__ATOMIC_RELAXED);}
+int native_setting_fps(void){return __atomic_load_n(&fps_limit,__ATOMIC_RELAXED);}
+int native_setting_aa(void){return __atomic_load_n(&aa,__ATOMIC_RELAXED);}
+int native_setting_game(int index){return index==7?native_setting_aspect():index>=0 && index<7?__atomic_load_n(&game_values[index],__ATOMIC_RELAXED):-1;}
+int native_setting_volume(int effects){return __atomic_load_n(&volumes[effects!=0],__ATOMIC_RELAXED);}
+static void save(void) {
+    if(!settings_path[0])return;
+    char temporary[520];snprintf(temporary,sizeof temporary,"%s.tmp",settings_path);
+    FILE *f=fopen(temporary,"w");if(!f)return;
+    int ok=fprintf(f,"EOGSETTINGS1\ncontrol_style=%d\ncrosshair_colour=%d\nwatch_colour=%d\naspect=%d\nn64_aa=%d\nfps_limit=%d\nlook_sensitivity=%d\nsharpness=%d\nvignette=%d\nbloom=%d\nfilm_grain=%d\nwatch_skin=%d\nglass_detail=%d\nlod_strength=%d\nview_distance=%d\nvignette_mode=%d\n",
+                   native_setting_style(),native_setting_crosshair(),native_setting_watch(),native_setting_aspect(),native_setting_aa(),native_setting_fps(),native_setting_sensitivity(),native_setting_sharpness(),native_setting_vignette(),native_setting_bloom(),native_setting_grain(),native_setting_skin(),native_setting_glass(),native_setting_lod(),native_setting_view_distance(),native_setting_vignette_mode())>0;
+    if(fprintf(f,"audio_mixer=%d\n",native_setting_audio_mixer())<0)ok=0;
+    if(fprintf(f,"guard_visibility=%d\nguard_ai_hz=%d\n",native_setting_guard_visibility(),native_setting_guard_ai_hz())<0)ok=0;
+    if(fprintf(f,"unlock_everything=%d\n",native_setting_unlock_all())<0)ok=0;
+    for(int i=0;i<7;i++)if(fprintf(f,"game_option_%d=%d\n",i,native_setting_game(i))<0)ok=0;
+    if(fprintf(f,"music_volume=%d\neffects_volume=%d\n",native_setting_volume(0),native_setting_volume(1))<0)ok=0;
+    if(fclose(f))ok=0;
+    if(!ok){remove(temporary);return;}
+    if(rename(temporary,settings_path)==0)return;
+    /* SD filesystems may reject renaming over an existing destination. */
+    char backup[520];snprintf(backup,sizeof backup,"%s.bak",settings_path);
+    remove(backup);
+    if(rename(settings_path,backup)!=0)return;
+    if(rename(temporary,settings_path)==0)remove(backup);
+    else rename(backup,settings_path);
+}
+static void update(int *field,int value,int minimum,int maximum) {
+    if(value<minimum || value>maximum)return;
+    if(__atomic_exchange_n(field,value,__ATOMIC_RELAXED)!=value)save();
+}
+void native_setting_set_guard_visibility(int v){update(&guard_visibility,v,0,1);}
+void native_setting_set_guard_ai_hz(int v){if(v==30 || v==15 || v==5)update(&guard_ai_hz,v,5,30);}
+void native_setting_set_unlock_all(int v){update(&unlock_all,v,0,1);}
+void native_setting_set_audio_mixer(int v){update(&audio_mixer,v,0,1);}
+void native_setting_set_skin(int v){update(&skin,v,0,4);}
+void native_setting_set_lod(int v){if(v==4 && native_setting_lod()!=4)native_setting_dynamic_lod(1);update(&lod,v,0,4);}
+void native_setting_set_vignette_mode(int v){update(&vignette_mode,v,0,3);}
+void native_setting_set_view_distance(int v){update(&view_distance,v,0,3);}
+void native_setting_set_glass(int v){update(&glass,v,0,1);}
+void native_setting_set_style(int v){update(&style,v,0,9);}
+void native_setting_set_crosshair(int v){update(&crosshair,v,0,5);}
+void native_setting_set_watch(int v){update(&watch_colour,v,0,5);}
+void native_setting_set_aspect(int v){update(&aspect,v,0,2);}
+void native_setting_set_vignette(int v){update(&vignette,v,0,2);}
+void native_setting_set_grain(int v){update(&grain,v,0,2);}
+void native_setting_set_bloom(int v){update(&bloom,v,0,2);}
+void native_setting_set_sharpness(int v){update(&sharpness,v,0,6);}
+void native_setting_set_sensitivity(int v){if(v%25==0)update(&sensitivity,v,25,200);}
+void native_setting_set_fps(int v){if(v==30 || v==60)update(&fps_limit,v,30,60);}
+void native_setting_set_aa(int v){update(&aa,v,0,1);}
+void native_setting_set_game(int index,int v){if(index==7)native_setting_set_aspect(v);else if(index>=0 && index<7)update(&game_values[index],v,0,index==6?2:1);}
+void native_setting_set_volume(int effects,int v){update(&volumes[effects!=0],v,0,32767);}
+void native_settings_init(const char *directory) {
+    guard_visibility=0;guard_ai_hz=30;unlock_all=0;audio_mixer=1;dynamic_lod=1;vignette_mode=0;render_state=0;
+    style=-1;crosshair=watch_colour=0;aspect=-1;aa=1;fps_limit=60;sensitivity=100;sharpness=vignette=bloom=grain=skin=0;glass=1;lod=1;view_distance=2;settings_path[0]=0;config_missing=0;
+    for(int i=0;i<7;i++)game_values[i]=-1;
+    volumes[0]=volumes[1]=-1;
+    if(!directory || snprintf(settings_path,sizeof settings_path,"%s/native-options.ini",directory)>=(int)sizeof settings_path){settings_path[0]=0;return;}
+    FILE *f=fopen(settings_path,"r");
+    if(!f && errno==ENOENT) {
+        /* Recover the last complete file if power/exit interrupted FAT's
+         * backup-and-replace step. Its presence is not a first launch. */
+        char backup[520];snprintf(backup,sizeof backup,"%s.bak",settings_path);
+        if(rename(backup,settings_path)==0)f=fopen(settings_path,"r");
+    }
+    if(!f){config_missing=errno==ENOENT;return;}
+    char line[128]={0};int s=-1,c=0,w=0,a=-1,q=1,fps=60,sens=100,sharp=0,vig=0,glow=0,noise=0,watchskin=0,glassdetail=1,lodstrength=1,viewdistance=2,vigmode=0;
+    int mixer=1,unlocked=0,guardvisible=0,guardhz=30;
+    int games[7]={-1,-1,-1,-1,-1,-1,-1},music=-1,effects=-1;
+    int ok=fgets(line,sizeof line,f)!=NULL && !memcmp(line,"EOGSETTINGS1\n",13);
+    unsigned found=0;
+    while(ok && fgets(line,sizeof line,f)) {
+        if(sscanf(line,"control_style=%d",&s)==1)found|=1;
+        else if(sscanf(line,"crosshair_colour=%d",&c)==1)found|=2;
+        else if(sscanf(line,"watch_colour=%d",&w)==1)found|=4;
+        else if(sscanf(line,"aspect=%d",&a)==1)found|=8;
+        else if(sscanf(line,"n64_aa=%d",&q)==1)found|=16;
+        else if(sscanf(line,"vignette=%d",&vig)==1){}
+        else if(sscanf(line,"vignette_mode=%d",&vigmode)==1){}
+        else if(sscanf(line,"film_grain=%d",&noise)==1){}
+        else if(sscanf(line,"watch_skin=%d",&watchskin)==1){}
+        else if(sscanf(line,"glass_detail=%d",&glassdetail)==1){}
+        else if(sscanf(line,"lod_strength=%d",&lodstrength)==1){}
+        else if(sscanf(line,"view_distance=%d",&viewdistance)==1){}
+        else if(sscanf(line,"bloom=%d",&glow)==1){}
+        else if(sscanf(line,"sharpness=%d",&sharp)==1){}
+        else if(sscanf(line,"look_sensitivity=%d",&sens)==1){}
+        else if(sscanf(line,"fps_limit=%d",&fps)==1){}
+        else if(sscanf(line,"music_volume=%d",&music)==1){}
+        else if(sscanf(line,"effects_volume=%d",&effects)==1){}
+        else if(sscanf(line,"guard_visibility=%d",&guardvisible)==1){}
+        else if(sscanf(line,"guard_ai_hz=%d",&guardhz)==1){}
+        else if(sscanf(line,"unlock_everything=%d",&unlocked)==1){}
+        else if(sscanf(line,"audio_mixer=%d",&mixer)==1){}
+        else {int index,value;if(sscanf(line,"game_option_%d=%d",&index,&value)==2 && index>=0 && index<7)games[index]=value;}
+    }
+    ok=ok && !ferror(f) && (found&15)==15 && s>=-1 && s<=9 && c>=0 && c<=5 && w>=0 && w<=5 && a>=-1 && a<=2 && q>=0 && q<=1;
+    if(guardvisible<0 || guardvisible>1 || (guardhz!=30 && guardhz!=15 && guardhz!=5))ok=0;
+    if(unlocked<0 || unlocked>1 || mixer<0 || mixer>1)ok=0;
+    if(fps!=30 && fps!=60)ok=0;
+    if(sens<25 || sens>200 || sens%25 || sharp<0 || sharp>6 || vig<0 || vig>2 || glow<0 || glow>2 || noise<0 || noise>2 || watchskin<0 || watchskin>4 || glassdetail<0 || glassdetail>2 || lodstrength<0 || lodstrength>4 || viewdistance<0 || viewdistance>3 || vigmode<0 || vigmode>3)ok=0;
+    for(int i=0;i<7;i++)if(games[i]<-1 || games[i]>(i==6?2:1))ok=0;
+    if(music< -1 || music>32767 || effects< -1 || effects>32767)ok=0;
+    fclose(f);
+    if(ok){guard_visibility=guardvisible;guard_ai_hz=guardhz;unlock_all=unlocked;audio_mixer=mixer;style=s;crosshair=c;watch_colour=w;aspect=a;aa=q;fps_limit=fps;sensitivity=sens;sharpness=sharp;vignette=vig;vignette_mode=vigmode;bloom=glow;grain=noise;skin=watchskin;glass=glassdetail==2?1:glassdetail;lod=lodstrength;view_distance=viewdistance;memcpy(game_values,games,sizeof games);volumes[0]=music;volumes[1]=effects;}
+}
+int native_settings_apply_console_defaults(int model) {
+    /* Existence, not parse success, controls first-launch detection. Never
+     * replace an existing user's choices, even when their file is invalid. */
+    if(!config_missing)return 0;
+    int newer=native_console_is_new(model);
+    style=newer?8:9;aspect=newer?1:0;fps_limit=30;aa=0;
+    game_values[0]=1;sharpness=4;vignette=1;vignette_mode=1;
+    glass=newer?0:1;lod=newer?1:4;view_distance=newer?1:3;
+    config_missing=0;
+    save();
+    return 1;
+}
+const char *native_colour_name(int is_watch,int value) {
+    static const char *const watch_names[]={"Green\n","White\n","Amber\n","Red\n","Blue\n","Gold\n"};
+    static const char *const sight_names[]={"Original\n","White\n","Green\n","Amber\n","Red\n","Blue\n"};
+    if(is_watch)return watch_names[value>=0 && value<6?value:0];
+    return sight_names[value>=0 && value<6?value:0];
+}
+const char *native_string(unsigned id) {
+    switch(id) {
+    case 0xf000:return "1.5 Vesper\n";
+    case 0xf001:return "1.6 Jinx\n";
+    case 0xf010:return "Crosshair\n";
+    case 0xf011:return "Watch colour\n";
+    case 0xf013:return "FPS limit\n";
+    case 0xf012:return "Supersampling\n";
+    default:return NULL;
+    }
+}
+
+/* UI order is independent of persistent option identifiers. */
+int native_menu_option_at(int index) {
+    static const unsigned char rows[]={0,15,3,4,5,6,7,9,14,10,13,22,23,21,27,28,8,11,16,17,24,18,19,12,20,1,2,25,26};
+    return index>=0 && index<(int)sizeof rows?rows[index]:-1;
+}

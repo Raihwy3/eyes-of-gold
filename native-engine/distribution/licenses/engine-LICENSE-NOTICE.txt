@@ -1,0 +1,13 @@
+GoldenEye 007 engine - license scope
+
+This engine includes code inherited from the GoldenEye 007 decompilation through:
+https://github.com/jkdansereau/goldeneye-pc-port
+Revision: fda76b69837e6c5aae436e0d3e798989e49b06d2
+
+The upstream NOTICE states that the inherited n64decomp/007 game sources have no
+explicit license. There is therefore no engine-wide MIT license to reproduce.
+Do not interpret the PC-port license, the 3DS additions, the project name or the
+user-supplied-ROM requirement as a license for that inherited code or game assets.
+
+The PC port's own MIT terms and original notice are preserved separately as
+upstream-LICENSE.txt and upstream-NOTICE.txt in the parent folder.

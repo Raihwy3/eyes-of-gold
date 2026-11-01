@@ -1,0 +1,1484 @@
+{
+  "files": 368,
+  "bytes": 7810980,
+  "python_syntax": "passed",
+  "copied_native_source_equality": "Verified at export; two build scripts subsequently fixed during isolated build test.",
+  "upstream_included": false,
+  "roms_or_generated_binaries_included": false,
+  "full_clean_build": "Passed in isolated local clone after build-script fixes; upstream and ROM supplied locally; network download and console execution not tested.",
+  "inventory": [
+    {
+      "path": ".gitignore",
+      "sha256": "8020bfbf482cc3d0049ecdc676273a38b62a144ffd168d9181b1972f69c79146"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "cf70dca21a07053c33cb75eacc30be420783ce814a18ab3f63017a9ecd1b255d"
+    },
+    {
+      "path": "Makefile",
+      "sha256": "ffe6dffb22dceec5a7ff9be9bdf78eed5183e0636a2e1263f10074582123e879"
+    },
+    {
+      "path": "NOTICE.md",
+      "sha256": "21b599618b67a669e0b35867e0739531f2a8f6b1d677e7d4c12385f00e778bec"
+    },
+    {
+      "path": "README.md",
+      "sha256": "d44a4ff93ca4beb8909756fb21fd7b49c1fd21645b110f11012da77d279857cd"
+    },
+    {
+      "path": "SOURCE-RELEASE.md",
+      "sha256": "4637e31ee5586a9a4bfa22624bcee112092d18730767c91360dd427c68822e8d"
+    },
+    {
+      "path": "docs/clean-build-test.md",
+      "sha256": "ebd59a10dd5041aca1510b913262f7f2bdf239d3a6f24b533e1d6055e8c22232"
+    },
+    {
+      "path": "docs/rom-data-release.md",
+      "sha256": "bf1e4419fc7f1fe30fefefaedfe9fedf341972e7e75b69721c13651566fc5bdf"
+    },
+    {
+      "path": "icon.png",
+      "sha256": "48e1e1812b24846592760a8d21d19f7cf8c1678923b9d1dc6625e26d48f63c0e"
+    },
+    {
+      "path": "launcher-icon.png",
+      "sha256": "48e1e1812b24846592760a8d21d19f7cf8c1678923b9d1dc6625e26d48f63c0e"
+    },
+    {
+      "path": "native-engine/CONSOLE-ASSET-CONVERSION.md",
+      "sha256": "9a5b820a9445d524876594bc8bfc51a873e5141ffeff1d830e1f7fab58324119"
+    },
+    {
+      "path": "native-engine/LICENSE",
+      "sha256": "effdd39b5ed9bd36814c226078bb6a70fc7dcf4b80dc6eadf0dbc906aa090c78"
+    },
+    {
+      "path": "native-engine/NOTICE.md",
+      "sha256": "f1426bdf93ab0387da6fd1071f388d1d0ea5b3ff5f8879a127fa450c42d32f29"
+    },
+    {
+      "path": "native-engine/README.md",
+      "sha256": "27e9ad7e02d5537aea20936af73481591e4dd0b62b314e59fcf4ec57a004d99d"
+    },
+    {
+      "path": "native-engine/distribution/GAME-README.txt",
+      "sha256": "30eadae12cc102fd1559511ff6f479d33f996a185632a06cb21d6faed05a6156"
+    },
+    {
+      "path": "native-engine/distribution/LICENSE.txt",
+      "sha256": "1759b3c53a5d4f83063138117d671a902e4ff207def65022d03b3b812db0e14d"
+    },
+    {
+      "path": "native-engine/distribution/NOTICE.txt",
+      "sha256": "0f3b875e2f09eb90d13f8f3ea056c49a82e586ba6e78e1f5bf25a39b03d7e923"
+    },
+    {
+      "path": "native-engine/distribution/licenses/SOURCES.txt",
+      "sha256": "d5d240e9db6db60a004f0824596d79930a9aff2f3e7fd97ca7043141db206403"
+    },
+    {
+      "path": "native-engine/distribution/licenses/citro3d-LICENSE.txt",
+      "sha256": "25dceef8628ad7869c8636d46d825eec187e1e5baa7521bc4ae2d18b39eef56e"
+    },
+    {
+      "path": "native-engine/distribution/licenses/engine-LICENSE-NOTICE.txt",
+      "sha256": "ed9d1899eb2de998d5df247af3fa1fd3fbdf36d6b7a347020bd95a642d37a6ac"
+    },
+    {
+      "path": "native-engine/distribution/licenses/eyes-of-gold-LICENSE-NOTICE.txt",
+      "sha256": "115bd71466e0f74a4799b1590880e5b38df8e21325baad3625df2b3d005efeb9"
+    },
+    {
+      "path": "native-engine/distribution/licenses/eyes-of-gold-MIT-LICENSE.txt",
+      "sha256": "cf70dca21a07053c33cb75eacc30be420783ce814a18ab3f63017a9ecd1b255d"
+    },
+    {
+      "path": "native-engine/distribution/licenses/gcc-runtime-GPL-3.0.txt",
+      "sha256": "9d004ea21276d448725b6ff5ce367fdf4d5c15165a3d6a60df2e651effffb614"
+    },
+    {
+      "path": "native-engine/distribution/licenses/gcc-runtime-exception.txt",
+      "sha256": "8d38432fc81722a7efcf1efd755749ac90ae7845dc9a6ce951d24516b8013f95"
+    },
+    {
+      "path": "native-engine/distribution/licenses/libctru-LICENSE.txt",
+      "sha256": "100b230a77bfd1d0b4fb47cd5c964f84f8f9fcae0fc3066e407ffb7d8c904553"
+    },
+    {
+      "path": "native-engine/distribution/licenses/newlib-LICENSE.txt",
+      "sha256": "d088bd6a1210c4d4df829632a88c3f1a0ff2780f8409638199f777e17c766c4a"
+    },
+    {
+      "path": "native-engine/engine-state-review.json",
+      "sha256": "a2f6781c40f0fd5b74bf345e359838aedacdbacdc127fc84ea7049590064d17d"
+    },
+    {
+      "path": "native-engine/include/PR/R4300.h",
+      "sha256": "29f18d55284f085e2775e49651e78c341642cdda4c85f12c613c6c7476fbe525"
+    },
+    {
+      "path": "native-engine/include/PR/gbi.h",
+      "sha256": "efa254bbfc116edd0d218fb2adb688d6e21cd0dbf15aa0d2a6d2c253432dcf0a"
+    },
+    {
+      "path": "native-engine/include/PR/os.h",
+      "sha256": "65fb1d45a2d6b40785f99f48deba2e079588391cb60e95ac80d7f75269c91323"
+    },
+    {
+      "path": "native-engine/include/SDL.h",
+      "sha256": "2284ee6c7a7166c85a9c64f09d8f47b6c71af53c4317ebecf6477bdb5537f367"
+    },
+    {
+      "path": "native-engine/include/bstring.h",
+      "sha256": "3cf8d595a6e756945ad719c66d1f7d5f57cde4d8b7b97e921ca8dfdb8d5c8872"
+    },
+    {
+      "path": "native-engine/include/engine_probe.h",
+      "sha256": "1a8d3a3194f72405dd4e62e97f124d600f9f69b97b14cb4d5d75fabc04a84bda"
+    },
+    {
+      "path": "native-engine/include/include/bstring.h",
+      "sha256": "2055fa90f6015d2fc78a2d43982e2b1e6757a15a363c3728de31d507321fb198"
+    },
+    {
+      "path": "native-engine/include/include/string.h",
+      "sha256": "9bc0d88817a6d1ed4f9cbbecebd257231060026c71dcaf86f40b63aa5b997034"
+    },
+    {
+      "path": "native-engine/include/native_aa.h",
+      "sha256": "2ea181aafcb74cfa84ea49d17e480af740185f206a90b6bc1ce717b7de14dbc7"
+    },
+    {
+      "path": "native-engine/include/native_aspect.h",
+      "sha256": "1cd15dd9a4fa88fc968c46b3423db8adf40c32de75f185a108fae1b0f5b4abba"
+    },
+    {
+      "path": "native-engine/include/native_assets.h",
+      "sha256": "1626fcdc1a170c5543476a6b6c7eec9b41a06170c45996dc85a9286c8244b16d"
+    },
+    {
+      "path": "native-engine/include/native_audio.h",
+      "sha256": "376ae917048f3780431265b5bd8e025d4e3ffc01440d2c5431fb4115cab8b79e"
+    },
+    {
+      "path": "native-engine/include/native_audio_pcm.h",
+      "sha256": "fb923e6bee45baef6c87e13279c569d850d04fcf521e87d51ad3e0a5fd885bf4"
+    },
+    {
+      "path": "native-engine/include/native_baked_lod.h",
+      "sha256": "52204ef1e24bb959f7d4552a810b997f17968ea14531b36a80a117398933eff6"
+    },
+    {
+      "path": "native-engine/include/native_baked_mesh_lod.h",
+      "sha256": "10c11386c00ac71e8595f0de75958471ce959706582b7f315280d8d2956c84da"
+    },
+    {
+      "path": "native-engine/include/native_boot_progress.h",
+      "sha256": "972a4fb459649e35f1056e2409e01bf64efba95e399bd2196c7644356ffb2ebb"
+    },
+    {
+      "path": "native-engine/include/native_bottom.h",
+      "sha256": "f13f604fbb6a271f313e143622c09a53d5fde8004a7d0c975add9b52cd288d1e"
+    },
+    {
+      "path": "native-engine/include/native_bottom_engine.h",
+      "sha256": "2ee1a0a11ceeaef29a08965526557bb40922b1d574afbdd94c5c3be798d98b7a"
+    },
+    {
+      "path": "native-engine/include/native_bottom_front.h",
+      "sha256": "d6bf5271abb3539d9e7d1071c14a151be282911a7b4e3c5a7d4c1a02fcc039d8"
+    },
+    {
+      "path": "native-engine/include/native_bottom_watch.h",
+      "sha256": "0b504eba261b2c7d11c62a5cdf26e4bdc9557bcee1095263274ba1bdc685fdac"
+    },
+    {
+      "path": "native-engine/include/native_cart.h",
+      "sha256": "adfd188f2d1242c421b775cf7cf4cdb3f8404537bd31e8a0ed52ba337175e115"
+    },
+    {
+      "path": "native-engine/include/native_clip_colour.h",
+      "sha256": "dad161cdc49ec1bb4ad9fd99641292badedcd6599bd5b92f415e59601a3cc489"
+    },
+    {
+      "path": "native-engine/include/native_console.h",
+      "sha256": "04d3d2b2a059fdabdc8fb10a79df5d16d90e416641fceb353463c792cd66de2e"
+    },
+    {
+      "path": "native-engine/include/native_controls.h",
+      "sha256": "96ac1b8ae14d4b2b94acc8586300e469cefa5e80f728c197e70ab443119d3860"
+    },
+    {
+      "path": "native-engine/include/native_convert.h",
+      "sha256": "b5b5c0652deb5c7659f6534d2b4d2d758ac37f13c1b565af0f24f1a3b18a073a"
+    },
+    {
+      "path": "native-engine/include/native_cpu_room_bounds.h",
+      "sha256": "c6be05a269ca0dcbd9609d354736cc0430c1c5b2d417aca2746b8b2ff93d2a02"
+    },
+    {
+      "path": "native-engine/include/native_cull.h",
+      "sha256": "ac3b2c7104e270ab072a8d10809b5b08a322b874f7080d8caaeb081f44b28342"
+    },
+    {
+      "path": "native-engine/include/native_derived.h",
+      "sha256": "24b215bad66e65fae96ede7dfc4079bfe39305b5f6201908b5328d789b7a1f78"
+    },
+    {
+      "path": "native-engine/include/native_detail.h",
+      "sha256": "7c8d4b4751ba7c3a00056a20a7eb3e6b925a42d5cc571d37ff81768340f4490f"
+    },
+    {
+      "path": "native-engine/include/native_display.h",
+      "sha256": "653982071de9c3c5e74924e16c82ed72218a0dfe08246bafec60d65f29ce3fe1"
+    },
+    {
+      "path": "native-engine/include/native_distance_fog.h",
+      "sha256": "a141eda3c9efb52d8f451220ad2cd83b236cd23f17c17841dd9a0a23c3f99517"
+    },
+    {
+      "path": "native-engine/include/native_distance_fog_emit.h",
+      "sha256": "05e74bf2044e1694d00b5a056c4d1058ea157d2caeec117e819c0d9fc306acde"
+    },
+    {
+      "path": "native-engine/include/native_distance_room.h",
+      "sha256": "0bdea0db20dfb39faab2efcec50632b18271ecd48a0b1613f613bfcb8bfbbd8f"
+    },
+    {
+      "path": "native-engine/include/native_dsp_mix.h",
+      "sha256": "765253aa835f5837e164919f6b6251708127b2dda7a987a61ccf3c692a5a57a3"
+    },
+    {
+      "path": "native-engine/include/native_dynamic_lod.h",
+      "sha256": "720ee785f8214e891d2fe47fad5130fe1587b9fe9d18171362c88a6b6bfc7c63"
+    },
+    {
+      "path": "native-engine/include/native_effects.h",
+      "sha256": "c71f6fe8dc7b2216f41ad58c713897cc41043627378fde8108fcb76d8e2a2463"
+    },
+    {
+      "path": "native-engine/include/native_frame_limit.h",
+      "sha256": "cd46e6a7b9c88c3dbe1ef2b0c49c5947abcdf776a4c3f63b011221c4deee5679"
+    },
+    {
+      "path": "native-engine/include/native_front_menu.h",
+      "sha256": "f36154a241c8beb1b8620e0938dc4861e10681eb26db86ad9839c8062f5fe301"
+    },
+    {
+      "path": "native-engine/include/native_game.h",
+      "sha256": "56196a9006c17fa2ce4e522b153ccebf8573777e2d9dc2277a4b7b48455f8a34"
+    },
+    {
+      "path": "native-engine/include/native_glass.h",
+      "sha256": "bc0215b257c3fa83ad9e547198a3d1a6e2bf5d6daa0deee570ddbe204b3e2cd6"
+    },
+    {
+      "path": "native-engine/include/native_glyph_sample.h",
+      "sha256": "2cdda47a4c8c0a7278e40909890e92ccc5fc7c53f5467c9ea01a9f01f86a2d9a"
+    },
+    {
+      "path": "native-engine/include/native_gpu_bounds.h",
+      "sha256": "9e8c0bee4f844e4ba720f4dab8349f81fa2b5628de89c29b600d666eee5760f9"
+    },
+    {
+      "path": "native-engine/include/native_gpu_world.h",
+      "sha256": "51adf1cea5254330319a0cd98d8bb86d30f6f01a96554a1fb5a1b28a0dc9b56b"
+    },
+    {
+      "path": "native-engine/include/native_graphics.h",
+      "sha256": "b191328feeaebf47c1b900d500e3f7f1f7d04f6400edc735334b7bbbaf764368"
+    },
+    {
+      "path": "native-engine/include/native_guard_activity.h",
+      "sha256": "b5fc43be4fa2ae62d172408504522772c254a66072855222186188dd71f7fb6f"
+    },
+    {
+      "path": "native-engine/include/native_guard_activity_impl.h",
+      "sha256": "5fd21841117907bd997174ef810f1131da3baa391cba57dc02d203c24a56893e"
+    },
+    {
+      "path": "native-engine/include/native_guard_pose.h",
+      "sha256": "84037d615e2d5cc940ccaeec8c693dfe80bf82cfa0b4e7ca6cad63afb6ad2a8b"
+    },
+    {
+      "path": "native-engine/include/native_guard_profile.h",
+      "sha256": "2900a61ea984aa459339e9604322bb118d1caa5a14128aca8f422073b8c9f99b"
+    },
+    {
+      "path": "native-engine/include/native_inflate.h",
+      "sha256": "406f02ccc4cf60d551dd7f61f0d51d38eaaeb68245b1b94f8f91cf8aab488d6c"
+    },
+    {
+      "path": "native-engine/include/native_input.h",
+      "sha256": "2d885683dcef5e3f7ea63767a1fdc4b25b89e1329ec80b3233951e84740b11ae"
+    },
+    {
+      "path": "native-engine/include/native_lod_scope.h",
+      "sha256": "945ca3a52bee7904bea5b65566df8fd7cbfedbf6335a70f608accc4e840315c2"
+    },
+    {
+      "path": "native-engine/include/native_log_buffer.h",
+      "sha256": "82da7ad9d8cfed14110d4067e6966c3a216cb03acb7ac736d5c8d60d5454bb14"
+    },
+    {
+      "path": "native-engine/include/native_log_policy.h",
+      "sha256": "30dfd4b9193ff81b57a05b163c162bcb503d315f83c0d6753c6c74905e83a17f"
+    },
+    {
+      "path": "native-engine/include/native_menu_focus.h",
+      "sha256": "074724f0dbeeabd50983753b1d6e88f326319a7eca81575fe9b8b281370b5c32"
+    },
+    {
+      "path": "native-engine/include/native_menu_options.h",
+      "sha256": "ba9e2a00b6b430093d853fa8abaf8347dbef6b6de9f44fc8c0841a970e68827d"
+    },
+    {
+      "path": "native-engine/include/native_menu_state.h",
+      "sha256": "27cbcfc0ef38d8dfa79df74c3cd12ba6299834e769e5ca595c4339b96406dd2b"
+    },
+    {
+      "path": "native-engine/include/native_mesh_lod.h",
+      "sha256": "e5da285e459174b72e666c63b10be3219dd61ea06709ff64b2b5691643f8e3d1"
+    },
+    {
+      "path": "native-engine/include/native_model_facing.h",
+      "sha256": "8369ef7606924053a4729f5e489e8a10c7e54ba09231036fbb970603ed443733"
+    },
+    {
+      "path": "native-engine/include/native_motion.h",
+      "sha256": "b3b991eb0910101961dd2652463a572cce2353f3d4a5b705e9f21962ce87f166"
+    },
+    {
+      "path": "native-engine/include/native_object_batch.h",
+      "sha256": "035a78a826f230826e17b8038888de74761659cb206fefaa63bfa54d3f68867c"
+    },
+    {
+      "path": "native-engine/include/native_objectives_capture.h",
+      "sha256": "fc25ea28589e30b9db8d4acb531df6bb4a1405ff4e441896a4394b7e113d148f"
+    },
+    {
+      "path": "native-engine/include/native_objectives_capture_impl.h",
+      "sha256": "2509e7ef0be42e0eb7376eb4f80a6febd7ccbc44d14384056d385725dc6247bb"
+    },
+    {
+      "path": "native-engine/include/native_options_bridge.h",
+      "sha256": "8aa47fd74555a1253f18cb7bf68d0a7fd67603fb9f75d567f67496053e5bd3bd"
+    },
+    {
+      "path": "native-engine/include/native_pad.h",
+      "sha256": "e7a9de28f06524eaf09ecdb42be2a68179bac56128f001e143d9e805dcea257d"
+    },
+    {
+      "path": "native-engine/include/native_pickup.h",
+      "sha256": "e3d0512fd779aba52356747d615dbc382ffc445c30f1a953488750551dc84256"
+    },
+    {
+      "path": "native-engine/include/native_prop_detail.h",
+      "sha256": "de0be132a0d940b6c62b0645843675956a2ced4071461cc96f7ae77bbc09abdb"
+    },
+    {
+      "path": "native-engine/include/native_ram.h",
+      "sha256": "1de9825008826175b5c44bd37244871aa0cba3018b2a37a8fb1d7fb67b502bf8"
+    },
+    {
+      "path": "native-engine/include/native_rare_skin.h",
+      "sha256": "c19db98ee8e687438a1ee48a7cfcfc8bf003a650fa01ad0861ae2c4c886dfcc8"
+    },
+    {
+      "path": "native-engine/include/native_render_reference.h",
+      "sha256": "6181bea56da353ba0708edfb63921a28c3944ea60ae1c2dcb254ab91081d952e"
+    },
+    {
+      "path": "native-engine/include/native_result_ui.h",
+      "sha256": "ff8aba40d0b24ef27498304de9e57ba22dfb1d23c317827b77063a28ad75d0bb"
+    },
+    {
+      "path": "native-engine/include/native_retained_index.h",
+      "sha256": "17a1b0fcf210e444cadefcf2675d55858f55f2197b188b2ab63137c0c15506a2"
+    },
+    {
+      "path": "native-engine/include/native_rle.h",
+      "sha256": "fde4c0b559ba29299950ec8c1c22e88f5cf47f251ec19ae7fa9079da85934fda"
+    },
+    {
+      "path": "native-engine/include/native_rom_data.h",
+      "sha256": "a11319dbf8e5a92f720c5d1c17a4fd3c6db7bb1dccd1ba8c22ee7292db1938b3"
+    },
+    {
+      "path": "native-engine/include/native_room.h",
+      "sha256": "f2a1e15b9c490cf9b8e0c350892932d274ebf787d640140780f23531273ff0f8"
+    },
+    {
+      "path": "native-engine/include/native_room_packet_scope.h",
+      "sha256": "54b192432e931808b8df36a6f637307ea29639c231deb5d9f2b89461b6652f0a"
+    },
+    {
+      "path": "native-engine/include/native_room_packets.h",
+      "sha256": "41d12a6b13f84aa59672c15496bc81bc1bed565def2aa8bf13bd4f69598d53cf"
+    },
+    {
+      "path": "native-engine/include/native_room_packets_runtime.h",
+      "sha256": "264c97a2dd7449b0b05ad392f4e7834dc41b3efd1fcd516413922bfae582e3a3"
+    },
+    {
+      "path": "native-engine/include/native_room_render.h",
+      "sha256": "167c005ef7c823bb3f8b6838c1f24e1e880fa601d346bf9fdc6b2e6fdc6d0aca"
+    },
+    {
+      "path": "native-engine/include/native_rsp_profile.h",
+      "sha256": "0cc6cd26a0e79b0563f1296dc7cf78659c941c5d02b399efeccb2431323f45c4"
+    },
+    {
+      "path": "native-engine/include/native_scenery_batches.h",
+      "sha256": "2011831359621c21560fa5e307a3371f072e9ed2b1f340a91347fea9393b79e2"
+    },
+    {
+      "path": "native-engine/include/native_scenery_cache.h",
+      "sha256": "b73ebfea637dd04d5fc31117ea4cdfcecfdf22255f6593713080b2d4a4636977"
+    },
+    {
+      "path": "native-engine/include/native_scenery_scope.h",
+      "sha256": "a4e869229e0059d989d2b0b7640fc1637dd980879884e15efcae1937f0d21968"
+    },
+    {
+      "path": "native-engine/include/native_settings.h",
+      "sha256": "9e5e08514b0355c96154296e0994b1d16171b140ccb82503dc8a523528e293d5"
+    },
+    {
+      "path": "native-engine/include/native_setup_lod.h",
+      "sha256": "57c70db9efa5c9483631412b44ce72a37647a49160e275b1e84732706712b962"
+    },
+    {
+      "path": "native-engine/include/native_stage_limits.h",
+      "sha256": "318dc9adcfd1699dbcadd09002c39b4adc559c467d3f9c0f7dabeb57d84a1672"
+    },
+    {
+      "path": "native-engine/include/native_test_assert.h",
+      "sha256": "1361395eb554cc6cf4e6ed2f87f23219ae98510d22885bcf5ca85d070842cba3"
+    },
+    {
+      "path": "native-engine/include/native_theme.h",
+      "sha256": "648581e71de9d79615bd5e504ce129e99e672291fc6ff53579b39d5234514b7d"
+    },
+    {
+      "path": "native-engine/include/native_unorm.h",
+      "sha256": "231068f4df2f109146dd73d8969b847ebb24f9845e060266aee7b25ce9b4f3af"
+    },
+    {
+      "path": "native-engine/include/native_version.h",
+      "sha256": "7da3a7f62240ae241761f5abdeeb72c142f404b8cf911da8a02e0a13fde2a61e"
+    },
+    {
+      "path": "native-engine/include/native_viewmodel.h",
+      "sha256": "3a502848554a911e3ccbfa1c64a539fe4c89f84e7796d1344c0114cafaf02c51"
+    },
+    {
+      "path": "native-engine/include/native_vignette.h",
+      "sha256": "86451d3e4286a03d6b6e2ef715af11e8dea4a40954ad37993be1f3e098fa69ac"
+    },
+    {
+      "path": "native-engine/include/native_watch_environment.h",
+      "sha256": "a4ad66d11f969dc3e8999969d18951646f5cf1aba64d9ddff2471b0cc3685b72"
+    },
+    {
+      "path": "native-engine/include/native_watch_mirror.h",
+      "sha256": "6629038f09d9f8573ff1ab3cc32f89de5880c2bb4ceb8a8d94cc7f3dff81aa70"
+    },
+    {
+      "path": "native-engine/include/native_watch_options.h",
+      "sha256": "b6b3c81afe52cefcb5ca69c650f8d0e7ec61c21a01aadeca90d4ffa16771730e"
+    },
+    {
+      "path": "native-engine/include/native_watch_skin.h",
+      "sha256": "fc7fbd1b1ddcabd5cb2017d08b389e3e60f517a59b43a389c24f8cb5b8cd28db"
+    },
+    {
+      "path": "native-engine/include/native_watch_skin_mesh.h",
+      "sha256": "fb7bb5a845897583b5f0ea398efefad5a5cfa66bd31f89c931333880849d32db"
+    },
+    {
+      "path": "native-engine/include/native_watch_ui.h",
+      "sha256": "0726aadbd6daf93fdac36d94967af8ba63f3dd1d356a7ebcfba9ffdd694b1c7f"
+    },
+    {
+      "path": "native-engine/include/native_work_profile.h",
+      "sha256": "3a6c5b97251ed7a460cf02bd919bf82759bbf51648f409084dfa60d740730fb9"
+    },
+    {
+      "path": "native-engine/include/pica_alpha_product.h",
+      "sha256": "c0f144052523dc32d66411237a6ac12915dd4eb26de760adf587afb67f6d0236"
+    },
+    {
+      "path": "native-engine/include/pica_batch.h",
+      "sha256": "a5ca5ac2413608184f02b3d242cf015520bcb948260f4ec105879efa060db5ae"
+    },
+    {
+      "path": "native-engine/include/pica_combiner.h",
+      "sha256": "c8ac8cb2af6f815d3daf0b258cbbd57aef4bc74f49d63494aa14061c5b15112a"
+    },
+    {
+      "path": "native-engine/include/pica_decal_depth.h",
+      "sha256": "bf97d0fea377f5c679f9fb4c9300d7e5bbbe2801e48e51eb3f61abea3f0fa4fd"
+    },
+    {
+      "path": "native-engine/include/pica_depth.h",
+      "sha256": "c14ccfdd647810689264fa070654372d1c90da62ed31f32c2cd6d428f1ec8eed"
+    },
+    {
+      "path": "native-engine/include/pica_fog.h",
+      "sha256": "d983d5f9a4befe9a9e74348a6cfba20f18e5db1a6cc111106482f3a0c5800286"
+    },
+    {
+      "path": "native-engine/include/pica_inputs.h",
+      "sha256": "09dd6542c7548dbcd7e2e3ec03f424a44fa2e44bd2498b71149e8f7e1f081062"
+    },
+    {
+      "path": "native-engine/include/pica_lod_inputs.h",
+      "sha256": "37673b6b435bcee28c6de39a807e0cb3ff04b350c5942b95f9d03aa1c3c50e99"
+    },
+    {
+      "path": "native-engine/include/pica_mesh_cache.h",
+      "sha256": "f3cb3864f48ad89db974b36e4db9a25a7e209dc3062455fe89587d03fe54421e"
+    },
+    {
+      "path": "native-engine/include/pica_noise.h",
+      "sha256": "0fdd780da7deb4ad5d9cccc5757f0bd6d0aa4fd0ef81b3a1a9844ad85809b8e9"
+    },
+    {
+      "path": "native-engine/include/pica_proven_inputs.h",
+      "sha256": "83a205972f054c36933d0cbbcffe58a82ec650167fca5b5d11902a0d0dddf5a9"
+    },
+    {
+      "path": "native-engine/include/pica_retained_mesh.h",
+      "sha256": "8b83a71e1c341c6dcb7eb538bf2c5de80dc28161dc7189168fa188b3b07e68f5"
+    },
+    {
+      "path": "native-engine/include/pica_sharpness.h",
+      "sha256": "1d96473503a50e548980ef2009f0b224bf474a009b178383263322af21eb892d"
+    },
+    {
+      "path": "native-engine/include/pica_static_attributes.h",
+      "sha256": "d2d0cbea0a123db98bdd9dbbaff09b68dfe13899c79453bae88542445526d446"
+    },
+    {
+      "path": "native-engine/include/pica_tev_cache.h",
+      "sha256": "cb4be23869695d382bb1efa2ea16cd90b10442bd820c49f29bc11d0707867691"
+    },
+    {
+      "path": "native-engine/include/pica_texcoord.h",
+      "sha256": "ac116bef091403a4e397af4839b7a37f673fa2340504c8e6cbee10ce78943aaa"
+    },
+    {
+      "path": "native-engine/include/pica_watch_mirror.h",
+      "sha256": "cce8125d85ae9ac259eb041f0b2208559ea0e2779cedd0a9aa04fa524ab7883e"
+    },
+    {
+      "path": "native-engine/include/platform.h",
+      "sha256": "e4ada66668ebe0b978050911000722629c51175a81cbb00e2e887da130502be8"
+    },
+    {
+      "path": "native-engine/include/portaddr.h",
+      "sha256": "2b2e2c8841b9e5f76b2ffa72b94d8f4a42a56fcbc20a84f8bb12102c8ef6e20a"
+    },
+    {
+      "path": "native-engine/include/prelude.h",
+      "sha256": "cb524bc447d7484522a0e53234f854797dbd1e8e88c1bb91bb085bf061f60ac4"
+    },
+    {
+      "path": "native-engine/include/sys/mman.h",
+      "sha256": "fb1e4628346b9cbdeacc8c734fe056b72a987ddbc97c7446f24d5e5ce2a88183"
+    },
+    {
+      "path": "native-engine/rom-code-pool-review.json",
+      "sha256": "dedc3332ae13b0c7bfd4ca0ea78c136655d563018e24c5425c23bb354fbf0c4e"
+    },
+    {
+      "path": "native-engine/rom-data-code-review.json",
+      "sha256": "99923f94f4aa6abd070592b8b740f0cd65892959dd1027bbcd9e22647eb57ace"
+    },
+    {
+      "path": "native-engine/rom-data-layout.json",
+      "sha256": "419f73ae8dc66b79809b1c0ce8c9a82536463781144f91a5edd7e2b03f939acc"
+    },
+    {
+      "path": "native-engine/rom-string-layout.json",
+      "sha256": "201e59bb9e388124c108e805d4e52684b66538594f8eb299dbd99c7a0e7afac2"
+    },
+    {
+      "path": "native-engine/source-files.json",
+      "sha256": "96f4dbc9de00e9c8838f9346b3e554529d8e36efad5c5d76fd4548b5e4b59e44"
+    },
+    {
+      "path": "native-engine/src/audio_3ds.c",
+      "sha256": "a39a48122d05a069768df6738c849515c806952d4d4c6d9422e313acda059b5b"
+    },
+    {
+      "path": "native-engine/src/baseline_options.c",
+      "sha256": "80aa6c1e201035ea276c15a015235921ce0b8a431721cf36782ab2a271b62586"
+    },
+    {
+      "path": "native-engine/src/bottom_3ds.c",
+      "sha256": "9521631b486f948ea73fca31a6bd99b8c99491f56808df66881de76d274e21c8"
+    },
+    {
+      "path": "native-engine/src/display_3ds.c",
+      "sha256": "0c4a4381c26beec04fec5b3808a0af0ce764fb6b6ee788e45adac7847a98d6f5"
+    },
+    {
+      "path": "native-engine/src/engine_probe.c",
+      "sha256": "13520d99af8be6239efadef927993ff8532ed55973c8eeac1bffb4c50afb9610"
+    },
+    {
+      "path": "native-engine/src/game_memory.c",
+      "sha256": "0e5f0fab87f9281b4dda941a6c991a74c11052a5f96cb7f8fa00f8c7334153ed"
+    },
+    {
+      "path": "native-engine/src/gfx_native.cpp",
+      "sha256": "6ab4624a6876d633a877653608b6f458e9aeb1b50fc704eea987b4e6f89448e0"
+    },
+    {
+      "path": "native-engine/src/gfx_pica.cpp",
+      "sha256": "e248e5a4b41d2bf6e3ac8b4a3666df1fe631a8c51a959e9dd6f97b32a6d803d1"
+    },
+    {
+      "path": "native-engine/src/graphics_host_check.cpp",
+      "sha256": "e1830ecbe6bb7d346ac1a537b5deb0482668aef3e9952fb82e27e5306883edb3"
+    },
+    {
+      "path": "native-engine/src/graphics_scene.c",
+      "sha256": "8fffb828706e9eab5bf872de7ddf47f9d7f90eb0b480152678926dc81a77bffe"
+    },
+    {
+      "path": "native-engine/src/input_3ds.c",
+      "sha256": "f4807ff889d0dcadce84e5ce5922f0037d0746bbd07510a486ea6c66ff51855d"
+    },
+    {
+      "path": "native-engine/src/native_assets.c",
+      "sha256": "2a893c332694f1f6f3026077b32146517223605340f077763c59a4d1d717e573"
+    },
+    {
+      "path": "native-engine/src/native_audio_bank.c",
+      "sha256": "c6fd337487d3329034ec9a1b2826c24f18f36fb43d3e9973b33ae0edcf957ba9"
+    },
+    {
+      "path": "native-engine/src/native_audio_pcm.c",
+      "sha256": "e1da92f017f8e38615d65821cdc869390184777e7f59fc82f7aa167dd8c91dc3"
+    },
+    {
+      "path": "native-engine/src/native_cart.c",
+      "sha256": "26e4164cd321e04f54099454145f88a31f5e45a4b307de5c3ed3d173a7dc80a7"
+    },
+    {
+      "path": "native-engine/src/native_clip.v.pica",
+      "sha256": "d9c8566cd2cd366c20bc9b9e7a59368e0c127c574abd8b328d1aae7f63c66a88"
+    },
+    {
+      "path": "native-engine/src/native_controls.c",
+      "sha256": "f1f572008699fbf5bd41f1719a1d93856004ef09b10f029d265926913b7fbd7b"
+    },
+    {
+      "path": "native-engine/src/native_convert.c",
+      "sha256": "e9914376e3824c13d0a11025eec5bdded218e4dac171dd4bc1edd19b9ffacd18"
+    },
+    {
+      "path": "native-engine/src/native_derived.cpp",
+      "sha256": "5fc7a1cb08e12aea467eb0dcbf84dd0757ab1b3a42fd11b0e30cc329ce83c4e9"
+    },
+    {
+      "path": "native-engine/src/native_dsp_mix.c",
+      "sha256": "8abce097e5325ca22beabaa3a8e0ce2e50f31175dbbe64fa16fbe11359c9928e"
+    },
+    {
+      "path": "native-engine/src/native_effects.c",
+      "sha256": "02f7f6381045a0d0cefb98e105913b5def24068e3a7e769ca3eadacb4dc3e8ab"
+    },
+    {
+      "path": "native-engine/src/native_game.c",
+      "sha256": "3ef69c698918fba1ca4069d7d929de4ff32fd5cfa8b616f8c1527ce29c45037c"
+    },
+    {
+      "path": "native-engine/src/native_game_platform.c",
+      "sha256": "db6261980de92a85a8038ef85163e95d1c2fc838606b98495dd4aa930dbc9fc6"
+    },
+    {
+      "path": "native-engine/src/native_game_video.cpp",
+      "sha256": "684cbd909030f7ab94fc5a5742da02b7aca1f87dbd2306b02758b63395ada127"
+    },
+    {
+      "path": "native-engine/src/native_motion.c",
+      "sha256": "8013ad06501c739eaa1968f5859f0e6d5233335b502b0a1dc3b221113884d838"
+    },
+    {
+      "path": "native-engine/src/native_muted_audio.c",
+      "sha256": "33692c98d47320aff4a7216b7bf9857883d9156d7338e3bdf095b46f96ed7abe"
+    },
+    {
+      "path": "native-engine/src/native_ram.c",
+      "sha256": "df1e3d7675309bdbbbc4d4a0f733585114ba9b70e706dcabf3f0b6ee1d157e4b"
+    },
+    {
+      "path": "native-engine/src/native_rle.c",
+      "sha256": "52f2fc78c4df3ea8d962cfe813d7c262d78451b3c2fbeb9cdaf0410979a08d37"
+    },
+    {
+      "path": "native-engine/src/native_rom_data.c",
+      "sha256": "2d9b2847316777d2e8e78840df5ab565591ad4bfcd325213726edefb10155a71"
+    },
+    {
+      "path": "native-engine/src/native_room.c",
+      "sha256": "c29d42982e89ca5fc16868886be0919cd79408322960db7780802ee0539c9031"
+    },
+    {
+      "path": "native-engine/src/native_settings.c",
+      "sha256": "35015f7717c3ba5e0a2be3d87535d952d5b4b223d600101662a8d8aed1399959"
+    },
+    {
+      "path": "native-engine/src/native_world.v.pica",
+      "sha256": "8c544bfc163be7cbcf4b6c8288e62902ddeebfa85b90f02b5de218e2a4c3b1c7"
+    },
+    {
+      "path": "native-engine/src/pica_inputs.cpp",
+      "sha256": "2ee2dad07bb5212d8d880c712dc6ecf4e36db36e663bdc8822d210b0caabc691"
+    },
+    {
+      "path": "native-engine/src/platform_3ds.c",
+      "sha256": "db19303fbcb20cf7bf203c48eaf203f53cf87748b9e686a1913b37c878d90036"
+    },
+    {
+      "path": "native-engine/src/platform_host.c",
+      "sha256": "288a730fa712c88102699aa7a33367428bb6437da27c2338728927a6563b98b1"
+    },
+    {
+      "path": "native-engine/src/rom_fixups.c",
+      "sha256": "2638c131f409d10fcb02a29f285bb81b324e2f8704b4a7de4d05805fc4699bd0"
+    },
+    {
+      "path": "native-engine/tests/audio_mock/3ds.h",
+      "sha256": "4794d348713c09405dd2cae24b4e57cb65d15b6d4d49a12a182ae4b132c6109f"
+    },
+    {
+      "path": "native-engine/tests/audio_pcm_host.c",
+      "sha256": "e6821a97fc2b999de73675c992729b8a9bc01c0f54d5256fbb649fb5990bde04"
+    },
+    {
+      "path": "native-engine/tests/baked_mesh_lod_host.cpp",
+      "sha256": "f35bab11a3da904d29fa981ac169dd0bafb0a9340bc392d5cb8fae55deb3bcce"
+    },
+    {
+      "path": "native-engine/tests/bg_special_portals_host.c",
+      "sha256": "32133ae1572694030c5a374b7ed916484ca86b9291df2da229a23daca0459d17"
+    },
+    {
+      "path": "native-engine/tests/bottom/check.c",
+      "sha256": "b5bd8827266e4d18bfa15280e1aaad6f585b248efe98847be6ef2987c5573603"
+    },
+    {
+      "path": "native-engine/tests/bottom/mock/3ds.h",
+      "sha256": "e7bc4c02d9c4e09eab837f7be17e71af257bb4c8d367d908a8d24582deb7789e"
+    },
+    {
+      "path": "native-engine/tests/bottom/preview.c",
+      "sha256": "44c2ee5e573c87ae88a5133948587100adf8d1d35c8beaedc4fffee4e9d129c4"
+    },
+    {
+      "path": "native-engine/tests/bunker_objectives_host.c",
+      "sha256": "7fb912f652a3915aadc58eec1bcac65633b02232d1aaab97d166983e0933a88c"
+    },
+    {
+      "path": "native-engine/tests/clip_colour_host.cpp",
+      "sha256": "04a634f8174924c79deab70c32226e8be230d301ef6b9b1509485a085c519815"
+    },
+    {
+      "path": "native-engine/tests/display/3ds.h",
+      "sha256": "c03b98a156faff8898c9ea194bf4034e8be6ab82bb52a4bcf0cad63cde65d050"
+    },
+    {
+      "path": "native-engine/tests/display/check.c",
+      "sha256": "afdeacab80e67ee263ce8fa518a747ca58236d859b1fd30420b0ea3f79a4e294"
+    },
+    {
+      "path": "native-engine/tests/dsp_backend_host.c",
+      "sha256": "fa23fb7b7bcff8b2b8389923f1a9b329f5d1ce4e6d702fce593b70eefa1e0658"
+    },
+    {
+      "path": "native-engine/tests/dsp_envelope_host.c",
+      "sha256": "783fe1113e703ac8de6078763587fad927384a1be539e91b810d28166b6e73a4"
+    },
+    {
+      "path": "native-engine/tests/dsp_mix_host.c",
+      "sha256": "f40c870ab7cb756dfbd19ae16ccf41f1b5757b0eef8a000a40bf4e2b6dff86d5"
+    },
+    {
+      "path": "native-engine/tests/effect_lod_host.c",
+      "sha256": "2eb5fe744561e3d1e01f6acae023eea9d99cfebbabcf769eb1b6000234da3546"
+    },
+    {
+      "path": "native-engine/tests/frontend_end_host.c",
+      "sha256": "3a2057bb4268977aa30ce62d35b8808788a62a7af4538fe9bea921d72ae7806c"
+    },
+    {
+      "path": "native-engine/tests/game_assets_host.c",
+      "sha256": "086383ec5d04a62b610c2f009b807acdf24ee565f65fedf9d4a02ee08d999158"
+    },
+    {
+      "path": "native-engine/tests/global_image_reset_host.c",
+      "sha256": "067af491222d59b104b96391e9436af6301b9d40d6d018b4db65af6d4a9ea398"
+    },
+    {
+      "path": "native-engine/tests/guard_activity_host.c",
+      "sha256": "b56560e8c3cf07507cad4f6025c022f20eb9de5e2bb812c2202e5546421e5243"
+    },
+    {
+      "path": "native-engine/tests/guard_pose_host.c",
+      "sha256": "f00edcab561258a9e1c8455d3f474c4ae52cbc0bb14aac202629a6591250bda6"
+    },
+    {
+      "path": "native-engine/tests/indy_disconnected_host.c",
+      "sha256": "4935a7236f418fc2ada42775147cfbe577f4ce9615db888aad05c0f19922a83b"
+    },
+    {
+      "path": "native-engine/tests/input/check.c",
+      "sha256": "e5e128c7bf72cdd399b0ab1ced61bca30c3b205833bc2f36069f148ca936e6ef"
+    },
+    {
+      "path": "native-engine/tests/input/mock/3ds.h",
+      "sha256": "3adf1a3b9bc23ee08ec0fc6a92c902f136f0f2499c9fc67a108b41cd47424b3f"
+    },
+    {
+      "path": "native-engine/tests/intro_scene_host.c",
+      "sha256": "8143dfac384edb1e7cb5365bb27da00540848dc19f3074b0f11b3b084fea9981"
+    },
+    {
+      "path": "native-engine/tests/mesh_lod_host.cpp",
+      "sha256": "f32f4c19598cbbc34a506481e9b4320bf6ea4257d1d8bd23d28a16118652899c"
+    },
+    {
+      "path": "native-engine/tests/model_bsp_host.c",
+      "sha256": "228d2d0f25e4373dde6acafc89bf2a2775b50dbb1fccdd99cb4660660a849e60"
+    },
+    {
+      "path": "native-engine/tests/model_slots_host.c",
+      "sha256": "a92be9afca903296fd94e619583da58b482116bd0f4ea71b0053ee2db0972271"
+    },
+    {
+      "path": "native-engine/tests/multiplayer_preview_host.c",
+      "sha256": "b2fe346f16571a8625b3eef7341b85aa60c751ebe699173a0735a7e14e4cd3ef"
+    },
+    {
+      "path": "native-engine/tests/music_load_host.c",
+      "sha256": "185b1ee36c3337fc40d886fc38ce30d5d68da0a0fd22ff563b63f7b8c4c505a0"
+    },
+    {
+      "path": "native-engine/tests/music_muted_host.c",
+      "sha256": "431af228b8c735cdf747a1ff7c4a97dd8db2f5d632bc5ebe4d9899e9a5e0f0cd"
+    },
+    {
+      "path": "native-engine/tests/native_actor_lod_host.c",
+      "sha256": "8b7b6c7025db7b45a8a013ad3bd0983d584c35dc2ded818ebc1ec2981ea41071"
+    },
+    {
+      "path": "native-engine/tests/native_adaptive_checks.h",
+      "sha256": "79f58091d9693c5cc7469aea052fc2ad6ffbd773bba4901e2cf380ddcd06122f"
+    },
+    {
+      "path": "native-engine/tests/native_aspect_host.c",
+      "sha256": "66fc9fd5c7867b2ea19db006194d182e8f5b7b8a810b7d978ccc6170147658f4"
+    },
+    {
+      "path": "native-engine/tests/native_boot_host.c",
+      "sha256": "fe6b0e8c3b715461ee1c4b6e49411d214203e8b731a3112f759a48b53568fda0"
+    },
+    {
+      "path": "native-engine/tests/native_cart_cache_host.c",
+      "sha256": "352ce9e6df04a8bcfb7347d4b7f16491d9650bad90ff7642d1dd3f44c22283c2"
+    },
+    {
+      "path": "native-engine/tests/native_controls_host.c",
+      "sha256": "66f9e83015b6fb9fba13a52c2cb3704d8c8f0b916e460d51bf8e5a6ee9ee12e6"
+    },
+    {
+      "path": "native-engine/tests/native_convert_host.c",
+      "sha256": "3a95cecaf55e791129db97b132e14aa1c18adf1bf8b227a7c576e5e6bacd1cbc"
+    },
+    {
+      "path": "native-engine/tests/native_derived_budget.cpp",
+      "sha256": "3d682b844a5a6a1a9fd8b2b8b3f7ce6aadb6726ee6a6dcf5001cba8c9ff5343a"
+    },
+    {
+      "path": "native-engine/tests/native_derived_host.cpp",
+      "sha256": "0c6765f5eb8dd04022817d774248a18ff3608eb7e195ec7fdf0ec644fbbe6c41"
+    },
+    {
+      "path": "native-engine/tests/native_derived_io.cpp",
+      "sha256": "91e256dcfe37bdb9d035f402b1a070ba9f361701c1b80ff61204d6905ba1ebfb"
+    },
+    {
+      "path": "native-engine/tests/native_derived_reference.cpp",
+      "sha256": "3112329063068ed946f84594bb00e99b5709f61b03fa95bf5f183487d8db663e"
+    },
+    {
+      "path": "native-engine/tests/native_detail_host.c",
+      "sha256": "2313720ef441c074c86137e65f07b65969e1ab52878e71103a8817db3689ebcf"
+    },
+    {
+      "path": "native-engine/tests/native_front_cursor_host.c",
+      "sha256": "c7f460742c41111da85a479dc6c196266da1e285a3c8cc1d98f76cb767a91a69"
+    },
+    {
+      "path": "native-engine/tests/native_game_layout.c",
+      "sha256": "72377c2b5d8271ea39cf9d3b5d30ad5173f9eb9c7089643495cacc57abb91fb1"
+    },
+    {
+      "path": "native-engine/tests/native_log_buffer_host.c",
+      "sha256": "0f3d04bbce3c6378703634a71dde465dbcadc124fcc58e794fec49f9720c9da2"
+    },
+    {
+      "path": "native-engine/tests/native_log_policy_host.c",
+      "sha256": "9b7f49ab45997996f94e476d5add2901c7734e430fd46c54088c2eb8d0afe3e5"
+    },
+    {
+      "path": "native-engine/tests/native_menu_host.c",
+      "sha256": "d285550be94f71a3c225bf7714202c83db29c597910678109deec32af49eccf4"
+    },
+    {
+      "path": "native-engine/tests/native_pickup_host.c",
+      "sha256": "102135ea55e33aad7c07604148a2cdf06f607b46fd142803f5565301cfcbc708"
+    },
+    {
+      "path": "native-engine/tests/native_pool_opcode_host.c",
+      "sha256": "02f33c37c34c428c03c1580ab52c5787c3915353366fd425226ccf25930f4a3a"
+    },
+    {
+      "path": "native-engine/tests/native_preferences_host.c",
+      "sha256": "f0abde887e4caf4b3a12d16657b565d4b3b260cb941fa14dd67b95595238dd1d"
+    },
+    {
+      "path": "native-engine/tests/native_prop_lod_host.c",
+      "sha256": "cf8043e38fcd44d0037825cb99169754ccc46afe9280a0ffdeb07f979fdea6e1"
+    },
+    {
+      "path": "native-engine/tests/native_room_render_host.c",
+      "sha256": "6f89d383dcb75679258c5cb5f463a12f6d8c93d928f5f927588946a7359208f0"
+    },
+    {
+      "path": "native-engine/tests/native_shutdown_host.c",
+      "sha256": "13cb30a164fc8e088b3fbfcbc321d8d8e550fd29d81e07422c35b0a5bc623040"
+    },
+    {
+      "path": "native-engine/tests/native_title_storage_host.c",
+      "sha256": "16d40e059519641a701545134aaa4025a00ebca24f2789a3aded11f5e05742e1"
+    },
+    {
+      "path": "native-engine/tests/native_unlock_host.c",
+      "sha256": "6aa9038599fd7bacaf285687ce06f30dd3d9c70945ccaa795117164ecf011994"
+    },
+    {
+      "path": "native-engine/tests/native_worker_host.c",
+      "sha256": "e8c1a9ba599299374c837ff7310d62dfb64d4e2bb1851966ae5aa657d07cd8c0"
+    },
+    {
+      "path": "native-engine/tests/pica_backend/README.md",
+      "sha256": "f1409fe226a6407aef9f73d2663e629357e6fcf779e214a31eda2ecf6bfb0ef8"
+    },
+    {
+      "path": "native-engine/tests/pica_backend/check.cpp",
+      "sha256": "815d6db209d4dac761a390581b248054fa3a88a1557fb2a4801594c0948a6b29"
+    },
+    {
+      "path": "native-engine/tests/pica_backend/mock/3ds.h",
+      "sha256": "760d5950958bd752f2b16bde7405d64e02c77657d37be6d898a1a116c79270b3"
+    },
+    {
+      "path": "native-engine/tests/pica_backend/mock/native_clip_shbin.h",
+      "sha256": "a9137cf7299b2c33edeed0c0478f6e14c2dc6652c6f2077159ec8c4364cebd58"
+    },
+    {
+      "path": "native-engine/tests/pica_backend/mock/native_world_shbin.h",
+      "sha256": "b152f0897008d624ff6376aeffb25eb9943f3c893264706435beb73a668d3e8d"
+    },
+    {
+      "path": "native-engine/tests/pica_backend/reference/gfx_pica_before.cpp",
+      "sha256": "3587f5f50800b6d05c80aea3c5d3f6d787f94704298034c030bd62eda1b0e60a"
+    },
+    {
+      "path": "native-engine/tests/pica_inputs_equivalence.cpp",
+      "sha256": "d80bd3ee2aa2c21d906df05b1cdb2badad493ba790a30ca3f49aa1a051475570"
+    },
+    {
+      "path": "native-engine/tests/pica_inputs_reference.cpp",
+      "sha256": "15849fca888e3d2132a63be578bbcd49891f6d16f9f12a7f121c3f2ea8b5f73c"
+    },
+    {
+      "path": "native-engine/tests/pica_material_host.cpp",
+      "sha256": "b27abc297c5de5eced987da0159328fd2fc34a39b4607be2f513a56465a27207"
+    },
+    {
+      "path": "native-engine/tests/prop_proxy_host.py",
+      "sha256": "f2011dc34d50596cf7d5f12a5d1ce451714f3c3bff706146136909b357d28de2"
+    },
+    {
+      "path": "native-engine/tests/room_packets_host.cpp",
+      "sha256": "155e8d98b7634206a97d6cca1688d7819f75c277dc5a710861359db362345523"
+    },
+    {
+      "path": "native-engine/tests/scenery_batches_host.cpp",
+      "sha256": "2c548ed1216ae818e684554f1162da22ea92667e60767d553ecadb3d7fa1641a"
+    },
+    {
+      "path": "native-engine/tests/scenery_cache_host.cpp",
+      "sha256": "6435a7c52ee04a56e5b86af76ac9e8b6fb7138a050b74198c007e5bfaad386f0"
+    },
+    {
+      "path": "native-engine/tests/setup_reuse_host.c",
+      "sha256": "148b64ed1dc416828e9560daaa3473bfc728e53c9f7b8491c5606a464d801f49"
+    },
+    {
+      "path": "native-engine/tests/silo_objectives_host.c",
+      "sha256": "7564af3e5e6ea1c9e321d85acd92be250c600edcc24e98d0051a65f73f7711bd"
+    },
+    {
+      "path": "native-engine/tests/stage_scripts_host.c",
+      "sha256": "098df27c1a08a8d460fc8b2eae83094f272d87e30ab9492a46cea9bdad1af32b"
+    },
+    {
+      "path": "native-engine/tests/watch_skin_host.c",
+      "sha256": "51677b912e7f257b6b04fe498e3903f7be56964af527949408dba4c248013cb8"
+    },
+    {
+      "path": "native-engine/tests/work_profile_host.c",
+      "sha256": "9293a2efa266355cd5d62d1d1a3b41638d6835e9ecfd4370b7f6f3654aeb4ed4"
+    },
+    {
+      "path": "native-engine/tools/advanced_watch.py",
+      "sha256": "f5744c32c3f2175f74a833c61f2447787c5ec4667b4b70961a3d8a770e504f72"
+    },
+    {
+      "path": "native-engine/tools/analyze_worker_timing.py",
+      "sha256": "6fda7596aad20aa38ea58d73875052adb2ef69147e6b814b8fab906c43c80c7f"
+    },
+    {
+      "path": "native-engine/tools/audio_pcm_assets.py",
+      "sha256": "8d7db30026b6a2cbce1304962b7c28001e2a50a1e403c195575e99b9894b361b"
+    },
+    {
+      "path": "native-engine/tools/audit_original_data.py",
+      "sha256": "c0b4fb9018027220c52ddcfcee820ec06f5ca9426def30202bf8fe128c598b4f"
+    },
+    {
+      "path": "native-engine/tools/bg_lod_assets.py",
+      "sha256": "a30de6cc091550ba1728ada1e99e803fa437305990c7f8d17b391fa43b0cb691"
+    },
+    {
+      "path": "native-engine/tools/bottom_background.py",
+      "sha256": "8d1c7e8113969a4679d2a75e2c89e6b45e7cfd1f550b6e72bb4cfc9392983e68"
+    },
+    {
+      "path": "native-engine/tools/build.py",
+      "sha256": "9e84a565ae0fe44981d68ba0623ccdd794dd8750c7b2d8f8636811cad8bf1221"
+    },
+    {
+      "path": "native-engine/tools/build_game.py",
+      "sha256": "e5b19ff9ce759ed4d337b5078aef33a49dd0645386c08679da15e1cdf3e7fdd7"
+    },
+    {
+      "path": "native-engine/tools/build_graphics.py",
+      "sha256": "e622967ff547dc72202bbf3374b69c7c577cb7277c0a81b12bc72a914d2cadc1"
+    },
+    {
+      "path": "native-engine/tools/build_probe.py",
+      "sha256": "d4d6cd895c60a13e97f45541f22b668b2f54c7b52524ca751918567d3beff85c"
+    },
+    {
+      "path": "native-engine/tools/check_audio_pcm.py",
+      "sha256": "0cbbcbcc113f31dd55aa74fb255bdaed8ab9268e839b962a7a853093a361723a"
+    },
+    {
+      "path": "native-engine/tools/check_bg_special_portals.py",
+      "sha256": "03c8849b6c80a85fb33f959d62ceaf0e752094b66168e57809683cc230444aec"
+    },
+    {
+      "path": "native-engine/tools/check_bottom.py",
+      "sha256": "96962f23c39c99afc22b417a6e5a8534325683d72edb3ef9255619fd46a0ef3c"
+    },
+    {
+      "path": "native-engine/tools/check_console_convert.py",
+      "sha256": "d17478303d2752d5be1382cd224bc25cedd4dac242363a77e2c8feee498e8673"
+    },
+    {
+      "path": "native-engine/tools/check_derived.py",
+      "sha256": "95ec420c9964a77c3dfef547f0affa4494f67531c2c2166cb5ff045dd2b83353"
+    },
+    {
+      "path": "native-engine/tools/check_detail.py",
+      "sha256": "83ebafac8534bc8078a8a6d32e72a3b1fba9e4c5a36b10f5319a4c8301e4353f"
+    },
+    {
+      "path": "native-engine/tools/check_display_host.py",
+      "sha256": "5bf421619f6e79229a664fa066cfa403184b9029d8f8d78d33fc7bb4968e704c"
+    },
+    {
+      "path": "native-engine/tools/check_dsp_audio.py",
+      "sha256": "5f143cf460886bfe12f82190109e7e66fd96cf8bc8191fe81c8f3c66a0f5e127"
+    },
+    {
+      "path": "native-engine/tools/check_effect_lod.py",
+      "sha256": "7dd2b9f6daf6b428dce3ccdabfeeaae9d59e1172076b9820b941f7b33281861c"
+    },
+    {
+      "path": "native-engine/tools/check_frontend_end.py",
+      "sha256": "e0e245e4bda006796a6cce1e3ee7da68e5c0b3ad3c33856a55cd1d056da6316e"
+    },
+    {
+      "path": "native-engine/tools/check_game_assets.py",
+      "sha256": "857bf7326b8a6796748c91c115f3eb1e90d415a94d57d10f3cbfa69c472bd91d"
+    },
+    {
+      "path": "native-engine/tools/check_graphics_host.py",
+      "sha256": "3623dfed35e6d873c7e6e3fe7b4d34c8e6048178449f53f3fdbf35249d025fd2"
+    },
+    {
+      "path": "native-engine/tools/check_guard_activity.py",
+      "sha256": "6084b45ac8f51e2db884f0d6811e6eb2c07405f72ad1f1151f2aaae08f22cbcb"
+    },
+    {
+      "path": "native-engine/tools/check_guard_pose.py",
+      "sha256": "1e729d0c62c978731d8b05813d704c7c249f15b4a2bde5e3f45590c1e97b5480"
+    },
+    {
+      "path": "native-engine/tools/check_intro_timing.py",
+      "sha256": "08b4aa051ee13590b09e83a617dbe6438b7c9c808fcff21216bd9fc888c69507"
+    },
+    {
+      "path": "native-engine/tools/check_model_bsp.py",
+      "sha256": "db6e643d50c2ce1c862c9d0095b3b33a7005b57e356929c01f59a847fdf3e55b"
+    },
+    {
+      "path": "native-engine/tools/check_multiplayer_preview.py",
+      "sha256": "b3e77ca0c86e56e506c18cba659308895fa84fb68e093c10c1a4071d033bea28"
+    },
+    {
+      "path": "native-engine/tools/check_music_load.py",
+      "sha256": "1190d6b0dab5a0c9db54379925e2bb75ccba4c167fd94c224fbbdedb9ebcf7f8"
+    },
+    {
+      "path": "native-engine/tools/check_native_audio.py",
+      "sha256": "142caf5c02dcb699e6b6d24e3d63ad36f497412a4b847a1b41fde98129652e28"
+    },
+    {
+      "path": "native-engine/tools/check_pica_backend.py",
+      "sha256": "8d79720d5df3e30b8e0a99d43031ed7806d12adaf17a1c7fe8309d951d69e0ff"
+    },
+    {
+      "path": "native-engine/tools/check_rom_data.py",
+      "sha256": "ebd51801632258625ea5aab274e4b12efb160a09cbbbeaa2fcd4ef406ad6b64b"
+    },
+    {
+      "path": "native-engine/tools/check_scenery_cache.py",
+      "sha256": "efb552c7d99e3a16a696a0e53744bc6db4968245d24fc93c9c3e2b6408d4908f"
+    },
+    {
+      "path": "native-engine/tools/check_setup_stride.py",
+      "sha256": "98ab1fd0e01e33414b550c5bf556a195858551cfb098ba7d4808487571423229"
+    },
+    {
+      "path": "native-engine/tools/check_unlock_all.py",
+      "sha256": "e58b2add0db1917a352b307d020ed436654eff6f393f3b9f621d0ef834cf40ec"
+    },
+    {
+      "path": "native-engine/tools/check_watch_skins.py",
+      "sha256": "f8a73ee4d25268979a03847024f592cdab5f2a996bac49638f44a36d351655d1"
+    },
+    {
+      "path": "native-engine/tools/check_work_profile.py",
+      "sha256": "afe6edad30bf840312aa4f916d392121b1951e67565ef25ae806125aa82eee0d"
+    },
+    {
+      "path": "native-engine/tools/classify_original_data.py",
+      "sha256": "28caef3c4432cfe64b58ebcbf43b051c1bb4d2a28568cb3cf09268a6f0306aaa"
+    },
+    {
+      "path": "native-engine/tools/compiler_table_review.py",
+      "sha256": "8d37a23b5be3338e5ebbd527cd27dcfb8b400d0655e8c09ce2c3746653dd588c"
+    },
+    {
+      "path": "native-engine/tools/console_asset_recipe.py",
+      "sha256": "530430eddeb4320fc2f415038b75b210d902c86c0b80dca5fc64732567c9148b"
+    },
+    {
+      "path": "native-engine/tools/cpu_clip.py",
+      "sha256": "6c6ec2d36ae80ce494d5a496c5cac4999ec1a63d82194c63e870c0bb19a830c3"
+    },
+    {
+      "path": "native-engine/tools/cpu_world_indices.py",
+      "sha256": "fe0dd4ec9e91eb0c87d5ca8fa1b3f98af1b157a1a0316e54b2cfcf7cc2f967be"
+    },
+    {
+      "path": "native-engine/tools/deferred_background.py",
+      "sha256": "cced4eaa80a1274b517a05e1029d34c0b6ef95d998532ffa34b9a741650f14f4"
+    },
+    {
+      "path": "native-engine/tools/deferred_cpu_rooms.py",
+      "sha256": "6beaab19e9d5d78658818a1ad514a3e47c3e958f0dac1f717b44bf18bbd4535f"
+    },
+    {
+      "path": "native-engine/tools/derived_layout.py",
+      "sha256": "a001a852777eca8dbe82217fdd1a3564ea985c7701409e56af7ccaccd7da2fad"
+    },
+    {
+      "path": "native-engine/tools/distance_fog.py",
+      "sha256": "5e5c39971d29c1ca0fecad9e09007888b32f3f27002a115b5f640a2faee04ff1"
+    },
+    {
+      "path": "native-engine/tools/dsp_audio.py",
+      "sha256": "1e6811b048190eb11b209144551c797949690b743a0d974c0fda69b63db8139d"
+    },
+    {
+      "path": "native-engine/tools/effect_lod.py",
+      "sha256": "fdac683a52733c1abe7ee096d96a7a0fdbc238b8651c56fedd5a4f31c2b79f93"
+    },
+    {
+      "path": "native-engine/tools/fog_batch.py",
+      "sha256": "53653bf6c9019f05c02d626446b44e1bda024342f1c3616d1cdd07beb3faa46e"
+    },
+    {
+      "path": "native-engine/tools/glass_detail.py",
+      "sha256": "894b71eaf62849f7277900369589c0a34f316003d483fcc6e041fa5f38f40e70"
+    },
+    {
+      "path": "native-engine/tools/gpu_world.py",
+      "sha256": "1c6f347c1dc055c4ae2c73a18e57d0503a11de948cd52a38c2c3a268648420fb"
+    },
+    {
+      "path": "native-engine/tools/guard_pose.py",
+      "sha256": "b6950703e1aa0f27eb6f8a1422c158318141c7b909eadd7739b91e2c5ee314e2"
+    },
+    {
+      "path": "native-engine/tools/intro_timing.py",
+      "sha256": "c4128ef0ffb7a1b0987baa26cc1e0c0a19b76941caf3905e2940b47f968482f8"
+    },
+    {
+      "path": "native-engine/tools/link_audit.py",
+      "sha256": "257aa63f07cf95fe90c65bebc37d272f3eacc02e9cdc6efd4e970e648bd96b50"
+    },
+    {
+      "path": "native-engine/tools/lod_hint.py",
+      "sha256": "9b343f238d4944b2a5094f53fab53a1efee75917a4e68fd845dedca8db37a570"
+    },
+    {
+      "path": "native-engine/tools/match_original_ai_debug.py",
+      "sha256": "7fc4c799241b29dcdfc0dc67b20e7d4c6e7ef22e1502e97dd862d2732ba1aa3e"
+    },
+    {
+      "path": "native-engine/tools/match_original_animation_order.py",
+      "sha256": "c3b56a9b0c13df908a40e1de1f623251e5aa742eb0722d4cebad2e77d3928687"
+    },
+    {
+      "path": "native-engine/tools/match_original_data.py",
+      "sha256": "cfb09c619d4b4c95efca10853f6a283c445ea70970734fb47ddbbde07f32be69"
+    },
+    {
+      "path": "native-engine/tools/match_original_declaration_order.py",
+      "sha256": "93224dfb33f1002c5b46b246e785b6d67d6a3d0f024380b4b36bd01da4aff30f"
+    },
+    {
+      "path": "native-engine/tools/match_original_hand_data.py",
+      "sha256": "795c034aaf6098107fd2a9ba6e08c9438989603764eed3b41a9aa7e30924208d"
+    },
+    {
+      "path": "native-engine/tools/match_original_images.py",
+      "sha256": "e3db7846238d47558d41184a5f36d13ad1936f4b746bb3d6acb2c0af9a0d059d"
+    },
+    {
+      "path": "native-engine/tools/match_original_menu_data.py",
+      "sha256": "f3d06f37133b22d503bfece8f2d1f378d9f2db95783de52d254f65218d06da85"
+    },
+    {
+      "path": "native-engine/tools/match_original_monitors.py",
+      "sha256": "41ce978024b9e314e97dfacd22b290f5e9ab73c416fe5f363b8bf53076062c36"
+    },
+    {
+      "path": "native-engine/tools/match_original_pointer_tables.py",
+      "sha256": "ab7a4ea2e4ac9343fc9fc3efd6dad3d522eb7bac56830302454b90aa42442def"
+    },
+    {
+      "path": "native-engine/tools/match_original_renderdata.py",
+      "sha256": "3f3938cf1ea4cd33d1ca5bea38b4e515a55134a7fc86b390cb65cc7d1ec45cf8"
+    },
+    {
+      "path": "native-engine/tools/match_original_small_data.py",
+      "sha256": "55b1ab08eab3f65e496afc2369db0e0fd56f3c8bf28d1fd0c475112ce04041db"
+    },
+    {
+      "path": "native-engine/tools/material_work.py",
+      "sha256": "bf99ba797239591647681b49795785164a1655a35873c02172c34e96242985e0"
+    },
+    {
+      "path": "native-engine/tools/mesh_lod.py",
+      "sha256": "b14113117de2b5c46b7934bdd9d4a4a67e897bccd1723baaacb2cb698ebbbc47"
+    },
+    {
+      "path": "native-engine/tools/model_batches.py",
+      "sha256": "a33032016fe4a676dd3d73fae468aa94e1c5f1ad2227e6b4b393df35654ea6df"
+    },
+    {
+      "path": "native-engine/tools/model_face_cull.py",
+      "sha256": "5d5abcb27b258e9e54bfda11985a51549001c553c0bd44fee2fb3f7a10a8c07c"
+    },
+    {
+      "path": "native-engine/tools/multiplayer_preview.py",
+      "sha256": "9ccc45e11d8e7976f6eeb73a86594a147262b86e8e5bfdbc3b84b768703739d2"
+    },
+    {
+      "path": "native-engine/tools/native_fixture.py",
+      "sha256": "8d330156fe40e1dc3a559f3bfc88d401de5859b21920ee200af37d5cef54d7fb"
+    },
+    {
+      "path": "native-engine/tools/native_game_assets.py",
+      "sha256": "92994c5073934d03ad358ad558bc42913b9785e72e7b404bb68cce4117b0f5cf"
+    },
+    {
+      "path": "native-engine/tools/native_options.py",
+      "sha256": "dd244907808aaace458d8f8d7f645db33c56bbc21e13376990bcd9452cc4a912"
+    },
+    {
+      "path": "native-engine/tools/object_lod_assets.py",
+      "sha256": "7e23a4d8f9451c307782ecd0cf567244ff2629937c0b0fbbc70d807839e89534"
+    },
+    {
+      "path": "native-engine/tools/original_data_types.py",
+      "sha256": "fbb29aaf3cbb8c07567431577cdd5049f7a88125654c6e4fce59aedfd9c39141"
+    },
+    {
+      "path": "native-engine/tools/original_pointer_plan.py",
+      "sha256": "389f26369cf7b40002af37a42fa7f37c7b6ae53603357e460ca59fdfb96ca322"
+    },
+    {
+      "path": "native-engine/tools/original_pool_records.py",
+      "sha256": "a379de6843f55af2e7299ec91bd47dd05f3673c8b08e5d47ffcc7ff4f307a2f9"
+    },
+    {
+      "path": "native-engine/tools/original_string_plan.py",
+      "sha256": "cd5602857894e2ba35af8d608a6c2483cf81cb25fc0a55c028dc7bfcaba19596"
+    },
+    {
+      "path": "native-engine/tools/package_elf.py",
+      "sha256": "793c56e79c879927780340aae055de770d6eb81cad59a74dbad7a4695f3d92f0"
+    },
+    {
+      "path": "native-engine/tools/prepared_batches.py",
+      "sha256": "07c3b42ac97c09bf5c150d125e241c91648e14cd349b5a6744ff592183b9e17b"
+    },
+    {
+      "path": "native-engine/tools/preview_bottom.py",
+      "sha256": "853787233f08236d72bec3d4355619dcc1e133dd72ad692d364174fe9cd361cb"
+    },
+    {
+      "path": "native-engine/tools/prop_proxy.py",
+      "sha256": "53b2a4a3a785634dc40460319520e96dc9bf484ae17e00edafb7f15032b276f5"
+    },
+    {
+      "path": "native-engine/tools/quad_batches.py",
+      "sha256": "cc7b2cd5e379a81f36db39c42ba9c104eacf2635ddf7e1717aa24441cc527f64"
+    },
+    {
+      "path": "native-engine/tools/resolve_original_unions.py",
+      "sha256": "dc97ba277ac710931750c6483b5eb35704d4c44db10d5b3b89460f95995e6880"
+    },
+    {
+      "path": "native-engine/tools/retained_batches.py",
+      "sha256": "d817ee196160827f0b6dd2e4803d96dfeacc9454005fdcd0d51d3a770a6be1c5"
+    },
+    {
+      "path": "native-engine/tools/review_port_data.py",
+      "sha256": "37df92097a7f21ead20877196007b872a16e6cea6ca36fa7dbdf95fce677f814"
+    },
+    {
+      "path": "native-engine/tools/review_runtime_code.py",
+      "sha256": "01ed2e344dcc8ddf90001718df3aef5191433f997fe0ba7a98b8d3d1c541d7e9"
+    },
+    {
+      "path": "native-engine/tools/rom_data_plan.py",
+      "sha256": "69221669616f6f9ebb092315b2478e6ecd4dd9e02e2c33d939614167a1a83b23"
+    },
+    {
+      "path": "native-engine/tools/room_fixture.py",
+      "sha256": "9722a5aace88afcd12d8489ae4d287ecc1e2d219481e44defce59fd9f811587c"
+    },
+    {
+      "path": "native-engine/tools/room_lod_assets.py",
+      "sha256": "5f527a69c3f2202664441bfce199e7c2ef2ab18271b87050e11baf590eb043ef"
+    },
+    {
+      "path": "native-engine/tools/room_packets.py",
+      "sha256": "b67d5afd21e06f46ae3c89f6914c7f83194f4b6629bddfcd1d56cef46f48cc6c"
+    },
+    {
+      "path": "native-engine/tools/scenery_batches.py",
+      "sha256": "0e9f6203e1b3eba0093defb99355af6fff2eb1596cc5fcfd05c18c0be955d4f0"
+    },
+    {
+      "path": "native-engine/tools/scenery_cache.py",
+      "sha256": "ee0acef0df3e0a2fe70306a630410229c8926c11f3e83ddf0d501ddda15ea3d3"
+    },
+    {
+      "path": "native-engine/tools/simple_glass_batches.py",
+      "sha256": "77211031add7d94e33c079f4ac4e8630f9aeedfe52d49fa3dcfad699d32d07a6"
+    },
+    {
+      "path": "native-engine/tools/stage_assets.py",
+      "sha256": "ab79cd7cd836f5c64659991d7f504a63d926d8fe1bfebfc5de84f14388c1fa51"
+    },
+    {
+      "path": "native-engine/tools/static_attributes.py",
+      "sha256": "498b7cc075e50281bd73e03ae3178777975de8f386268a2095dcf825fe153812"
+    },
+    {
+      "path": "native-engine/tools/texture_pixels.py",
+      "sha256": "85a97c8460932978bc8dc94782a666678f9dab537c629875739a33f1993afee8"
+    },
+    {
+      "path": "native-engine/tools/title_asset_layout.py",
+      "sha256": "cdc0576878277e29c09e4831e798c9986e3bd58cf62399524953af7f4c758d4d"
+    },
+    {
+      "path": "native-engine/tools/triangle_setup.py",
+      "sha256": "7175e57124183ef5fb7a8b76679613c8ba4e56fd18c6fa476865ba9b52e97a31"
+    },
+    {
+      "path": "native-engine/tools/uv_prepare.py",
+      "sha256": "21e09efeebb6ce5b6a821a2a1118b42e759fb5c69ca4aeb762b78a8a39c90806"
+    },
+    {
+      "path": "native-engine/tools/vertex_pack.py",
+      "sha256": "c648e53c568192a3190b34b5394bebdff46aaa44fe2fe9ef6350b4da28960ed1"
+    },
+    {
+      "path": "native-engine/tools/vertex_refs.py",
+      "sha256": "be6e2eabcc6216f7ed18d72470bc21cf51b408dd1d3a4f0dbd73ddf20aff1667"
+    },
+    {
+      "path": "native-engine/tools/vertex_reuse.py",
+      "sha256": "208a7ef26321b4fbee5352af31068aaf72398f571ce3cf172f527082adca20e0"
+    },
+    {
+      "path": "native-engine/tools/viewmodel_cull.py",
+      "sha256": "c8b813492e846457cde395c5e2ae1ad73eff958b8d8a18e1d700a98e642d56d4"
+    },
+    {
+      "path": "native-engine/tools/weapon_skin_assets.py",
+      "sha256": "ff2701943ca7baeb5e22e8c318b80437649bbdb60dda869443de2241f9ae8c7a"
+    },
+    {
+      "path": "requirements.txt",
+      "sha256": "4266800bf8ab1e41f66e6cac170a12bb7fd24740cb7d2d902b68a12a0279f8a9"
+    },
+    {
+      "path": "tools/setup.py",
+      "sha256": "49fac43a6eb5e36244d43417d550d7615b8095168147ecc2d5cb91ff0313016f"
+    }
+  ],
+  "documentation": "Rewritten for public readers; feature summary checked against port source."
+}

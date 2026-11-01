@@ -1,0 +1,25 @@
+Eyes of Gold Launcher
+
+This is an unofficial 3DS port of the GoldenEye 007 engine, built on the
+GoldenEye decompilation and PC port. It adds a 3DS platform layer, rendering,
+controls and menu changes.
+
+You need your own supported US retail ROM. The launcher checks it and prepares
+the game files on your SD card. The install ZIP does not include a ROM,
+extracted game assets or generated asset caches. The executable does contain
+compiled engine code, conversion code and the metadata needed to read the ROM.
+
+All 20 campaign missions are enabled. Multiplayer is an experimental preview
+of 11 arenas, with one controlled player and a second idle player.
+
+Upstream source:
+https://github.com/jkdansereau/goldeneye-pc-port
+Commit: fda76b69837e6c5aae436e0d3e798989e49b06d2
+
+The original Eyes of Gold additions are MIT licensed. The inherited engine,
+PC port and other components have separate terms. LICENSE.txt explains them;
+the full license documents and component credits are included alongside it.
+Upstream license and notice files are kept unchanged.
+
+This fan project is not affiliated with Nintendo, Rare or the James Bond
+rights holders. The original game and its assets belong to their owners.

@@ -1,0 +1,11 @@
+Eyes of Gold - original 3DS additions
+
+The original 3DS platform code, rendering additions, controls, menus and tools
+are MIT licensed. Read eyes-of-gold-MIT-LICENSE.txt for the terms and attribution.
+
+This applies to original code and changes made for this project. Inherited
+GoldenEye decompilation code, game assets and third-party code keep their own
+license status. See engine-LICENSE-NOTICE.txt and the other component notices.
+
+Eyes of Gold Launcher is the application's display name. Its version number
+refers to this 3DS port, not the upstream PC port or the original game.

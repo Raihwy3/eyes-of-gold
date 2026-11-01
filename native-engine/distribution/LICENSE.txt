@@ -1,0 +1,37 @@
+Eyes of Gold Launcher - license guide
+
+Different parts of this project have different license terms. This guide
+explains which documents to read; it does not replace those documents.
+
+Eyes of Gold additions
+
+The original 3DS code and changes are MIT licensed. Read
+licenses/eyes-of-gold-MIT-LICENSE.txt for the full terms and attribution, and
+licenses/eyes-of-gold-LICENSE-NOTICE.txt for what that license covers.
+It does not relicense inherited engine code or game assets.
+
+PC port
+
+The upstream PC port's own code, tools and documentation are MIT licensed.
+Its license credits James Dansereau, the upstream author. This is a separate
+credit from the author of the 3DS additions. Read upstream-LICENSE.txt and
+upstream-NOTICE.txt for the full terms and scope.
+
+Inherited game engine
+
+The upstream notice states that the inherited GoldenEye decompilation code
+has no explicit license. Neither the PC-port MIT license nor the Eyes of Gold
+MIT license grants a license to that code. Supplying your own ROM does not
+change its licensing. See licenses/engine-LICENSE-NOTICE.txt.
+
+Other libraries
+
+Fast3D has its own MIT license in fast3d-LICENSE.txt. Separate documents for
+libctru, Citro3D, newlib and the GCC runtime are in licenses/. The GCC runtime
+exception is included with its license. licenses/SOURCES.txt lists versions,
+credits and source locations.
+
+Game assets
+
+The original game's assets are not covered by these software licenses.
+They are loaded from the user's ROM as described in NOTICE.txt.

@@ -1,0 +1,27 @@
+; Fast3D has already transformed vertices into homogeneous clip space.
+; Citro3D's tilt matrix supplies the LCD rotation only. Preserve perspective W.
+.fvec tilt[4]
+.constf constants(0.0, 1.0, 0.5, -1.0)
+.out outpos position
+.out outcolor color
+.out outuv0 texcoord0
+.out outuv1 texcoord1
+.out outuv2 texcoord2
+.alias inpos v0
+.alias incolor v1
+.alias uv0 v2
+.alias uv1 v3
+.alias uv2 v4
+.proc main
+ dp4 outpos.x, tilt[0], inpos
+ dp4 outpos.y, tilt[1], inpos
+ ; Backend preconverts depth to [-W,0] before float24 upload. This must
+ ; match the world shader even for CPU-clipped triangles and decals.
+ mov outpos.z, inpos.z
+ mov outpos.w, inpos.w
+ mov outcolor, incolor
+ mov outuv0, uv0
+ mov outuv1, uv1
+ mov outuv2, uv2
+ end
+.end

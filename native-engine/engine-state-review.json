@@ -1,0 +1,366 @@
+{
+  "version": 1,
+  "scope": "Code implementation and runtime state only. This is not an exemption for original assets or serialized content.",
+  "rows": [
+    {
+      "symbol": "selected_difficulty",
+      "review": "frontend control state",
+      "evidence": "Mutable enum/sentinel/enable state controlling engine bootstrap and menus; no text, artwork, level records or authored mission data."
+    },
+    {
+      "symbol": "unlock_control_style",
+      "review": "frontend control state",
+      "evidence": "Mutable enum/sentinel/enable state controlling engine bootstrap and menus; no text, artwork, level records or authored mission data."
+    },
+    {
+      "symbol": "maybe_prev_menu",
+      "review": "frontend control state",
+      "evidence": "Mutable enum/sentinel/enable state controlling engine bootstrap and menus; no text, artwork, level records or authored mission data."
+    },
+    {
+      "symbol": "gunbarrel_mode",
+      "review": "frontend control state",
+      "evidence": "Mutable enum/sentinel/enable state controlling engine bootstrap and menus; no text, artwork, level records or authored mission data."
+    },
+    {
+      "symbol": "g_MainStageNum",
+      "review": "frontend control state",
+      "evidence": "Mutable enum/sentinel/enable state controlling engine bootstrap and menus; no text, artwork, level records or authored mission data."
+    },
+    {
+      "symbol": "game_length",
+      "review": "frontend control state",
+      "evidence": "Mutable enum/sentinel/enable state controlling engine bootstrap and menus; no text, artwork, level records or authored mission data."
+    },
+    {
+      "symbol": "MP_stage_selected",
+      "review": "frontend control state",
+      "evidence": "Mutable enum/sentinel/enable state controlling engine bootstrap and menus; no text, artwork, level records or authored mission data."
+    },
+    {
+      "symbol": "unlock_game_length",
+      "review": "frontend control state",
+      "evidence": "Mutable enum/sentinel/enable state controlling engine bootstrap and menus; no text, artwork, level records or authored mission data."
+    },
+    {
+      "symbol": "gamemode",
+      "review": "frontend control state",
+      "evidence": "Mutable enum/sentinel/enable state controlling engine bootstrap and menus; no text, artwork, level records or authored mission data."
+    },
+    {
+      "symbol": "unlock_chars",
+      "review": "frontend control state",
+      "evidence": "Mutable enum/sentinel/enable state controlling engine bootstrap and menus; no text, artwork, level records or authored mission data."
+    },
+    {
+      "symbol": "briefingpage",
+      "review": "frontend control state",
+      "evidence": "Mutable enum/sentinel/enable state controlling engine bootstrap and menus; no text, artwork, level records or authored mission data."
+    },
+    {
+      "symbol": "unlock_handicap",
+      "review": "frontend control state",
+      "evidence": "Mutable enum/sentinel/enable state controlling engine bootstrap and menus; no text, artwork, level records or authored mission data."
+    },
+    {
+      "symbol": "unlock_stage_select",
+      "review": "frontend control state",
+      "evidence": "Mutable enum/sentinel/enable state controlling engine bootstrap and menus; no text, artwork, level records or authored mission data."
+    },
+    {
+      "symbol": "unlock_aim_sight",
+      "review": "frontend control state",
+      "evidence": "Mutable enum/sentinel/enable state controlling engine bootstrap and menus; no text, artwork, level records or authored mission data."
+    },
+    {
+      "symbol": "current_menu",
+      "review": "frontend control state",
+      "evidence": "Mutable enum/sentinel/enable state controlling engine bootstrap and menus; no text, artwork, level records or authored mission data."
+    },
+    {
+      "symbol": "aim_sight_adjustment",
+      "review": "frontend control state",
+      "evidence": "Mutable enum/sentinel/enable state controlling engine bootstrap and menus; no text, artwork, level records or authored mission data."
+    },
+    {
+      "symbol": "selected_stage",
+      "review": "frontend control state",
+      "evidence": "Mutable enum/sentinel/enable state controlling engine bootstrap and menus; no text, artwork, level records or authored mission data."
+    },
+    {
+      "symbol": "g_StageNum",
+      "review": "frontend control state",
+      "evidence": "Mutable enum/sentinel/enable state controlling engine bootstrap and menus; no text, artwork, level records or authored mission data."
+    },
+    {
+      "symbol": "mp_weapon_set",
+      "review": "frontend control state",
+      "evidence": "Mutable enum/sentinel/enable state controlling engine bootstrap and menus; no text, artwork, level records or authored mission data."
+    },
+    {
+      "symbol": "menu_update",
+      "review": "frontend control state",
+      "evidence": "Mutable enum/sentinel/enable state controlling engine bootstrap and menus; no text, artwork, level records or authored mission data."
+    },
+    {
+      "symbol": "unlock_weapon_select",
+      "review": "frontend control state",
+      "evidence": "Mutable enum/sentinel/enable state controlling engine bootstrap and menus; no text, artwork, level records or authored mission data."
+    },
+    {
+      "symbol": "taskgrab_ramdump_num.0",
+      "review": "driver, scheduler and diagnostics state",
+      "evidence": "Mutable driver pointers, frame/one-shot counters, input/debug state or unset indices. Pointer targets are native runtime storage, not game content."
+    },
+    {
+      "symbol": "movementSpeed.0",
+      "review": "driver, scheduler and diagnostics state",
+      "evidence": "Mutable driver pointers, frame/one-shot counters, input/debug state or unset indices. Pointer targets are native runtime storage, not game content."
+    },
+    {
+      "symbol": "c.0",
+      "review": "driver, scheduler and diagnostics state",
+      "evidence": "Mutable driver pointers, frame/one-shot counters, input/debug state or unset indices. Pointer targets are native runtime storage, not game content."
+    },
+    {
+      "symbol": "firsttime.0",
+      "review": "driver, scheduler and diagnostics state",
+      "evidence": "Mutable driver pointers, frame/one-shot counters, input/debug state or unset indices. Pointer targets are native runtime storage, not game content."
+    },
+    {
+      "symbol": "toggleFlag.1",
+      "review": "driver, scheduler and diagnostics state",
+      "evidence": "Mutable driver pointers, frame/one-shot counters, input/debug state or unset indices. Pointer targets are native runtime storage, not game content."
+    },
+    {
+      "symbol": "speedgraphframes",
+      "review": "driver, scheduler and diagnostics state",
+      "evidence": "Mutable driver pointers, frame/one-shot counters, input/debug state or unset indices. Pointer targets are native runtime storage, not game content."
+    },
+    {
+      "symbol": "g_indyJpg32BitGrabnum",
+      "review": "driver, scheduler and diagnostics state",
+      "evidence": "Mutable driver pointers, frame/one-shot counters, input/debug state or unset indices. Pointer targets are native runtime storage, not game content."
+    },
+    {
+      "symbol": "g_ContNeedsInit",
+      "review": "driver, scheduler and diagnostics state",
+      "evidence": "Mutable driver pointers, frame/one-shot counters, input/debug state or unset indices. Pointer targets are native runtime storage, not game content."
+    },
+    {
+      "symbol": "clock_drawn_flag",
+      "review": "driver, scheduler and diagnostics state",
+      "evidence": "Mutable driver pointers, frame/one-shot counters, input/debug state or unset indices. Pointer targets are native runtime storage, not game content."
+    },
+    {
+      "symbol": "bodypartshot",
+      "review": "driver, scheduler and diagnostics state",
+      "evidence": "Mutable driver pointers, frame/one-shot counters, input/debug state or unset indices. Pointer targets are native runtime storage, not game content."
+    },
+    {
+      "symbol": "g_viVstartSign",
+      "review": "driver, scheduler and diagnostics state",
+      "evidence": "Mutable driver pointers, frame/one-shot counters, input/debug state or unset indices. Pointer targets are native runtime storage, not game content."
+    },
+    {
+      "symbol": "g_viColorOutputMode",
+      "review": "driver, scheduler and diagnostics state",
+      "evidence": "Mutable driver pointers, frame/one-shot counters, input/debug state or unset indices. Pointer targets are native runtime storage, not game content."
+    },
+    {
+      "symbol": "previousFrameCounter",
+      "review": "driver, scheduler and diagnostics state",
+      "evidence": "Mutable driver pointers, frame/one-shot counters, input/debug state or unset indices. Pointer targets are native runtime storage, not game content."
+    },
+    {
+      "symbol": "g_TokenCount",
+      "review": "driver, scheduler and diagnostics state",
+      "evidence": "Mutable driver pointers, frame/one-shot counters, input/debug state or unset indices. Pointer targets are native runtime storage, not game content."
+    },
+    {
+      "symbol": "frameDelay",
+      "review": "driver, scheduler and diagnostics state",
+      "evidence": "Mutable driver pointers, frame/one-shot counters, input/debug state or unset indices. Pointer targets are native runtime storage, not game content."
+    },
+    {
+      "symbol": "objective_count",
+      "review": "driver, scheduler and diagnostics state",
+      "evidence": "Mutable driver pointers, frame/one-shot counters, input/debug state or unset indices. Pointer targets are native runtime storage, not game content."
+    },
+    {
+      "symbol": "lastFrameCounter",
+      "review": "driver, scheduler and diagnostics state",
+      "evidence": "Mutable driver pointers, frame/one-shot counters, input/debug state or unset indices. Pointer targets are native runtime storage, not game content."
+    },
+    {
+      "symbol": "g_DebugMenuPercentage",
+      "review": "driver, scheduler and diagnostics state",
+      "evidence": "Mutable driver pointers, frame/one-shot counters, input/debug state or unset indices. Pointer targets are native runtime storage, not game content."
+    },
+    {
+      "symbol": "g_ContDataPtr",
+      "review": "driver, scheduler and diagnostics state",
+      "evidence": "Mutable driver pointers, frame/one-shot counters, input/debug state or unset indices. Pointer targets are native runtime storage, not game content."
+    },
+    {
+      "symbol": "g_indyRgb32BitGrabnum",
+      "review": "driver, scheduler and diagnostics state",
+      "evidence": "Mutable driver pointers, frame/one-shot counters, input/debug state or unset indices. Pointer targets are native runtime storage, not game content."
+    },
+    {
+      "symbol": "g_ViUnblackTimer",
+      "review": "driver, scheduler and diagnostics state",
+      "evidence": "Mutable driver pointers, frame/one-shot counters, input/debug state or unset indices. Pointer targets are native runtime storage, not game content."
+    },
+    {
+      "symbol": "g_ViBackData",
+      "review": "driver, scheduler and diagnostics state",
+      "evidence": "Mutable driver pointers, frame/one-shot counters, input/debug state or unset indices. Pointer targets are native runtime storage, not game content."
+    },
+    {
+      "symbol": "g_ViFrontData",
+      "review": "driver, scheduler and diagnostics state",
+      "evidence": "Mutable driver pointers, frame/one-shot counters, input/debug state or unset indices. Pointer targets are native runtime storage, not game content."
+    },
+    {
+      "symbol": "g_DebMemPos",
+      "review": "driver, scheduler and diagnostics state",
+      "evidence": "Mutable driver pointers, frame/one-shot counters, input/debug state or unset indices. Pointer targets are native runtime storage, not game content."
+    },
+    {
+      "symbol": "g_sndPlayerPtr",
+      "review": "driver, scheduler and diagnostics state",
+      "evidence": "Mutable driver pointers, frame/one-shot counters, input/debug state or unset indices. Pointer targets are native runtime storage, not game content."
+    },
+    {
+      "symbol": "g_musicXTrack1Volume",
+      "review": "neutral engine gain/scaling or unset state",
+      "evidence": "Mixer limits, unit multipliers and unset/layout-control sentinels. Authored samples, weapon/difficulty/fog/font tables are imported separately from ROM."
+    },
+    {
+      "symbol": "g_musicXTrack2Volume",
+      "review": "neutral engine gain/scaling or unset state",
+      "evidence": "Mixer limits, unit multipliers and unset/layout-control sentinels. Authored samples, weapon/difficulty/fog/font tables are imported separately from ROM."
+    },
+    {
+      "symbol": "g_musicXTrack3Volume",
+      "review": "neutral engine gain/scaling or unset state",
+      "evidence": "Mixer limits, unit multipliers and unset/layout-control sentinels. Authored samples, weapon/difficulty/fog/font tables are imported separately from ROM."
+    },
+    {
+      "symbol": "overlap_correction",
+      "review": "neutral engine gain/scaling or unset state",
+      "evidence": "Mixer limits, unit multipliers and unset/layout-control sentinels. Authored samples, weapon/difficulty/fog/font tables are imported separately from ROM."
+    },
+    {
+      "symbol": "g_DoorScale",
+      "review": "neutral engine gain/scaling or unset state",
+      "evidence": "Mixer limits, unit multipliers and unset/layout-control sentinels. Authored samples, weapon/difficulty/fog/font tables are imported separately from ROM."
+    },
+    {
+      "symbol": "g_ScaledFarFogIntensity",
+      "review": "neutral engine gain/scaling or unset state",
+      "evidence": "Mixer limits, unit multipliers and unset/layout-control sentinels. Authored samples, weapon/difficulty/fog/font tables are imported separately from ROM."
+    },
+    {
+      "symbol": "g_sndSfxVolumeScale",
+      "review": "neutral engine gain/scaling or unset state",
+      "evidence": "Mixer limits, unit multipliers and unset/layout-control sentinels. Authored samples, weapon/difficulty/fog/font tables are imported separately from ROM."
+    },
+    {
+      "symbol": "difficulty",
+      "review": "neutral engine gain/scaling or unset state",
+      "evidence": "Mixer limits, unit multipliers and unset/layout-control sentinels. Authored samples, weapon/difficulty/fog/font tables are imported separately from ROM."
+    },
+    {
+      "symbol": "g_SoloAmmoMultiplier",
+      "review": "neutral engine gain/scaling or unset state",
+      "evidence": "Mixer limits, unit multipliers and unset/layout-control sentinels. Authored samples, weapon/difficulty/fog/font tables are imported separately from ROM."
+    },
+    {
+      "symbol": "D_80032464",
+      "review": "port allocation budget",
+      "evidence": "PORT-specific expanded buffer capacities in gun.c; these size native allocations and replace N64 capacities, with no game asset payload."
+    },
+    {
+      "symbol": "size_item_buffer",
+      "review": "port allocation budget",
+      "evidence": "PORT-specific expanded buffer capacities in gun.c; these size native allocations and replace N64 capacities, with no game asset payload."
+    },
+    {
+      "symbol": "g_GLGrenadeLaunchUnk8C",
+      "review": "engine arithmetic literals",
+      "evidence": "One-element arrays preserve the gun code literal-pool order; scalar arithmetic operands, not serialized game content."
+    },
+    {
+      "symbol": "g_GLGrenadeLaunchUnk94",
+      "review": "engine arithmetic literals",
+      "evidence": "One-element arrays preserve the gun code literal-pool order; scalar arithmetic operands, not serialized game content."
+    },
+    {
+      "symbol": "rz_lbits",
+      "review": "general-purpose DEFLATE implementation",
+      "evidence": "Generic gzip/DEFLATE decoding tables and table-width parameters; zlib.c identifies the public-domain Mark Adler inflate implementation. Needed before ROM decompression."
+    },
+    {
+      "symbol": "rz_dbits",
+      "review": "general-purpose DEFLATE implementation",
+      "evidence": "Generic gzip/DEFLATE decoding tables and table-width parameters; zlib.c identifies the public-domain Mark Adler inflate implementation. Needed before ROM decompression."
+    },
+    {
+      "symbol": "rz_cplext",
+      "review": "general-purpose DEFLATE implementation",
+      "evidence": "Generic gzip/DEFLATE decoding tables and table-width parameters; zlib.c identifies the public-domain Mark Adler inflate implementation. Needed before ROM decompression."
+    },
+    {
+      "symbol": "rz_mask_bits",
+      "review": "general-purpose DEFLATE implementation",
+      "evidence": "Generic gzip/DEFLATE decoding tables and table-width parameters; zlib.c identifies the public-domain Mark Adler inflate implementation. Needed before ROM decompression."
+    },
+    {
+      "symbol": "rz_cpdext",
+      "review": "general-purpose DEFLATE implementation",
+      "evidence": "Generic gzip/DEFLATE decoding tables and table-width parameters; zlib.c identifies the public-domain Mark Adler inflate implementation. Needed before ROM decompression."
+    },
+    {
+      "symbol": "rz_border",
+      "review": "general-purpose DEFLATE implementation",
+      "evidence": "Generic gzip/DEFLATE decoding tables and table-width parameters; zlib.c identifies the public-domain Mark Adler inflate implementation. Needed before ROM decompression."
+    },
+    {
+      "symbol": "rz_cplens",
+      "review": "general-purpose DEFLATE implementation",
+      "evidence": "Generic gzip/DEFLATE decoding tables and table-width parameters; zlib.c identifies the public-domain Mark Adler inflate implementation. Needed before ROM decompression."
+    },
+    {
+      "symbol": "rz_cpdist",
+      "review": "general-purpose DEFLATE implementation",
+      "evidence": "Generic gzip/DEFLATE decoding tables and table-width parameters; zlib.c identifies the public-domain Mark Adler inflate implementation. Needed before ROM decompression."
+    },
+    {
+      "symbol": "fbit.0",
+      "review": "general-purpose printf implementation",
+      "evidence": "Printf flag-character-to-bit mapping used by xprintf; general library implementation, no game content. Existing upstream code notices apply."
+    },
+    {
+      "symbol": "styles.8",
+      "review": "independently authored custom control labels",
+      "evidence": "The two Vesper/Jinx labels in native_options_bridge.h; original style labels are read through the ROM language bank."
+    },
+    {
+      "symbol": "CSWTCH.897",
+      "review": "compiler-generated switch implementation",
+      "evidence": "Four independently authored watch navigation labels: Advanced/Back/Audio/Experimental; complete pointer targets inspected."
+    },
+    {
+      "symbol": "CSWTCH.475",
+      "review": "compiler-generated custom view-distance lookup",
+      "evidence": "Saved chraction.s references this table only from native_guard_activity_beyond_fog. Its complete 12-byte payload equals the independently authored Far/Medium/Near distances [4000,2200,1200] in native_detail.h, not ROM asset data."
+    },
+    {
+      "symbol": "CSWTCH.2704",
+      "review": "compiler-generated custom watch skin colour lookup",
+      "evidence": "Complete four-entry seconds-hand finish lookup generated from native_watch_skin_mesh.h, including independently added muted Gold. All four u32 colours checked against the custom skin implementation and saved assembly references."
+    }
+  ]
+}

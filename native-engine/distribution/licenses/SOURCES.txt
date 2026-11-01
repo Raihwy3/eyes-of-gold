@@ -1,0 +1,41 @@
+Dependency license sources
+
+The linked game uses the inherited engine and PC port, Fast3D, libctru, Citro3D,
+newlib (C/math/system support) and GCC's libgcc/libstdc++ runtime support.
+Build-only tools are not shipped in this install archive; their original license
+files remain in their source/tool distributions. No OpenGL/glad runtime is linked
+in this 3DS build.
+
+Original Eyes of Gold native additions:
+MIT, Copyright (c) 2026 Eyes of Gold contributors.
+eyes-of-gold-MIT-LICENSE.txt is copied from native-engine/LICENSE.
+Scope: eyes-of-gold-LICENSE-NOTICE.txt.
+
+Original engine and PC-port revision:
+fda76b69837e6c5aae436e0d3e798989e49b06d2
+https://github.com/jkdansereau/goldeneye-pc-port
+The root upstream-LICENSE.txt, upstream-NOTICE.txt and fast3d-LICENSE.txt are
+copied directly from this pinned checkout at build time.
+
+libctru 2.7.0 (installed package 2.7.0-1):
+libctru-LICENSE.txt is the License section of:
+https://raw.githubusercontent.com/devkitPro/libctru/v2.7.0/README.md
+
+Citro3D 1.7.1 (installed package 1.7.1-2):
+https://raw.githubusercontent.com/devkitPro/citro3d/v1.7.1/LICENSE
+
+newlib (installed package 4.6.0.20260123-5):
+newlib-LICENSE.txt retains the upstream collection of copyright/license notices,
+including notices for other targets. It is not a claim that all those targets or
+implementations are linked. Snapshot retrieved 2026-10-27 from:
+https://raw.githubusercontent.com/devkitPro/newlib/master/COPYING.NEWLIB
+
+GCC 16.1.0 runtime (libgcc and libstdc++):
+Read gcc-runtime-GPL-3.0.txt together with gcc-runtime-exception.txt. The runtime
+exception is retained separately; a GPL-only label would omit relevant terms.
+https://raw.githubusercontent.com/gcc-mirror/gcc/releases/gcc-16.1.0/COPYING3
+https://raw.githubusercontent.com/gcc-mirror/gcc/releases/gcc-16.1.0/COPYING.RUNTIME
+
+The license documents retrieved from upstream text views preserve their wording;
+whitespace is normalized when saving them. This index explains their origin and
+does not replace any license or certify distribution rights for the whole game.
