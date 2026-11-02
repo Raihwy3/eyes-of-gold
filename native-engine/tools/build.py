@@ -59,6 +59,27 @@ def prepare():
     (BUILD/'include/native_build.h').write_text('#define NATIVE_BUILD_ID "'+digest.hexdigest()[:12]+'"\n')
 def source_path(rel):
     source=UP/rel
+    if str(rel)=='src/game/ramromreplay.c':
+        text='#include "native_demo.h"\n'+source.read_text()
+        old='''    if (ramrom_blkbuf_2->randseed != (u8)g_randomSeed)
+    {
+        ramromFadeToTitle();
+    }'''
+        if text.count(old)!=1:raise ValueError('Original replay seed check changed')
+        text=text.replace(old,'    native_demo_replay_seed(ramrom_blkbuf_2->randseed,(u8)g_randomSeed);')
+        for condition,reason in [('ramrom_blkbuf_2->check != var_t0','NATIVE_DEMO_CHECKSUM'),
+                                 ('joyGetButtonsPressedThisFrame(0, 0xFFFFU) != 0','NATIVE_DEMO_INPUT'),
+                                 ('var_a3 == 0 && ramrom_blkbuf_2->speedframes == 0','NATIVE_DEMO_END')]:
+            old='    if ('+condition+')\n    {\n        ramromFadeToTitle();'
+            if text.count(old)!=1:raise ValueError('Original replay exit changed: '+condition)
+            text=text.replace(old,old.replace('        ramromFadeToTitle();','        native_demo_replay_stop('+reason+');\n        ramromFadeToTitle();'))
+        old='    if ((g_GlobalTimer >= temp_v1) && ((g_GlobalTimer - g_ClockTimer) < temp_v1))\n    {\n        ramromFadeToTitle();'
+        assert text.count(old)==1
+        text=text.replace(old,old.replace('        ramromFadeToTitle();','        native_demo_replay_stop(NATIVE_DEMO_TIMER);\n        ramromFadeToTitle();'))
+        old='void replay_recorded_ramrom_at_address(ramromfilestructure *demofile)\n{'
+        assert text.count(old)==1
+        text=text.replace(old,old+'\n    native_demo_replay_begin();')
+        dest=BUILD/'overlay/ramromreplay.c';dest.write_text(text);return dest
     if str(rel)=='assets/rarewarelogo.c':
         text='#ifdef __3DS__\n#include "native_title_storage.h"\n#else\n'+source.read_text()+'\n#endif\n'
         dest=BUILD/'overlay/rarewarelogo.c';dest.write_text(text)

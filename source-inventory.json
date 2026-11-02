@@ -1,6 +1,6 @@
 {
   "files": 375,
-  "bytes": 7826558,
+  "bytes": 7832562,
   "python_syntax": "passed",
   "copied_native_source_equality": "Updated since the initial export; per-file hashes describe this release.",
   "upstream_included": false,
@@ -225,7 +225,7 @@
     },
     {
       "path": "native-engine/include/native_demo.h",
-      "sha256": "73c5880a4471988011caa59474493ff8807fdcc7ae920678d59b501ec724881f"
+      "sha256": "7bb7e6adf8bd665db903193869dab1bad4f287cac31b896c3f60fc45b9499b32"
     },
     {
       "path": "native-engine/include/native_derived.h",
@@ -601,11 +601,11 @@
     },
     {
       "path": "native-engine/rom-code-pool-review.json",
-      "sha256": "88a1ea9d6c8ae15b0add3d7fafdb76916f2c6ce776a5ceaa02d2e9f4793361ba"
+      "sha256": "4aa3ba4b840fca45d75b27cd90692cfe4986245757e7494ae5430a941e6b19e5"
     },
     {
       "path": "native-engine/rom-data-code-review.json",
-      "sha256": "0499e75b18d5c407c50ecbd41d6b4523e45e29e992fe4529d2ea265c986b7f36"
+      "sha256": "8c6175f817506f32e3a2f0210394efb4fcc633a5699dc02c1d323aa914bc7a16"
     },
     {
       "path": "native-engine/rom-data-layout.json",
@@ -685,7 +685,7 @@
     },
     {
       "path": "native-engine/src/native_controls.c",
-      "sha256": "fb5e72c919e2f6eb8de5b9578a9df9b6ae9ffa93f6cafb2583f25a202e0e7491"
+      "sha256": "15607787ecb95a4117c4f3f48474edafb8827fc9516eb0ba4c0fd8ccfd740243"
     },
     {
       "path": "native-engine/src/native_convert.c",
@@ -909,7 +909,7 @@
     },
     {
       "path": "native-engine/tests/native_controls_host.c",
-      "sha256": "6f575009977022f2d34c1d9827c16e6c56d4061d83812a3bebdb16b7e98947e7"
+      "sha256": "e8871e998f119a6ae7b2cdbd4320fecd07ff0cf445883901247e4f8469a99447"
     },
     {
       "path": "native-engine/tests/native_convert_host.c",
@@ -1097,7 +1097,7 @@
     },
     {
       "path": "native-engine/tools/build.py",
-      "sha256": "1a028d7e763d7fe3b3b8faeaf4f9771c291de77e89d35ef14bf3f4b5425a01ce"
+      "sha256": "7cc418aa5c0998743ea943a6a3a9f19dc8859a76d299623b492ee116fc034ad7"
     },
     {
       "path": "native-engine/tools/build_game.py",
@@ -1113,7 +1113,7 @@
     },
     {
       "path": "native-engine/tools/check_attract_camera.py",
-      "sha256": "f3a176361f18f68f5fe0855aecde416c968f4064c167c92a88c7238302c9bd3c"
+      "sha256": "bba348e337c66052bdde489a40d4966fe7f90af353441908ce4a190d5e81b6e4"
     },
     {
       "path": "native-engine/tools/check_audio_pcm.py",

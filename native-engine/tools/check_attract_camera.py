@@ -38,7 +38,7 @@ def check_rom_table_loader(out):
 
 def main():
     out=build.BUILD/'attract-camera';out.mkdir(exist_ok=True)
-    replay=(build.UP/'src/game/ramromreplay.c').read_text()
+    replay=build.source_path(Path('src/game/ramromreplay.c')).read_text()
     front=build.source_path(Path('src/game/front.c')).read_text()
     assert 'select_ramrom_to_play();' in front
     assert 'attract demo stages are not converted' not in front
@@ -48,6 +48,7 @@ def main():
     check_rom_table_loader(out)
     source=r'''
 #include <ultra64.h>
+#include <macro.h>
 #include <assert.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -55,6 +56,8 @@ def main():
 #include <string.h>
 #include <math.h>
 #include "ramromreplay.h"
+#include "joy.h"
+#include "native_demo.h"
 #include "native_distance_fog.h"
 #include "native_test_assert.h"
 static FILE *cart;
@@ -67,11 +70,32 @@ char ramrom_data_target[0x380] __attribute__((aligned(16)));
 u8 *address_demo_loaded;
 ramromfilestructure *ptr_active_demofile;
 s32 g_ramromPlayBackFlag;
+s32 g_GlobalTimer,g_ClockTimer;
+u64 g_randomSeed;
+s32 prev_keypresses;
+struct ramrom_seed {u8 speedframes,count,randseed,check;};
+struct ramrom_blockbuf {s8 stick_x,stick_y;u8 button_low,button_high;};
+struct ramrom_seed *ramrom_blkbuf_2;
+struct ramrom_blockbuf *ramrom_blkbuf_3;
+static unsigned fades,starts,drifts,stops[4];
+static int timer_stop_tick;
+static int cont_index;
+static u16 physical_buttons;
+void native_demo_replay_begin(void){starts++;}
+void native_demo_replay_seed(unsigned expected,unsigned actual){drifts+=expected!=actual;}
+void native_demo_replay_stop(int reason){assert(reason>=0 && reason<4);stops[reason]++;if(reason==NATIVE_DEMO_TIMER)timer_stop_tick=g_GlobalTimer;}
+static void ramromFadeToTitle(void){fades++;}
+void joySetContDataIndex(s32 n){cont_index=n;}
+u16 joyGetButtonsPressedThisFrame(s8 n,u16 mask){assert(n==0 && cont_index==0);return physical_buttons&mask;}
+void updateFrameCounters(s32 n){g_ClockTimer=n;g_GlobalTimer+=n;}
 static void *romCopyAligned(void *dst,void *src,int size) {
     uintptr_t at=(uintptr_t)src-0x10000000u;
-    assert(at>=begin && at+size<=end);
+    unsigned offset=at&1;at&=~(uintptr_t)1;
+    dst=(void *)(((uintptr_t)dst+15)&~(uintptr_t)15);
+    size=(size+offset+15)&~15;
+    assert(at>=begin && at+size<=end+15);
     assert(!fseek(cart,at,SEEK_SET));assert(fread(dst,1,size,cart)==(unsigned)size);
-    return dst;
+    return (u8 *)dst+offset;
 }
 void set_solo_and_ptr_briefing(enum LEVELID n){selected_stage=n;}
 void set_selected_difficulty(enum DIFFICULTY n){selected_difficulty=n;}
@@ -80,6 +104,10 @@ void guMtxIdentF(float m[4][4]) {memset(m,0,64);for(int i=0;i<4;i++)m[i][i]=1;}
 '''
     source+=function(replay,'static void ramromFixupEndian(')+'\n'
     source+=function(replay,'void replay_recorded_ramrom_at_address(')+'\n'
+    source+=function(replay,'s32 ramrom_replay_handler(struct contsample *arg0, s32 arg1)\n{')+'\n'
+    original=(build.UP/'src/game/ramromreplay.c').read_text()
+    source+=function(original,'s32 ramrom_replay_handler(struct contsample *arg0, s32 arg1)\n{').replace('ramrom_replay_handler(', 'reference_replay_handler(',1)+'\n'
+    source+=function(replay,'void iterate_ramrom_entries_handle_camera_out(')+'\n'
     perspective=(build.UP/'src/libultra/gu/perspective.c').read_text()
     source+=function(perspective,'void guPerspectiveF(')+'\n'
     source+=r'''
@@ -88,24 +116,46 @@ int main(int argc,char **argv) {
     cart=fopen(argv[1],"rb");assert(cart);begin=strtoul(argv[2],0,10);end=begin+strtoul(argv[3],0,10);
     replay_recorded_ramrom_at_address((void *)(uintptr_t)(0x10000000u+begin));
     ramromfilestructure *h=ptr_active_demofile;
-    assert(g_ramromPlayBackFlag && selected_menu==MENU_RUN_STAGE && reload);
+    assert(g_ramromPlayBackFlag && selected_menu==MENU_RUN_STAGE && reload && starts==1);
     assert(selected_stage==h->stagenum && selected_stage>0 && selected_stage<60);
     assert(selected_difficulty==h->difficulty && selected_difficulty<=2);
     assert(h->numplayers==0 && h->size_cmds>0 && h->size_cmds<=4);
     assert(h->filesize>0 && h->filesize<=(int)(end-begin));
     unsigned at=begin+sizeof *h,packets=0;
+    struct contsample samples[CONTSAMPLE_LEN]={0};int sample_index=0;
     for(;;) {
         unsigned char seed[4],data[256];assert(at+4<=end);
         assert(!fseek(cart,at,SEEK_SET));assert(fread(seed,1,4,cart)==4);
-        if(!seed[0] && !seed[1])break;
+        if(!seed[0] && !seed[1]) {
+            iterate_ramrom_entries_handle_camera_out();assert(stops[NATIVE_DEMO_END]==1);break;
+        }
         unsigned bytes=seed[1]*h->size_cmds*4;
         assert(bytes<=sizeof data && at+4+bytes<=end);
         assert(fread(data,1,bytes,cart)==bytes);
         unsigned char sum=seed[0]+seed[1]+seed[2];
         for(unsigned i=0;i<bytes;i++)sum+=data[i];
-        assert(sum==seed[3]);at+=(bytes+5)&~1u;packets++;
+        assert(sum==seed[3]);
+        iterate_ramrom_entries_handle_camera_out();
+        assert(ramrom_blkbuf_2->check==seed[3]);
+        g_randomSeed=(seed[2]+1)&255; /* Deliberately diverge on every packet. */
+        if(!packets){unsigned before=fades;reference_replay_handler(samples,sample_index);assert(fades==before+1);}
+        unsigned before=fades;
+        sample_index=ramrom_replay_handler(samples,sample_index);
+        assert(fades==before && cont_index==1);
+        if(!packets) {
+            ramrom_blkbuf_2->check^=1;
+            ramrom_replay_handler(samples,sample_index);assert(fades==before+1 && stops[NATIVE_DEMO_CHECKSUM]==1);
+            ramrom_blkbuf_2->check^=1;physical_buttons=A_BUTTON;
+            ramrom_replay_handler(samples,sample_index);assert(fades==before+2 && stops[NATIVE_DEMO_INPUT]==1);
+            physical_buttons=0;
+        }
+        at+=(bytes+5)&~1u;packets++;
+        assert((uintptr_t)address_demo_loaded==0x10000000u+at);
     }
-    assert(packets>0);fclose(cart);
+    assert(packets>0 && drifts>=packets && stops[NATIVE_DEMO_TIMER]==1);
+    assert(g_GlobalTimer>=h->totaltime_ms);
+    assert(timer_stop_tick>=h->totaltime_ms-60 && timer_stop_tick<h->totaltime_ms-60+256);
+    fclose(cart);
     for(int aspect=0;aspect<3;aspect++)for(int zoom=0;zoom<2;zoom++)for(int n=2;n<=30;n++) {
         float matrix[4][4],ratio=aspect==0?4.f/3:aspect==1?5.f/4:5.f/3;
         float near=n,far=15000;
@@ -124,7 +174,7 @@ int main(int argc,char **argv) {
             assert(fog.end_world==end);
         }
     }
-    printf("PASS retail demo: stage=%d packets=%u; actual projection and Near/Medium/Far fog boundaries agree at all aspects/zoom\n",selected_stage,packets);
+    printf("PASS retail demo: stage=%d packets=%u ticks=%d; full iterator/handler survives RNG drift, preserves checksum/input/end/timer exits; fog/projection agree\n",selected_stage,packets,g_GlobalTimer);
 }
 '''
     test=out/'check.c';test.write_text(source);binary=out/'check'

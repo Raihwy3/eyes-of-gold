@@ -9,6 +9,21 @@
 #include "native_pad.h"
 #include "native_settings.h"
 #include "native_demo.h"
+#include "system.h"
+static unsigned native_demo_seed_drift;
+void native_demo_replay_begin(void) {
+    native_demo_seed_drift=0;
+    sysLogPrintf(LOG_NOTE,"Attract replay started");
+}
+void native_demo_replay_seed(unsigned expected,unsigned actual) {
+    if(expected==actual)return;
+    if(!native_demo_seed_drift++)sysLogPrintf(LOG_NOTE,
+        "Attract replay RNG drift: recorded=%u actual=%u; continuing recorded input",expected,actual);
+}
+void native_demo_replay_stop(int reason) {
+    const char *why=reason==NATIVE_DEMO_CHECKSUM?"packet checksum":reason==NATIVE_DEMO_INPUT?"physical input":reason==NATIVE_DEMO_END?"end of recording":"recorded time limit";
+    sysLogPrintf(LOG_NOTE,"Attract replay exit: %s; RNG drift packets=%u",why,native_demo_seed_drift);
+}
 extern int get_currentmenu(void);
 extern int lvlGetControlsLockedFlag(void);
 extern int disablePlayerActionsWhenPausedOrInMpMenu(void);

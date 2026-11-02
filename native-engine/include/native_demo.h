@@ -6,4 +6,8 @@ extern int get_is_ramrom_flag(void) __attribute__((weak));
 static inline int native_demo_active(void) {
     return get_is_ramrom_flag && get_is_ramrom_flag()!=0;
 }
+enum NativeDemoStop {NATIVE_DEMO_CHECKSUM,NATIVE_DEMO_INPUT,NATIVE_DEMO_END,NATIVE_DEMO_TIMER};
+void native_demo_replay_begin(void);
+void native_demo_replay_seed(unsigned expected,unsigned actual);
+void native_demo_replay_stop(int reason);
 #endif

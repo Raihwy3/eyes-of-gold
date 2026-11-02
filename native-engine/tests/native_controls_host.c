@@ -12,6 +12,10 @@
 #include "bondconstants.h"
 #include "fr.h"
 #include "native_test_assert.h"
+#include "system.h"
+#include "native_demo.h"
+static unsigned demo_logs;
+void sysLogPrintf(enum LogLevel level,const char *fmt,...){(void)level;(void)fmt;demo_logs++;}
 static int current_player;
 s32 get_cur_playernum(void){return current_player;}
 static struct player player;
@@ -118,6 +122,10 @@ int main(void) {
     }
     assert(native_controls_look_rate(__builtin_inff())==0 && native_controls_look_rate(__builtin_nanf(""))==0);
     assert(native_controls_look_rate(1e30f)==2 && native_controls_look_rate(-1e30f)==-2);
+    native_demo_replay_begin();assert(demo_logs==1);
+    native_demo_replay_seed(1,1);assert(demo_logs==1);
+    native_demo_replay_seed(1,2);native_demo_replay_seed(1,3);assert(demo_logs==2);
+    native_demo_replay_stop(NATIVE_DEMO_TIMER);assert(demo_logs==3);
     demo_active=1;memset(&m,0x5a,sizeof m);struct MoveData recorded=m;
     native_controls_apply(&m);assert(!memcmp(&m,&recorded,sizeof m));
     assert(!native_game_input_gameplay() && native_controls_restore(2)==2);
