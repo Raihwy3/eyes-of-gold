@@ -10,7 +10,7 @@ Some original game content appears in the decompiled source as strings and initi
 
 The build replaces those definitions with empty writable storage. At startup, `native_rom_data_init` fills it from the ROM-derived cartridge file. Layout metadata describes the locations, field widths, byte order and pointer mappings needed to do this.
 
-The recorded development audit covers 1,261 named definitions and 216 compiler-generated data ranges. These include weapon and skeleton definitions, animation and AI tables, menu text, colours, resource names and default records.
+The recorded development audit covers 1,262 named definitions and 216 compiler-generated data ranges. These include weapon and skeleton definitions, animation and AI tables, menu text, colours, resource names, default records and the attract-demo selection table.
 
 ## What the build checks
 

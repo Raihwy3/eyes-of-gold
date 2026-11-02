@@ -32,6 +32,8 @@ def main():
     check_guard_pose.main()
     import check_guard_activity
     check_guard_activity.main()
+    import check_attract_camera
+    check_attract_camera.main()
     import check_work_profile
     check_work_profile.main()
     import check_effect_lod

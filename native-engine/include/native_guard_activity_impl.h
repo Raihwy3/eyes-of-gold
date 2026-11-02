@@ -3,6 +3,7 @@
 #include "native_guard_activity.h"
 #include "native_detail.h"
 #include "native_settings.h"
+#include "native_demo.h"
 #include "chraidata.h"
 #include "system.h"
 #include <string.h>
@@ -57,6 +58,7 @@ static struct NativeGuardActivity *native_guard_activity_slot(ChrRecord *chr) {
  * visibility test. A model intersecting the visible side stays live. No rays,
  * AI-list lookup, model tick or timer catch-up is performed here. */
 int native_guard_activity_beyond_fog(ChrRecord *chr) {
+    if(native_demo_active())return 0;
     if(!chr || !chr->model || !chr->prop || chr->prop->type!=PROP_TYPE_CHR ||
        lvlGetCurrentStageToLoad()==LEVELID_TITLE || getPlayerCount()!=1)return 0;
     uintptr_t at=(uintptr_t)chr,base=(uintptr_t)g_ChrSlots;
@@ -139,6 +141,7 @@ static int native_guard_activity_clear(ChrRecord *chr,PropRecord *bond) {
 }
 
 int native_guard_activity_awake(ChrRecord *chr) {
+    if(native_demo_active())return 1;
     int now=g_GlobalTimer;
     if(now<native_guard_activity_frame)native_guard_activity_reset();
     if(now!=native_guard_activity_frame){native_guard_activity_frame=now;native_guard_activity_probes=0;}
@@ -209,6 +212,7 @@ int native_guard_activity_awake(ChrRecord *chr) {
  * model based on one ray. Mission scripts and alerted/pursuing guards retain
  * the original perception so scripted actions and pursuit cannot stall. */
 int native_guard_activity_sight_allowed(ChrRecord *chr) {
+    if(native_demo_active())return 1;
     if(native_guard_activity_beyond_fog(chr))return 0;
     if(!native_setting_guard_visibility() || !chr || !chr->prop || !chr->model ||
        lvlGetCurrentStageToLoad()==LEVELID_TITLE || getPlayerCount()!=1 || g_ClockTimer<=0)return 1;
@@ -234,6 +238,7 @@ int native_guard_activity_sight_allowed(ChrRecord *chr) {
 }
 
 int native_guard_activity_ai_due(ChrRecord *chr) {
+    if(native_demo_active())return 1;
     if(native_guard_activity_beyond_fog(chr))return 0;
     struct NativeGuardActivity *s=native_guard_activity_slot(chr);
     /* Local mission scripts and non-slot background actors retain their rate. */

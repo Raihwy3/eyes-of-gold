@@ -506,9 +506,10 @@ def source_path(rel):
         needle='    display_image_at_position(&DL, &xypos, &halfedxy, image->width, image->height, 0, 0, 1, 255, 255, 255, 220, (image->level > 0), 0);'
         assert text.count(needle)==1
         text=text.replace(needle,'    s32 r=255,g=255,b=255;\n    extern void portCrosshairTint(s32 *,s32 *,s32 *);\n    extern void portCrosshairApplyTintCombine(Gfx *);\n    if(option==0)portCrosshairTint(&r,&g,&b);\n    Gfx *env=DL;\n'+needle.replace('255, 255, 255, 220','r, g, b, 220')+'\n    if(option==0)portCrosshairApplyTintCombine(env);')
-        old='            select_ramrom_to_play();'
-        if text.count(old)!=1:raise ValueError('Original attract-demo transition changed')
-        text=text.replace(old,'            sysLogPrintf(LOG_NOTE,"Intro complete: returning to file select; attract demo stages are not converted");\n            frontChangeMenu(MENU_FILE_SELECT,TRUE);')
+        # All retail demo stages are converted now. Keep the original attract
+        # transition, which reads recorded input packets from the user's ROM.
+        if text.count('            select_ramrom_to_play();')!=1:
+            raise ValueError('Original attract-demo transition changed')
         text=text.replace('PORT_HUD_ASPECT(DL, GE_HUD_ASPECT_CENTER);','PORT_HUD_ASPECT(DL, GE_HUD_ASPECT_NONE);')
         text=re.sub(r'viSetAspect\(([^;\n]*)\);',r'viSetAspect(native_frontend_aspect(\1));',text)
         text='''#include <ultra64.h>

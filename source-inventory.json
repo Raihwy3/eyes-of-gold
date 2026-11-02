@@ -1,15 +1,15 @@
 {
-  "files": 368,
-  "bytes": 7810980,
+  "files": 375,
+  "bytes": 7826558,
   "python_syntax": "passed",
-  "copied_native_source_equality": "Verified at export; two build scripts subsequently fixed during isolated build test.",
+  "copied_native_source_equality": "Updated since the initial export; per-file hashes describe this release.",
   "upstream_included": false,
   "roms_or_generated_binaries_included": false,
-  "full_clean_build": "Passed in isolated local clone after build-script fixes; upstream and ROM supplied locally; network download and console execution not tested.",
+  "full_clean_build": "Original isolated source build passed. Release 0.9.4 build, host checks, ROM-data audit and packaging passed in the working checkout; console execution not tested here.",
   "inventory": [
     {
       "path": ".gitignore",
-      "sha256": "8020bfbf482cc3d0049ecdc676273a38b62a144ffd168d9181b1972f69c79146"
+      "sha256": "6f62ec1131a796102ecee743f10333c7d6f4b9c9f1ee6144bc7e645c4247e06d"
     },
     {
       "path": "LICENSE",
@@ -25,7 +25,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "d44a4ff93ca4beb8909756fb21fd7b49c1fd21645b110f11012da77d279857cd"
+      "sha256": "0a884d9c47252c916e2ed262a402061dee89807c6a7443b1dd700ad7721835c8"
     },
     {
       "path": "SOURCE-RELEASE.md",
@@ -37,7 +37,7 @@
     },
     {
       "path": "docs/rom-data-release.md",
-      "sha256": "bf1e4419fc7f1fe30fefefaedfe9fedf341972e7e75b69721c13651566fc5bdf"
+      "sha256": "ce4c239f3ab29c42c97011b2ea59f1d0862d7366931f7e2e301521434daa9178"
     },
     {
       "path": "icon.png",
@@ -224,6 +224,10 @@
       "sha256": "ac3b2c7104e270ab072a8d10809b5b08a322b874f7080d8caaeb081f44b28342"
     },
     {
+      "path": "native-engine/include/native_demo.h",
+      "sha256": "73c5880a4471988011caa59474493ff8807fdcc7ae920678d59b501ec724881f"
+    },
+    {
       "path": "native-engine/include/native_derived.h",
       "sha256": "24b215bad66e65fae96ede7dfc4079bfe39305b5f6201908b5328d789b7a1f78"
     },
@@ -297,7 +301,7 @@
     },
     {
       "path": "native-engine/include/native_guard_activity_impl.h",
-      "sha256": "5fd21841117907bd997174ef810f1131da3baa391cba57dc02d203c24a56893e"
+      "sha256": "3bb524ff1f953727bcfd021a2e3f7516a8c4f977fd8bd665c4964819968954a2"
     },
     {
       "path": "native-engine/include/native_guard_pose.h",
@@ -469,7 +473,7 @@
     },
     {
       "path": "native-engine/include/native_version.h",
-      "sha256": "7da3a7f62240ae241761f5abdeeb72c142f404b8cf911da8a02e0a13fde2a61e"
+      "sha256": "357ee4e6b4c5faaf6a20e1565a430c90a6d2924835391487263c5aa1fa91eef9"
     },
     {
       "path": "native-engine/include/native_viewmodel.h",
@@ -504,6 +508,10 @@
       "sha256": "0726aadbd6daf93fdac36d94967af8ba63f3dd1d356a7ebcfba9ffdd694b1c7f"
     },
     {
+      "path": "native-engine/include/native_weapon_stereo.h",
+      "sha256": "6060b2fa858f864ca8d5fc92270d6c30b4a51bb4f6eee3b80385806ea7b252db"
+    },
+    {
       "path": "native-engine/include/native_work_profile.h",
       "sha256": "3a6c5b97251ed7a460cf02bd919bf82759bbf51648f409084dfa60d740730fb9"
     },
@@ -513,7 +521,7 @@
     },
     {
       "path": "native-engine/include/pica_batch.h",
-      "sha256": "a5ca5ac2413608184f02b3d242cf015520bcb948260f4ec105879efa060db5ae"
+      "sha256": "1bbce4456d4339e6d615d51565cc63cd7fdaca35c01aa1ae37c04c5b9b264365"
     },
     {
       "path": "native-engine/include/pica_combiner.h",
@@ -593,15 +601,15 @@
     },
     {
       "path": "native-engine/rom-code-pool-review.json",
-      "sha256": "dedc3332ae13b0c7bfd4ca0ea78c136655d563018e24c5425c23bb354fbf0c4e"
+      "sha256": "88a1ea9d6c8ae15b0add3d7fafdb76916f2c6ce776a5ceaa02d2e9f4793361ba"
     },
     {
       "path": "native-engine/rom-data-code-review.json",
-      "sha256": "99923f94f4aa6abd070592b8b740f0cd65892959dd1027bbcd9e22647eb57ace"
+      "sha256": "0499e75b18d5c407c50ecbd41d6b4523e45e29e992fe4529d2ea265c986b7f36"
     },
     {
       "path": "native-engine/rom-data-layout.json",
-      "sha256": "419f73ae8dc66b79809b1c0ce8c9a82536463781144f91a5edd7e2b03f939acc"
+      "sha256": "7f5028354e08820ff3a9d87532707b245e6227baf5ac3b241c162d7f1c51ba6d"
     },
     {
       "path": "native-engine/rom-string-layout.json",
@@ -641,7 +649,7 @@
     },
     {
       "path": "native-engine/src/gfx_pica.cpp",
-      "sha256": "e248e5a4b41d2bf6e3ac8b4a3666df1fe631a8c51a959e9dd6f97b32a6d803d1"
+      "sha256": "d8f6d070cfc2df7cb3e8f91cc570366954d8ad7126485f34feab2995a967b6e5"
     },
     {
       "path": "native-engine/src/graphics_host_check.cpp",
@@ -677,7 +685,7 @@
     },
     {
       "path": "native-engine/src/native_controls.c",
-      "sha256": "f1f572008699fbf5bd41f1719a1d93856004ef09b10f029d265926913b7fbd7b"
+      "sha256": "fb5e72c919e2f6eb8de5b9578a9df9b6ae9ffa93f6cafb2583f25a202e0e7491"
     },
     {
       "path": "native-engine/src/native_convert.c",
@@ -768,6 +776,10 @@
       "sha256": "f35bab11a3da904d29fa981ac169dd0bafb0a9340bc392d5cb8fae55deb3bcce"
     },
     {
+      "path": "native-engine/tests/batch_prefix.cpp",
+      "sha256": "b6dc2ed1d9026ac470ac96c28001c1d6639d72370de8a368b9fed802478e58de"
+    },
+    {
       "path": "native-engine/tests/bg_special_portals_host.c",
       "sha256": "32133ae1572694030c5a374b7ed916484ca86b9291df2da229a23daca0459d17"
     },
@@ -817,7 +829,7 @@
     },
     {
       "path": "native-engine/tests/frontend_end_host.c",
-      "sha256": "3a2057bb4268977aa30ce62d35b8808788a62a7af4538fe9bea921d72ae7806c"
+      "sha256": "f8f9687303fd0ad958e9927012b825bb706fb20fe62f468cf41da79840f32339"
     },
     {
       "path": "native-engine/tests/game_assets_host.c",
@@ -829,7 +841,7 @@
     },
     {
       "path": "native-engine/tests/guard_activity_host.c",
-      "sha256": "b56560e8c3cf07507cad4f6025c022f20eb9de5e2bb812c2202e5546421e5243"
+      "sha256": "527c0540ef7448c6cc78b61b27d4daddc1572585306c4f9474ff9e09b6b60862"
     },
     {
       "path": "native-engine/tests/guard_pose_host.c",
@@ -897,7 +909,7 @@
     },
     {
       "path": "native-engine/tests/native_controls_host.c",
-      "sha256": "66f9e83015b6fb9fba13a52c2cb3704d8c8f0b916e460d51bf8e5a6ee9ee12e6"
+      "sha256": "6f575009977022f2d34c1d9827c16e6c56d4061d83812a3bebdb16b7e98947e7"
     },
     {
       "path": "native-engine/tests/native_convert_host.c",
@@ -985,7 +997,7 @@
     },
     {
       "path": "native-engine/tests/pica_backend/check.cpp",
-      "sha256": "815d6db209d4dac761a390581b248054fa3a88a1557fb2a4801594c0948a6b29"
+      "sha256": "cbf0f47c0c64300722ae41941fdfb30797abadb81e3b59bbb854b7c6fd654b56"
     },
     {
       "path": "native-engine/tests/pica_backend/mock/3ds.h",
@@ -1048,6 +1060,14 @@
       "sha256": "51677b912e7f257b6b04fe498e3903f7be56964af527949408dba4c248013cb8"
     },
     {
+      "path": "native-engine/tests/weapon-stereo-notes.md",
+      "sha256": "cfc2da930220dd0dacdc52060f128271284d0610bfed9bc1260c5e26ec7f2bfb"
+    },
+    {
+      "path": "native-engine/tests/weapon_stereo.cpp",
+      "sha256": "4599f830b28325fc547dfbc025dcc89fd0f27a51a14f0285cdf2469d392d4a47"
+    },
+    {
       "path": "native-engine/tests/work_profile_host.c",
       "sha256": "9293a2efa266355cd5d62d1d1a3b41638d6835e9ecfd4370b7f6f3654aeb4ed4"
     },
@@ -1077,11 +1097,11 @@
     },
     {
       "path": "native-engine/tools/build.py",
-      "sha256": "9e84a565ae0fe44981d68ba0623ccdd794dd8750c7b2d8f8636811cad8bf1221"
+      "sha256": "1a028d7e763d7fe3b3b8faeaf4f9771c291de77e89d35ef14bf3f4b5425a01ce"
     },
     {
       "path": "native-engine/tools/build_game.py",
-      "sha256": "e5b19ff9ce759ed4d337b5078aef33a49dd0645386c08679da15e1cdf3e7fdd7"
+      "sha256": "0964f434510a655c66f2ac99d731e1f72e6d6241d60751631d145d33810a6ab9"
     },
     {
       "path": "native-engine/tools/build_graphics.py",
@@ -1090,6 +1110,10 @@
     {
       "path": "native-engine/tools/build_probe.py",
       "sha256": "d4d6cd895c60a13e97f45541f22b668b2f54c7b52524ca751918567d3beff85c"
+    },
+    {
+      "path": "native-engine/tools/check_attract_camera.py",
+      "sha256": "f3a176361f18f68f5fe0855aecde416c968f4064c167c92a88c7238302c9bd3c"
     },
     {
       "path": "native-engine/tools/check_audio_pcm.py",
@@ -1190,6 +1214,10 @@
     {
       "path": "native-engine/tools/check_watch_skins.py",
       "sha256": "f8a73ee4d25268979a03847024f592cdab5f2a996bac49638f44a36d351655d1"
+    },
+    {
+      "path": "native-engine/tools/check_weapon_stereo.py",
+      "sha256": "929be12ff4571c8aded3127bda0fd49dc5359d78804752867f3cca037c4e3797"
     },
     {
       "path": "native-engine/tools/check_work_profile.py",

@@ -8,10 +8,10 @@ The game is playable, but there are still bugs and performance issues. New 3DS s
 
 ## What the port adds
 
-The original campaign, menus, intros and watch run through the native engine. On top of that, the port adds features for the 3DS:
+The original campaign, menus, intros, idle demos and watch run through the native engine. On top of that, the port adds features for the 3DS:
 
 - **Dual-screen support.** The bottom screen has touch controls for menus and a full-screen version of the watch interface. During gameplay it shows your mission objectives, and you can drag on it to look around.
-- **Stereoscopic UI.** The 3D slider adds depth to supported menu and HUD elements, including the watch interface in front of the watch model. The level itself is still rendered flat; this is not full stereoscopic world rendering.
+- **Stereoscopic 3D.** The 3D slider controls depth for the game world and first-person weapons, alongside supported menu, HUD and watch elements. The bottom-screen interface stays flat.
 - **Two extra control styles.** **1.5 Vesper** uses the Circle Pad for movement and the C-stick for looking. **1.6 Jinx** uses the Circle Pad for movement, the face buttons for looking and the D-pad for the actions moved from those buttons. The original control styles are still available, and look sensitivity is adjustable.
 - **Display options.** Choose 4:3, 5:4 or the top screen's native 5:3 aspect ratio, with a 30 or 60 FPS cap. These are limits, not guaranteed frame rates. There is also optional supersampling and a choice of smoothing or sharpening filters.
 - **Performance settings.** Adjust model and texture detail, view distance, glass and effects. Dynamic LOD changes the detail level as the frame rate changes. Experimental guard settings can reduce update rates and work spent on distant or hidden guards, but may affect their behaviour.

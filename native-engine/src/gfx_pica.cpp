@@ -9,6 +9,7 @@
 #include "native_gpu_world.h"
 #include "native_display.h"
 #include "native_graphics.h"
+#include "native_weapon_stereo.h"
 #include "native_work_profile.h"
 #include "pica_depth.h"
 #include "pica_fog.h"
@@ -96,10 +97,10 @@ extern "C" int native_pica_retained_supported(void){
   return !disabled && retained_meshes.available();
 }
 static C3D_RenderTarget *target,*watch_target,*right_target;
-static bool stereo_active,ui_rect_scope,frontend_ui;
+static bool stereo_active,ui_rect_scope,frontend_ui,viewmodel_scope;
 static int top_sample_scale=1;
 static unsigned top_output_flags;
-static C3D_Mtx stereo_tilt[3]; // flat, left UI, right UI
+static C3D_Mtx stereo_tilt[7]; // flat, UI, first-person and world left/right
 extern "C" void native_pica_frontend_ui(int enabled){frontend_ui=enabled!=0;}
 extern "C" int native_pica_ui_rect(int enabled);
 static Vertex *watch_vertices;
@@ -170,13 +171,15 @@ static PicaOrderedDraw pending_draw;
 static unsigned gpu_draws,merged_draws;
 static void flush_draw() {
   if(!pending_draw.count)return;
-  const bool raised=frontend_ui || watch_scope || ui_rect_scope;
-  if(stereo_active)C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER,tilt_uniform,&stereo_tilt[raised?1:0]);
+  const bool raised=(frontend_ui && !gpu_world) || watch_scope || ui_rect_scope;
+  const unsigned left_eye=viewmodel_scope?3:raised?1:5;
+  const unsigned right_eye=viewmodel_scope?4:raised?2:6;
+  if(stereo_active)C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER,tilt_uniform,&stereo_tilt[left_eye]);
   if(pending_indexed)C3D_DrawElements(GPU_TRIANGLES,pending_draw.count,C3D_UNSIGNED_SHORT,(pending_elements?pending_elements:world_indices)+pending_draw.first);
   else C3D_DrawArrays(GPU_TRIANGLES,pending_draw.first,pending_draw.count);
   if(stereo_active) {
     C3D_FrameDrawOn(right_target);restore_top_view();
-    C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER,tilt_uniform,&stereo_tilt[raised?2:0]);
+    C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER,tilt_uniform,&stereo_tilt[right_eye]);
     if(pending_indexed)C3D_DrawElements(GPU_TRIANGLES,pending_draw.count,C3D_UNSIGNED_SHORT,(pending_elements?pending_elements:world_indices)+pending_draw.first);
     else C3D_DrawArrays(GPU_TRIANGLES,pending_draw.first,pending_draw.count);
     C3D_FrameDrawOn(target);restore_top_view();
@@ -190,6 +193,9 @@ extern "C" int native_pica_gpu_world_supported(void){
   return world_indices && !disabled;
 }
 extern "C" int native_pica_gpu_world(const NativeGpuWorld *world) {
+  // Producers frequently end an already inactive model scope. Keep clip draws
+  // queued instead of flushing and rebinding the same shader for these no-ops.
+  if(!world && !world_palette_active)return 1;
   // Appending immutable matrix rows cannot affect vertices already pending.
   // Only changes to shader/culling or recycling a full palette are barriers.
   bool entering=world && !world_palette_active;
@@ -227,6 +233,7 @@ extern "C" int native_pica_gpu_world(const NativeGpuWorld *world) {
 extern "C" int native_pica_ui_rect(int enabled) {
   if(!stereo_active)return 0;
   if(enabled<0)return 1;
+  if(ui_rect_scope==(enabled!=0))return 1;
   flush_draw();ui_rect_scope=enabled!=0;return 1;
 }
 #include "pica_watch_mirror.h"
@@ -236,9 +243,9 @@ extern "C" void native_pica_texture_lod(unsigned level) {
   level=std::min(level,3u);if(level==texture_lod_level)return;
   flush_draw();texture_lod_level=level;
 }
-static bool viewmodel_scope;
 extern "C" void native_pica_set_viewmodel(int enabled) {
-  flush_draw();viewmodel_scope=enabled!=0;tev_valid=false;
+  if(viewmodel_scope==(enabled!=0))return;
+  flush_draw();viewmodel_scope=enabled!=0;
 }
 static u64 gpu_wait_start,cpu_frame_start;
 static double gpu_wait_ms;
@@ -742,9 +749,10 @@ static void draw(float *buf, size_t floats, size_t triangles) {
     memcpy(fog_color,cached->fog_colour,sizeof fog_color);mapped=true;
   }else {
     if(proven)inputs=proven_plan;else if(camera_lod)inputs=lod_plan;
-    mapped=(proven || camera_lod || pica_plan_inputs_view(buf,stride,input_offset,count,c.num_inputs,c.opt_alpha,&inputs,refs)) &&
-      (!c.opt_fog || plan_batch_fog(buf,stride,fog_offset,count,fog_color,refs));
-    if(!mapped && (!c.opt_fog || plan_batch_fog(buf,stride,fog_offset,count,fog_color,refs)))
+    const bool colours_mapped=proven || camera_lod || pica_plan_inputs_view(buf,stride,input_offset,count,c.num_inputs,c.opt_alpha,&inputs,refs);
+    const bool fog_mapped=!c.opt_fog || plan_batch_fog(buf,stride,fog_offset,count,fog_color,refs);
+    mapped=colours_mapped && fog_mapped;
+    if(!mapped && fog_mapped)
       mapped=alpha_product=pica_alpha_product_plan(c,buf,stride,input_offset,count,&inputs,refs);
   }
   if(measure_frame)planning_ticks+=svcGetSystemTick()-planning_start;
@@ -1194,6 +1202,11 @@ static void start() {
   const float disparity=4.f*osGet3DSliderState()/400.f;
   Mtx_OrthoTilt(&stereo_tilt[1],-1-disparity,1-disparity,-1,1,0,1,true);
   Mtx_OrthoTilt(&stereo_tilt[2],-1+disparity,1+disparity,-1,1,0,1,true);
+  const float slider=osGet3DSliderState();
+  native_weapon_stereo(stereo_tilt[3],tilt,slider,false);
+  native_weapon_stereo(stereo_tilt[4],tilt,slider,true);
+  native_world_stereo(stereo_tilt[5],tilt,slider,false);
+  native_world_stereo(stereo_tilt[6],tilt,slider,true);
   C3D_FVUnifMtx4x4(
       GPU_VERTEX_SHADER,
       tilt_uniform, &tilt);

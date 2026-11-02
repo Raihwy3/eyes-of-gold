@@ -16,7 +16,15 @@ inline bool pica_batch_fits(const float *p,size_t stride,size_t offset,
 inline size_t pica_batch_prefix(const float *p,size_t stride,size_t offset,
                                 size_t triangles,unsigned inputs,bool alpha,bool fog,const float *const *refs=nullptr) {
   if(!triangles || !pica_batch_fits(p,stride,offset,1,inputs,alpha,fog,nullptr,nullptr,refs))return 0;
-  size_t low=1,high=triangles+1;
+  // Most failed batches have a short compatible run. Find its scale before
+  // bisecting, instead of repeatedly probing half the entire remaining draw.
+  size_t low=1,high=2;
+  while(high<=triangles && pica_batch_fits(p,stride,offset,high,inputs,alpha,fog,nullptr,nullptr,refs)){
+    low=high;
+    if(high>triangles/2){high=triangles+1;break;}
+    high*=2;
+  }
+  if(high>triangles)high=triangles+1;
   while(low+1<high) {
     size_t mid=low+(high-low)/2;
     if(pica_batch_fits(p,stride,offset,mid,inputs,alpha,fog,nullptr,nullptr,refs))low=mid;

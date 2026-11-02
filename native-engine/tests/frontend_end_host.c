@@ -17,14 +17,19 @@ void viSetViewPosition(s16 a,s16 b) {(void)a;(void)b;}
 s32 check_aztec_completed_any_folder_secret_00(void) {return 1;}
 s32 fileIsEgyptCompletedOn00AnyFolder(void) {return 1;}
 u32 randomGetNext(void) {return 1;}
-u16 joyGetButtonsPressedThisFrame(s8 p,u16 b) {(void)p;(void)b;return 0;}
-void select_ramrom_to_play(void) {abort();}
+static unsigned demos;
+static u16 pressed;
+u16 joyGetButtonsPressedThisFrame(s8 p,u16 b) {(void)p;return pressed&b;}
+void select_ramrom_to_play(void) {demos++;frontChangeMenu(MENU_RUN_STAGE,TRUE);}
 int main(void) {
     unsigned end=0;while(intro_char_table[end].body>=0)++end;
     if(!end)abort();
     intro_character_index=end-1;full_actor_intro=0;g_MenuTimer=181;
     menu_update=MENU_INVALID;is_emulating_spectrum=FALSE;
     interface_menu18_displaycast();
-    if(menu_update!=MENU_FILE_SELECT || is_emulating_spectrum || intro_character_index!=0)abort();
-    puts("PASS real cast intro completion returns to file select without launching attract demo");
+    if(menu_update!=MENU_RUN_STAGE || demos!=1 || !is_emulating_spectrum || intro_character_index!=0)abort();
+    intro_character_index=0;g_MenuTimer=0;pressed=A_BUTTON;menu_update=MENU_INVALID;
+    interface_menu18_displaycast();
+    if(menu_update!=MENU_FILE_SELECT || demos!=1)abort();
+    puts("PASS real cast intro completion launches attract playback; button interruption returns to file select");
 }

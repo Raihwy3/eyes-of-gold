@@ -19,6 +19,8 @@ struct player *g_CurrentPlayer=&player;
 struct player *g_playerPointers[4]={&player,NULL,NULL,NULL};
 enum CAMERAMODE g_CameraMode=CAMERAMODE_FP;
 static int menu=11,locked,allowed=1,mx,my,reloads;
+static int demo_active;
+int get_is_ramrom_flag(void){return demo_active;}
 static unsigned actions;
 static int tx,ty;
 void native_input_take_touch_look(int *x,int *y){*x=tx;*y=ty;tx=ty=0;}
@@ -116,6 +118,12 @@ int main(void) {
     }
     assert(native_controls_look_rate(__builtin_inff())==0 && native_controls_look_rate(__builtin_nanf(""))==0);
     assert(native_controls_look_rate(1e30f)==2 && native_controls_look_rate(-1e30f)==-2);
+    demo_active=1;memset(&m,0x5a,sizeof m);struct MoveData recorded=m;
+    native_controls_apply(&m);assert(!memcmp(&m,&recorded,sizeof m));
+    assert(!native_game_input_gameplay() && native_controls_restore(2)==2);
+    assert(native_controls_look_rate(.4f)==.4f);
+    demo_active=0;assert(native_game_input_gameplay());
+    puts("PASS attract playback: recorded MoveData, control style and look speed preserved");
     puts("PASS 30000 original aim acceleration ticks: corner/reverse/release, 200% gain, bounded consumed rate and unchanged stored state");
     puts("PASS look gain: 50/100/200 percent, full-stick speed scaling after curve, watch/locked input excluded");
     puts("PASS touch look preserves legacy movement and ignores watch/control-locked gameplay");

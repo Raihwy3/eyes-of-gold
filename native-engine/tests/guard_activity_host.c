@@ -19,6 +19,8 @@
 #include "native_test_assert.h"
 
 s32 g_GlobalTimer,g_ClockTimer=1;
+static int demo_active;
+int get_is_ramrom_flag(void){return demo_active;}
 static ChrRecord guards[8];
 ChrRecord *g_ChrSlots=guards;
 static PropRecord props[8],bond;
@@ -239,6 +241,17 @@ int main(void){
     reset();wall_clear=0;guards[0].hidden=CHRHIDDEN_TIMER_ACTIVE;guards[0].sleep=10;
     for(int i=0;i<10;i++,g_GlobalTimer++)chrTick(&props[0]);
     assert(guards[0].timer60==10 && !guards[0].sleep); /* Inside-fog wall sleep keeps existing timer policy. */
+    reset();props[0].pos.z=-1800;visibility_gate=1;ai_hz=5;wall_clear=0;
+    demo_active=1;
+    for(int i=0;i<10;i++,g_GlobalTimer++) {
+        assert(!native_guard_activity_beyond_fog(&guards[0]));
+        assert(native_guard_activity_awake(&guards[0]));
+        assert(native_guard_activity_sight_allowed(&guards[0]));
+        assert(native_guard_activity_ai_due(&guards[0]));
+    }
+    assert(!ray_calls);demo_active=0;
+    assert(native_guard_activity_beyond_fog(&guards[0]));
+    puts("PASS attract playback bypasses custom fog/visibility/AI throttling without probes; normal policy resumes afterwards");
     puts("PASS hard fog freeze: no guard/action/AI/ray/timer work in every physical guard state, held/nested visuals culled, exact bounding sphere and authored fog, live camera/range changes and one-step wake");
     puts("PASS experimental guard LOS: no offscreen probes, bounded wall/door rechecks, visible models retained, pursuit/script/hearing exemptions; 30/15/5 Hz at 30/60 render ticks, live changes and damage wake");
     puts("PASS actual guard activity: visible guards survive blocked sight rays, camera turns/offsets and Original fog; wake before fog boundary; offscreen sleep, pursuit/scripts, 30Hz AI, 4Hz probes, damage/hearing/door wake, timers and cleanup");

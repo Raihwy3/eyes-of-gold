@@ -283730,6 +283730,167 @@
         ]
       ],
       "hash": 1349900447
+    },
+    {
+      "symbol": "ramrom_table",
+      "unit": "ramromreplay.c",
+      "link_name": "ramrom_table",
+      "bytes": 120,
+      "bank": "cdata",
+      "source_offset": 161376,
+      "fields": [
+        [
+          0,
+          4,
+          "pointer"
+        ],
+        [
+          4,
+          4,
+          "scalar"
+        ],
+        [
+          8,
+          4,
+          "pointer"
+        ],
+        [
+          12,
+          4,
+          "scalar"
+        ],
+        [
+          16,
+          4,
+          "pointer"
+        ],
+        [
+          20,
+          4,
+          "scalar"
+        ],
+        [
+          24,
+          4,
+          "pointer"
+        ],
+        [
+          28,
+          4,
+          "scalar"
+        ],
+        [
+          32,
+          4,
+          "pointer"
+        ],
+        [
+          36,
+          4,
+          "scalar"
+        ],
+        [
+          40,
+          4,
+          "pointer"
+        ],
+        [
+          44,
+          4,
+          "scalar"
+        ],
+        [
+          48,
+          4,
+          "pointer"
+        ],
+        [
+          52,
+          4,
+          "scalar"
+        ],
+        [
+          56,
+          4,
+          "pointer"
+        ],
+        [
+          60,
+          4,
+          "scalar"
+        ],
+        [
+          64,
+          4,
+          "pointer"
+        ],
+        [
+          68,
+          4,
+          "scalar"
+        ],
+        [
+          72,
+          4,
+          "pointer"
+        ],
+        [
+          76,
+          4,
+          "scalar"
+        ],
+        [
+          80,
+          4,
+          "pointer"
+        ],
+        [
+          84,
+          4,
+          "scalar"
+        ],
+        [
+          88,
+          4,
+          "pointer"
+        ],
+        [
+          92,
+          4,
+          "scalar"
+        ],
+        [
+          96,
+          4,
+          "pointer"
+        ],
+        [
+          100,
+          4,
+          "scalar"
+        ],
+        [
+          104,
+          4,
+          "pointer"
+        ],
+        [
+          108,
+          4,
+          "scalar"
+        ],
+        [
+          112,
+          4,
+          "pointer"
+        ],
+        [
+          116,
+          4,
+          "scalar"
+        ]
+      ],
+      "hash": 3651893285
     }
   ],
   "pointers": [
@@ -283836,6 +283997,62 @@
     {
       "key": 450000,
       "kind": "identity"
+    },
+    {
+      "key": 2880208,
+      "kind": "cart"
+    },
+    {
+      "key": 2901200,
+      "kind": "cart"
+    },
+    {
+      "key": 2909344,
+      "kind": "cart"
+    },
+    {
+      "key": 2916176,
+      "kind": "cart"
+    },
+    {
+      "key": 2925360,
+      "kind": "cart"
+    },
+    {
+      "key": 2932640,
+      "kind": "cart"
+    },
+    {
+      "key": 2942704,
+      "kind": "cart"
+    },
+    {
+      "key": 2953216,
+      "kind": "cart"
+    },
+    {
+      "key": 2966416,
+      "kind": "cart"
+    },
+    {
+      "key": 2987536,
+      "kind": "cart"
+    },
+    {
+      "key": 2996128,
+      "kind": "cart"
+    },
+    {
+      "key": 3004272,
+      "kind": "cart"
+    },
+    {
+      "key": 3010848,
+      "kind": "cart"
+    },
+    {
+      "key": 3024384,
+      "kind": "cart"
     },
     {
       "key": 4425312,

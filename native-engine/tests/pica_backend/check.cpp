@@ -914,7 +914,7 @@ int main(int argc,char **argv) {
  // Restore the previous fixture used by watch projection tests.
  captured.id0=0xd000020d210c818aULL;gfx_cc_get_features(captured.id0,captured.id1,&captured.cc);
  data=make_vertices(captured.cc,.4f);stride=data.size()/6;offset=stride-8;
- // Each eye reuses original world vertices. Only UI projection differs;
+ // Each eye reuses original world vertices with separate world/UI projections;
  // bottom mirroring must see the restored flat matrix.
  for(int samples=1;samples<=2;samples++) {
  top_sample_scale=samples;
@@ -923,10 +923,16 @@ int main(int argc,char **argv) {
  viewport(40,0,320,240);scissor(40,0,320,240);
  stereo_active=true;tilt_uniform=0;
  stereo_tilt[0].r[0].x=0.f;stereo_tilt[1].r[0].x=-.01f;stereo_tilt[2].r[0].x=.01f;
+ stereo_tilt[3].r[0].x=-.02f;stereo_tilt[4].r[0].x=.02f;
+ stereo_tilt[5].r[0].x=-.03f;stereo_tilt[6].r[0].x=.03f;
  size_t u=draw_uniforms.size();before=recorded.size();
- native_pica_frontend_ui(0);draw(data.data(),data.size(),2);barrier();
+ native_pica_frontend_ui(0);draw(data.data(),data.size(),2);
+ assert(pending_draw.count==6);
+ native_pica_gpu_world(nullptr);native_pica_ui_rect(0);native_pica_set_viewmodel(0);
+ assert(pending_draw.count==6 && recorded.size()==before);
+ barrier();
  assert(recorded.size()==before+12 && draw_uniforms.size()==u+2);
- assert(draw_uniforms[u]==0 && draw_uniforms[u+1]==0);
+ assert(draw_uniforms[u]==-.03f && draw_uniforms[u+1]==.03f);
  u=draw_uniforms.size();before=recorded.size();
  native_pica_ui_rect(1);draw(data.data(),data.size(),2);barrier();native_pica_ui_rect(0);
  assert(recorded.size()==before+12 && draw_uniforms.size()==u+2);
@@ -938,9 +944,16 @@ int main(int argc,char **argv) {
    assert(recorded[before+6+v].state.target==(uintptr_t)right_target);
    assert(!memcmp(recorded[before+v].state.viewport,recorded[before+6+v].state.viewport,sizeof driver.viewport));
  }
+ u=draw_uniforms.size();before=recorded.size();
+ native_pica_set_viewmodel(1);draw(data.data(),data.size(),2);barrier();native_pica_set_viewmodel(0);
+ assert(recorded.size()==before+12 && draw_uniforms.size()==u+2);
+ assert(draw_uniforms[u]==-.02f && draw_uniforms[u+1]==.02f);
+ assert(C3D_FVUnif[0][0].x==0.f && driver.target==(uintptr_t)target);
+ u=draw_uniforms.size();draw(data.data(),data.size(),2);barrier();
+ assert(draw_uniforms[u]==-.03f && draw_uniforms[u+1]==.03f);
  stereo_active=false;right_target=nullptr;
  }
- puts("PASS stereo submissions: flat world, opposite UI disparity, identical geometry/viewport, flat uniform restored for bottom output");
+ puts("PASS stereo submissions: world/weapon/UI eye projections, redundant scopes preserve queued draws, identical geometry/viewport, flat bottom output");
  // The second LCD keeps native-size UI coordinates and omits watch body.
  // Verify top output, UVs/materials, scissor and buffer restoration.
  for(int samples=1;samples<=2;samples++) {

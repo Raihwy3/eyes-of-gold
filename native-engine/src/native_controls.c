@@ -8,6 +8,7 @@
 #include "native_input.h"
 #include "native_pad.h"
 #include "native_settings.h"
+#include "native_demo.h"
 extern int get_currentmenu(void);
 extern int lvlGetControlsLockedFlag(void);
 extern int disablePlayerActionsWhenPausedOrInMpMenu(void);
@@ -15,10 +16,12 @@ extern void attempt_reload_item_in_hand(s32 hand);
 extern void native_input_take_motion(int *,int *,unsigned *) __attribute__((weak));
 extern void native_bottom_game_tick(void) __attribute__((weak));
 int native_controls_restore(int original) {
+    if(native_demo_active())return original;
     int selected=native_setting_style();return selected>=0?selected:original;
 }
 static struct player *native_controlled_player(void){return g_playerPointers[0];}
 int native_game_input_gameplay(void) {
+    if(native_demo_active())return 0;
     struct player *controlled=native_controlled_player();
     return get_currentmenu()==11 && controlled && !controlled->bonddead &&
            (g_CameraMode==CAMERAMODE_NONE || g_CameraMode==CAMERAMODE_FP || g_CameraMode==CAMERAMODE_MP) &&
@@ -35,6 +38,7 @@ static int crouch_target=CROUCH_STAND;
 static int legacy_touch_crouch;
 static int safe_axis(int v){return v< -5?v+5:v>5?v-5:0;}
 void native_controls_apply(struct MoveData *m) {
+    if(native_demo_active())return;
     /* Only player 1 owns the physical/touch controls; never drain for P2. */
     if(get_cur_playernum()!=0)return;
     if(native_bottom_game_tick && get_currentmenu()==11)native_bottom_game_tick();

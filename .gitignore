@@ -1,6 +1,6 @@
 /upstream/
 /local/
-/native-engine/build/
+/native-engine/build
 __pycache__/
 *.py[cod]
 *.n64
