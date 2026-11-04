@@ -328,6 +328,9 @@ int main(void) {
   consoleInit(GFX_TOP, &top);
   consoleInit(GFX_BOTTOM, &bottom);
 
+  extern int native_update_startup(const char *,PrintConsole *,PrintConsole *);
+  if(!native_update_startup("sdmc:/3ds/eyes-of-gold-native-game",&top,&bottom)){gfxExit();return 0;}
+
   native_input_init();
   native_bottom_init();
   aptHook(&lifecycle_cookie,lifecycle_event,NULL);

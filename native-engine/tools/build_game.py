@@ -32,8 +32,16 @@ def main():
     check_guard_pose.main()
     import check_guard_activity
     check_guard_activity.main()
+    import check_updater
+    check_updater.main()
+    import check_randomizer
+    check_randomizer.main()
+    import check_subsistence
+    check_subsistence.main()
     import check_attract_camera
     check_attract_camera.main()
+    subprocess_queue_check=build_probe.run([sys.executable,build.TARGET/"tools/check_os_queues.py"],timeout=45)
+    print(subprocess_queue_check.stdout,end="")
     import check_work_profile
     check_work_profile.main()
     import check_effect_lod
@@ -54,7 +62,7 @@ def main():
     check_graphics_host.main();check_display_host.main()
     out=build.BUILD/'game';out.mkdir(exist_ok=True)
     objects=[]
-    for source in [build.TARGET/'src/native_game.c',build.TARGET/'src/native_effects.c',build.TARGET/'src/native_rle.c',build.TARGET/'src/native_audio_bank.c',build.TARGET/'src/native_assets.c',build.TARGET/'src/native_muted_audio.c',build.TARGET/'src/native_audio_pcm.c',build.TARGET/'src/native_dsp_mix.c',
+    for source in [build.TARGET/'src/native_game.c',build.TARGET/'src/native_randomizer.c',build.TARGET/'src/native_effects.c',build.TARGET/'src/native_rle.c',build.TARGET/'src/native_audio_bank.c',build.TARGET/'src/native_assets.c',build.TARGET/'src/native_muted_audio.c',build.TARGET/'src/native_audio_pcm.c',build.TARGET/'src/native_dsp_mix.c',
                    build.TARGET/'src/native_game_video.cpp',*[build.source_path(Path(name)) for name in ('src/boss.c','src/snd.c','src/audi.c','src/memp.c','src/game/indy_comms.c','src/music.c','src/game/lv.c','src/game/title.c','src/game/title2.c','src/game/front.c','src/game/image_bank.c','src/game/prop.c','src/game/loadobjectmodel.c')],*[build.UP/'port/src'/name for name in
                    ('gimgfixup.c','pc_netorder.c','eepimport.c','legacycrc.c','d318watchdog.c','ucode.c')]]:
         cpp=source.suffix=='.cpp';flags=build_probe.engine_args()
@@ -93,13 +101,15 @@ def main():
     bottom=out/'bottom_3ds.o'
     build_probe.run([build.CC,*arch,'-std=gnu11','-O2','-Wall','-Wextra','-Werror','-D__3DS__',
         '-I'+str(build.TARGET/'include'),'-I'+str(build.BUILD/'include'),'-I/opt/devkitpro/libctru/include','-c',build.TARGET/'src/bottom_3ds.c','-o',bottom])
+    import updater_deps
+    objects += updater_deps.objects()
     objects += [audio,platform,bottom,*[p for p in build_graphics.graphics_objects() if p.name in ('gfx_native.cpp.o','gfx_pica.cpp.o','display_3ds.c.o','pica_inputs.cpp.o')]]
     objects += [build.BUILD/name for name in ('input_3ds.o','rom_fixups.o','romassets.o','runtime_symbols.o')]
     target=build.BUILD/'eyes-of-gold-native-game'
     build_probe.run([build.CC.with_name('arm-none-eabi-g++'),*arch,'-specs=3dsx.specs','-L/opt/devkitpro/libctru/lib',
        '-Wl,--gc-sections,--no-enum-size-warning,-Map,'+str(target.with_suffix('.map')),*objects,
        '-Wl,--start-group',*[build.BUILD/name for name in ('liboriginal-engine.a','liboriginal-rsp.a','libnative-os.a','libnative-mixer.a','libnative-baseline.a')],
-       '-Wl,--end-group','-lcitro3d','-lctru','-lm','-o',target.with_suffix('.elf')])
+       '-Wl,--end-group',*updater_deps.libraries(),'-lcitro3d','-lctru','-lm','-o',target.with_suffix('.elf')])
     symbols=build_probe.run([build.CC.with_name('arm-none-eabi-nm'),'--defined-only',target.with_suffix('.elf')]).stdout
     names={line.split()[-1] for line in symbols.splitlines() if line.split()}
     required={'init_menu00_legalscreen','init_menu04_goldeneyelogo','init_menu05_fileselect','constructor_menu0A_briefing','frontChangeMenu','bossEntry','bossMainloop','lvlStageLoad','gunTickGameplay','chrlvTickPatrol','chrlvTickAttackCommon','bondviewPlayerTickDamageAndHealth','handles_shot_actors','bheadUpdate'}

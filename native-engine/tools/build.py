@@ -84,6 +84,10 @@ def source_path(rel):
         text='#ifdef __3DS__\n#include "native_title_storage.h"\n#else\n'+source.read_text()+'\n#endif\n'
         dest=BUILD/'overlay/rarewarelogo.c';dest.write_text(text)
         return dest
+    if str(rel)=='src/game/bondview_r.c':
+        from subsistence import loadout
+        text=loadout(source.read_text())
+        dest=BUILD/'overlay/bondview_r.c';dest.write_text(text);return dest
     if str(rel)=='src/game/bondview2.c':
         text=source.read_text()
         replacements={
@@ -260,7 +264,10 @@ def source_path(rel):
     } else result=native_chr_tick_impl(prop);''')
         dest=BUILD/'overlay/chr.c';dest.write_text(text);return dest
     if str(rel)=='src/game/chraction.c':
-        text='#include "native_guard_activity.h"\n'+source.read_text()
+        text='#include "native_randomizer.h"\n#include "native_guard_activity.h"\n'+source.read_text()
+        old='        sp38 = retrieve_header_for_body_and_head(bodyid, headid, (u32) arg1->bitflags);'
+        if text.count(old)!=1:raise ValueError('Original guard appearance constructor changed')
+        text=text.replace(old,'        s32 visualbody=bodyid,visualhead=headid;\n        native_randomizer_story_appearance(arg1->chrnum,&visualbody,&visualhead);\n        sp38 = retrieve_header_for_body_and_head(visualbody, visualhead, (u32) arg1->bitflags);')
         old='void chrlvActionTick(ChrRecord *self)\n{'
         assert text.count(old)==1
         text=text.replace(old,'#include "native_guard_activity_impl.h"\n\n'+old+
@@ -429,6 +436,8 @@ def source_path(rel):
         return dest
     if str(rel)=='src/game/prop.c':
         text=source.read_text()
+        text='#include "native_randomizer.h"\n'+text
+        text=text.replace('        // PD rejoins here','        native_randomizer_setup(stageId);\n\n        // PD rejoins here',1)
         start=text.index('void proplvreset2(enum LEVELID stageId)')
         body=text[start:]
         checkpoints=[
@@ -478,6 +487,8 @@ def source_path(rel):
         return dest
     if str(rel)=='src/game/front.c':
         text='#include "system.h"\n#include "native_settings.h"\n#include <stdio.h>\nstatic int native_front_update(void);\nstatic int native_front_is_open(void);\nstatic int native_front_options_blocked(void);\nstatic Gfx *native_front_draw(Gfx *);\nstatic int native_mode_y(int);\nstatic int native_mode_row(void);\nstatic int native_mode_extra(void);\nstatic void native_mode_activate(void);\nstatic Gfx *native_mode_draw_entries(Gfx *);\n'+source.read_text()
+        from subsistence import frontend
+        text=frontend(text)
         # Remaining title render counters also need elapsed VI time.
         for old,new in (('ninLogoRotRate += 0.0209439527243f;','ninLogoRotRate += 0.0209439527243f*g_ClockTimer;'),('ninLogoRotRate += 0.017453292f;','ninLogoRotRate += 0.017453292f*g_ClockTimer;'),('g_MenuTimer++;','g_MenuTimer += g_ClockTimer;')):
             assert text.count(old)==1,old
@@ -922,6 +933,8 @@ static f32 native_frontend_aspect(f32 authored) {
         if text.count(needle)!=1:raise ValueError('Original worker entry changed: '+name)
         text=text.replace(needle,needle+'\n    native_worker_crash_init();\n#if defined(__3DS__)\n    extern void native_platform_worker_info(const char *) __attribute__((weak));\n    if(native_platform_worker_info)native_platform_worker_info("'+name+'");\n#endif')
     text='#include "native_work_profile.h"\n'+text
+    from os_queue_patch import patch_os_queues
+    text=patch_os_queues(text)
     at=text.index('static void *portRenderWorker(void *arg)')
     end=text.index('static int portRenderWorkerOn(void)',at)
     worker=text[at:end]

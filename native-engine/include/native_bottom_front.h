@@ -27,6 +27,10 @@ static void native_bottom_front_position(int tag) {
         if(tag==100){cursor_h_pos=TABS_LEFT_EDGE+5;cursor_v_pos=PREVTAB_TAB_TOP+10;tab_prev_highlight=1;}
         else {current_mp_stage_highlighted=tag;cursor_h_pos=80+85*(tag%4);cursor_v_pos=135+70*(tag/4);tab_prev_highlight=0;}
     }
+    else if(current_menu==MENU_CHEAT) {
+        if(tag==100){cursor_h_pos=TABS_LEFT_EDGE+5;cursor_v_pos=PREVTAB_TAB_TOP+10;tab_prev_highlight=1;}
+        else if(tag>=0 && tag<totalunlockedcheats){int split=native_cheat_split(totalunlockedcheats);cursor_h_pos=tag<split?100:240;cursor_v_pos=native_cheat_row_y(tag<split?tag:tag-split,totalunlockedcheats)+5;cheathighlighted=tag;tab_prev_highlight=0;}
+    }
     else if(current_menu==MENU_MISSION_SELECT)set_cursor_to_stage_solo(tag);
     else if(current_menu==MENU_DIFFICULTY)set_cursor_pos_difficulty(tag);
     else {cursor_h_pos=tag?TABS_LEFT_EDGE+5:NEXTTAB_CURSOR_HPOS;cursor_v_pos=tag?PREVTAB_TAB_TOP+10:NEXTTAB_CURSOR_VPOS;}
@@ -80,6 +84,13 @@ static void native_bottom_front_publish(void) {
         native_bottom_row(&v,"Select Mission","",0,0);native_bottom_row(&v,"Multiplayer","",1,0);
         if(is_cheat_menu_available)native_bottom_row(&v,"Cheat Options","",2,0);
         native_bottom_row(&v,"OPTIONS","",is_cheat_menu_available?3:2,0);native_bottom_row(&v,"EXIT","",is_cheat_menu_available?4:3,0);
+    } else if(current_menu==MENU_CHEAT) {
+        native_bottom_string(v.title,sizeof v.title,"CHEAT OPTIONS");
+        for(int i=0;i<totalunlockedcheats;i++) {
+            int id=arrayUnlockedCheats[i];
+            native_bottom_row(&v,(char *)native_cheat_label(id),(const char *)native_cheat_value(id,(u8 *)(native_cheat_active(id)?"On":"Off")),i,0);
+        }
+        native_bottom_row(&v,"Back","",100,0);
     } else if(current_menu==MENU_MP_OPTIONS) {
         native_bottom_string(v.title,sizeof v.title,"LOCAL MULTIPLAYER");
         native_bottom_string(v.note,sizeof v.note,"Player 1 controlled. Player 2 idle.");

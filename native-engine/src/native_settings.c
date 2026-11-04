@@ -7,6 +7,15 @@
 static int style=-1,crosshair,watch_colour,aspect=-1,aa=1,fps_limit=60,sensitivity=100,sharpness=0,vignette=0,bloom=0,grain=0,skin=0,glass=1,lod=1,view_distance=2;
 static int dynamic_lod=1,vignette_mode,audio_mixer=1;
 int native_setting_audio_mixer(void){return __atomic_load_n(&audio_mixer,__ATOMIC_RELAXED);}
+static int randomiser,randomiser_seed=1;
+int native_setting_randomiser(void){return __atomic_load_n(&randomiser,__ATOMIC_RELAXED);}
+int native_setting_randomiser_seed(void){return __atomic_load_n(&randomiser_seed,__ATOMIC_RELAXED);}
+const char *native_randomiser_label(void){return "Randomiser";}
+const char *native_randomiser_seed_label(void){return "New seed";}
+const char *native_randomiser_seed_text(void){static char text[8];snprintf(text,sizeof text,"%06d",native_setting_randomiser_seed());return text;}
+static int subsistence;
+int native_setting_subsistence(void){return __atomic_load_n(&subsistence,__ATOMIC_RELAXED);}
+const char *native_subsistence_label(void){return "Subsistence";}
 static int unlock_all,guard_visibility,guard_ai_hz=30;
 int native_setting_guard_visibility(void){return __atomic_load_n(&guard_visibility,__ATOMIC_RELAXED);}
 int native_setting_guard_ai_hz(void){return __atomic_load_n(&guard_ai_hz,__ATOMIC_RELAXED);}
@@ -47,6 +56,8 @@ static void save(void) {
                    native_setting_style(),native_setting_crosshair(),native_setting_watch(),native_setting_aspect(),native_setting_aa(),native_setting_fps(),native_setting_sensitivity(),native_setting_sharpness(),native_setting_vignette(),native_setting_bloom(),native_setting_grain(),native_setting_skin(),native_setting_glass(),native_setting_lod(),native_setting_view_distance(),native_setting_vignette_mode())>0;
     if(fprintf(f,"audio_mixer=%d\n",native_setting_audio_mixer())<0)ok=0;
     if(fprintf(f,"guard_visibility=%d\nguard_ai_hz=%d\n",native_setting_guard_visibility(),native_setting_guard_ai_hz())<0)ok=0;
+    if(fprintf(f,"randomiser=%d\nrandomiser_seed=%d\n",native_setting_randomiser(),native_setting_randomiser_seed())<0)ok=0;
+    if(fprintf(f,"subsistence=%d\n",native_setting_subsistence())<0)ok=0;
     if(fprintf(f,"unlock_everything=%d\n",native_setting_unlock_all())<0)ok=0;
     for(int i=0;i<7;i++)if(fprintf(f,"game_option_%d=%d\n",i,native_setting_game(i))<0)ok=0;
     if(fprintf(f,"music_volume=%d\neffects_volume=%d\n",native_setting_volume(0),native_setting_volume(1))<0)ok=0;
@@ -66,6 +77,9 @@ static void update(int *field,int value,int minimum,int maximum) {
 }
 void native_setting_set_guard_visibility(int v){update(&guard_visibility,v,0,1);}
 void native_setting_set_guard_ai_hz(int v){if(v==30 || v==15 || v==5)update(&guard_ai_hz,v,5,30);}
+void native_setting_set_randomiser(int v){update(&randomiser,v,0,1);}
+void native_setting_set_randomiser_seed(int v){update(&randomiser_seed,v,1,999999);}
+void native_setting_set_subsistence(int v){update(&subsistence,v,0,1);}
 void native_setting_set_unlock_all(int v){update(&unlock_all,v,0,1);}
 void native_setting_set_audio_mixer(int v){update(&audio_mixer,v,0,1);}
 void native_setting_set_skin(int v){update(&skin,v,0,4);}
@@ -87,7 +101,7 @@ void native_setting_set_aa(int v){update(&aa,v,0,1);}
 void native_setting_set_game(int index,int v){if(index==7)native_setting_set_aspect(v);else if(index>=0 && index<7)update(&game_values[index],v,0,index==6?2:1);}
 void native_setting_set_volume(int effects,int v){update(&volumes[effects!=0],v,0,32767);}
 void native_settings_init(const char *directory) {
-    guard_visibility=0;guard_ai_hz=30;unlock_all=0;audio_mixer=1;dynamic_lod=1;vignette_mode=0;render_state=0;
+    randomiser=0;randomiser_seed=1;subsistence=0;guard_visibility=0;guard_ai_hz=30;unlock_all=0;audio_mixer=1;dynamic_lod=1;vignette_mode=0;render_state=0;
     style=-1;crosshair=watch_colour=0;aspect=-1;aa=1;fps_limit=60;sensitivity=100;sharpness=vignette=bloom=grain=skin=0;glass=1;lod=1;view_distance=2;settings_path[0]=0;config_missing=0;
     for(int i=0;i<7;i++)game_values[i]=-1;
     volumes[0]=volumes[1]=-1;
@@ -101,7 +115,7 @@ void native_settings_init(const char *directory) {
     }
     if(!f){config_missing=errno==ENOENT;return;}
     char line[128]={0};int s=-1,c=0,w=0,a=-1,q=1,fps=60,sens=100,sharp=0,vig=0,glow=0,noise=0,watchskin=0,glassdetail=1,lodstrength=1,viewdistance=2,vigmode=0;
-    int mixer=1,unlocked=0,guardvisible=0,guardhz=30;
+    int mixer=1,unlocked=0,guardvisible=0,guardhz=30,subs=0,rando=0,seed=1;
     int games[7]={-1,-1,-1,-1,-1,-1,-1},music=-1,effects=-1;
     int ok=fgets(line,sizeof line,f)!=NULL && !memcmp(line,"EOGSETTINGS1\n",13);
     unsigned found=0;
@@ -126,19 +140,23 @@ void native_settings_init(const char *directory) {
         else if(sscanf(line,"effects_volume=%d",&effects)==1){}
         else if(sscanf(line,"guard_visibility=%d",&guardvisible)==1){}
         else if(sscanf(line,"guard_ai_hz=%d",&guardhz)==1){}
+        else if(sscanf(line,"randomiser=%d",&rando)==1){}
+        else if(sscanf(line,"randomiser_seed=%d",&seed)==1){}
+        else if(sscanf(line,"subsistence=%d",&subs)==1){}
         else if(sscanf(line,"unlock_everything=%d",&unlocked)==1){}
         else if(sscanf(line,"audio_mixer=%d",&mixer)==1){}
         else {int index,value;if(sscanf(line,"game_option_%d=%d",&index,&value)==2 && index>=0 && index<7)games[index]=value;}
     }
     ok=ok && !ferror(f) && (found&15)==15 && s>=-1 && s<=9 && c>=0 && c<=5 && w>=0 && w<=5 && a>=-1 && a<=2 && q>=0 && q<=1;
     if(guardvisible<0 || guardvisible>1 || (guardhz!=30 && guardhz!=15 && guardhz!=5))ok=0;
-    if(unlocked<0 || unlocked>1 || mixer<0 || mixer>1)ok=0;
+    if(rando<0 || rando>1 || seed<1 || seed>999999)ok=0;
+    if(subs<0 || subs>1 || unlocked<0 || unlocked>1 || mixer<0 || mixer>1)ok=0;
     if(fps!=30 && fps!=60)ok=0;
     if(sens<25 || sens>200 || sens%25 || sharp<0 || sharp>6 || vig<0 || vig>2 || glow<0 || glow>2 || noise<0 || noise>2 || watchskin<0 || watchskin>4 || glassdetail<0 || glassdetail>2 || lodstrength<0 || lodstrength>4 || viewdistance<0 || viewdistance>3 || vigmode<0 || vigmode>3)ok=0;
     for(int i=0;i<7;i++)if(games[i]<-1 || games[i]>(i==6?2:1))ok=0;
     if(music< -1 || music>32767 || effects< -1 || effects>32767)ok=0;
     fclose(f);
-    if(ok){guard_visibility=guardvisible;guard_ai_hz=guardhz;unlock_all=unlocked;audio_mixer=mixer;style=s;crosshair=c;watch_colour=w;aspect=a;aa=q;fps_limit=fps;sensitivity=sens;sharpness=sharp;vignette=vig;vignette_mode=vigmode;bloom=glow;grain=noise;skin=watchskin;glass=glassdetail==2?1:glassdetail;lod=lodstrength;view_distance=viewdistance;memcpy(game_values,games,sizeof games);volumes[0]=music;volumes[1]=effects;}
+    if(ok){randomiser=rando;randomiser_seed=seed;subsistence=subs;guard_visibility=guardvisible;guard_ai_hz=guardhz;unlock_all=unlocked;audio_mixer=mixer;style=s;crosshair=c;watch_colour=w;aspect=a;aa=q;fps_limit=fps;sensitivity=sens;sharpness=sharp;vignette=vig;vignette_mode=vigmode;bloom=glow;grain=noise;skin=watchskin;glass=glassdetail==2?1:glassdetail;lod=lodstrength;view_distance=viewdistance;memcpy(game_values,games,sizeof games);volumes[0]=music;volumes[1]=effects;}
 }
 int native_settings_apply_console_defaults(int model) {
     /* Existence, not parse success, controls first-launch detection. Never

@@ -3,6 +3,16 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+int native_setting_randomiser(void);
+void native_setting_set_randomiser(int value);
+int native_setting_randomiser_seed(void);
+void native_setting_set_randomiser_seed(int value);
+const char *native_randomiser_label(void);
+const char *native_randomiser_seed_label(void);
+const char *native_randomiser_seed_text(void);
+int native_setting_subsistence(void);
+void native_setting_set_subsistence(int value);
+const char *native_subsistence_label(void);
 void native_settings_init(const char *directory);
 int native_settings_apply_console_defaults(int model);
 int native_setting_guard_visibility(void);

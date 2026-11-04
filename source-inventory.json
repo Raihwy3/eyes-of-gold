@@ -1,11 +1,11 @@
 {
-  "files": 375,
-  "bytes": 7832562,
+  "files": 410,
+  "bytes": 8187852,
   "python_syntax": "passed",
   "copied_native_source_equality": "Updated since the initial export; per-file hashes describe this release.",
   "upstream_included": false,
   "roms_or_generated_binaries_included": false,
-  "full_clean_build": "Original isolated source build passed. Release 0.9.4 build, host checks, ROM-data audit and packaging passed in the working checkout; console execution not tested here.",
+  "full_clean_build": "Original isolated source build passed. The current release rebuild and relevant host checks, ROM-data audit, updater package installation and packaging checks passed in the working checkout. Console update networking is not yet tested.",
   "inventory": [
     {
       "path": ".gitignore",
@@ -25,7 +25,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "0a884d9c47252c916e2ed262a402061dee89807c6a7443b1dd700ad7721835c8"
+      "sha256": "9d721623ab4f15605256c3fbe55d7aef509e058ff3073a0275e74ae5d57faa76"
     },
     {
       "path": "SOURCE-RELEASE.md",
@@ -36,8 +36,16 @@
       "sha256": "ebd59a10dd5041aca1510b913262f7f2bdf239d3a6f24b533e1d6055e8c22232"
     },
     {
+      "path": "docs/randomiser.md",
+      "sha256": "59f329c260eda0af390ddd268a21c145e54db74026325ed04d693478aeb9a3b4"
+    },
+    {
       "path": "docs/rom-data-release.md",
       "sha256": "ce4c239f3ab29c42c97011b2ea59f1d0862d7366931f7e2e301521434daa9178"
+    },
+    {
+      "path": "docs/updater.md",
+      "sha256": "cefed2e8c83762e38706df59bfa12b1b43db6e35bca5d472409607dda6f0dbe5"
     },
     {
       "path": "icon.png",
@@ -73,15 +81,23 @@
     },
     {
       "path": "native-engine/distribution/NOTICE.txt",
-      "sha256": "0f3b875e2f09eb90d13f8f3ea056c49a82e586ba6e78e1f5bf25a39b03d7e923"
+      "sha256": "d719943e4556a4cbb92052378514d0feda71e2d6a629770c263b5fc95d818034"
+    },
+    {
+      "path": "native-engine/distribution/licenses/Mozilla-MPL-2.0.txt",
+      "sha256": "66a3107d5ad6a058aab753eaac2047ccb2ed0e39465dd0fe5844da3e300d5172"
     },
     {
       "path": "native-engine/distribution/licenses/SOURCES.txt",
-      "sha256": "d5d240e9db6db60a004f0824596d79930a9aff2f3e7fd97ca7043141db206403"
+      "sha256": "aebb166da25e426849014763be70a5c3efa65caeba2a276c30f7e632611d17e9"
     },
     {
       "path": "native-engine/distribution/licenses/citro3d-LICENSE.txt",
       "sha256": "25dceef8628ad7869c8636d46d825eec187e1e5baa7521bc4ae2d18b39eef56e"
+    },
+    {
+      "path": "native-engine/distribution/licenses/curl.txt",
+      "sha256": "b1d7feb949ea5023552029fbe0bf5db4f23c2f85e9b8e51e18536f0ecbf9c524"
     },
     {
       "path": "native-engine/distribution/licenses/engine-LICENSE-NOTICE.txt",
@@ -104,12 +120,28 @@
       "sha256": "8d38432fc81722a7efcf1efd755749ac90ae7845dc9a6ce951d24516b8013f95"
     },
     {
+      "path": "native-engine/distribution/licenses/jsmn.txt",
+      "sha256": "4675b94a50d2afe811c52785463c854f1156056632cce17cc7133939eac8ed55"
+    },
+    {
       "path": "native-engine/distribution/licenses/libctru-LICENSE.txt",
       "sha256": "100b230a77bfd1d0b4fb47cd5c964f84f8f9fcae0fc3066e407ffb7d8c904553"
     },
     {
+      "path": "native-engine/distribution/licenses/mbedTLS.txt",
+      "sha256": "9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b"
+    },
+    {
+      "path": "native-engine/distribution/licenses/minizip.txt",
+      "sha256": "42751f6eb53b2b6f1e647a9e765e38f2cdade5d160714818f4f3cd257394e8a7"
+    },
+    {
       "path": "native-engine/distribution/licenses/newlib-LICENSE.txt",
       "sha256": "d088bd6a1210c4d4df829632a88c3f1a0ff2780f8409638199f777e17c766c4a"
+    },
+    {
+      "path": "native-engine/distribution/licenses/zlib.txt",
+      "sha256": "807c3a7dd7f6203b3dae80e28c3064f231c333685488541825b040081087fc4d"
     },
     {
       "path": "native-engine/engine-state-review.json",
@@ -189,7 +221,7 @@
     },
     {
       "path": "native-engine/include/native_bottom_front.h",
-      "sha256": "d6bf5271abb3539d9e7d1071c14a151be282911a7b4e3c5a7d4c1a02fcc039d8"
+      "sha256": "cdf1d6ad1c29544f1be47e706ef4f5c2080268980689b37635ca5c7888c8e030"
     },
     {
       "path": "native-engine/include/native_bottom_watch.h",
@@ -198,6 +230,10 @@
     {
       "path": "native-engine/include/native_cart.h",
       "sha256": "adfd188f2d1242c421b775cf7cf4cdb3f8404537bd31e8a0ed52ba337175e115"
+    },
+    {
+      "path": "native-engine/include/native_cheat_layout.h",
+      "sha256": "1e624cbbb771091ea349d58efde01cdeb82757d54e0a5d8209898e3667ef05ab"
     },
     {
       "path": "native-engine/include/native_clip_colour.h",
@@ -384,8 +420,16 @@
       "sha256": "de0be132a0d940b6c62b0645843675956a2ced4071461cc96f7ae77bbc09abdb"
     },
     {
+      "path": "native-engine/include/native_queue_completion.h",
+      "sha256": "61e54c6e0fc3dc6eb2ded8dfedbd40afa166946b7c25a30b7726ffea9190509d"
+    },
+    {
       "path": "native-engine/include/native_ram.h",
       "sha256": "1de9825008826175b5c44bd37244871aa0cba3018b2a37a8fb1d7fb67b502bf8"
+    },
+    {
+      "path": "native-engine/include/native_randomizer.h",
+      "sha256": "9354035d992c9f83e844e5facaccaf828cb8caf90e74151fbd08b092ca242beb"
     },
     {
       "path": "native-engine/include/native_rare_skin.h",
@@ -449,7 +493,7 @@
     },
     {
       "path": "native-engine/include/native_settings.h",
-      "sha256": "9e5e08514b0355c96154296e0994b1d16171b140ccb82503dc8a523528e293d5"
+      "sha256": "804944e30a7b21067b68c4d34350d2bd0988309c86f602ff829721a7807dfa9a"
     },
     {
       "path": "native-engine/include/native_setup_lod.h",
@@ -458,6 +502,10 @@
     {
       "path": "native-engine/include/native_stage_limits.h",
       "sha256": "318dc9adcfd1699dbcadd09002c39b4adc559c467d3f9c0f7dabeb57d84a1672"
+    },
+    {
+      "path": "native-engine/include/native_subsistence.h",
+      "sha256": "5507be40d211bef5c548e5255e61cd785d7f11772f127228fc15e1ef298542df"
     },
     {
       "path": "native-engine/include/native_test_assert.h",
@@ -472,8 +520,16 @@
       "sha256": "231068f4df2f109146dd73d8969b847ebb24f9845e060266aee7b25ce9b4f3af"
     },
     {
+      "path": "native-engine/include/native_update.h",
+      "sha256": "108dcc09be8b3f852466e6181cc4d0d35185beeaa5c772b01c3d361badc4bbd6"
+    },
+    {
+      "path": "native-engine/include/native_update_http.h",
+      "sha256": "611c098fe9560310d90074b6f89f4c1c21331668bb2a186697d3655bc204b547"
+    },
+    {
       "path": "native-engine/include/native_version.h",
-      "sha256": "357ee4e6b4c5faaf6a20e1565a430c90a6d2924835391487263c5aa1fa91eef9"
+      "sha256": "8243b92ab9c54eff121eb078af4f4b12610925ab11314efe665bed959137cc45"
     },
     {
       "path": "native-engine/include/native_viewmodel.h",
@@ -601,11 +657,11 @@
     },
     {
       "path": "native-engine/rom-code-pool-review.json",
-      "sha256": "4aa3ba4b840fca45d75b27cd90692cfe4986245757e7494ae5430a941e6b19e5"
+      "sha256": "d3a15dd23cc95bc26b5c7425b5d7498ea9cb5c0ea58edf644ff78cdf2f2636aa"
     },
     {
       "path": "native-engine/rom-data-code-review.json",
-      "sha256": "8c6175f817506f32e3a2f0210394efb4fcc633a5699dc02c1d323aa914bc7a16"
+      "sha256": "204d57960e284df99d338fa608006ae55c2f7297c6bd49e44886be2497c692c6"
     },
     {
       "path": "native-engine/rom-data-layout.json",
@@ -709,7 +765,7 @@
     },
     {
       "path": "native-engine/src/native_game_platform.c",
-      "sha256": "db6261980de92a85a8038ef85163e95d1c2fc838606b98495dd4aa930dbc9fc6"
+      "sha256": "cdfaa1ecdf1bd8177c686e3251c820d2b10ca4d6f9087995793c9186af68e719"
     },
     {
       "path": "native-engine/src/native_game_video.cpp",
@@ -728,6 +784,10 @@
       "sha256": "df1e3d7675309bdbbbc4d4a0f733585114ba9b70e706dcabf3f0b6ee1d157e4b"
     },
     {
+      "path": "native-engine/src/native_randomizer.c",
+      "sha256": "b2fddc946369dcfb008a503fb4794b815ba8b756bddb6458de59c79f6206e985"
+    },
+    {
       "path": "native-engine/src/native_rle.c",
       "sha256": "52f2fc78c4df3ea8d962cfe813d7c262d78451b3c2fbeb9cdaf0410979a08d37"
     },
@@ -741,7 +801,19 @@
     },
     {
       "path": "native-engine/src/native_settings.c",
-      "sha256": "35015f7717c3ba5e0a2be3d87535d952d5b4b223d600101662a8d8aed1399959"
+      "sha256": "75137badef05730dafc8c213edc2b30b07257ec93656ec7ebecd8f88b8e1fbbb"
+    },
+    {
+      "path": "native-engine/src/native_update.c",
+      "sha256": "f22bf015bf7273659c3af157b7ecd19fb9ff3ec76a9732290d651ea873f447c3"
+    },
+    {
+      "path": "native-engine/src/native_update_3ds.c",
+      "sha256": "04451b20087e5b1d89662dc39da75b43ebc8d0b2875214cc8d0cbd71c17a20f8"
+    },
+    {
+      "path": "native-engine/src/native_update_http.c",
+      "sha256": "a4adbc7bd2faf6a31415e4f67d6acb84f85fbddbc7618e0fb2477220eb3173d6"
     },
     {
       "path": "native-engine/src/native_world.v.pica",
@@ -992,6 +1064,10 @@
       "sha256": "e8c1a9ba599299374c837ff7310d62dfb64d4e2bb1851966ae5aa657d07cd8c0"
     },
     {
+      "path": "native-engine/tests/os_queue_host.c",
+      "sha256": "c5b31786c04ef12ece587ccb9ee200cabf96d1a2a842f706780479f92f404d0e"
+    },
+    {
       "path": "native-engine/tests/pica_backend/README.md",
       "sha256": "f1409fe226a6407aef9f73d2663e629357e6fcf779e214a31eda2ecf6bfb0ef8"
     },
@@ -1032,6 +1108,10 @@
       "sha256": "f2011dc34d50596cf7d5f12a5d1ce451714f3c3bff706146136909b357d28de2"
     },
     {
+      "path": "native-engine/tests/randomizer_host.c",
+      "sha256": "11f60a1aa21a537e028387cd4dfbdf2f44e2f06fa77f94c2bf972eaf88a4466e"
+    },
+    {
       "path": "native-engine/tests/room_packets_host.cpp",
       "sha256": "155e8d98b7634206a97d6cca1688d7819f75c277dc5a710861359db362345523"
     },
@@ -1054,6 +1134,18 @@
     {
       "path": "native-engine/tests/stage_scripts_host.c",
       "sha256": "098df27c1a08a8d460fc8b2eae83094f272d87e30ab9492a46cea9bdad1af32b"
+    },
+    {
+      "path": "native-engine/tests/subsistence_host.c",
+      "sha256": "53ce3f8624fc663ef51200f300efc79f4a5aa31a64b3b235d5bcd0d7e479fe87"
+    },
+    {
+      "path": "native-engine/tests/update_host.c",
+      "sha256": "88dbb7193e7b07ebce90c8fe9c349fffec57a6ceac6d6a4a40c2dddeefb26ef1"
+    },
+    {
+      "path": "native-engine/tests/update_rename.h",
+      "sha256": "a1ea3891aa5afd618d323800050beab28bb4fb6df26c664c58f64bfd5271f8b9"
     },
     {
       "path": "native-engine/tests/watch_skin_host.c",
@@ -1097,11 +1189,11 @@
     },
     {
       "path": "native-engine/tools/build.py",
-      "sha256": "7cc418aa5c0998743ea943a6a3a9f19dc8859a76d299623b492ee116fc034ad7"
+      "sha256": "7bfee72fbc8b83d89e4af66bdcd23566483e3b5acc3746cbaefec0123b7a03e9"
     },
     {
       "path": "native-engine/tools/build_game.py",
-      "sha256": "0964f434510a655c66f2ac99d731e1f72e6d6241d60751631d145d33810a6ab9"
+      "sha256": "314c05fd1acef057a6b75c7761f83fdcd47dd13d633cba60b14c43992e5bf2fe"
     },
     {
       "path": "native-engine/tools/build_graphics.py",
@@ -1192,8 +1284,16 @@
       "sha256": "142caf5c02dcb699e6b6d24e3d63ad36f497412a4b847a1b41fde98129652e28"
     },
     {
+      "path": "native-engine/tools/check_os_queues.py",
+      "sha256": "1cba315489696f9f317e2b08953c927e2c4f40a69711438c54ffd0972c80c9be"
+    },
+    {
       "path": "native-engine/tools/check_pica_backend.py",
       "sha256": "8d79720d5df3e30b8e0a99d43031ed7806d12adaf17a1c7fe8309d951d69e0ff"
+    },
+    {
+      "path": "native-engine/tools/check_randomizer.py",
+      "sha256": "4f1a1d2a4027cb23aaafddb0b5d87359f66d116bb6d1d339566b2db2c07cdace"
     },
     {
       "path": "native-engine/tools/check_rom_data.py",
@@ -1208,8 +1308,16 @@
       "sha256": "98ab1fd0e01e33414b550c5bf556a195858551cfb098ba7d4808487571423229"
     },
     {
+      "path": "native-engine/tools/check_subsistence.py",
+      "sha256": "cd8fcb6c204e8fa3d774da85bfff5b574b452ed1a0f4ad1dd03f6f68b00c0998"
+    },
+    {
       "path": "native-engine/tools/check_unlock_all.py",
       "sha256": "e58b2add0db1917a352b307d020ed436654eff6f393f3b9f621d0ef834cf40ec"
+    },
+    {
+      "path": "native-engine/tools/check_updater.py",
+      "sha256": "79b97f1221687a9e65f3703776b57a435d7efe47a697a16dd2015ee5d223d874"
     },
     {
       "path": "native-engine/tools/check_watch_skins.py",
@@ -1392,6 +1500,10 @@
       "sha256": "cd5602857894e2ba35af8d608a6c2483cf81cb25fc0a55c028dc7bfcaba19596"
     },
     {
+      "path": "native-engine/tools/os_queue_patch.py",
+      "sha256": "6fc97d1f0e4bbf98c32ceb9f1e54b26762c5e27c3c5924a80225ee3e223f4c05"
+    },
+    {
       "path": "native-engine/tools/package_elf.py",
       "sha256": "793c56e79c879927780340aae055de770d6eb81cad59a74dbad7a4695f3d92f0"
     },
@@ -1464,6 +1576,10 @@
       "sha256": "498b7cc075e50281bd73e03ae3178777975de8f386268a2095dcf825fe153812"
     },
     {
+      "path": "native-engine/tools/subsistence.py",
+      "sha256": "38024f4bd0070533c11296725d9d5380f06352d634473ada8eb418c0983f142f"
+    },
+    {
       "path": "native-engine/tools/texture_pixels.py",
       "sha256": "85a97c8460932978bc8dc94782a666678f9dab537c629875739a33f1993afee8"
     },
@@ -1474,6 +1590,10 @@
     {
       "path": "native-engine/tools/triangle_setup.py",
       "sha256": "7175e57124183ef5fb7a8b76679613c8ba4e56fd18c6fa476865ba9b52e97a31"
+    },
+    {
+      "path": "native-engine/tools/updater_deps.py",
+      "sha256": "27151dd69f8509c589c75d63417bcbc73e1c7eae4cf03f7687ee628fb4d3a2ac"
     },
     {
       "path": "native-engine/tools/uv_prepare.py",
@@ -1500,6 +1620,26 @@
       "sha256": "ff2701943ca7baeb5e22e8c318b80437649bbdb60dda869443de2241f9ae8c7a"
     },
     {
+      "path": "native-engine/vendor/updater/README.md",
+      "sha256": "d44cb5583c7e18a24c4bf4d39b9110e4d2a3b126deca645f6fd281dbef557db1"
+    },
+    {
+      "path": "native-engine/vendor/updater/cacert.pem",
+      "sha256": "796f1389bfea13c0ed78f663b765baaff54a508e5483786bd6ece73c5e3e3cbe"
+    },
+    {
+      "path": "native-engine/vendor/updater/jsmn-LICENSE.txt",
+      "sha256": "4675b94a50d2afe811c52785463c854f1156056632cce17cc7133939eac8ed55"
+    },
+    {
+      "path": "native-engine/vendor/updater/jsmn.h",
+      "sha256": "c04533e9181e1e33baceb0f55ac449b05145bb936e8c68cc77dfe0d8277514fb"
+    },
+    {
+      "path": "native-engine/vendor/updater/sources.json",
+      "sha256": "5d39fe70d9b314f8e72bb205d47dafc16912911c18db049e8c2019c8cb71a2dd"
+    },
+    {
       "path": "requirements.txt",
       "sha256": "4266800bf8ab1e41f66e6cac170a12bb7fd24740cb7d2d902b68a12a0279f8a9"
     },
@@ -1508,5 +1648,5 @@
       "sha256": "49fac43a6eb5e36244d43417d550d7615b8095168147ecc2d5cb91ff0313016f"
     }
   ],
-  "documentation": "Rewritten for public readers; feature summary checked against port source."
+  "documentation": "Source and release instructions checked against the current port."
 }

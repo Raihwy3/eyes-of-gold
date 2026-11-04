@@ -2,7 +2,7 @@
 
 A work-in-progress native port of GoldenEye 007 for Nintendo 3DS, based on the [GoldenEye decompilation and PC port](https://github.com/jkdansereau/goldeneye-pc-port).
 
-All 20 campaign missions are available, along with 11 multiplayer maps. Multiplayer is only a preview for now: you can control one player while the second stays idle. There is no networking yet.
+All 20 campaign missions are available, along with 11 multiplayer maps. Multiplayer is only a preview for now: you can control one player while the second stays idle. There is no multiplayer networking yet.
 
 The game is playable, but there are still bugs and performance issues. New 3DS systems handle it better; busy scenes can be slow on an Old 3DS.
 
@@ -19,6 +19,8 @@ The original campaign, menus, intros, idle demos and watch run through the nativ
 - **Watch and crosshair customisation.** Choose interface and crosshair colours, including blue and gold, along with alternate watch-hand styles.
 - **Audio options.** Music and sound effects come from the ROM. You can choose CPU or DSP-assisted mixing; the DSP option still leaves some audio work on the CPU.
 - **Saved settings.** Port-specific options are stored in `native-options.ini`. First-launch defaults depend on the console model and do not replace an existing settings file.
+- **Campaign modifiers.** Cheat Options includes Subsistence and a seeded Randomiser for starting guns, ordinary guard appearances and weapons, weapon pickups and ammo-crate contents. [Randomiser details](docs/randomiser.md).
+- **Optional startup updates.** With Wi-Fi connected, the launcher checks GitHub Releases and asks before downloading and installing a newer launcher. ROMs, saves and settings are kept. [Updater details](docs/updater.md).
 - **Setup on the console.** Asset conversion runs on the 3DS, so players do not need a PC to prepare their ROM. The boot screen shows setup progress.
 
 The main menu also has an options page, an exit button and an unlock-everything option for levels and cheats. Most in-game settings are available through the watch.
@@ -37,7 +39,7 @@ This repository contains the source. If you want to build your own install ZIP, 
 
 ## Building from source
 
-The build scripts currently expect devkitPro at `/opt/devkitpro`. Install its 3DS tools, including devkitARM, libctru, Citro3D, picasso, smdhtool and 3dsxtool. You also need Python 3, GCC/G++, make, Git and the Python package `pyelftools`. Pillow is only used for optional image previews.
+The build scripts currently expect devkitPro at `/opt/devkitpro`. Install its 3DS tools, including devkitARM, libctru, Citro3D, picasso, smdhtool and 3dsxtool. You also need Python 3, GCC/G++, make, Git and the Python package `pyelftools`. Pillow is only used for optional image previews. The updater also needs devkitPro packages `3ds-curl`, `3ds-mbedtls` and `3ds-zlib`. Its host checks use curl, MiniZip, zlib and OpenSSL development libraries, plus the `openssl` command.
 
 Install the Python build dependency in your environment with:
 

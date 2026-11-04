@@ -23,3 +23,7 @@ Upstream license and notice files are kept unchanged.
 
 This fan project is not affiliated with Nintendo, Rare or the James Bond
 rights holders. The original game and its assets belong to their owners.
+
+The startup updater uses curl, Mbed TLS, zlib/MiniZip and jsmn. HTTPS root
+certificates come from Mozilla via curl. Their notices and licenses are in
+the licenses folder. No third-party update server or account is required.
