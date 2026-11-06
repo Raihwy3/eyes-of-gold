@@ -17,7 +17,7 @@ The original campaign, menus, intros, idle demos and watch run through the nativ
 - **Display options.** Choose 4:3, 5:4 or the top screen's native 5:3 aspect ratio, with a 30 or 60 FPS cap. These are limits, not guaranteed frame rates. There is also optional supersampling and a choice of smoothing or sharpening filters.
 - **Performance settings.** Adjust model and texture detail, view distance, glass and effects. Dynamic LOD changes the detail level as the frame rate changes. Experimental guard settings can reduce update rates and work spent on distant or hidden guards, but may affect their behaviour.
 - **Extra screen effects.** Optional bloom, film grain and vignette. The vignette can stay on or appear only while crouching, aiming, or either.
-- **Flick Stick.** Optional C-stick directional turns with 1.5 Vesper, alongside gyro or touch look.
+- **Experimental Flick Stick.** Optional C-stick directional turns with 1.5 Vesper, alongside gyro or touch look.
 - **Watch and crosshair customisation.** Choose interface and crosshair colours, including blue, gold and purple, along with alternate watch-hand styles.
 - **Audio options.** Music and sound effects come from the ROM. You can choose CPU or DSP-assisted mixing; the DSP option still leaves some audio work on the CPU.
 - **Saved settings.** Port-specific options are stored in `native-options.ini`. First-launch defaults depend on the console model and do not replace an existing settings file.

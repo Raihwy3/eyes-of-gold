@@ -1,6 +1,6 @@
 {
   "files": 420,
-  "bytes": 9537763,
+  "bytes": 9539786,
   "python_syntax": "passed",
   "upstream_included": false,
   "roms_or_generated_binaries_included": false,
@@ -24,7 +24,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "e56d27af3434ae5de66e5e70717ff6a009a5137541435704cee4cb65128df9dc"
+      "sha256": "25a7f724eafd47058daa7957edee2c6447b4102007bf6439c0112ef3030df058"
     },
     {
       "path": "SOURCE-RELEASE.md",
@@ -40,7 +40,7 @@
     },
     {
       "path": "docs/gyro-stereo.md",
-      "sha256": "e585719eeb3a3e88f79a508d0a7e66a8e4718336bd5937b7d39e6cae673cad6f"
+      "sha256": "d9d434756d6d4b3f2d56d9bf7f0dd899256fd8cdac6210dd2dbedb56b420d543"
     },
     {
       "path": "docs/randomiser.md",
@@ -160,7 +160,7 @@
     },
     {
       "path": "native-engine/engine-state-review.json",
-      "sha256": "6f10be93f07240ed2bc731b5beebef2ecdf0f94c6bbc1aa1a42785956c9458ef"
+      "sha256": "249350f636e0d1e9b0400fe838a05c56684098df86c99d2e14a6b073c861315a"
     },
     {
       "path": "native-engine/include/PR/R4300.h",
@@ -432,7 +432,7 @@
     },
     {
       "path": "native-engine/include/native_options_bridge.h",
-      "sha256": "015609645ac2715ff5c0893304fa5a039a693c606511723f005d1d0d78213e5a"
+      "sha256": "cadb7297574f5b7fed723457d68be6b85fff6e9ece2c59cc14beb68ac47dd147"
     },
     {
       "path": "native-engine/include/native_pad.h",
@@ -556,7 +556,7 @@
     },
     {
       "path": "native-engine/include/native_version.h",
-      "sha256": "046ea891d4cd335f03d924429c9fd157c07cb0933d0453a74e313e86da522933"
+      "sha256": "c24559fa9f0a3d53d8fee257798ecb8f3e7ad08cf7c26d4373f3b2d27a9ac65a"
     },
     {
       "path": "native-engine/include/native_viewmodel.h",
@@ -684,11 +684,11 @@
     },
     {
       "path": "native-engine/rom-code-pool-review.json",
-      "sha256": "0c030099dd5d504eba3cbb972b455fffc8dc4f3f5cf8ff0685d047473bb473ff"
+      "sha256": "117d4be9e3116bd101fef5296b805c198824146e24ef2fe40661af9eeff6079b"
     },
     {
       "path": "native-engine/rom-data-code-review.json",
-      "sha256": "4d0f0d8cbe80ea8de6ab3f8fde1c8b28127462c846c12d1c1b174b9b42be783f"
+      "sha256": "8bccf8a20d25024c042240512aa7327b6b25e1622af4613fff664c24f02a97f9"
     },
     {
       "path": "native-engine/rom-data-layout.json",

@@ -420,7 +420,7 @@
     {
       "symbol": "labels.10",
       "review": "independently authored native menu/control implementation data",
-      "evidence": "All pointer targets inspected against independently authored native control/watch labels, including gyro and Controls. Imported matching literals remain ROM-backed: [None, b'Music volume\\n', b'Effects volume\\n', None, None, None, None, None, None, None, b'Aspect ratio\\n', b'Crosshair\\n', b'Watch colour\\n', b'Supersampling\\n', b'FPS limit\\n', b'Look sensitivity\\n', b'Image filter\\n', b'Vignette\\n', b'Bloom\\n', b'Film grain\\n', b'Watch skin\\n', b'Glass detail\\n', b'LOD strength\\n', b'View distance\\n', b'Vignette when\\n', b'Mixer (restart)\\n', b'Unlock everything\\n', b'Guard LOS (exp)\\n', b'Guard AI rate\\n', b'Gyro look\\n', b'Gyro sensitivity\\n', b'Touch sensitivity\\n', b'Flick stick\\n']"
+      "evidence": "All pointer targets inspected against independently authored native control/watch labels, including gyro and Controls. Imported matching literals remain ROM-backed: [None, b'Music volume\\n', b'Effects volume\\n', None, None, None, None, None, None, None, b'Aspect ratio\\n', b'Crosshair\\n', b'Watch colour\\n', b'Supersampling\\n', b'FPS limit\\n', b'Look sensitivity\\n', b'Image filter\\n', b'Vignette\\n', b'Bloom\\n', b'Film grain\\n', b'Watch skin\\n', b'Glass detail\\n', b'LOD strength\\n', b'View distance\\n', b'Vignette when\\n', b'Mixer (restart)\\n', b'Unlock everything\\n', b'Guard LOS (exp)\\n', b'Guard AI rate\\n', b'Gyro look\\n', b'Gyro sensitivity\\n', b'Touch sensitivity\\n', b'Flick stick (exp)\\n']"
     },
     {
       "symbol": "CSWTCH.903",

@@ -57,7 +57,7 @@ void native_menu_option_change(int row,int direction) {
     else native_setting_set_vignette_mode(value);
 }
 const char *native_menu_option_label(int row) {
-    static const char *const labels[]={0,"Music volume\n","Effects volume\n",0,0,0,0,0,0,0,"Aspect ratio\n","Crosshair\n","Watch colour\n","Supersampling\n","FPS limit\n","Look sensitivity\n","Image filter\n","Vignette\n","Bloom\n","Film grain\n","Watch skin\n","Glass detail\n","LOD strength\n","View distance\n","Vignette when\n","Mixer (restart)\n","Unlock everything\n","Guard LOS (exp)\n","Guard AI rate\n","Gyro look\n","Gyro sensitivity\n","Touch sensitivity\n","Flick stick\n"};
+    static const char *const labels[]={0,"Music volume\n","Effects volume\n",0,0,0,0,0,0,0,"Aspect ratio\n","Crosshair\n","Watch colour\n","Supersampling\n","FPS limit\n","Look sensitivity\n","Image filter\n","Vignette\n","Bloom\n","Film grain\n","Watch skin\n","Glass detail\n","LOD strength\n","View distance\n","Vignette when\n","Mixer (restart)\n","Unlock everything\n","Guard LOS (exp)\n","Guard AI rate\n","Gyro look\n","Gyro sensitivity\n","Touch sensitivity\n","Flick stick (exp)\n"};
     if(row==0)return (const char *)langGet(getStringID(LOPTIONS,OPTION_STR_32_CONTROLSTYLE_LF));
     if(row>=3 && row<=9)return (const char *)langGet(game_options_entries[row-3].text[0]);
     return row>=0 && row<NATIVE_MENU_OPTIONS_COUNT?labels[row]:"\n";
