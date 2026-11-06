@@ -38,12 +38,8 @@ static inline void native_launcher_top(const char *subtitle,const char *stage) {
     native_launcher_text(18,9,stage,34);
 }
 static inline void native_launcher_bottom(const char *title) {
-    printf("\x1b[33m\x1b[2;3H+----------------------------------+");
-    for(int row=3;row<28;row++)printf("\x1b[%d;3H|\x1b[%d;38H|",row,row);
-    printf("\x1b[28;3H+----------------------------------+\x1b[0m");
-    native_launcher_text(3,5,"FIELD OPERATIONS",32);
+    printf("\x1b[33m");native_launcher_text(3,5,title,32);printf("\x1b[0m");
     native_launcher_line(5,5,32);
-    printf("\x1b[33m");native_launcher_text(6,5,title,32);printf("\x1b[0m");
     native_launcher_line(24,5,32);
     native_launcher_text(26,5,"Eyes of Gold " NATIVE_ENGINE_VERSION,32);
 }
@@ -67,8 +63,6 @@ static inline void native_launcher_message(int row,const char *s,int lines) {
 }
 static inline void native_launcher_actions(const char *action) {
     const char *back=strstr(action,"B:");
-    native_launcher_line(19,5,32);native_launcher_line(23,5,32);
-    printf("\x1b[33m\x1b[20;21H|\x1b[21;21H|\x1b[22;21H|\x1b[0m");
     if(!strncmp(action,"A:",2))native_launcher_text(21,5,action,back && back-action<15?(int)(back-action):15);
     else native_launcher_text(21,5,"PLEASE WAIT",15);
     if(back)native_launcher_text(21,23,back,14);

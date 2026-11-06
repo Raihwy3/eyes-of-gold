@@ -34,9 +34,9 @@ int main(void){
         top=screen(output[0],50);assert 'FIELD OPERATIONS' in top[3] and '[==============================]' in top[19]
         for index in (1,2,3):
             bottom=screen(output[index],40)
-            assert 'FIELD OPERATIONS' in bottom[2] and 'Eyes of Gold' in bottom[25]
-            for row in range(2,27):assert bottom[row][2]=='|' and bottom[row][37]=='|'
+            assert ('LAUNCHER UPDATE' if index!=2 else 'MISSION PREPARATION') in bottom[2] and 'Eyes of Gold' in bottom[25]
+            for row in range(2,27):assert bottom[row][2]==' ' and bottom[row][37]==' '
             if index==1:assert 'A: Install' in bottom[20] and 'B: Not now' in bottom[20] and 'are kept.' in '\n'.join(bottom)
             if index==3:assert 'B: Exit' in bottom[20] and 'A: Continue' in bottom[20]
-    print('PASS shared launcher UI: top/bottom bounds, matching chrome, wrapped notices/errors, preserved borders and touch-button positions')
+    print('PASS shared launcher UI: top/bottom bounds, simple gold styling, wrapped notices/errors, clear margins and touch-button positions')
 if __name__=='__main__':main()

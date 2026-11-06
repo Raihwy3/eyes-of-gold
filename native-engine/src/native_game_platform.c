@@ -249,14 +249,12 @@ static void boot_screen(const char *stage,unsigned done,unsigned total,int conve
   printf("\x1b[28;5HBuild " NATIVE_BUILD_ID);
   consoleSelect(&bottom);consoleClear();
   native_launcher_bottom(converting==2?"MISSION READY":"MISSION PREPARATION");
-  native_launcher_text(8,5,"HARDWARE",32);
+  native_launcher_text(8,5,"CONSOLE",32);
   native_launcher_text(9,5,native_console_name(console_model),32);
-  native_launcher_line(11,5,32);
   if(converting==2) {
-    native_launcher_text(13,5,"ALL CHECKS COMPLETE",32);
+    native_launcher_text(13,5,"Game files are ready.",32);
     native_launcher_text(15,5,"Starting the game...",32);
     native_launcher_text(17,5,"Touch menus will appear here.",32);
-    native_launcher_text(21,5,"READY TO LAUNCH",32);
   } else {
     native_launcher_text(13,5,converting?"BUILDING GAME FILES":"CHECKING GAME FILES",32);
     native_launcher_text(15,5,stage,32);
@@ -264,7 +262,6 @@ static void boot_screen(const char *stage,unsigned done,unsigned total,int conve
     native_launcher_text(20,5,converting?"Keep the console powered on.":"Preparing your mission...",32);
     if(converting)native_launcher_text(21,5,"B: Cancel preparation",32);
   }
-  native_launcher_bar(22,5,30,overall,100);
 }
 void native_platform_prepared(void) {
   boot_screen("Mission ready",1,1,2);

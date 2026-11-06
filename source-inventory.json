@@ -1,6 +1,6 @@
 {
   "files": 420,
-  "bytes": 9506782,
+  "bytes": 9506261,
   "python_syntax": "passed",
   "upstream_included": false,
   "roms_or_generated_binaries_included": false,
@@ -380,7 +380,7 @@
     },
     {
       "path": "native-engine/include/native_launcher_ui.h",
-      "sha256": "c9372335c24c80c13fc74d519cbc44590b9c648700eb1bb62986767ed70993d7"
+      "sha256": "4330698db3efd1f640d04f3914639fdf24a770ccd8fa1564e2d9e4e3f3d45671"
     },
     {
       "path": "native-engine/include/native_lod_scope.h",
@@ -792,7 +792,7 @@
     },
     {
       "path": "native-engine/src/native_game_platform.c",
-      "sha256": "a236d61fd62e90cbf8e1b045b6500236428ffc18ad717a03fbddc644da337449"
+      "sha256": "c064f29aa948f9e7d88446f515a7afa67f2a9cdf880b92ff92b392a0a3f2421c"
     },
     {
       "path": "native-engine/src/native_game_video.cpp",
@@ -836,7 +836,7 @@
     },
     {
       "path": "native-engine/src/native_update_3ds.c",
-      "sha256": "3426023dfda70b85226f0586abbabb69fa4f7c55d08ae87f62937d78ff76341b"
+      "sha256": "03b4d1b95ba04f833c91e43ff25d0f9c2d8283100e6a4d5202032a7bae68910f"
     },
     {
       "path": "native-engine/src/native_update_http.c",
@@ -1304,7 +1304,7 @@
     },
     {
       "path": "native-engine/tools/check_launcher_ui.py",
-      "sha256": "6cdb27469be32c26a10d66e0d21dba097aca200d3f4ac6c2cedbcf32b6dd7d6c"
+      "sha256": "ca07515c6bdae3c41f8d38ad6408adcf48da3e0bcf2d5538624900d832104ed6"
     },
     {
       "path": "native-engine/tools/check_model_bsp.py",

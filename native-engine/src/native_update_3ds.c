@@ -52,7 +52,6 @@ static void draw(const char *stage,const char *message,const char *action,unsign
         native_launcher_text(8,23,"AVAILABLE",14);
         native_launcher_text(9,23,job.release.tag,14);
     }
-    native_launcher_line(11,5,32);
     native_launcher_message(13,message,5);
     native_launcher_actions(action);
     gfxFlushBuffers();gfxSwapBuffers();
