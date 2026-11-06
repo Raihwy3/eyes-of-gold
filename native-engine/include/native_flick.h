@@ -2,7 +2,8 @@
 #define EOG_NATIVE_FLICK_H
 #include <stdint.h>
 #include <math.h>
-/* Raw C-stick units. Hysteresis prevents repeated flicks near the edge.
+/* Raw C-stick units. Low thresholds suit the pressure-sensitive 3DS nub;
+ * releasing requires a real return to centre, rather than a pressure dip.
  * Initial turns finish over 100ms; edge rotation tracks one-to-one degrees. */
 struct NativeFlick { uint64_t last;float angle,remaining,pending;unsigned remaining_us;int active,armed; };
 static inline float native_flick_wrap(float a) {
@@ -10,13 +11,13 @@ static inline float native_flick_wrap(float a) {
 }
 static inline void native_flick_sample(struct NativeFlick *f,uint64_t now,int x,int y,int enabled) {
     uint64_t dt=f->last && now>=f->last?now-f->last:0;
-    if(!enabled || dt>100000){*f=(struct NativeFlick){0};f->last=now;return;}
+    if(!enabled || dt>250000){*f=(struct NativeFlick){0};f->last=now;return;}
     f->last=now;
     if(x>156)x=156;else if(x< -156)x=-156;
     if(y>156)y=156;else if(y< -156)y=-156;
     int radius=x*x+y*y;
-    if(radius<94*94){f->active=0;f->armed=1;}
-    else if(radius>=124*124 || f->active) {
+    if(radius<20*20){f->active=0;f->armed=1;}
+    else if(radius>=48*48 || f->active) {
         float angle=atan2f((float)x,(float)y)*57.2957795131f;
         if(f->active)f->pending+=native_flick_wrap(angle-f->angle);
         else if(f->armed){f->remaining+=angle;f->remaining_us=100000;f->active=1;f->armed=0;}

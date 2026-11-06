@@ -76,8 +76,24 @@ int main(void) {
    native_flick_sample(&f,now,0,0,1);
    for(int i=0;i<12;i++){now+=1000000/hz;native_flick_sample(&f,now,dir*156,0,1);}
    assert(fabsf(f.pending-dir*90)<.01f && f.remaining_us==0);
-   native_flick_sample(&f,now+200000,0,-156,1);assert(f.pending==0 && !f.active);
+   native_flick_sample(&f,now+400000,0,-156,1);assert(f.pending==0 && !f.active);
  }
+ /* Uneven C-stick pressure must work in every direction. A pressure dip
+  * while holding left must not re-arm and repeatedly add another 90 degrees. */
+ const int directions[4][2]={{-55,0},{55,0},{0,55},{0,-55}};
+ const float expected_turn[4]={-90,90,0,180};
+ for(int d=0;d<4;d++) {
+   struct NativeFlick f={0};uint64_t t=1000000;native_flick_sample(&f,t,0,0,1);
+   for(int i=0;i<12;i++){t+=16667;native_flick_sample(&f,t,directions[d][0],directions[d][1],1);}
+   assert(fabsf(f.pending-expected_turn[d])<.02f);
+   for(int i=0;i<12;i++){t+=16667;native_flick_sample(&f,t,directions[d][0]/2,directions[d][1]/2,1);}
+   assert(fabsf(f.pending-expected_turn[d])<.02f);
+ }
+ struct NativeFlick slow={0};native_flick_sample(&slow,1000000,0,0,1);
+ native_flick_sample(&slow,1016667,-60,0,1);native_flick_sample(&slow,1136667,-60,0,1);
+ assert(fabsf(slow.pending+90)<.02f); // 120ms game frame completes, without re-flicking.
+ native_flick_sample(&slow,1153334,0,0,1);native_flick_sample(&slow,1170001,0,-60,1);
+ native_flick_sample(&slow,1290001,0,-60,1);assert(fabsf(slow.pending-90)<.02f);
  struct NativeFlick wrap={0};native_flick_sample(&wrap,1000000,0,0,1);
  native_flick_sample(&wrap,1010000,1,-156,1);wrap.pending=wrap.remaining=0;wrap.remaining_us=0;
  native_flick_sample(&wrap,1020000,-1,-156,1);assert(wrap.pending>0 && wrap.pending<1);
