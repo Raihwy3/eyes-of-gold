@@ -18,6 +18,8 @@ def main():
     (build.BUILD/'compile-summary.log').write_text(engine.stdout+engine.stderr)
     print(engine.stdout,end='')
     build.prepare()
+    import check_launcher_ui
+    check_launcher_ui.main()
     import bottom_background
     bottom_background.generate()
     import native_game_assets,check_game_assets

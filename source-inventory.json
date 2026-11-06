@@ -1,10 +1,10 @@
 {
-  "files": 418,
-  "bytes": 9501134,
+  "files": 420,
+  "bytes": 9506782,
   "python_syntax": "passed",
   "upstream_included": false,
   "roms_or_generated_binaries_included": false,
-  "validation": "ARM engine build, watch-menu/settings checks, gyro/Flick Stick/touch camera checks, cheat checks, updater checks and strict ROM-data release audit passed. The final binary has not been tested on a console.",
+  "validation": "ARM engine build, input/menu/settings checks, shared launcher UI bounds and wrapping checks, updater checks and strict ROM-data release audit passed. The final binary has not been tested on a console.",
   "inventory": [
     {
       "path": ".gitignore",
@@ -377,6 +377,10 @@
     {
       "path": "native-engine/include/native_input.h",
       "sha256": "a7610ca8a13bb8827ccff41de3eeab6d4484237952d4ec6044239c1ac29d5bc7"
+    },
+    {
+      "path": "native-engine/include/native_launcher_ui.h",
+      "sha256": "c9372335c24c80c13fc74d519cbc44590b9c648700eb1bb62986767ed70993d7"
     },
     {
       "path": "native-engine/include/native_lod_scope.h",
@@ -788,7 +792,7 @@
     },
     {
       "path": "native-engine/src/native_game_platform.c",
-      "sha256": "85aedd4545a7c33dd973ca9ac8526209a08f1a78d9fe9ab6297130cd708eff23"
+      "sha256": "a236d61fd62e90cbf8e1b045b6500236428ffc18ad717a03fbddc644da337449"
     },
     {
       "path": "native-engine/src/native_game_video.cpp",
@@ -832,7 +836,7 @@
     },
     {
       "path": "native-engine/src/native_update_3ds.c",
-      "sha256": "04451b20087e5b1d89662dc39da75b43ebc8d0b2875214cc8d0cbd71c17a20f8"
+      "sha256": "3426023dfda70b85226f0586abbabb69fa4f7c55d08ae87f62937d78ff76341b"
     },
     {
       "path": "native-engine/src/native_update_http.c",
@@ -1224,7 +1228,7 @@
     },
     {
       "path": "native-engine/tools/build_game.py",
-      "sha256": "e39fadc99a8b944a2990f3ec525a632eaacd94d9a8bdb1f2245a2ac3f229ddde"
+      "sha256": "7becfedb1d2dce5397310b8597af4d127b54e73ee5d6c1b560a58363479980eb"
     },
     {
       "path": "native-engine/tools/build_graphics.py",
@@ -1297,6 +1301,10 @@
     {
       "path": "native-engine/tools/check_intro_timing.py",
       "sha256": "08b4aa051ee13590b09e83a617dbe6438b7c9c808fcff21216bd9fc888c69507"
+    },
+    {
+      "path": "native-engine/tools/check_launcher_ui.py",
+      "sha256": "6cdb27469be32c26a10d66e0d21dba097aca200d3f4ac6c2cedbcf32b6dd7d6c"
     },
     {
       "path": "native-engine/tools/check_model_bsp.py",

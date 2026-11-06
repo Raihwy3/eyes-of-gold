@@ -8,6 +8,7 @@
 #include "native_update.h"
 #include "native_update_http.h"
 #include "native_version.h"
+#include "native_launcher_ui.h"
 #include "native_update_ca.h"
 static PrintConsole *top_console,*bottom_console;
 static struct UpdateJob {
@@ -37,22 +38,23 @@ static int start_job(int download) {
 }
 static void draw(const char *stage,const char *message,const char *action,unsigned done,unsigned total) {
     consoleSelect(top_console);consoleClear();
-    printf("\x1b[33m\x1b[5;10HE Y E S   O F   G O L D\x1b[0m"
-           "\x1b[9;14HLAUNCHER UPDATE"
-           "\x1b[13;6H%-38.38s\x1b[16;6HInstalled: " NATIVE_RELEASE_TAG,
-           stage);
-    if(total){unsigned percent=(unsigned)((uint64_t)done*100/total);if(percent>100)percent=100;char bar[31];for(unsigned i=0;i<30;i++)bar[i]=i<percent*30/100?'=':'-';bar[30]=0;printf("\x1b[20;9H\x1b[33m[%s]\x1b[0m\x1b[23;22H%3u%%",bar,percent);}
+    native_launcher_top("LAUNCHER UPDATE",stage);
+    if(total){native_launcher_bar(20,9,30,done,total);printf("\x1b[22;23H%3u%%",native_launcher_percent(done,total));}
+    else native_launcher_text(20,14,"UPDATE SERVICE",30);
+    native_launcher_text(24,5,"OPTIONAL LAUNCHER UPDATE",40);
+    native_launcher_line(26,5,40);
+    native_launcher_text(28,5,"Installed " NATIVE_RELEASE_TAG,40);
     consoleSelect(bottom_console);consoleClear();
-    printf("\x1b[33m\x1b[3;3HUPDATE SERVICE\x1b[5;3H----------------------------------\x1b[0m\x1b[8;3H%s",message);
-    if((job.download || __atomic_load_n(&job.done,__ATOMIC_ACQUIRE)) && job.release.tag[0])printf("\x1b[13;3HAvailable: %.30s",job.release.tag);
-    const char *back=strstr(action,"B:");
-    if(!strncmp(action,"A:",2)) {
-        size_t length=back?(size_t)(back-action):strlen(action);
-        while(length && action[length-1]==' ')length--;
-        printf("\x1b[20;3H%.*s",(int)length,action);
+    native_launcher_bottom("LAUNCHER UPDATE");
+    native_launcher_text(8,5,"INSTALLED",15);
+    native_launcher_text(9,5,NATIVE_RELEASE_TAG,15);
+    if((job.download || __atomic_load_n(&job.done,__ATOMIC_ACQUIRE)) && job.release.tag[0]) {
+        native_launcher_text(8,23,"AVAILABLE",14);
+        native_launcher_text(9,23,job.release.tag,14);
     }
-    if(back)printf("\x1b[20;23H%s",back);
-    printf("\x1b[33m\x1b[25;3H----------------------------------\x1b[0m\x1b[27;3HEyes of Gold " NATIVE_ENGINE_VERSION);
+    native_launcher_line(11,5,32);
+    native_launcher_message(13,message,5);
+    native_launcher_actions(action);
     gfxFlushBuffers();gfxSwapBuffers();
 }
 static int buttons(void) {
@@ -69,7 +71,7 @@ static int await_job(int download) {
     while(aptMainLoop()) {
         if(__atomic_load_n(&job.done,__ATOMIC_ACQUIRE))return job.ok;
         if(buttons()<0 || (!download && osGetTime()-started>=4500)){__atomic_store_n(&job.cancel,1,__ATOMIC_RELAXED);return 0;}
-        if(osGetTime()>=paint){draw(download?"DOWNLOADING RELEASE":"CHECKING GITHUB RELEASES",download?"Saving the launcher update...":"Checking for a newer release.","B: Skip / cancel",__atomic_load_n(&job.received,__ATOMIC_RELAXED),__atomic_load_n(&job.total,__ATOMIC_RELAXED));paint=osGetTime()+200;}
+        if(osGetTime()>=paint){draw(download?"DOWNLOADING RELEASE":"CHECKING GITHUB RELEASES",download?"Saving the launcher update...":"Checking for a newer release.",download?"B: Cancel":"B: Skip",__atomic_load_n(&job.received,__ATOMIC_RELAXED),__atomic_load_n(&job.total,__ATOMIC_RELAXED));paint=osGetTime()+200;}
         gspWaitForVBlank();
     }
     __atomic_store_n(&job.cancel,1,__ATOMIC_RELAXED);return 0;
@@ -87,7 +89,7 @@ int native_update_startup(const char *directory,PrintConsole *top,PrintConsole *
     snprintf(flag,sizeof flag,"%s/no-update-check.flag",directory);if(access(flag,F_OK)==0)return 1;
     u32 wifi=0;if(R_FAILED(acInit()))return 1;Result connected=ACU_GetWifiStatus(&wifi);acExit();if(R_FAILED(connected) || !wifi)return 1;
     if(!start_job(0) || !await_job(0))return aptMainLoop();
-    int choice=prompt("NEW RELEASE AVAILABLE","Download and install this update?\n\n  ROMs, saves and settings are kept.","A: Install     B: Not now");
+    int choice=prompt("NEW RELEASE AVAILABLE","Install this launcher update?\n\nYour ROM, saves and settings\nare kept.","A: Install     B: Not now");
     if(choice<=0)return choice<0;
     snprintf(job.file,sizeof job.file,"%s/launcher-update.zip.part",directory);
     if(!start_job(1) || !await_job(1)) {

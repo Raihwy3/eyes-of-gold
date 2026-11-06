@@ -2,6 +2,7 @@
 #include "native_build.h"
 #include "native_version.h"
 #include "native_boot_progress.h"
+#include "native_launcher_ui.h"
 #include "native_game.h"
 #include "native_audio.h"
 #include "native_graphics.h"
@@ -235,64 +236,35 @@ void sysFatalError(const char *fmt, ...) {
 static void boot_screen(const char *stage,unsigned done,unsigned total,int converting) {
   static unsigned overall;
   if(converting)overall=native_boot_total(stage,done,total,overall);
-  const unsigned percent=total?(unsigned)((u64)done*100/total):0;
-  const unsigned bounded=percent>100?100:percent;
-  char bar[33];
-  for(unsigned i=0;i<32;i++)bar[i]=i<bounded*32/100?'=':'-';
-  bar[32]=0;
-  consoleSelect(&top);
-  consoleClear();
-  printf("\x1b[33m"
-         "\x1b[3;5H+----------------------------------------+"
-         "\x1b[4;5H|             FIELD OPERATIONS           |"
-         "\x1b[5;5H+----------------------------------------+"
-         "\x1b[8;23H  |  "
-         "\x1b[9;23H--O--"
-         "\x1b[10;23H  |  "
-         "\x1b[12;14HE Y E S   O F   G O L D"
-         "\x1b[0m\x1b[14;16HNATIVE GAME LAUNCHER"
-         "\x1b[18;9H%-34.34s",stage);
-  if(converting && total)
-    printf("\x1b[20;9H\x1b[33m[%s]\x1b[0m\x1b[22;23H%3u%%",bar,bounded);
-  else if(converting)
-    printf("\x1b[20;14HPreparing audio: %u frames",done);
-  else
-    printf("\x1b[20;14HPreparing your mission...");
-  char total_bar[41];
-  for(unsigned i=0;i<40;i++)total_bar[i]=i<overall*40/100?'=':'-';
-  total_bar[40]=0;
-  printf("\x1b[24;5HTOTAL PREPARATION %3u%%"
-         "\x1b[26;5H\x1b[33m[%s]"
-         "\x1b[0m\x1b[28;5HBuild " NATIVE_BUILD_ID,overall,total_bar);
-  consoleSelect(&bottom);
-  consoleClear();
-  printf("\x1b[33m\x1b[3;4HMISSION PREPARATION"
-         "\x1b[5;4H--------------------------------"
-         "\x1b[0m\x1b[8;4HCONSOLE"
-         "\x1b[10;4H%-32.32s"
-         "\x1b[13;4H%s"
-         "\x1b[16;4H%s"
-         "\x1b[17;4H%s"
-         "\x1b[21;4H%s"
-         "\x1b[33m\x1b[24;4H--------------------------------"
-         "\x1b[0m\x1b[26;4HEyes of Gold " NATIVE_ENGINE_VERSION,
-         native_console_name(console_model),
-         converting?"PREPARING GAME FILES":"CHECKING GAME FILES",
-         converting?"New files are built from your":"Your saved settings will load",
-         converting?"ROM only when needed.":"automatically.",
-         converting?"B: cancel preparation":"Please wait...");
+  unsigned bounded=native_launcher_percent(done,total);
+  consoleSelect(&top);consoleClear();
+  native_launcher_top("NATIVE GAME LAUNCHER",stage);
+  if(converting && total) {
+    native_launcher_bar(20,9,32,done,total);
+    printf("\x1b[22;23H%3u%%",bounded);
+  } else if(converting)printf("\x1b[20;14HPreparing audio: %u frames",done);
+  else native_launcher_text(20,14,"Preparing your mission...",34);
+  printf("\x1b[24;5HTOTAL PREPARATION %3u%%",overall);
+  native_launcher_bar(26,5,40,overall,100);
+  printf("\x1b[28;5HBuild " NATIVE_BUILD_ID);
+  consoleSelect(&bottom);consoleClear();
+  native_launcher_bottom(converting==2?"MISSION READY":"MISSION PREPARATION");
+  native_launcher_text(8,5,"HARDWARE",32);
+  native_launcher_text(9,5,native_console_name(console_model),32);
+  native_launcher_line(11,5,32);
   if(converting==2) {
-    consoleClear();
-    printf("\x1b[33m\x1b[3;4HEYES OF GOLD"
-           "\x1b[5;4H--------------------------------"
-           "\x1b[0m\x1b[10;4HMISSION READY"
-           "\x1b[13;4HGame files are ready."
-           "\x1b[16;4HStarting the game..."
-           "\x1b[19;4HTouch menus will appear here."
-           "\x1b[33m\x1b[24;4H--------------------------------"
-           "\x1b[0m\x1b[26;4HEyes of Gold " NATIVE_ENGINE_VERSION);
+    native_launcher_text(13,5,"ALL CHECKS COMPLETE",32);
+    native_launcher_text(15,5,"Starting the game...",32);
+    native_launcher_text(17,5,"Touch menus will appear here.",32);
+    native_launcher_text(21,5,"READY TO LAUNCH",32);
+  } else {
+    native_launcher_text(13,5,converting?"BUILDING GAME FILES":"CHECKING GAME FILES",32);
+    native_launcher_text(15,5,stage,32);
+    native_launcher_message(17,converting?"Files are prepared from your ROM only when needed.":"Your saved settings will load automatically.",2);
+    native_launcher_text(20,5,converting?"Keep the console powered on.":"Preparing your mission...",32);
+    if(converting)native_launcher_text(21,5,"B: Cancel preparation",32);
   }
-  if(converting==1)printf("\x1b[19;4HKeep the console powered on.");
+  native_launcher_bar(22,5,30,overall,100);
 }
 void native_platform_prepared(void) {
   boot_screen("Mission ready",1,1,2);
