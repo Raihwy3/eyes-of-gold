@@ -5,6 +5,7 @@
 #include "native_aspect.h"
 #include "native_detail.h"
 #include "native_settings.h"
+#include "native_controls.h"
 extern SCREEN_RATIO_OPTION get_screen_ratio(void) __attribute__((weak));
 f32 portScreenShakeScale=1.0f;
 s32 portSkipIntro=0,portNoHitFlash=0,portCrosshairHide=0,portAllUnlocked=0;
@@ -35,6 +36,6 @@ void portCrosshairApplyTintCombine(Gfx *command) {
       ENVIRONMENT,0,TEXEL0_ALPHA,0,TEXEL0,0,ENVIRONMENT,0);
 }
 f32 portGunSwayTheta(f32 elapsed){(void)elapsed;return 0.0f;}
-int portMouseAimPdGetTurn(f32 *x,f32 *y){(void)x;(void)y;return 0;}
+int portMouseAimPdGetTurn(f32 *x,f32 *y){return native_controls_aim_turn(x,y);}
 int portAIWideView(void){return 0;}
 Gfx *optionsFileSelectLabel(Gfx *commands){return commands;}

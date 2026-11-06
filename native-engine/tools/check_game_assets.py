@@ -134,7 +134,7 @@ def main():
         obj=out/(source.name+'.controls.o')
         build_probe.run(['gcc',*build_probe.engine_args(True),'-I'+str(out),'-c',source,'-o',obj]);control_objects.append(obj)
     controls_binary=out/'native-controls-check'
-    build_probe.run(['gcc','-no-pie','-Wl,--gc-sections',*control_objects,'-o',controls_binary])
+    build_probe.run(['gcc','-no-pie','-Wl,--gc-sections',*control_objects,'-lm','-o',controls_binary])
     print(build_probe.run([controls_binary]).stdout)
     cache_binary=out/'native-cart-cache-check'
     build_probe.run(['gcc','-std=gnu11','-O2','-Wall','-Wextra','-Werror','-I'+str(build.TARGET/'include'),build.TARGET/'src/native_cart.c',build.TARGET/'tests/native_cart_cache_host.c','-pthread','-o',cache_binary])

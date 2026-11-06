@@ -95,9 +95,27 @@ int main(void) {
  native_flick_sample(&slow,1153334,0,0,1);native_flick_sample(&slow,1170001,0,-60,1);
  native_flick_sample(&slow,1290001,0,-60,1);assert(fabsf(slow.pending-90)<.02f);
  struct NativeFlick wrap={0};native_flick_sample(&wrap,1000000,0,0,1);
- native_flick_sample(&wrap,1010000,1,-156,1);wrap.pending=wrap.remaining=0;wrap.remaining_us=0;
- native_flick_sample(&wrap,1020000,-1,-156,1);assert(wrap.pending>0 && wrap.pending<1);
- native_flick_sample(&wrap,1030000,0,0,0);assert(wrap.pending==0);
+ native_flick_sample(&wrap,1010000,1,-156,1);native_flick_sample(&wrap,1050000,1,-156,1);
+ wrap.pending=wrap.remaining=0;wrap.remaining_us=0;
+ native_flick_sample(&wrap,1060000,-1,-156,1);assert(wrap.pending==0); // Back-axis jitter is not rotation.
+ native_flick_sample(&wrap,1070000,0,0,0);assert(wrap.pending==0);
+ /* Release tails can point anywhere as pressure fades. They must not undo
+  * a left/right/back flick, even without an immediate perfect zero sample. */
+ for(int dir=-1;dir<=1;dir+=2){
+   struct NativeFlick f={0};uint64_t t=1000000;native_flick_sample(&f,t,0,0,1);
+   for(int i=0;i<12;i++){t+=16667;native_flick_sample(&f,t,dir*156,0,1);}
+   assert(fabsf(f.pending-dir*90)<.01f);
+   for(int i=0;i<12;i++){t+=16667;native_flick_sample(&f,t,0,30,1);}
+   assert(fabsf(f.pending-dir*90)<.01f);
+ }
+ struct NativeFlick tap={0};native_flick_sample(&tap,1000000,0,0,1);
+ native_flick_sample(&tap,1010000,-80,1,1);native_flick_sample(&tap,1020000,0,0,1);
+ native_flick_sample(&tap,1140000,0,0,1);assert(fabsf(tap.pending+90)<.01f);
+ struct NativeFlick circle={0};uint64_t ct=1000000;native_flick_sample(&circle,ct,0,0,1);
+ for(int i=0;i<12;i++){ct+=16667;native_flick_sample(&circle,ct,0,156,1);}
+ for(int i=1;i<=72;i++){float a=i*6.28318530718f/72;ct+=16667;
+   native_flick_sample(&circle,ct,(int)roundf(156*sinf(a)),(int)roundf(156*cosf(a)),1);}
+ assert(fabsf(circle.pending-360)<1);
  puts("PASS Flick Stick: directional angles, 30/60Hz timing, edge rotation/wrap, consume-once, unchanged movement, default stick look and menu/suspend/stall resets");
 
  puts("PASS HID gyro integration: degrees/sec, consume-once, aim-only, menus and suspend discard motion");

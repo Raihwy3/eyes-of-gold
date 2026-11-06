@@ -27,6 +27,8 @@ static int demo_active;
 int get_is_ramrom_flag(void){return demo_active;}
 static unsigned actions;
 static int tx,ty;
+f32 getPlayer_c_screenwidth(void){return 320;}
+f32 getPlayer_c_screenheight(void){return 240;}
 static float gy,gp,fy;
 void native_input_take_flick(float *yaw){*yaw=fy;fy=0;}
 void native_input_take_gyro(float *y,float *p){*y=gy;*p=gp;gy=gp=0;}
@@ -155,9 +157,20 @@ int main(void) {
     native_controls_apply_gyro();assert(player.vv_theta==176 && player.vv_verta==-1);
     native_setting_set_sensitivity(25);gy=2;gp=1;native_controls_apply_gyro();assert(player.vv_theta==172 && player.vv_verta==-2);
     native_setting_set_gyro(1);player.insightaimmode=0;gy=3;gp=3;native_controls_apply_gyro();assert(player.vv_theta==172 && player.vv_verta==-2);
-    player.insightaimmode=1;native_setting_set_gyro_sensitivity(200);gy=2;gp=1;native_controls_apply_gyro();assert(player.vv_theta==164 && player.vv_verta==-4);
-    locked=1;gy=3;gp=3;native_controls_apply_gyro();assert(player.vv_theta==164 && gy==0 && gp==0);locked=0;
+    player.insightaimmode=1;native_setting_set_gyro_sensitivity(200);gy=2;gp=1;
+    float ax=0,ay=0;assert(native_controls_aim_turn(&ax,&ay));
+    assert(ax<0 && ay>0 && player.vv_theta==172 && player.vv_verta==-2 && gy==0 && gp==0);
+    float held_x=ax,held_y=ay;ax=ay=0;assert(native_controls_aim_turn(&ax,&ay));
+    assert(fabsf(ax-held_x)<.00001f && fabsf(ay-held_y)<.00001f);
+    native_controls_apply_gyro();assert(player.vv_theta==172 && player.vv_verta==-2);
+    for(int i=0;i<10;i++){gy=-10;gp=0;ax=ay=0;assert(native_controls_aim_turn(&ax,&ay));assert(ax<=.65f && ax>=-.65f);}
+    assert(player.vv_theta!=172);
+    float edge_theta=player.vv_theta;ax=ay=0;native_controls_aim_turn(&ax,&ay);assert(player.vv_theta==edge_theta);
+    locked=1;gy=3;gp=3;ax=ay=0;assert(!native_controls_aim_turn(&ax,&ay));
+    native_controls_apply_gyro();assert(player.vv_theta==edge_theta && gy==0 && gp==0);locked=0;
+    player.insightaimmode=0;native_setting_set_gyro(2);
     player.vv_theta=1;player.vv_verta=88;gy=15;gp=-15;native_controls_apply_gyro();assert(player.vv_theta==301 && player.vv_verta==89);
+    puts("PASS gyro reticle: centred camera, retained target, original aim-path handoff, bounded edge overflow and no idle edge drift");
     native_setting_set_gyro(0);
     native_setting_set_style(8);native_setting_set_flick(1);player.vv_theta=350;fy=90;
     native_controls_apply_gyro();assert(player.vv_theta==80 && fy==0);

@@ -10,6 +10,7 @@
 #include "native_settings.h"
 #include "native_demo.h"
 #include "system.h"
+#include <math.h>
 static unsigned native_demo_seed_drift;
 void native_demo_replay_begin(void) {
     native_demo_seed_drift=0;
@@ -51,11 +52,15 @@ unsigned native_game_render_state(void) {
 }
 static int crouch_target=CROUCH_STAND;
 static int legacy_touch_crouch;
+static int gyro_aim_active;
+static float gyro_aim_x,gyro_aim_y;
 static int safe_axis(int v){return v< -5?v+5:v>5?v-5:0;}
 void native_controls_apply(struct MoveData *m) {
     if(native_demo_active())return;
     /* Only player 1 owns the physical/touch controls; never drain for P2. */
     if(get_cur_playernum()!=0)return;
+    if(!native_game_input_gameplay() || !g_CurrentPlayer->insightaimmode || !native_setting_gyro())gyro_aim_active=0;
+
     if(native_bottom_game_tick && get_currentmenu()==11)native_bottom_game_tick();
     if(!native_input_take_motion)return;
     int x,y;unsigned actions;native_input_take_motion(&x,&y,&actions);
@@ -113,6 +118,46 @@ void native_controls_adjust_look(float *yaw,float *pitch) {
     *yaw=native_controls_look_rate(*yaw);*pitch=native_controls_look_rate(*pitch);
 }
 
+/* Original gunfire calls this before drawing the reticle and weapon. Keep
+ * the target in screen space and use its existing gun/shot-direction path. */
+int native_controls_aim_turn(float *x,float *y){
+ if(get_cur_playernum()!=0 || !native_setting_gyro() || !native_input_take_gyro ||
+    !native_game_input_gameplay() || !g_CurrentPlayer->insightaimmode ||
+    lvlGetControlsLockedFlag() || !disablePlayerActionsWhenPausedOrInMpMenu()) {gyro_aim_active=0;return 0;}
+ float yaw=0,pitch=0;native_input_take_gyro(&yaw,&pitch);
+ if(!__builtin_isfinite(yaw) || !__builtin_isfinite(pitch))yaw=pitch=0;
+ float gain=native_setting_gyro_sensitivity()*.01f;
+ float fov=g_CurrentPlayer->fovy;
+ if(!(fov>1 && fov<=120))fov=60;
+ if(fov<60)gain*=fov/60;
+ float height=getPlayer_c_screenheight(),width=getPlayer_c_screenwidth();
+ float aspect=height>0 && width>0?width/height:1.3333333f;
+ float vertical=tanf(fov*.00872664626f),horizontal=vertical*aspect;
+ if(!gyro_aim_active){
+   gyro_aim_x=g_CurrentPlayer->crosshair_x_pos*(1-g_CurrentPlayer->guncrossdamp)-*x;
+   gyro_aim_y=g_CurrentPlayer->crosshair_y_pos*(1-g_CurrentPlayer->guncrossdamp)-*y;
+   if(!__builtin_isfinite(gyro_aim_x))gyro_aim_x=0;
+   if(!__builtin_isfinite(gyro_aim_y))gyro_aim_y=0;
+   gyro_aim_active=1;
+ }
+ gyro_aim_x-=yaw*gain*2.f*.01745329252f/horizontal;
+ gyro_aim_y+=pitch*gain*.01745329252f/vertical;
+ float tx=gyro_aim_x+*x,ty=gyro_aim_y+*y;
+ float cx=tx< -.65f?-.65f:tx>.65f?.65f:tx;
+ float cy=ty< -.65f?-.65f:ty>.65f?.65f:ty;
+ /* Only motion beyond the aiming area turns the camera. Subtract that
+  * overflow so a stationary device does not keep dragging the view. */
+ g_CurrentPlayer->vv_theta+=(tx-cx)*horizontal*57.29577951f;
+ g_CurrentPlayer->vv_verta-=(ty-cy)*vertical*57.29577951f;
+ while(g_CurrentPlayer->vv_theta<0)g_CurrentPlayer->vv_theta+=360;
+ while(g_CurrentPlayer->vv_theta>=360)g_CurrentPlayer->vv_theta-=360;
+ if(g_CurrentPlayer->vv_verta>89)g_CurrentPlayer->vv_verta=89;
+ if(g_CurrentPlayer->vv_verta< -89)g_CurrentPlayer->vv_verta=-89;
+ gyro_aim_x=cx-*x;gyro_aim_y=cy-*y;
+ *x=cx;*y=cy;
+ return 1;
+}
+
 /* Applied once after the original camera integrators, before their final clamp.
  * This bypasses stick acceleration and stick sensitivity intentionally. */
 void native_controls_apply_gyro(void){
@@ -128,6 +173,8 @@ void native_controls_apply_gyro(void){
    while(g_CurrentPlayer->vv_theta>=360)g_CurrentPlayer->vv_theta-=360;
  }
  int mode=native_setting_gyro();
+ if(g_CurrentPlayer->insightaimmode)return;
+ gyro_aim_active=0;
  if(!mode || (mode==1 && !g_CurrentPlayer->insightaimmode))return;
  if(!__builtin_isfinite(yaw) || !__builtin_isfinite(pitch))return;
  float gain=native_setting_gyro_sensitivity()*.01f;

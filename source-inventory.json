@@ -1,6 +1,6 @@
 {
   "files": 420,
-  "bytes": 9530507,
+  "bytes": 9537763,
   "python_syntax": "passed",
   "upstream_included": false,
   "roms_or_generated_binaries_included": false,
@@ -40,7 +40,7 @@
     },
     {
       "path": "docs/gyro-stereo.md",
-      "sha256": "2cdcdbbf99681eeb863f928b21af61c836a5b8f52aaa158cf6f152f2425c7c22"
+      "sha256": "e585719eeb3a3e88f79a508d0a7e66a8e4718336bd5937b7d39e6cae673cad6f"
     },
     {
       "path": "docs/randomiser.md",
@@ -260,7 +260,7 @@
     },
     {
       "path": "native-engine/include/native_controls.h",
-      "sha256": "9df871407643d4cdb5204032885f5d7e38c03ed1d7fbfae67132261c64128b7b"
+      "sha256": "6647c28cdce7da5a08e3d2c8ef5c1b17fd182ac46aeb6996ec90713a8dc5e750"
     },
     {
       "path": "native-engine/include/native_convert.h",
@@ -316,7 +316,7 @@
     },
     {
       "path": "native-engine/include/native_flick.h",
-      "sha256": "9b91570d6c6000071942d6c346f3b2c29eb61e80f8e0936709c27b6a767a2bf5"
+      "sha256": "acfdc62a7e88e916f8e96ddde0c2b38785d3655d83bd89bdadf7ee2ae9b235ca"
     },
     {
       "path": "native-engine/include/native_frame_limit.h",
@@ -684,11 +684,11 @@
     },
     {
       "path": "native-engine/rom-code-pool-review.json",
-      "sha256": "1ef8dbf2280bb77c74b0058a0dbbfdd393228f61818d9f46e4181be037a0b0b5"
+      "sha256": "0c030099dd5d504eba3cbb972b455fffc8dc4f3f5cf8ff0685d047473bb473ff"
     },
     {
       "path": "native-engine/rom-data-code-review.json",
-      "sha256": "fb607fc4a991b4fdbd49fd8e737cb46a81e3cdfdb613ca5423f80ba82d936adc"
+      "sha256": "4d0f0d8cbe80ea8de6ab3f8fde1c8b28127462c846c12d1c1b174b9b42be783f"
     },
     {
       "path": "native-engine/rom-data-layout.json",
@@ -708,7 +708,7 @@
     },
     {
       "path": "native-engine/src/baseline_options.c",
-      "sha256": "716758e3e3759d5d15ec9ad5107a341cb077df57a2beb24d369a0fdf4a01dd71"
+      "sha256": "962fffffad2444baba8a8ce118d20749a1129752880230adbef3bea03727ab03"
     },
     {
       "path": "native-engine/src/bottom_3ds.c",
@@ -768,7 +768,7 @@
     },
     {
       "path": "native-engine/src/native_controls.c",
-      "sha256": "ff6fb75a4af158b1419a9584f1bc67355e1beea3539107c754d316601708375e"
+      "sha256": "f2a3b742386d5505a80722988093acd54ddc7bb26988de62de269f3d22dcd503"
     },
     {
       "path": "native-engine/src/native_convert.c",
@@ -956,7 +956,7 @@
     },
     {
       "path": "native-engine/tests/input/check.c",
-      "sha256": "80cc38d9786380b5cb899f9155e37d0cf73690d17891299972a600273d53d320"
+      "sha256": "db31a367e448d771defccf6d27e12f9d1c70188ef4287ea7bb731a97710395d2"
     },
     {
       "path": "native-engine/tests/input/mock/3ds.h",
@@ -1012,7 +1012,7 @@
     },
     {
       "path": "native-engine/tests/native_controls_host.c",
-      "sha256": "d48fa506761540dfdf9a51fbc7e42489442d3045df547c0618a0f6929fc322c7"
+      "sha256": "968b30a6100e2242e6fa894d73c30a787de88b9aa9bb963b0429c72426760245"
     },
     {
       "path": "native-engine/tests/native_convert_host.c",
@@ -1284,7 +1284,7 @@
     },
     {
       "path": "native-engine/tools/check_game_assets.py",
-      "sha256": "53c90f9d3204a1b383331ccb308f624734956d28496914797983f550f23461f9"
+      "sha256": "2cc4e728c3f6c0b92e9e353ec6264e39a0a7f0b28ed9d55c9b3a23b9c7e7602c"
     },
     {
       "path": "native-engine/tools/check_graphics_host.py",
