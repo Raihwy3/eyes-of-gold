@@ -96,7 +96,3 @@ This project builds on the work of the GoldenEye decompilation and PC-port contr
 The original Eyes of Gold additions are MIT licensed. The inherited engine code and third-party libraries have separate terms; see [NOTICE.md](NOTICE.md) and the [license guide](native-engine/distribution/LICENSE.txt).
 
 Eyes of Gold is an unofficial fan project and is not affiliated with Nintendo, Rare or the James Bond rights holders.
-
-## Credits
-
-See [CREDITS.md](CREDITS.md) for contributors, references and acknowledgements, including IDrinkLava and OneUp on GBAtemp. Component sources and licences are listed in [SOURCES.txt](native-engine/distribution/licenses/SOURCES.txt).
