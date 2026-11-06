@@ -1,0 +1,3 @@
+#pragma once
+#define NATIVE_RETICLE_SCOPE 0x040000u
+#define NATIVE_SKY_SCOPE 0x020000u

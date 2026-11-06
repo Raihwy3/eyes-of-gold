@@ -102,9 +102,9 @@ int main(void) {
     uint64_t seen=0;
     for(int i=0;i<NATIVE_MENU_OPTIONS_COUNT;i++){int row=native_menu_option_at(i);assert(row>=0 && row<NATIVE_MENU_OPTIONS_COUNT && !(seen&(1ull<<row)));seen|=1ull<<row;}
     assert(seen==((1ull<<NATIVE_MENU_OPTIONS_COUNT)-1));
-    assert(native_menu_option_at(15)==22 && native_menu_option_at(16)==23 && native_menu_option_at(17)==21);
-    assert(native_menu_option_at(23)==17 && native_menu_option_at(24)==24);
-    assert(native_menu_option_at(27)==12 && native_menu_option_at(28)==20);
+    assert(native_menu_option_at(22)==22 && native_menu_option_at(23)==23 && native_menu_option_at(24)==21);
+    assert(native_menu_option_at(31)==17 && native_menu_option_at(32)==24);
+    assert(native_menu_option_at(35)==12 && native_menu_option_at(36)==20);
     assert(!native_setting_guard_visibility() && native_setting_guard_ai_hz()==30);
     native_setting_set_guard_ai_hz(0);native_setting_set_guard_ai_hz(60);native_setting_set_guard_visibility(2);
     assert(!native_setting_guard_visibility() && native_setting_guard_ai_hz()==30);
@@ -125,16 +125,33 @@ int main(void) {
     native_settings_init(directory);
     assert(native_setting_style()==-1 && native_setting_aspect()==-1);
     assert(!native_setting_crosshair() && !native_setting_watch() && native_setting_aa()==1);
-    assert(native_setting_gyro()==0 && native_setting_gyro_sensitivity()==100 && native_setting_touch_sensitivity()==100);
+    assert(native_setting_sensitivity()==250 && native_setting_gyro()==0 && native_setting_gyro_sensitivity()==250 && native_setting_touch_sensitivity()==250);
+    assert(!native_setting_aim_movement());
+    native_setting_set_aim_movement(1);native_settings_init(directory);assert(native_setting_aim_movement()==1);
+    native_setting_set_aim_movement(2);assert(native_setting_aim_movement()==1);
+    native_setting_set_aim_movement(0);native_settings_init(directory);assert(!native_setting_aim_movement());
     native_setting_set_style(8);native_setting_set_aspect(1);
-    for(int mode=0;mode<=2;mode++)for(int gain=25;gain<=200;gain+=25){
+    for(int strength=0;strength<=200;strength+=25){
+        native_setting_set_stereo_strength(strength);native_settings_init(directory);
+        assert(native_setting_stereo_strength()==strength);
+    }
+    native_setting_set_stereo_strength(100);
+    for(int mode=0;mode<=2;mode++)for(int gain=25;gain<=1000;gain+=25){
         native_setting_set_gyro(mode);native_setting_set_gyro_sensitivity(gain);native_settings_init(directory);
         assert(native_setting_gyro()==mode && native_setting_gyro_sensitivity()==gain);
     }
     native_setting_set_gyro(3);native_setting_set_gyro_sensitivity(0);native_setting_set_gyro_sensitivity(101);
-    assert(native_setting_gyro()==2 && native_setting_gyro_sensitivity()==200);
-    for(int gain=25;gain<=200;gain+=25){native_setting_set_touch_sensitivity(gain);native_settings_init(directory);assert(native_setting_touch_sensitivity()==gain);}
-    native_setting_set_touch_sensitivity(24);native_setting_set_touch_sensitivity(101);assert(native_setting_touch_sensitivity()==200);
+    assert(native_setting_gyro()==2 && native_setting_gyro_sensitivity()==1000);
+    for(int gain=25;gain<=1000;gain+=25){native_setting_set_touch_sensitivity(gain);native_settings_init(directory);assert(native_setting_touch_sensitivity()==gain);}
+    native_setting_set_touch_sensitivity(24);native_setting_set_touch_sensitivity(101);assert(native_setting_touch_sensitivity()==1000);
+    assert(!native_setting_aim_lock() && !native_setting_stamina_sway() && native_setting_steady_scope());
+    for(int space=0;space<3;space++)for(int axis=0;axis<2;axis++){
+        native_setting_set_gyro_space(space);native_setting_set_gyro_axis(axis);
+        native_setting_set_aim_lock(axis);native_setting_set_stamina_sway(axis);native_setting_set_steady_scope(!axis);
+        native_settings_init(directory);
+        assert(native_setting_gyro_space()==space && native_setting_gyro_axis()==axis);
+        assert(native_setting_aim_lock()==axis && native_setting_stamina_sway()==axis && native_setting_steady_scope()==!axis);
+    }
     native_setting_set_style(8);native_setting_set_crosshair(1);native_setting_set_watch(2);native_setting_set_aspect(1);native_setting_set_aa(0);native_setting_set_fps(30);native_setting_set_sensitivity(75);native_setting_set_sharpness(2);
     native_settings_init(directory);
     assert(native_setting_style()==8 && native_setting_crosshair()==1 && native_setting_watch()==2 && native_setting_aspect()==1);
@@ -161,7 +178,7 @@ int main(void) {
     char path[512];snprintf(path,sizeof path,"%s/native-options.ini",directory);
     FILE *f=fopen(path,"w");assert(f);
     fputs("EOGSETTINGS1\ncontrol_style=9\ncrosshair_colour=1\nwatch_colour=3\naspect=1\nmusic_playback=1\nglass_detail=2\n",f);fclose(f);
-    native_settings_init(directory);assert(native_setting_style()==9 && native_setting_watch()==3 && native_setting_aa()==1 && native_setting_fps()==60 && native_setting_sensitivity()==100 && native_setting_sharpness()==0 && !native_setting_vignette() && !native_setting_bloom() && !native_setting_grain());
+    native_settings_init(directory);assert(native_setting_style()==9 && native_setting_watch()==3 && native_setting_aa()==1 && native_setting_fps()==60 && native_setting_sensitivity()==250 && native_setting_sharpness()==0 && !native_setting_vignette() && !native_setting_bloom() && !native_setting_grain());
     assert(native_setting_skin()==0 && native_setting_glass()==1); /* Removed music key is ignored. */
     native_setting_set_aa(0);native_settings_init(directory);assert(native_setting_aa()==0 && native_setting_style()==9);
     f=fopen(path,"w");assert(f);fputs("EOGSETTINGS1\ncontrol_style=9\ncrosshair_colour=999\nwatch_colour=3\naspect=1\n",f);fclose(f);

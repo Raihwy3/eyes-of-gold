@@ -4,6 +4,7 @@
 #include "native_pad.h"
 #include "native_gyro.h"
 #include "native_flick.h"
+#include "native_motion_sensor.h"
 #include "native_settings.h"
 #include "native_bottom.h"
 #include "native_menu_focus.h"
@@ -13,7 +14,7 @@ static LightLock input_lock;
 static struct NativeGyro gyro;
 static struct NativeFlick flick;
 void native_input_take_flick(float *yaw){LightLock_Lock(&input_lock);*yaw=flick.pending;flick.pending=0;LightLock_Unlock(&input_lock);}
-static int gyro_enabled,gyro_failed;
+static int gyro_enabled,gyro_failed,accel_enabled;
 static float gyro_coefficient;
 extern unsigned native_game_render_state(void) __attribute__((weak));
 void native_input_take_gyro(float *yaw,float *pitch){LightLock_Lock(&input_lock);*yaw=gyro.yaw;*pitch=gyro.pitch;gyro.yaw=gyro.pitch=0;LightLock_Unlock(&input_lock);}
@@ -28,8 +29,8 @@ unsigned native_input_menu_buttons(void){LightLock_Lock(&input_lock);unsigned v=
 static int exit_requested,suspended;
 
 
-void native_input_init(void) {flick=(struct NativeFlick){0};gyro=(struct NativeGyro){0};gyro_enabled=gyro_failed=0;gyro_coefficient=0;LightLock_Init(&input_lock);pad=(struct NativePad){0};touch_look_x=touch_look_y=0;pending_actions=last_actions=menu_buttons=pressed=0;exit_requested=suspended=0;}
-void native_input_suspend(void) {LightLock_Lock(&input_lock);suspended=1;flick=(struct NativeFlick){0};gyro=(struct NativeGyro){0};if(gyro_enabled)HIDUSER_DisableGyroscope();gyro_enabled=0;LightLock_Unlock(&input_lock);}
+void native_input_init(void) {native_motion_reset();accel_enabled=0;flick=(struct NativeFlick){0};gyro=(struct NativeGyro){0};gyro_enabled=gyro_failed=0;gyro_coefficient=0;LightLock_Init(&input_lock);pad=(struct NativePad){0};touch_look_x=touch_look_y=0;pending_actions=last_actions=menu_buttons=pressed=0;exit_requested=suspended=0;}
+void native_input_suspend(void) {LightLock_Lock(&input_lock);suspended=1;flick=(struct NativeFlick){0};gyro=(struct NativeGyro){0};if(gyro_enabled)HIDUSER_DisableGyroscope();if(accel_enabled)HIDUSER_DisableAccelerometer();gyro_enabled=accel_enabled=0;LightLock_Unlock(&input_lock);}
 void inputUpdate(void) {
     LightLock_Lock(&input_lock);
     if(suspended){LightLock_Unlock(&input_lock);return;}
@@ -38,22 +39,33 @@ void inputUpdate(void) {
     menu_buttons=held;
     hidCircleRead(&circle);hidCstickRead(&cstick);
     int gameplay=native_game_input_gameplay?native_game_input_gameplay():0;
-    int mode=native_setting_gyro();
-    if(mode && !gyro_enabled && !gyro_failed){
+    int mode=native_setting_gyro(),sensor_needed=mode || native_motion_calibration_status()>0;
+    if(sensor_needed && !gyro_enabled && !gyro_failed){
         gyro_enabled=R_SUCCEEDED(HIDUSER_EnableGyroscope());
         if(!gyro_enabled || R_FAILED(HIDUSER_GetGyroscopeRawToDpsCoefficient(&gyro_coefficient)) || !(gyro_coefficient>0.f)){
             if(gyro_enabled)HIDUSER_DisableGyroscope();
             gyro_enabled=0;gyro_failed=1;
         }
     }
-    if(!mode){if(gyro_enabled)HIDUSER_DisableGyroscope();gyro_enabled=gyro_failed=0;}
+    if(sensor_needed && !accel_enabled)accel_enabled=R_SUCCEEDED(HIDUSER_EnableAccelerometer());
+    if(!sensor_needed){if(gyro_enabled)HIDUSER_DisableGyroscope();gyro_enabled=gyro_failed=0;}
+    accelVector accel={0};if(accel_enabled)hidAccelRead(&accel);
     angularRate rate={0};if(gyro_enabled)hidGyroRead(&rate);
     unsigned render_state=native_game_render_state?native_game_render_state():(gameplay?1u:0u);
     int aiming=(render_state&4) || (held&KEY_L);
     uint64_t now=(uint64_t)(svcGetSystemTick()*(1000000.0/SYSCLOCK_ARM11));
-    /* Pitch is rotation about the handheld's horizontal axis; yaw about up. */
-    native_gyro_sample(&gyro,now,gyro_enabled?rate.z/gyro_coefficient:0,gyro_enabled?rate.x/gyro_coefficient:0,
-        gyro_enabled && gameplay && (render_state&1) && (mode==2 || aiming));
+    /* libctru sensor axes -> helper axes: X across the handheld, Y up
+     * through its screen, Z toward its bottom edge (a right-handed basis).
+     * Accelerometer raw units are 512 per g. */
+    float yaw=0,pitch=0;
+    native_motion_sample(now,gyro_enabled?rate.x/gyro_coefficient:0,
+        gyro_enabled?rate.z/gyro_coefficient:0,gyro_enabled?-rate.y/gyro_coefficient:0,
+        gyro_enabled && accel_enabled?accel.x/512.f:0,
+        gyro_enabled && accel_enabled?accel.z/512.f:0,
+        gyro_enabled && accel_enabled?-accel.y/512.f:0,
+        gyro_enabled && gameplay && (render_state&1) && (mode==2 || (mode==1 && aiming)),
+        native_setting_gyro_space(),native_setting_gyro_axis(),&yaw,&pitch);
+    gyro.yaw=native_gyro_bound(gyro.yaw+yaw,15);gyro.pitch=native_gyro_bound(gyro.pitch+pitch,15);
     int dx=0,dy=0;unsigned touch_buttons=0,touch_actions=0;
     if(!gameplay && native_bottom_menu_stick)native_bottom_menu_stick(circle.dx,circle.dy);
     if(native_bottom_input) {

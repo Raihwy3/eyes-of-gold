@@ -14,7 +14,7 @@ def main():
         p=subprocess.run([str(binary),*map(str,args)],capture_output=True,text=True,env={**os.environ,'ASAN_OPTIONS':'detect_leaks=0',**({'EOG_TEST_CANCEL':'1'} if cancel else {})},timeout=20)
         assert p.returncode==(0 if ok else 1),(args,p.returncode,p.stdout,p.stderr)
         return p.stdout
-    for remote,current,expected in [('v0.9.6','v0.9.5',True),('v0.9.6','v0.9.6',False),('v0.9.4-r2','v0.9.4-r1',True),('v0.9.5','v0.9.4-r9',True),('v0.10.0','v0.9.9',True),('v0.9.4-r1','v0.9.4-r1',False),('v0.9.3','v0.9.4',False),('v0.9.5-beta','v0.9.4',False),('garbage','v0.9.4',False)]:run('compare',remote,current,ok=expected)
+    for remote,current,expected in [('v0.9.6-r2','v0.9.6-r1',True),('v0.9.6-r2','v0.9.6-r2',False),('v0.9.6-r1','v0.9.6-r2',False),('v0.9.6','v0.9.5',True),('v0.9.6','v0.9.6',False),('v0.9.4-r2','v0.9.4-r1',True),('v0.9.5','v0.9.4-r9',True),('v0.10.0','v0.9.9',True),('v0.9.4-r1','v0.9.4-r1',False),('v0.9.3','v0.9.4',False),('v0.9.5-beta','v0.9.4',False),('garbage','v0.9.4',False)]:run('compare',remote,current,ok=expected)
     with tempfile.TemporaryDirectory(prefix='eog-updater-') as temporary:
         tmp=Path(temporary);fixture=tmp/'release.json'
         release={'tag_name':'v0.9.5','draft':False,'prerelease':False,'body':'text containing "tag_name" and { nested-looking text }','assets':[{'name':'eyes-of-gold-source.zip','size':100,'browser_download_url':'https://example.com/source.zip'},

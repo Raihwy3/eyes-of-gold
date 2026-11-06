@@ -1,6 +1,18 @@
 /* Included after the original options.c; both menus use the same settings. */
 #include "native_menu_options.h"
+#include "native_motion_sensor.h"
+extern void native_motion_calibrate(void) __attribute__((weak));
+extern int native_motion_calibration_status(void) __attribute__((weak));
+extern int native_motion_calibration_progress(void) __attribute__((weak));
 int native_menu_option_value(int row) {
+    if(row==40)return native_setting_stereo_strength()/25;
+    if(row==39)return native_setting_aim_movement();
+    if(row==33)return native_setting_gyro_space();
+    if(row==34)return native_setting_gyro_axis();
+    if(row==35)return 0;
+    if(row==36)return native_setting_aim_lock();
+    if(row==37)return native_setting_stamina_sway();
+    if(row==38)return native_setting_steady_scope();
     if(row==32)return native_setting_flick();
     if(row==31)return (native_setting_touch_sensitivity()-25)/25;
     if(row==29)return native_setting_gyro();
@@ -27,17 +39,25 @@ int native_menu_option_value(int row) {
 }
 void native_menu_option_change(int row,int direction) {
     if(row<0 || row>=NATIVE_MENU_OPTIONS_COUNT)return;
+    if(row==40){native_setting_set_stereo_strength(25*((native_menu_option_value(row)+direction+9)%9));return;}
+    if(row==39){native_setting_set_aim_movement(!native_setting_aim_movement());return;}
+    if(row==33){native_setting_set_gyro_space((native_setting_gyro_space()+direction+3)%3);return;}
+    if(row==34){native_setting_set_gyro_axis(!native_setting_gyro_axis());return;}
+    if(row==35){if(native_motion_calibrate)native_motion_calibrate();return;}
+    if(row==36){native_setting_set_aim_lock(!native_setting_aim_lock());return;}
+    if(row==37){native_setting_set_stamina_sway(!native_setting_stamina_sway());return;}
+    if(row==38){native_setting_set_steady_scope(!native_setting_steady_scope());return;}
     if(row==32){native_setting_set_flick(!native_setting_flick());return;}
-    if(row==31){native_setting_set_touch_sensitivity(25+25*((native_menu_option_value(row)+direction+8)%8));return;}
+    if(row==31){native_setting_set_touch_sensitivity(25+25*((native_menu_option_value(row)+direction+40)%40));return;}
     if(row==29){native_setting_set_gyro((native_setting_gyro()+direction+3)%3);return;}
-    if(row==30){native_setting_set_gyro_sensitivity(25+25*((native_menu_option_value(row)+direction+8)%8));return;}
+    if(row==30){native_setting_set_gyro_sensitivity(25+25*((native_menu_option_value(row)+direction+40)%40));return;}
     if(row==27){native_setting_set_guard_visibility(!native_setting_guard_visibility());return;}
     if(row==28){static const int rates[]={30,15,5};native_setting_set_guard_ai_hz(rates[(native_menu_option_value(row)+direction+3)%3]);return;}
     if(row==26){native_setting_set_unlock_all(!native_setting_unlock_all());return;}
     if(row==25){native_setting_set_audio_mixer(!native_setting_audio_mixer());return;}
     int value=native_menu_option_value(row);
     if(row==1 || row==2){value+=direction*5;if(value<0)value=0;if(value>100)value=100;int volume=(value*32767+50)/100;native_setting_set_volume(row==2,volume);if(row==1)set_mTrack2Vol(volume);else sndApplyVolumeAllSfxSlot(volume);return;}
-    int count=row==22?5:row>=23?4:row==20?5:row==21?2:row==0?6:row==9 || row==10?3:row==11?7:row==12?7:row==15?8:row==16?7:row>=17?3:2;
+    int count=row==22?5:row>=23?4:row==20?5:row==21?2:row==0?6:row==9 || row==10?3:row==11?7:row==12?7:row==15?40:row==16?7:row>=17?3:2;
     value=(value+direction+count)%count;
     if(row==0){int style=value>=4?value+4:value;native_setting_set_style(style);if(g_CurrentPlayer)cur_player_set_control_type(style);}
     else if(row<=10){native_setting_set_game(row-3,value);game_options_entries[row-3].current_value=value;}
@@ -57,7 +77,7 @@ void native_menu_option_change(int row,int direction) {
     else native_setting_set_vignette_mode(value);
 }
 const char *native_menu_option_label(int row) {
-    static const char *const labels[]={0,"Music volume\n","Effects volume\n",0,0,0,0,0,0,0,"Aspect ratio\n","Crosshair\n","Watch colour\n","Supersampling\n","FPS limit\n","Look sensitivity\n","Image filter\n","Vignette\n","Bloom\n","Film grain\n","Watch skin\n","Glass detail\n","LOD strength\n","View distance\n","Vignette when\n","Mixer (restart)\n","Unlock everything\n","Guard LOS (exp)\n","Guard AI rate\n","Gyro look\n","Gyro sensitivity\n","Touch sensitivity\n","Flick stick (exp)\n"};
+    static const char *const labels[]={0,"Music volume\n","Effects volume\n",0,0,0,0,0,0,0,"Aspect ratio\n","Crosshair\n","Watch colour\n","Supersampling\n","FPS limit\n","Look sensitivity\n","Image filter\n","Vignette\n","Bloom\n","Film grain\n","Watch skin\n","Glass detail\n","LOD strength\n","View distance\n","Vignette when\n","Mixer (restart)\n","Unlock everything\n","Guard LOS (exp)\n","Guard AI rate\n","Gyro look\n","Gyro sensitivity\n","Touch sensitivity\n","Flick stick (exp)\n","Gyro space\n","Local turn axis\n","Calibrate gyro\n","Aim lock\n","Stamina sway\n","Steady scope\n","Aim movement\n","3D strength\n"};
     if(row==0)return (const char *)langGet(getStringID(LOPTIONS,OPTION_STR_32_CONTROLSTYLE_LF));
     if(row>=3 && row<=9)return (const char *)langGet(game_options_entries[row-3].text[0]);
     return row>=0 && row<NATIVE_MENU_OPTIONS_COUNT?labels[row]:"\n";
@@ -65,10 +85,20 @@ const char *native_menu_option_label(int row) {
 const char *native_menu_option_text(int row,char *buffer,unsigned size) {
     if(row<0 || row>=NATIVE_MENU_OPTIONS_COUNT)return "\n";
     static const char *const styles[]={"1.5 Vesper\n","1.6 Jinx\n"};
+    if(row==40){snprintf(buffer,size,"%d%%\n",native_setting_stereo_strength());return buffer;}
+    if(row==39)return native_setting_aim_movement()?"Classic\n":"Free\n";
+    if(row==33){static const char *const spaces[]={"Local\n","World\n","Player\n"};return spaces[native_setting_gyro_space()];}
+    if(row==34)return native_setting_gyro_space()?"Gravity\n":native_setting_gyro_axis()?"Roll\n":"Yaw\n";
+    if(row==35){
+        int state=native_motion_calibration_status?native_motion_calibration_status():0;
+        if(state==2){int percent=native_motion_calibration_progress?native_motion_calibration_progress():0;snprintf(buffer,size,"Still %d%%\n",percent);return buffer;}
+        return state==1?"Keep still\n":state==-1?"Calibrated\n":state==-2?"Try again\n":"Start\n";
+    }
+    if(row>=36)return native_menu_option_value(row)?"On\n":"Off\n";
     if(row==32)return native_setting_flick()?"On\n":"Off\n";
-    if(row==31){snprintf(buffer,size,"%d%%\n",native_setting_touch_sensitivity());return buffer;}
+    if(row==31){snprintf(buffer,size,"%d%%\n",native_setting_touch_sensitivity()*2/5);return buffer;}
     if(row==29){static const char *const modes[]={"Off\n","Aim only\n","Look + aim\n"};return modes[native_setting_gyro()];}
-    if(row==30){snprintf(buffer,size,"%d%%\n",native_setting_gyro_sensitivity());return buffer;}
+    if(row==30){snprintf(buffer,size,"%d%%\n",native_setting_gyro_sensitivity()*2/5);return buffer;}
     if(row==27)return native_setting_guard_visibility()?"On\n":"Off\n";
     if(row==28){snprintf(buffer,size,"%d Hz\n",native_setting_guard_ai_hz());return buffer;}
     if(row==26)return native_setting_unlock_all()?"On\n":"Off\n";
@@ -82,7 +112,7 @@ const char *native_menu_option_text(int row,char *buffer,unsigned size) {
     if(row==21){static const char *const glass[]={"Original\n","Simple\n"};return glass[value];}
     if(row>=17){static const char *const levels[]={"Off\n","Low\n","High\n"};return levels[value];}
     if(row==16){static const char *const levels[]={"Off\n","Sharp low\n","Sharp medium\n","Sharp high\n","Smooth low\n","Smooth medium\n","Smooth high\n"};return levels[value];}
-    if(row==15){snprintf(buffer,size,"%d%%\n",25+25*value);return buffer;}
+    if(row==15){snprintf(buffer,size,"%d%%\n",(25+25*value)*2/5);return buffer;}
     if(row==14)return value?"60 FPS\n":"30 FPS\n";
     if(row==1 || row==2){snprintf(buffer,size,"%d%%\n",value);return buffer;}
     if(row>=3 && row<=9)return (const char *)langGet(game_options_entries[row-3].text[value+1]);

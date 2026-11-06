@@ -3,6 +3,20 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+int native_setting_stereo_strength(void);
+void native_setting_set_stereo_strength(int value);
+int native_setting_gyro_space(void);
+int native_setting_gyro_axis(void);
+int native_setting_aim_lock(void);
+int native_setting_aim_movement(void);
+void native_setting_set_aim_movement(int);
+int native_setting_stamina_sway(void);
+int native_setting_steady_scope(void);
+void native_setting_set_gyro_space(int);
+void native_setting_set_gyro_axis(int);
+void native_setting_set_aim_lock(int);
+void native_setting_set_stamina_sway(int);
+void native_setting_set_steady_scope(int);
 int native_setting_touch_sensitivity(void);
 void native_setting_set_touch_sensitivity(int value);
 int native_setting_randomiser(void);

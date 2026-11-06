@@ -41,6 +41,15 @@ extern "C" void native_bottom_gpu_release(void){watch_owner=false;}
 extern "C" void native_bottom_watch_regions(const int bounds[5][4]){memcpy(watch_regions,bounds,sizeof watch_regions);}
 #endif
 Result GSPGPU_FlushDataCache(const void *,u32){return 0;}
+#ifndef BACKEND_REFERENCE
+static unsigned depth_copies,depth_splits,depth_invalidations;
+Result GSPGPU_InvalidateDataCache(const void *,u32){depth_invalidations++;return 0;}
+Result GX_TextureCopy(u32 *src,u32 in,u32 *dst,u32 out,u32 bytes,u32 flags){
+ assert(in==out && flags==BIT(3) && bytes<=DEPTH_COPY_CAPACITY && depth_splits>depth_copies);
+ memcpy(dst,src,bytes);depth_copies++;return 0;
+}
+#endif
+
 extern "C" {
 C3D_FVec C3D_FVUnif[2][C3D_FVUNIF_COUNT];
 bool C3D_FVUnifDirty[2][C3D_FVUNIF_COUNT];
@@ -85,6 +94,7 @@ int native_setting_vignette(void){return test_vignette;}
 int native_setting_bloom(void){return test_bloom;}
 void native_setting_set_vignette(int v){test_vignette=v;}
 void native_setting_set_bloom(int v){test_bloom=v;}
+int native_setting_stereo_strength(void){return 100;}
 int native_setting_aa(void){return test_aa;}
 void native_setting_set_aa(int value){test_aa=value;}
 int native_setting_sharpness(void){return test_sharpness;}
@@ -115,6 +125,7 @@ void C3D_RenderTargetSetOutput(C3D_RenderTarget *t,gfxScreen_t screen,gfx3dSide_
  }
 }
 void C3D_FrameBufClear(C3D_FrameBuf *,C3D_ClearBits,u32,u32){watch_clears++;}
+void C3D_FrameSplit(u8){depth_splits++;}
 #endif
 static void record_vertex(int i) {
  auto *data=static_cast<Vertex *>(driver_vertices);
@@ -948,7 +959,7 @@ int main(int argc,char **argv) {
  barrier();
  assert(recorded.size()==before+12 && draw_uniforms.size()==u+2);
  assert(draw_uniforms[u]==-.03f && draw_uniforms[u+1]==.03f);
- assert(draw_eye_offsets[u]==-6.f && draw_eye_offsets[u+1]==6.f);
+ assert(fabs(draw_eye_offsets[u]+90.f)<.0001f && fabs(draw_eye_offsets[u+1]-90.f)<.0001f);
  assert(draw_world_depth[u]==1.f && draw_world_depth[u+1]==1.f);
  u=draw_uniforms.size();before=recorded.size();
  native_pica_ui_rect(1);draw(data.data(),data.size(),2);barrier();native_pica_ui_rect(0);
@@ -963,6 +974,18 @@ int main(int argc,char **argv) {
    assert(recorded[before+6+v].state.target==(uintptr_t)right_target);
    assert(!memcmp(recorded[before+v].state.viewport,recorded[before+6+v].state.viewport,sizeof driver.viewport));
  }
+ stereo_tilt[9].r[0].x=-.05f;stereo_tilt[10].r[0].x=.05f;
+ u=draw_uniforms.size();native_pica_sky(1);native_pica_ui_rect(1);
+ draw(data.data(),data.size(),2);barrier();native_pica_ui_rect(0);native_pica_sky(0);
+ assert(draw_uniforms[u]==-.05f && draw_uniforms[u+1]==.05f);
+ assert(draw_eye_offsets[u]==0.f && draw_eye_offsets[u+1]==0.f && draw_world_depth[u]==1.f);
+ // The explicitly tagged reticle selects its own stereo matrices, not the
+ // menu/HUD matrix or perspective eye translation. Exiting restores HUD.
+ stereo_tilt[7].r[0].x=-.04f;stereo_tilt[8].r[0].x=.04f;
+ u=draw_uniforms.size();native_pica_reticle(1);native_pica_ui_rect(1);
+ draw(data.data(),data.size(),2);barrier();native_pica_ui_rect(0);native_pica_reticle(0);
+ assert(draw_uniforms[u]==-.04f && draw_uniforms[u+1]==.04f);
+ assert(draw_eye_offsets[u]==0.f && draw_eye_offsets[u+1]==0.f && reticle_seen);
  u=draw_uniforms.size();before=recorded.size();
  native_pica_set_viewmodel(1);draw(data.data(),data.size(),2);barrier();native_pica_set_viewmodel(0);
  assert(recorded.size()==before+12 && draw_uniforms.size()==u+2);
@@ -972,7 +995,7 @@ int main(int argc,char **argv) {
  assert(C3D_FVUnif[0][0].x==0.f && driver.target==(uintptr_t)target);
  u=draw_uniforms.size();draw(data.data(),data.size(),2);barrier();
  assert(draw_uniforms[u]==-.03f && draw_uniforms[u+1]==.03f);
- assert(draw_eye_offsets[u]==-6.f && draw_eye_offsets[u+1]==6.f);
+ assert(fabs(draw_eye_offsets[u]+90.f)<.0001f && fabs(draw_eye_offsets[u+1]-90.f)<.0001f);
  assert(draw_world_depth[u]==1.f && draw_world_depth[u+1]==1.f);
  // Orthographic HUD gauges and the physical watch must not inherit the
  // perspective-world eye translation (W=1 gauges would move off the LCD).
@@ -998,12 +1021,79 @@ int main(int argc,char **argv) {
  u=draw_uniforms.size();before=recorded.size();
  native_pica_gpu_world(&world);draw(data.data(),data.size(),2);barrier();native_pica_gpu_world(nullptr);
  assert(recorded.size()==before+12 && draw_eye_offsets.size()==u+2);
- assert(draw_eye_offsets[u]==-6.f && draw_eye_offsets[u+1]==6.f);
+ assert(fabs(draw_eye_offsets[u]+90.f)<.0001f && fabs(draw_eye_offsets[u+1]-90.f)<.0001f);
  assert(draw_world_depth[u]==1.f && draw_world_depth[u+1]==1.f);
  assert(C3D_FVUnif[0][world_stereo_uniform].z==0.f);
  stereo_active=false;right_target=nullptr;
  }
  puts("PASS stereo submissions: world/weapon/UI eye projections, redundant scopes preserve queued draws, identical geometry/viewport, flat bottom output");
+ // Synthetic completed D24S8 frames exercise the real sampler, not a mock
+ // convergence accessor. Cover native, AA and padded filter target layouts.
+ for(int samples=1;samples<=2;samples++)for(bool padded:{false,true}){
+  top_sample_scale=samples;
+  C3D_RenderTarget scene={};scene.frameBuf.width=padded?(samples==2?512:256):240*samples;scene.frameBuf.height=padded?512:400;
+  std::vector<uint32_t> depth(size_t(scene.frameBuf.width)*scene.frameBuf.height);
+  auto proj=native_stereo::Projection::from(-30010.f/29990.f,-1,-600000.f/29990.f,0);
+  float device=-(proj.ratio+proj.b/100.f-1.f)*.5f;
+  std::fill(depth.begin(),depth.end(),uint32_t(std::round(device*16777215.f))|0x5a000000u);
+  scene.frameBuf.depthBuf=depth.data();target=&scene;
+  stereo_active=true;stereo_slider=1;frontend_ui=watch_seen=false;invalidate_stereo_depth();
+  for(unsigned i=0;i<120;i++){
+   depth_frame={};depth_frame.target=&scene;depth_frame.projection=proj;depth_frame.usable=true;
+   depth_frame.width=scene.frameBuf.width;depth_frame.height=scene.frameBuf.height;depth_frame.samples=samples;
+   depth_frame.pixels=depth.data();depth_frame.bytes=depth.size()*4;depth_copied=true;
+   depth_frame.viewport[0]=40;depth_frame.viewport[1]=0;depth_frame.viewport[2]=320;depth_frame.viewport[3]=240;
+   depth_frame.tilt.r[0].y=1;depth_frame.tilt.r[1].x=-1;
+   depth_frame.slider=1;depth_frame.convergence=world_convergence;
+   reticle_seen=true;reticle_x=200;reticle_y=120;
+   update_stereo_depth(1.f/60);
+  }
+  assert(!depth_frame.usable);
+  // Independently write a left/right split in physical tiled storage. A
+  // flipped framebuffer row would sample the wrong side at an off-centre aim.
+  for(unsigned sy=0;sy<240;sy++)for(unsigned sx=0;sx<400;sx++)for(int sub=0;sub<samples;sub++){
+   unsigned mx=(239-sy)*samples+sub,my=scene.frameBuf.height-400+sx;
+   float w=sx<200?100.f:200.f;
+   float d=-(proj.ratio+proj.b/w-1.f)*.5f;
+   depth[native_stereo::tiled_index(mx,my,scene.frameBuf.width)]=uint32_t(std::round(d*16777215.f));
+  }
+  depth_frame.target=&scene;depth_frame.projection=proj;depth_frame.usable=true;
+  depth_frame.width=scene.frameBuf.width;depth_frame.height=scene.frameBuf.height;depth_frame.samples=samples;
+  depth_frame.pixels=depth.data();depth_frame.bytes=depth.size()*4;depth_copied=true;
+  depth_frame.viewport[0]=40;depth_frame.viewport[1]=0;depth_frame.viewport[2]=320;depth_frame.viewport[3]=240;
+  depth_frame.tilt.r[0].y=1;depth_frame.tilt.r[1].x=-1;
+  assert(std::fabs(read_stereo_depth(depth_frame,.2f,.3f)-100.f)<.01f);
+  assert(std::fabs(read_stereo_depth(depth_frame,.8f,.7f)-200.f)<.01f);
+  assert(world_convergence>99 && world_convergence<101);
+  assert(std::fabs(reticle_shift)<.0001f);
+  // Reconfiguration/menu/watch cannot sample a destroyed/stale surface.
+  depth_frame.usable=true;depth_frame.target=nullptr;update_stereo_depth(.016f);
+  assert(world_convergence>99 && world_convergence<101);
+  depth_frame.usable=true;depth_frame.target=&scene;watch_seen=true;update_stereo_depth(.016f);
+  assert(!depth_frame.usable && world_convergence>99 && world_convergence<101 && !aim_depth.have);watch_seen=false;
+  target=nullptr;stereo_active=false;
+ }
+ puts("PASS adaptive stereo backend: completed D24S8 depth, native/AA/padded targets, 4:3 viewport, convergence/reticle depth, stale targets and watch history hold");
+ // A queued snapshot stays unchanged when hands/HUD overwrite the scene
+ // depth later. Verify producer cache flushing/command-list split precedes
+ // the copy and repeated viewmodel entries do not queue another copy.
+ for(int samples:{1,2})for(bool padded:{false,true}){
+  C3D_RenderTarget scene={};scene.frameBuf.width=padded?(samples==2?512:256):240*samples;scene.frameBuf.height=padded?512:400;
+  std::vector<uint32_t> source(size_t(scene.frameBuf.width)*scene.frameBuf.height,0x123456u);scene.frameBuf.depthBuf=source.data();target=&scene;
+  depth_copy=static_cast<uint32_t *>(linearAlloc(DEPTH_COPY_CAPACITY));assert(depth_copy);
+  depth_frame={};depth_frame.target=&scene;depth_frame.width=scene.frameBuf.width;depth_frame.height=scene.frameBuf.height;depth_frame.usable=true;
+  depth_copied=false;stereo_active=true;frontend_ui=false;viewmodel_scope=false;
+  unsigned copies=depth_copies;
+  native_pica_set_viewmodel(1);assert(depth_copied && depth_copies==copies+1 && depth_frame.pixels==depth_copy);
+  std::fill(source.begin(),source.end(),0x999999u);
+  assert(depth_copy[1234]==0x123456u);
+  native_pica_set_viewmodel(0);native_pica_set_viewmodel(1);assert(depth_copies==copies+1);
+  native_pica_set_viewmodel(0);linearFree(depth_copy);depth_copy=nullptr;depth_frame={};depth_copied=false;
+  target=nullptr;stereo_active=false;
+ }
+ puts("PASS GPU depth snapshot ordering: command split before copy, scene frozen before weapons, single copy per frame and bounded native/AA/padded depth bytes");
+
+
  // The second LCD keeps native-size UI coordinates and omits watch body.
  // Verify top output, UVs/materials, scissor and buffer restoration.
  for(int samples=1;samples<=2;samples++) {

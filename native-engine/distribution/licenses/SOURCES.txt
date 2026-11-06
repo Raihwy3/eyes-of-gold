@@ -48,3 +48,24 @@ Updater components:
 - jsmn, https://github.com/zserge/jsmn (MIT; jsmn.txt)
 - Mozilla CA roots, https://curl.se/docs/caextract.html (Mozilla MPL 2.0; Mozilla-MPL-2.0.txt)
 Vendor source fingerprints are recorded in native-engine/vendor/updater/sources.json.
+
+GamepadMotionHelpers (MIT):
+https://github.com/JibbSmart/GamepadMotionHelpers
+Used for motion fusion, gyro spaces and calibration. Vendored source hashes are
+recorded in native-engine/vendor/GamepadMotionHelpers/source.json.
+License: GamepadMotionHelpers.txt.
+
+rt64-3ds stereo math (MIT): https://github.com/oneup03/rt64-3ds
+Commit 0d783be0c9f51fa7edc696ac33a0992b5f021ecb. Convergence, patch statistic
+and reticle candidate-strip sampling; adapted to this renderer.
+License: rt64-stereo.txt. Fingerprints: vendor/rt64-stereo/source.json.
+
+Flick-stick timing and rotation smoothing use JoyShockMapper by Julian "Jibb" Smart and contributors (MIT).
+Source: https://github.com/JibbSmart/JoyShockMapper
+Revision: 980dc52c09fbdfb3378b04a8a1895ea3157c29e1
+Adapted functions: handleFlickStick and GetSmoothedStickRotation in JoyShockMapper/src/main.cpp.
+License: JoyShockMapper.txt. The 3DS adapter uses camera degrees, pressure-nub thresholds and debounced release.
+
+Stereo implementation guidance: dynamic3d by oneup03 (OneUp).
+https://github.com/oneup03/3D-Skills/tree/main/dynamic3d
+See CREDITS.txt for GBAtemp acknowledgements to IDrinkLava and OneUp.

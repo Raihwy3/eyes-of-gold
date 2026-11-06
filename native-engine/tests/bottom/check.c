@@ -68,7 +68,7 @@ int main(void) {
     tap(250,56);assert(native_bottom_take(106,&c) && c.kind==EOG_BOTTOM_CHANGE && c.direction==1);
     v.context=300;v.kind=EOG_BOTTOM_GAME;native_bottom_publish(&v);
     input(0,1,90,100,1,&dx,&dy,&b,&a);assert(!dx && !dy);
-    input(0,1,100,92,1,&dx,&dy,&b,&a);assert(dx==30 && dy==24 && !b && !a);
+    input(0,1,100,92,1,&dx,&dy,&b,&a);assert(dx==75 && dy==60 && !b && !a);
     input(0,0,100,92,1,&dx,&dy,&b,&a);
     // No added button bars: lower screen remains a look pad. Hold opens watch once.
     input(0,1,100,220,1,&dx,&dy,&b,&a);assert(!a && !b);

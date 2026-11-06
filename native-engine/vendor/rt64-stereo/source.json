@@ -1,0 +1,13 @@
+{
+  "repository": "https://github.com/oneup03/rt64-3ds",
+  "revision": "0d783be0c9f51fa7edc696ac33a0992b5f021ecb",
+  "license": "MIT",
+  "reference_sha256": {
+    "rt64_3ds_stereo.cpp": "bb97f65f7bc524aecb5a93a55452ec696efb1899d8236e4dd8f77118ea02aed6",
+    "rt64_3ds_stereo.h": "85a199e3a0b28a76ae7fdc4d2e2dc6e87ea005168c5712f1ed8e780176a796c5",
+    "rt64_3ds_context.cpp": "db8dbc423abcda2a6c8acaa1e6c9b82223e76d635be8cad9c8852f670d337a69",
+    "rt64_3ds.h": "874ea3efc439649d3876af49cb5fabb3e6eba99a605cfe60f2d43c5598b1872d",
+    "LICENSE": "03d52856ed09784f7f57694f690ab0093d3cd40db69f9a318d45062f130f7116"
+  },
+  "adaptation": "AutoConvergence and near_depth_statistic copied with inline linkage and standalone declarations. Aim candidate strip adapted from sample_aim_depth; viewport, projection and GPU queue integration are specific to Eyes of Gold. Tiny std::sort calls use bounded insertion sort to avoid GCC 16 ARM array-bounds diagnostics; unmodified algorithms are retained in tests/rt64_stereo_reference.h for comparison."
+}

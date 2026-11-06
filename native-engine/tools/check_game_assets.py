@@ -88,7 +88,9 @@ def main():
     build_probe.run(['gcc','-no-pie','-Wl,--gc-sections',*menu_objects,'-lm','-o',menu_binary])
     print(build_probe.run([menu_binary]).stdout)
     hid_binary=out/'native-hid-check'
-    build_probe.run(['gcc','-std=c11','-O2','-Wall','-Wextra','-Werror','-I'+str(build.TARGET/'tests/input/mock'),'-I'+str(build.TARGET/'include'),build.TARGET/'src/input_3ds.c',build.TARGET/'src/native_settings.c',build.TARGET/'tests/input/check.c','-lm','-o',hid_binary])
+    motion_object=out/'motion-host.o'
+    build_probe.run(['g++','-std=c++20','-O2','-Wall','-Wextra','-Werror','-I'+str(build.TARGET/'include'),'-c',build.TARGET/'src/native_motion_sensor.cpp','-o',motion_object])
+    build_probe.run(['gcc','-std=c11','-O2','-Wall','-Wextra','-Werror','-I'+str(build.TARGET/'tests/input/mock'),'-I'+str(build.TARGET/'include'),build.TARGET/'src/input_3ds.c',build.TARGET/'src/native_settings.c',build.TARGET/'tests/input/check.c',motion_object,'-lstdc++','-lm','-o',hid_binary])
     print(build_probe.run([hid_binary]).stdout)
     import check_bottom
     check_bottom.main()
@@ -129,6 +131,13 @@ def main():
     pitch=movement.index('            if (moveData.canNaturalPitch)\n            {')
     pitch_end=movement.index('            else if (moveData.speedVertaDown > 0)',pitch)
     (out/'native-touch-aim-axes.h').write_text(movement[turn:turn_end]+movement[pitch:pitch_end])
+    lean=movement.index('        if (moveData.rLeanLeft)')
+    lean_end=movement.index('        if (moveData.crouchDown)',lean)
+    source=(build.UP/'src/game/bondview.c').read_text()
+    begin=source.index('void currentPlayerSetSwayTarget(s32 value)\n{')
+    end=source.index('void currentPlayerAdjustCrouchPos(',begin)
+    (out/'native-lean-target.h').write_text(source[begin:end])
+    (out/'native-lean-consumer.h').write_text(movement[lean:lean_end])
     control_objects=[]
     for source in (build.TARGET/'src/native_controls.c',build.TARGET/'src/native_settings.c',build.UP/'src/str.c',build.TARGET/'tests/native_controls_host.c'):
         obj=out/(source.name+'.controls.o')

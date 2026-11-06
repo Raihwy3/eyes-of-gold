@@ -10,7 +10,9 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     for name, sources in (
         ('weapon-stereo', ['tests/weapon_stereo.cpp']),
+        ('dynamic-stereo', ['tests/dynamic_stereo.cpp']),
         ('gyro-filter', ['tests/gyro.cpp']),
+        ('motion-sensor', ['tests/motion_sensor.cpp','src/native_motion_sensor.cpp']),
         ('batch-prefix', ['tests/batch_prefix.cpp', 'src/pica_inputs.cpp']),
     ):
         binary = out / name

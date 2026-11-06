@@ -12,7 +12,7 @@ The original campaign, menus, intros, idle demos and watch run through the nativ
 
 - **Dual-screen support.** The bottom screen has touch controls for menus and a full-screen version of the watch interface. During gameplay it shows your mission objectives, and you can drag on it to look around, with adjustable touch sensitivity.
 - **Stereoscopic 3D.** The 3D slider controls depth for the game world and first-person weapons, alongside supported menu, HUD and watch elements. The bottom-screen interface stays flat.
-- **Gyro look.** Choose Aim Only or Look + Aim, with sensitivity separate from the sticks. It is off by default. The watch settings are under Game Options → Controls. [Motion and stereo details](docs/gyro-stereo.md).
+- **Gyro look.** Choose Aim Only or Look + Aim, with Local/World/Player spaces, calibration and a faster sensitivity baseline with a 10–200% range, separate from the sticks. It is off by default. The watch settings are under Game Options → Controls. [Motion and stereo details](docs/gyro-stereo.md).
 - **Two extra control styles.** **1.5 Vesper** uses the Circle Pad for movement and the C-stick for looking. **1.6 Jinx** uses the Circle Pad for movement, the face buttons for looking and the D-pad for the actions moved from those buttons. The original control styles are still available, and look sensitivity is adjustable.
 - **Display options.** Choose 4:3, 5:4 or the top screen's native 5:3 aspect ratio, with a 30 or 60 FPS cap. These are limits, not guaranteed frame rates. There is also optional supersampling and a choice of smoothing or sharpening filters.
 - **Performance settings.** Adjust model and texture detail, view distance, glass and effects. Dynamic LOD changes the detail level as the frame rate changes. Experimental guard settings can reduce update rates and work spent on distant or hidden guards, but may affect their behaviour.
@@ -96,3 +96,7 @@ This project builds on the work of the GoldenEye decompilation and PC-port contr
 The original Eyes of Gold additions are MIT licensed. The inherited engine code and third-party libraries have separate terms; see [NOTICE.md](NOTICE.md) and the [license guide](native-engine/distribution/LICENSE.txt).
 
 Eyes of Gold is an unofficial fan project and is not affiliated with Nintendo, Rare or the James Bond rights holders.
+
+## Credits
+
+See [CREDITS.md](CREDITS.md) for contributors, references and acknowledgements, including IDrinkLava and OneUp on GBAtemp. Component sources and licences are listed in [SOURCES.txt](native-engine/distribution/licenses/SOURCES.txt).

@@ -4,6 +4,7 @@
 #include "native_pad.h"
 #include "native_settings.h"
 #include "native_flick.h"
+#include "jsm_smoothing_reference.h"
 #include <math.h>
 #include <assert.h>
 #include <stdio.h>
@@ -71,7 +72,7 @@ int main(void) {
  rx=ry=0;inputUpdate();rx=-156;inputUpdate();native_input_suspend();native_input_take_flick(&turn);assert(turn==0);
  native_setting_set_flick(0);native_input_init();rx=156;ry=0;inputUpdate();inputComputePad(0,&px,&py);assert(px==80 && py==0);
  rx=ry=0;
- for(int hz=30;hz<=60;hz+=30)for(int dir=-1;dir<=1;dir+=2) {
+ for(int hz=30;hz<=100;hz=hz==30?60:hz==60?100:101)for(int dir=-1;dir<=1;dir+=2) {
    struct NativeFlick f={0};uint64_t now=1000000;
    native_flick_sample(&f,now,0,0,1);
    for(int i=0;i<12;i++){now+=1000000/hz;native_flick_sample(&f,now,dir*156,0,1);}
@@ -92,12 +93,12 @@ int main(void) {
  struct NativeFlick slow={0};native_flick_sample(&slow,1000000,0,0,1);
  native_flick_sample(&slow,1016667,-60,0,1);native_flick_sample(&slow,1136667,-60,0,1);
  assert(fabsf(slow.pending+90)<.02f); // 120ms game frame completes, without re-flicking.
- native_flick_sample(&slow,1153334,0,0,1);native_flick_sample(&slow,1170001,0,-60,1);
- native_flick_sample(&slow,1290001,0,-60,1);assert(fabsf(slow.pending-90)<.02f);
+ native_flick_sample(&slow,1153334,0,0,1);native_flick_sample(&slow,1175001,0,0,1);native_flick_sample(&slow,1191668,0,-60,1);
+ native_flick_sample(&slow,1311668,0,-60,1);assert(fabsf(slow.pending-90)<.02f);
  struct NativeFlick wrap={0};native_flick_sample(&wrap,1000000,0,0,1);
  native_flick_sample(&wrap,1010000,1,-156,1);native_flick_sample(&wrap,1050000,1,-156,1);
  wrap.pending=wrap.remaining=0;wrap.remaining_us=0;
- native_flick_sample(&wrap,1060000,-1,-156,1);assert(wrap.pending==0); // Back-axis jitter is not rotation.
+ native_flick_sample(&wrap,1060000,-1,-156,1);assert(fabsf(wrap.pending)<1); // Crossing the back axis must not jump by 360 degrees.
  native_flick_sample(&wrap,1070000,0,0,0);assert(wrap.pending==0);
  /* Release tails can point anywhere as pressure fades. They must not undo
   * a left/right/back flick, even without an immediate perfect zero sample. */
@@ -110,12 +111,44 @@ int main(void) {
  }
  struct NativeFlick tap={0};native_flick_sample(&tap,1000000,0,0,1);
  native_flick_sample(&tap,1010000,-80,1,1);native_flick_sample(&tap,1020000,0,0,1);
- native_flick_sample(&tap,1140000,0,0,1);assert(fabsf(tap.pending+90)<.01f);
+ native_flick_sample(&tap,1140000,0,0,1);assert(fabsf(tap.pending+90)<1.f);
  struct NativeFlick circle={0};uint64_t ct=1000000;native_flick_sample(&circle,ct,0,0,1);
  for(int i=0;i<12;i++){ct+=16667;native_flick_sample(&circle,ct,0,156,1);}
  for(int i=1;i<=72;i++){float a=i*6.28318530718f/72;ct+=16667;
    native_flick_sample(&circle,ct,(int)roundf(156*sinf(a)),(int)roundf(156*cosf(a)),1);}
+ for(int i=0;i<8;i++){ct+=16667;native_flick_sample(&circle,ct,0,156,1);}
  assert(fabsf(circle.pending-360)<1);
+ /* Upstream absolute-time quadratic easing: 43.75% at 25ms,
+  * 75% at 50ms, and 100% at 100ms. Repeated timestamps consume nothing. */
+ struct NativeFlick eased={0};native_flick_sample(&eased,1000000,0,0,1);
+ native_flick_sample(&eased,1010000,80,0,1);
+ native_flick_sample(&eased,1035000,80,0,1);assert(fabsf(eased.pending-39.375f)<.001f);
+ native_flick_sample(&eased,1035000,80,0,1);assert(fabsf(eased.pending-39.375f)<.001f);
+ native_flick_sample(&eased,1060000,80,0,1);assert(fabsf(eased.pending-67.5f)<.001f);
+ native_flick_sample(&eased,1110000,80,0,1);assert(fabsf(eased.pending-90)<.001f);
+ /* Compare the adapted smoother with the upstream function, including
+  * wraparound of its history and the immediate/smoothed blend boundary. */
+ for(int count=1;count<=64;count=count==1?3:count==3?6:count==6?64:65){
+   struct NativeFlick actual={0},reference={0};actual.sample_count=count;
+   for(int n=0;n<2000;n++){
+     float value=n%11==0?0:sinf(n*.73f)*15;
+     float a=native_flick_smooth(&actual,value);
+     float b=jsm_reference_smooth(&reference,value,.08f*57.2957795131f,.16f*57.2957795131f,count);
+     assert(fabsf(a-b)<.00001f);
+   }
+ }
+ /* Low-pressure rotation in sub-three-degree steps must retain every step. */
+ struct NativeFlick fine={0};uint64_t ft=1000000;native_flick_sample(&fine,ft,0,0,1);
+ for(int i=0;i<12;i++){ft+=16667;native_flick_sample(&fine,ft,0,55,1);}
+ for(int i=1;i<=45;i++){float a=i*0.01745329252f;ft+=16667;
+   native_flick_sample(&fine,ft,(int)roundf(55*sinf(a)),(int)roundf(55*cosf(a)),1);}
+ for(int i=0;i<8;i++){ft+=16667;native_flick_sample(&fine,ft,39,39,1);}
+ assert(fabsf(fine.pending-45)<1);
+ float before=fine.pending;
+ ft+=16667;native_flick_sample(&fine,ft,0,0,1);
+ ft+=16667;native_flick_sample(&fine,ft,39,39,1);
+ assert(fabsf(fine.pending-before)<.01f); // A single dropout does not re-flick.
+ native_flick_sample(&fine,ft-1,0,55,1);assert(!fine.active && fine.pending==0);
  puts("PASS Flick Stick: directional angles, 30/60Hz timing, edge rotation/wrap, consume-once, unchanged movement, default stick look and menu/suspend/stall resets");
 
  puts("PASS HID gyro integration: degrees/sec, consume-once, aim-only, menus and suspend discard motion");

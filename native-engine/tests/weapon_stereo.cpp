@@ -8,7 +8,7 @@ static float dot(const Row&r,float x,float y,float z,float w){return r.x*x+r.y*y
 int main(){
  Matrix flat={{{0,1,0,0},{-1,0,0,0},{0,0,1,0},{0,0,0,1}}},left,right;
  unsigned cases=0;
- for(int weapon=0;weapon<2;weapon++)for(int level=0;level<=10;level++)for(int d=10;d<=10000;d+=10){
+ for(int weapon=0;weapon<2;weapon++)for(int level=0;level<=20;level++)for(int d=10;d<=10000;d+=10){
   float slider=level/10.f,w=float(d);
   if(weapon){native_weapon_stereo(left,flat,slider,false);native_weapon_stereo(right,flat,slider,true);}
   else{native_world_stereo(left,flat,slider,false);native_world_stereo(right,flat,slider,true);}
@@ -24,22 +24,22 @@ int main(){
    // Changing near/far depth representation cannot change eye separation.
    if(depth)assert(std::fabs(l-previous)<1e-6f);
    previous=l;
-   float pixels=slider*((weapon?160.f:1200.f)/w+(weapon?1.f:-2.f));
+   float pixels=slider*((weapon?160.f:18000.f)/w+(weapon?1.f:-6.f));
    float expected=-pixels/200.f,limit=.03f*slider;
    if(weapon && expected>limit)expected=limit;
    if(weapon && expected< -limit)expected=-limit;
-   assert(std::fabs(l-expected)<1e-6f);
+   assert(std::fabs(l-expected)<1e-6f*(1+std::fabs(expected)));
    assert(!memcmp(&left.r[2],&flat.r[2],sizeof(Row)) && !memcmp(&left.r[3],&flat.r[3],sizeof(Row)));
    cases++;
   }
  }
  native_world_stereo(left,flat,0,false);assert(!memcmp(&left,&flat,sizeof flat));
  native_world_stereo(left,flat,1,false);
- // World convergence at 600: zero disparity. A 300-unit surface is in front;
- // a 1200-unit surface is behind, rather than shifted onto one flat layer.
- assert(std::fabs((left.r[1].w*600+native_stereo_eye_translation(1,false,false))/600)<1e-6f);
- assert(left.r[1].w*300+native_stereo_eye_translation(1,false,false)<0);
- assert(left.r[1].w*1200+native_stereo_eye_translation(1,false,false)>0);
+ // World convergence at 3000: zero disparity. A 1500-unit surface is in front;
+ // a 6000-unit surface is behind, rather than shifted onto one flat layer.
+ assert(std::fabs((left.r[1].w*3000+native_stereo_eye_translation(1,false,false))/3000)<1e-6f);
+ assert(left.r[1].w*1500+native_stereo_eye_translation(1,false,false)<0);
+ assert(left.r[1].w*6000+native_stereo_eye_translation(1,false,false)>0);
  // Reproduce the old flat near-world plane: these three walls all saturated
  // at the same six pixels. Off-axis world projection must distinguish them.
  float last=0;

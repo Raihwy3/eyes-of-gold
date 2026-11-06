@@ -7,30 +7,34 @@
 #define NATIVE_WATCH_AUDIO 10002
 #define NATIVE_WATCH_EXPERIMENTAL 10003
 #define NATIVE_WATCH_MOTION 10004
+#define NATIVE_WATCH_ACCESSIBILITY 10005
 #define NATIVE_WATCH_OPTION_Y 40
 #define NATIVE_WATCH_OPTION_PITCH 10
-static int native_watch_motion;
+static int native_watch_motion,native_watch_accessibility;
 static int native_watch_advanced,native_watch_audio,native_watch_experimental,native_watch_wait_neutral,native_watch_editing;
 static struct NativeMenuState native_watch_nav;
-static int native_watch_option_count(void){return native_watch_motion?6:native_watch_experimental?3:native_watch_audio?4:native_watch_advanced?16:10;}
+static int native_watch_option_count(void){return native_watch_accessibility?4:native_watch_motion?10:native_watch_experimental?4:native_watch_audio?4:native_watch_advanced?16:11;}
 static int native_watch_option_y(int index) {return NATIVE_WATCH_OPTION_Y+index*(native_watch_advanced && !native_watch_motion?NATIVE_WATCH_OPTION_PITCH:16);}
 static int native_watch_option_tag(int index) {
-    if(native_watch_motion){static const int rows[]={15,31,29,30,32,NATIVE_WATCH_BACK};return rows[index];}
-    if(native_watch_experimental){static const int rows[]={27,28,NATIVE_WATCH_BACK};return rows[index];}
+    if(native_watch_accessibility){static const int rows[]={36,37,38,NATIVE_WATCH_BACK};return rows[index];}
+    if(native_watch_motion){static const int rows[]={15,31,29,30,33,34,35,32,39,NATIVE_WATCH_BACK};return rows[index];}
+    if(native_watch_experimental){static const int rows[]={27,28,40,NATIVE_WATCH_BACK};return rows[index];}
     if(native_watch_audio){static const int rows[]={1,2,25,NATIVE_WATCH_BACK};return rows[index];}
-    if(!native_watch_advanced)return index<7?index+3:index==7?NATIVE_WATCH_AUDIO:index==8?NATIVE_WATCH_ADVANCED:NATIVE_WATCH_MOTION;
+    if(!native_watch_advanced)return index<7?index+3:index==7?NATIVE_WATCH_AUDIO:index==8?NATIVE_WATCH_ADVANCED:index==9?NATIVE_WATCH_MOTION:NATIVE_WATCH_ACCESSIBILITY;
     static const int rows[]={14,10,13,22,23,21,16,17,24,18,19,12,20,11,NATIVE_WATCH_EXPERIMENTAL,NATIVE_WATCH_BACK};return rows[index];
 }
-static const char *native_watch_options_title(void){return native_watch_motion?"CONTROLS":native_watch_experimental?"EXPERIMENTAL":native_watch_audio?"AUDIO":native_watch_advanced?"ADVANCED":"GAME OPTIONS";}
-static int native_watch_options_context(void){return 200+watch_screen_index+(watch_screen_index==WATCH_INDEX_GAME_OPTIONS?(native_watch_motion?800:native_watch_experimental?600:native_watch_audio?400:native_watch_advanced?200:0):0);}
+static const char *native_watch_options_title(void){return native_watch_accessibility?"ACCESSIBILITY":native_watch_motion?"CONTROLS":native_watch_experimental?"EXPERIMENTAL":native_watch_audio?"AUDIO":native_watch_advanced?"ADVANCED":"GAME OPTIONS";}
+static int native_watch_options_context(void){return 200+watch_screen_index+(watch_screen_index==WATCH_INDEX_GAME_OPTIONS?(native_watch_accessibility?1000:native_watch_motion?800:native_watch_experimental?600:native_watch_audio?400:native_watch_advanced?200:0):0);}
 static void native_watch_options_reset(void) {
-    native_watch_motion=0;native_watch_experimental=native_watch_audio=native_watch_advanced=native_watch_editing=0;if(watch_screen_index==WATCH_INDEX_GAME_OPTIONS)watch_item_is_actively_selected=0;native_watch_wait_neutral=1;native_watch_nav=(struct NativeMenuState){0};
+    native_watch_accessibility=native_watch_motion=0;native_watch_experimental=native_watch_audio=native_watch_advanced=native_watch_editing=0;if(watch_screen_index==WATCH_INDEX_GAME_OPTIONS)watch_item_is_actively_selected=0;native_watch_wait_neutral=1;native_watch_nav=(struct NativeMenuState){0};
 }
 static void native_watch_option_action(int tag,int direction) {
-    if(tag==NATIVE_WATCH_MOTION){native_watch_motion=1;native_watch_nav.selected=0;}
+    if(tag==NATIVE_WATCH_ACCESSIBILITY){native_watch_accessibility=1;native_watch_nav.selected=0;}
+    else if(tag==NATIVE_WATCH_MOTION){native_watch_motion=1;native_watch_nav.selected=0;}
     else if(tag==NATIVE_WATCH_AUDIO){native_watch_audio=1;native_watch_nav.selected=0;}
     else if(tag==NATIVE_WATCH_ADVANCED){native_watch_advanced=1;native_watch_nav.selected=0;}
     else if(tag==NATIVE_WATCH_EXPERIMENTAL){native_watch_experimental=1;native_watch_nav.selected=0;}
+    else if(tag==NATIVE_WATCH_BACK && native_watch_accessibility){native_watch_accessibility=0;native_watch_nav.selected=10;}
     else if(tag==NATIVE_WATCH_BACK && native_watch_motion){native_watch_motion=0;native_watch_nav.selected=9;}
     else if(tag==NATIVE_WATCH_BACK && native_watch_experimental){native_watch_experimental=0;native_watch_nav.selected=14;}
     else if(tag==NATIVE_WATCH_BACK){native_watch_nav.selected=native_watch_audio?7:8;native_watch_audio=native_watch_advanced=0;}
@@ -42,7 +46,7 @@ static void native_watch_option_action(int tag,int direction) {
 }
 static int native_watch_option_back(void) {
     if(native_watch_editing){native_watch_editing=0;watch_item_is_actively_selected=0;return 1;}
-    if(!native_watch_advanced && !native_watch_audio && !native_watch_motion)return 0;
+    if(!native_watch_advanced && !native_watch_audio && !native_watch_motion && !native_watch_accessibility)return 0;
     native_watch_option_action(NATIVE_WATCH_BACK,1);return 1;
 }
 static void native_watch_options_input(void) {
@@ -61,6 +65,7 @@ static void native_watch_options_input(void) {
         int tag=native_watch_option_tag(native_watch_nav.selected);
         native_watch_nav.previous=held;
         if(tag>=NATIVE_WATCH_ADVANCED)native_watch_option_action(tag,1);
+        else if(tag==35)native_watch_option_action(tag,1);
         else native_watch_editing=!native_watch_editing;
         return;
     }
@@ -101,7 +106,7 @@ static Gfx *native_watch_options_draw(Gfx *gdl,Mtx *matrix) {
     for(int i=0;i<count;i++) {
         int tag=native_watch_option_tag(i),y=native_watch_option_y(i);
         unsigned colour=i==native_watch_nav.selected?0xa0ffa0f0:0x00ff00b0;
-        const char *label=tag==NATIVE_WATCH_MOTION?"Controls\n":tag==NATIVE_WATCH_AUDIO?"Audio\n":tag==NATIVE_WATCH_ADVANCED?"Advanced\n":tag==NATIVE_WATCH_EXPERIMENTAL?"Experimental\n":tag==NATIVE_WATCH_BACK?"Back\n":native_menu_option_label(tag);
+        const char *label=tag==NATIVE_WATCH_ACCESSIBILITY?"Accessibility\n":tag==NATIVE_WATCH_MOTION?"Controls\n":tag==NATIVE_WATCH_AUDIO?"Audio\n":tag==NATIVE_WATCH_ADVANCED?"Advanced\n":tag==NATIVE_WATCH_EXPERIMENTAL?"Experimental\n":tag==NATIVE_WATCH_BACK?"Back\n":native_menu_option_label(tag);
         gdl=draw_options_labels(gdl,50,y,(char *)label,colour,0,-1,0,0,0x3000b0,0);
         if(tag<NATIVE_WATCH_ADVANCED){char value[32];gdl=draw_options_labels(gdl,200,y,(char *)native_menu_option_text(tag,value,sizeof value),colour,0,-1,0,0,0x3000b0,0);}
     }

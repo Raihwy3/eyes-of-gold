@@ -142,7 +142,7 @@ def main():
     # Retire generated copies with the old name to avoid duplicate launcher entries.
     for source in files:
         (sd/source.name).unlink(missing_ok=True)
-    notices=['GAME-README.txt','LICENSE.txt','NOTICE.txt']
+    notices=['GAME-README.txt','LICENSE.txt','NOTICE.txt','CREDITS.txt']
     for name in notices:
         shutil.copyfile(build.TARGET/'distribution'/name,sd/name)
     for name in ('LICENSE','NOTICE'):

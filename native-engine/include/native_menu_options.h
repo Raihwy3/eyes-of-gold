@@ -1,6 +1,6 @@
 #ifndef EOG_NATIVE_MENU_OPTIONS_H
 #define EOG_NATIVE_MENU_OPTIONS_H
-#define NATIVE_MENU_OPTIONS_COUNT 33
+#define NATIVE_MENU_OPTIONS_COUNT 41
 int native_menu_option_at(int index);
 int native_menu_option_value(int row);
 void native_menu_option_change(int row,int direction);

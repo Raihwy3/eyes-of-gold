@@ -9,6 +9,10 @@ typedef struct {int16_t x,z,y;} angularRate;
 static inline int HIDUSER_EnableGyroscope(void){return 0;}
 static inline int HIDUSER_DisableGyroscope(void){return 0;}
 static inline int HIDUSER_GetGyroscopeRawToDpsCoefficient(float *c){*c=14.375f;return 0;}
+typedef struct {int16_t x,y,z;} accelVector;
+static inline int HIDUSER_EnableAccelerometer(void){return 0;}
+static inline int HIDUSER_DisableAccelerometer(void){return 0;}
+static inline void hidAccelRead(accelVector *a){a->x=a->y=0;a->z=512;}
 extern angularRate test_gyro_rate;
 static inline void hidGyroRead(angularRate *r){*r=test_gyro_rate;}
 static inline uint64_t svcGetSystemTick(void){static uint64_t t;t+=SYSCLOCK_ARM11/60;return t;}

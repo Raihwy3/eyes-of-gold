@@ -54,6 +54,8 @@ def prepare():
     inputs=[TARGET/'source-files.json',TARGET/'rom-data-layout.json',TARGET/'rom-data-code-review.json',TARGET/'rom-string-layout.json',TARGET/'engine-state-review.json',TARGET/'rom-code-pool-review.json']
     for folder in ('src','include','tools','tests'):
         inputs += sorted(p for p in (TARGET/folder).rglob('*') if p.suffix in ('.c','.cpp','.h','.py','.pica'))
+    inputs += sorted((TARGET/'vendor/GamepadMotionHelpers').glob('*'))
+    inputs += sorted((TARGET/'vendor/rt64-stereo').glob('*'))
     for path in inputs:
         digest.update(str(path.relative_to(TARGET)).encode());digest.update(path.read_bytes())
     (BUILD/'include/native_build.h').write_text('#define NATIVE_BUILD_ID "'+digest.hexdigest()[:12]+'"\n')
@@ -97,7 +99,7 @@ def source_path(rel):
         for old,new in replacements.items():
             if text.count(old)!=1:raise ValueError('Original Full viewport boundary changed: '+old)
             text=text.replace(old,new)
-        text='#include "native_watch_environment.h"\n#include "native_controls.h"\n#include "native_theme.h"\n'+text
+        text='#include "native_watch_environment.h"\n#include "native_controls.h"\n#include "native_demo.h"\n#include "native_theme.h"\n'+text
         old='    g_CurrentPlayer->field_D0 = 0;'
         if text.count(old)!=1:raise ValueError('Original movement hook boundary changed')
         text=text.replace(old,'    native_controls_apply(&moveData);\n'+old)
@@ -110,6 +112,12 @@ def source_path(rel):
         anchor='    bondviewApplyVertaTheta();\n\n    // Handle crouching'
         assert text.count(anchor)==1
         text=text.replace(anchor,'    native_controls_apply_gyro();\n'+anchor)
+        old='    return g_CurrentPlayer->bondbreathing;'
+        assert text.count(old)==1
+        text=text.replace(old,'    return !native_demo_active() && !native_setting_stamina_sway()?0.f:g_CurrentPlayer->bondbreathing;')
+        old='    bheadUpdate(percent_speed, speedsideways);'
+        assert text.count(old)==1
+        text=text.replace(old,old+"\n    native_controls_scope_head();")
         signature='Gfx *bondviewRenderWatch(Gfx *gdl)'
         declarations='static void native_watch_skin_begin(ModelFileHeader *);\nstatic void native_watch_skin_end(void);\nstatic Gfx *native_watch_skin_draw(Gfx *,Mtxf *);\n'
         text=text.replace(signature,declarations+signature,1)
@@ -390,6 +398,8 @@ def source_path(rel):
         text=text[:a]+body+text[b:]
         import effect_lod
         text=effect_lod.gun(text)
+        import dynamic_stereo
+        text=dynamic_stereo.gun(text)
         dest=BUILD/'overlay/gunfire.c';dest.write_text(text);return dest
     if str(rel)=='src/game/bg.c':
         text=source.read_text()
@@ -722,6 +732,8 @@ static f32 native_frontend_aspect(f32 authored) {
         old='            DL = skyRender(DL);'
         assert text.count(old)==1
         text=text.replace(old,'            struct NativeDistanceFog native_fog;\n            DL=native_distance_fog_current(&native_fog)?native_distance_fog_backdrop(DL):skyRender(DL);')
+        import dynamic_stereo
+        text=dynamic_stereo.level(text)
         dest=BUILD/'overlay/lv.c';dest.parent.mkdir(exist_ok=True);dest.write_text(text)
         return dest
     if str(rel)=='src/game/indy_comms.c':
@@ -811,6 +823,8 @@ static f32 native_frontend_aspect(f32 authored) {
         text=cache_triangle_setup(text)
         from vertex_pack import apply as cache_vertex_pack
         text=cache_vertex_pack(text)
+        import dynamic_stereo
+        text=dynamic_stereo.interpreter(text)
         from viewmodel_cull import apply as viewmodel_cull
         text=viewmodel_cull(text)
         import glass_detail
@@ -1076,6 +1090,9 @@ def main():
         baseline=BUILD/'baseline_options.o'
         subprocess.run([str(CC),*FLAGS,*['-D'+s for s in DEFS],*['-I'+str(p) for p in INCLUDES],'-include',str(TARGET/'include/prelude.h'),'-include','versioninfo.h','-c',str(TARGET/'src/baseline_options.c'),'-o',str(baseline)],check=True)
         extras=[]
+        motion=BUILD/'native_motion_sensor.o'
+        subprocess.run([str(CC.with_name('arm-none-eabi-g++')),'-std=gnu++20','-O2','-Wall','-Wextra','-Werror','-march=armv6k','-mtune=mpcore','-mfloat-abi=hard','-mtp=soft','-fno-rtti','-fno-exceptions','-ffunction-sections','-fdata-sections','-I'+str(TARGET/'include'),'-c',str(TARGET/'src/native_motion_sensor.cpp'),'-o',str(motion)],check=True)
+        extras.append(str(motion))
         for name in ('native_settings.c','native_controls.c'):
             obj=BUILD/(name+'.o')
             subprocess.run([str(CC),*FLAGS,*['-D'+v for v in DEFS],*['-I'+str(v) for v in INCLUDES],'-include',str(TARGET/'include/prelude.h'),'-c',str(TARGET/'src'/name),'-o',str(obj)],check=True)

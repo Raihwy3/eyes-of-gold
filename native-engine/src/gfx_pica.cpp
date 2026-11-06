@@ -10,6 +10,7 @@
 #include "native_display.h"
 #include "native_graphics.h"
 #include "native_weapon_stereo.h"
+#include "native_dynamic_stereo.h"
 #include "native_work_profile.h"
 #include "pica_depth.h"
 #include "pica_fog.h"
@@ -101,7 +102,31 @@ static float stereo_slider;
 static bool stereo_active,ui_rect_scope,frontend_ui,viewmodel_scope;
 static int top_sample_scale=1;
 static unsigned top_output_flags;
-static C3D_Mtx stereo_tilt[7]; // flat, UI, first-person and world left/right
+static C3D_Mtx stereo_tilt[11]; // flat, UI, first-person and world left/right
+static void flush_draw();
+static native_stereo::Convergence auto_convergence;
+static native_stereo::AimDepth aim_depth;
+static void queue_stereo_depth();
+static uint32_t *depth_copy;
+static bool depth_copied,depth_copy_failed,sky_scope;
+static constexpr unsigned DEPTH_COPY_CAPACITY=512*512*4;
+static native_stereo::Projection stereo_projection;
+static float world_convergence=native_stereo::manual_convergence,reticle_shift;
+static bool reticle_scope,reticle_seen;
+static float reticle_x,reticle_y;
+struct StereoDepthFrame {
+ C3D_RenderTarget *target=nullptr;native_stereo::Projection projection;
+ float scale=-1,bias=0,convergence=native_stereo::manual_convergence,slider=0;int viewport[4]={};
+ C3D_Mtx tilt={};unsigned triangles=0,bytes=0;bool usable=false;
+ const uint32_t *pixels=nullptr;unsigned width=0,height=0;int samples=1;
+};
+static StereoDepthFrame depth_frame;
+extern "C" void native_pica_projection(float a,float b,float c,float d){
+ auto next=native_stereo::Projection::from(a,b,c,d);
+ if(next.valid!=stereo_projection.valid || next.ratio!=stereo_projection.ratio || next.b!=stereo_projection.b)flush_draw();
+ stereo_projection=next;
+}
+
 extern "C" void native_pica_frontend_ui(int enabled){frontend_ui=enabled!=0;}
 extern "C" int native_pica_ui_rect(int enabled);
 static Vertex *watch_vertices;
@@ -174,21 +199,35 @@ static unsigned gpu_draws,merged_draws;
 static void flush_draw() {
   if(!pending_draw.count)return;
   const bool flat_overlay=watch_body; // physical watch and screen-space gauges
-  const bool raised=(frontend_ui && !gpu_world) || watch_scope || ui_rect_scope;
-  const unsigned left_eye=flat_overlay?0:viewmodel_scope?3:raised?1:5;
-  const unsigned right_eye=flat_overlay?0:viewmodel_scope?4:raised?2:6;
-  const float eye_translation=stereo_active && !flat_overlay && !raised?native_stereo_eye_translation(stereo_slider,false,viewmodel_scope):0.f;
+  const bool raised=(frontend_ui && !gpu_world) || watch_scope || ui_rect_scope || reticle_scope;
+  const unsigned left_eye=flat_overlay?0:sky_scope?9:reticle_scope?7:viewmodel_scope?3:raised?1:5;
+  const unsigned right_eye=flat_overlay?0:sky_scope?10:reticle_scope?8:viewmodel_scope?4:raised?2:6;
+  const float eye_translation=stereo_active && !flat_overlay && !raised && !sky_scope?native_stereo_eye_translation(stereo_slider,false,viewmodel_scope,world_convergence):0.f;
   const int stereo_uniform=world_palette_active?world_stereo_uniform:clip_stereo_uniform;
   // World geometry must retain the full off-axis eye projection. Clamping
   // each vertex separately collapses all close surfaces onto one depth plane.
-  const float full_world_depth=stereo_active && !flat_overlay && !raised && !viewmodel_scope?1.f:0.f;
-  C3D_FVUnifSet(GPU_VERTEX_SHADER,stereo_uniform,stereo_active?stereo_slider*.03f:0.f,eye_translation,full_world_depth,0);
+  const float full_world_depth=stereo_active && !flat_overlay && !raised && !viewmodel_scope && !sky_scope?1.f:0.f;
+  const float shader_full_depth=sky_scope?1.f:full_world_depth;
+  // Choose the dominant depth-writing world projection. Menus, weapons and
+  // the watch have separate cameras and cannot supply scene depth.
+  if(full_world_depth && !frontend_ui && !depth_copied && stereo_projection.valid && sharp_depth.test && sharp_depth.write &&
+     last_viewport[2]>=280 && last_viewport[3]>=180 &&
+     pending_draw.count>depth_frame.triangles){
+    depth_frame.target=target;depth_frame.projection=stereo_projection;
+    depth_frame.scale=sharp_depth_scale;depth_frame.bias=sharp_depth_bias;
+    depth_frame.convergence=world_convergence;depth_frame.slider=stereo_slider;
+    depth_frame.triangles=pending_draw.count;depth_frame.usable=true;
+    memcpy(depth_frame.viewport,last_viewport,sizeof last_viewport);depth_frame.tilt=stereo_tilt[0];
+    depth_frame.samples=top_sample_scale;depth_frame.width=target->frameBuf.width;depth_frame.height=target->frameBuf.height;
+  }
+  const float shift_limit=reticle_scope?.30f:stereo_slider*.03f;
+  C3D_FVUnifSet(GPU_VERTEX_SHADER,stereo_uniform,stereo_active?shift_limit:0.f,eye_translation,shader_full_depth,0);
   if(stereo_active)C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER,tilt_uniform,&stereo_tilt[left_eye]);
   if(pending_indexed)C3D_DrawElements(GPU_TRIANGLES,pending_draw.count,C3D_UNSIGNED_SHORT,(pending_elements?pending_elements:world_indices)+pending_draw.first);
   else C3D_DrawArrays(GPU_TRIANGLES,pending_draw.first,pending_draw.count);
   if(stereo_active) {
     C3D_FrameDrawOn(right_target);restore_top_view();
-    C3D_FVUnifSet(GPU_VERTEX_SHADER,stereo_uniform,stereo_slider*.03f,-eye_translation,full_world_depth,0);
+    C3D_FVUnifSet(GPU_VERTEX_SHADER,stereo_uniform,shift_limit,-eye_translation,shader_full_depth,0);
     C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER,tilt_uniform,&stereo_tilt[right_eye]);
     if(pending_indexed)C3D_DrawElements(GPU_TRIANGLES,pending_draw.count,C3D_UNSIGNED_SHORT,(pending_elements?pending_elements:world_indices)+pending_draw.first);
     else C3D_DrawArrays(GPU_TRIANGLES,pending_draw.first,pending_draw.count);
@@ -199,6 +238,14 @@ static void flush_draw() {
   }
   if(!pending_indexed)mirror_draw(pending_draw.first,pending_draw.count);
   ++gpu_draws;pending_draw.clear();pending_indexed=false;pending_elements=nullptr;
+}
+extern "C" void native_pica_reticle(int enabled){
+ if(reticle_scope==(enabled!=0))return;
+ flush_draw();reticle_scope=enabled!=0;
+}
+extern "C" void native_pica_sky(int enabled){
+ if(sky_scope==(enabled!=0))return;
+ flush_draw();sky_scope=enabled!=0;
 }
 extern "C" int native_pica_gpu_world_supported(void){
   static const bool disabled=getenv("EOG_DISABLE_GPU_WORLD")!=nullptr;
@@ -257,7 +304,9 @@ extern "C" void native_pica_texture_lod(unsigned level) {
 }
 extern "C" void native_pica_set_viewmodel(int enabled) {
   if(viewmodel_scope==(enabled!=0))return;
-  flush_draw();viewmodel_scope=enabled!=0;
+  flush_draw();
+  if(enabled)queue_stereo_depth();
+  viewmodel_scope=enabled!=0;
 }
 static u64 gpu_wait_start,cpu_frame_start;
 static double gpu_wait_ms;
@@ -711,6 +760,17 @@ static void draw(float *buf, size_t floats, size_t triangles) {
     }
   }
   auto vertex=[&](size_t i){return pica_vertex_at(buf,stride,i,refs);};
+  if(reticle_scope && stereo_active && count){
+   float x0=1.e9f,x1=-1.e9f,y0=1.e9f,y1=-1.e9f;
+   for(size_t i=0;i<count;i++){const float *v=vertex(i);if(v[3]>0){
+    x0=std::min(x0,v[0]/v[3]);x1=std::max(x1,v[0]/v[3]);
+    y0=std::min(y0,v[1]/v[3]);y1=std::max(y1,v[1]/v[3]);
+   }}
+   if(x0<=x1 && y0<=y1){
+    reticle_x=last_viewport[0]+((x0+x1)*.25f+.5f)*last_viewport[2];
+    reticle_y=last_viewport[1]+(.5f-(y0+y1)*.25f)*last_viewport[3];reticle_seen=true;
+   }
+  }
   const unsigned channels = c.opt_alpha ? 4 : 3;
   const size_t input_offset = stride - channels * c.num_inputs;
   float fog_color[3] = {0, 0, 0};
@@ -1067,7 +1127,10 @@ static void draw(float *buf, size_t floats, size_t triangles) {
 /* This operation is always outside a C3D frame. Output replacement waits
  * for the previous GPU transfer before any old framebuffer is freed. Keep
  * both old eyes intact until both new allocations have succeeded. */
+static void invalidate_stereo_depth(){depth_frame.usable=false;auto_convergence.reset();aim_depth.reset();world_convergence=native_stereo::manual_convergence;reticle_shift=0;}
+static void discard_stereo_snapshot(){depth_frame.usable=false;}
 static bool configure_top_samples(int scale) {
+  discard_stereo_snapshot();
   C3D_RenderTarget *left=C3D_RenderTargetCreate(240*scale,400,GPU_RB_RGBA8,GPU_RB_DEPTH24_STENCIL8);
   if(!left)return false;
   C3D_RenderTarget *right=C3D_RenderTargetCreate(240*scale,400,GPU_RB_RGBA8,GPU_RB_DEPTH24_STENCIL8);
@@ -1107,6 +1170,60 @@ static void update_sharp_targets(int samples,int strength) {
   if(!watch_target)sysFatalError("Native PICA: cannot restore watch target");
   sysLogPrintf(2,"Sharpness off: normal output restored%s",strength?" (insufficient VRAM for filter)":"");
 }
+/* Flush and queue a tiled depth copy before hands/HUD can overwrite it.
+ * The next normal FrameBegin completes it; no extra wait or GPU readback fence. */
+static void queue_stereo_depth(){
+ if(depth_copied || !stereo_active || frontend_ui || !depth_frame.usable || !depth_copy)return;
+ unsigned bytes=depth_frame.width*depth_frame.height*4;
+ if(!bytes || bytes>DEPTH_COPY_CAPACITY){depth_frame.usable=false;return;}
+ mesh_cache.flush();retained_meshes.flush();
+ GSPGPU_FlushDataCache(vertices,vertex_count*sizeof(Vertex));
+ if(world_index_count)GSPGPU_FlushDataCache(world_indices,world_index_count*sizeof(uint16_t));
+ C3D_FrameSplit(0);
+ unsigned dim=GX_BUFFER_DIM(240*8*2/16,0);
+ if(R_FAILED(GX_TextureCopy(static_cast<u32 *>(depth_frame.target->frameBuf.depthBuf),dim,depth_copy,dim,bytes,BIT(3)))){
+  depth_frame.usable=false;return;
+ }
+ depth_frame.pixels=depth_copy;depth_frame.bytes=bytes;depth_copied=true;
+}
+static uint32_t read_stereo_packed(const StereoDepthFrame &f,float x,float y){
+ if(!f.target || !f.width || !f.height || x<0 || x>1 || y<0 || y>1)return 0;
+ auto *buffer=f.pixels?f.pixels:static_cast<const uint32_t *>(f.target->frameBuf.depthBuf);
+ if(!buffer)return 0;
+ float nx=x*2-1,ny=1-y*2;
+ const auto &r0=f.tilt.r[0],&r1=f.tilt.r[1];
+ float rx=r0.x*nx+r0.y*ny+r0.w,ry=r1.x*nx+r1.y*ny+r1.w;
+ int px=int(f.viewport[1]*f.samples+(rx*.5f+.5f)*f.viewport[3]*f.samples);
+ int py=int(400-f.viewport[0]-f.viewport[2]+(ry*.5f+.5f)*f.viewport[2]);
+ py=f.height-1-py;
+ if(px<0 || py<0 || unsigned(px)>=f.width || unsigned(py)>=f.height)return 0;
+ return buffer[native_stereo::tiled_index(px,py,f.width)];
+}
+static float read_stereo_depth(const StereoDepthFrame &f,float x,float y){
+ return f.projection.distance(read_stereo_packed(f,x,y),f.scale,f.bias);
+}
+static void update_stereo_depth(float seconds){
+ if(!stereo_active || frontend_ui || !target){invalidate_stereo_depth();return;}
+ if(watch_seen){depth_frame.usable=false;aim_depth.reset();reticle_shift=0;return;}
+ // A missing world frame preserves convergence/aim history as in rt64-3ds.
+ if(!reticle_seen)aim_depth.reset();
+ if(!depth_frame.usable || depth_frame.target!=target || !depth_copied || !depth_frame.pixels){
+  reticle_shift=reticle_seen?aim_depth.shift(world_convergence,stereo_slider):0;return;
+ }
+ auto &f=depth_frame;
+ if(R_FAILED(GSPGPU_InvalidateDataCache(f.pixels,f.bytes))){depth_frame.usable=false;return;}
+ auto canonical=[&](float x,float y){return f.projection.canonical(read_stereo_packed(f,x,y),f.scale,f.bias);};
+ float zp=native_stereo::near_depth(canonical,f.viewport[2],f.viewport[3]);
+ float near=f.projection.distance_from_canonical(zp);
+ world_convergence=auto_convergence.update(near,stereo_slider,seconds,f.projection.near_plane());
+ if(reticle_seen){
+  auto read=[&](float x,float y){return read_stereo_depth(f,(x-f.viewport[0])/f.viewport[2],(y-f.viewport[1])/f.viewport[3]);};
+  aim_depth.sample(read,reticle_x,reticle_y,float(f.viewport[2]),f.slider,f.convergence,seconds);
+ }
+ reticle_shift=reticle_seen?aim_depth.shift(world_convergence,stereo_slider):0;
+ depth_frame.usable=false;
+}
+
 static void init() {
 
   top_output_flags=native_display_prepare();
@@ -1170,6 +1287,7 @@ static void start() {
   // Reallocate only at frame boundaries, before C3D_FrameBegin. Watch/menu
   // changes are atomically sampled once here, never during an active draw.
   int requested_samples=native_setting_aa()?2:1;
+  if(requested_samples!=top_sample_scale || bool(native_setting_sharpness() || native_setting_vignette() || native_setting_bloom() || native_setting_grain())!=sharp_enabled)discard_stereo_snapshot();
   update_sharp_targets(requested_samples,native_setting_sharpness());
   requested_samples=native_setting_aa()?2:1;
   if(!sharp_enabled && requested_samples!=top_sample_scale && !configure_top_samples(requested_samples)) {
@@ -1184,11 +1302,25 @@ static void start() {
   if (!C3D_FrameBegin(0))
     sysFatalError("Native PICA: frame begin failed");
   native_work_profile_end(NATIVE_WORK_GPU_WAIT,native_gpu_start);
+  // Charge depth sampling to CPU render time, not the preceding GPU wait.
+  cpu_frame_start=svcGetSystemTick();
+  gpu_wait_ms=(double)(cpu_frame_start-gpu_wait_start)*1000.0/SYSCLOCK_ARM11;
+  stereo_slider=osGet3DSliderState()*native_setting_stereo_strength()/100.f;stereo_active=stereo_slider>0.f;
+  static u64 stereo_last_tick;
+  u64 stereo_now=svcGetSystemTick();
+  float stereo_dt=stereo_last_tick?float(stereo_now-stereo_last_tick)/SYSCLOCK_ARM11:1.f/60.f;
+  stereo_last_tick=stereo_now;
+  update_stereo_depth(stereo_dt);
+  if(stereo_active && !frontend_ui && !depth_copy && !depth_copy_failed){
+   depth_copy=static_cast<uint32_t *>(linearAlloc(DEPTH_COPY_CAPACITY));
+   depth_copy_failed=depth_copy==nullptr;
+   if(depth_copy_failed)sysLogPrintf(2,"Adaptive stereo disabled: no depth snapshot memory");
+  }
+  depth_frame={};depth_copied=false;reticle_seen=reticle_scope=sky_scope=false;stereo_projection={};
+
   mesh_cache.begin_frame();mesh_camera_lod_draws=mesh_camera_lod_hits=0;proven_input_draws=scanned_input_draws=0;
   retained_meshes.begin_frame();retained_token=0;pending_elements=nullptr;
-  cpu_frame_start=svcGetSystemTick();
   draw_ticks=upload_ticks=planning_ticks=0;
-  gpu_wait_ms=(double)(cpu_frame_start-gpu_wait_start)*1000.0/SYSCLOCK_ARM11;
   if(gpu_wait_ms>100.0)sysLogPrintf(2,"GPU wait hitch: %.2fms frame=%u",gpu_wait_ms,frame_count);
   __atomic_store_n(&gpu_phase,2,__ATOMIC_RELEASE);
   // Blocking FrameBegin(0) still waits for prior GPU commands before reuse.
@@ -1196,7 +1328,7 @@ static void start() {
   for (auto &t : retired)
     C3D_TexDelete(&t);
   retired.clear();
-  stereo_slider=osGet3DSliderState();stereo_active=stereo_slider>0.f;
+  stereo_slider=osGet3DSliderState()*native_setting_stereo_strength()/100.f;stereo_active=stereo_slider>0.f;
   ui_rect_scope=false;
   if(stereo_active)C3D_RenderTargetClear(right_target,C3D_CLEAR_ALL,0x000000ff,0);
   C3D_RenderTargetClear(target, C3D_CLEAR_ALL, 0x000000ff, 0);
@@ -1223,6 +1355,10 @@ static void start() {
   native_weapon_stereo(stereo_tilt[4],tilt,slider,true);
   native_world_stereo(stereo_tilt[5],tilt,slider,false);
   native_world_stereo(stereo_tilt[6],tilt,slider,true);
+  native_depth_stereo(stereo_tilt[7],tilt,1.f,false,-reticle_shift*200.f);
+  native_depth_stereo(stereo_tilt[8],tilt,1.f,true,-reticle_shift*200.f);
+  native_sky_stereo(stereo_tilt[9],tilt,slider,false);
+  native_sky_stereo(stereo_tilt[10],tilt,slider,true);
   C3D_FVUnifMtx4x4(
       GPU_VERTEX_SHADER,
       tilt_uniform, &tilt);
@@ -1242,6 +1378,7 @@ static void start() {
 }
 static void end() {
   flush_draw();
+  queue_stereo_depth();
   sharp_present();
   const u64 frame_cpu_ticks=svcGetSystemTick()-cpu_frame_start;
   static u64 window_cpu_ticks,window_wait_ticks,window_peak_ticks;
@@ -1262,6 +1399,7 @@ static void end() {
                  frame_count,draw_calls,(unsigned)vertex_count,bright_vertices,clip_vertices,
                  last_viewport[0],last_viewport[1],last_viewport[2],last_viewport[3],
                  last_scissor[0],last_scissor[1],last_scissor[2],last_scissor[3],last_depth,last_blend);
+  if(frame_count%120==0 && stereo_active)sysLogPrintf(2,"Stereo depth: convergence=%.1f reticle=%.2fpx scene=%u",double(world_convergence),double(reticle_shift*200.f),depth_frame.triangles);
   if(frame_count%120==0)sysLogPrintf(2,"Render cost: cpuWall=%.2fms wait=%.2fms previousGPU=%.2fms cmd=%.1f%% TEVconfig=%u reuse=%u",
     (double)frame_cpu_ticks*1000.0/SYSCLOCK_ARM11,gpu_wait_ms,
     (double)C3D_GetDrawingTime(),(double)C3D_GetCmdBufUsage()*100.0,tev_configs,tev_reuses);
@@ -1316,6 +1454,7 @@ static bool bind_fb(int id, float) {
 }
 static void clear_fb(bool color, bool depth) {
   flush_draw();
+  if(depth && !depth_copied)depth_frame.usable=false;
   if(stereo_active)C3D_RenderTargetClear(right_target,(C3D_ClearBits)((color?C3D_CLEAR_COLOR:0)|(depth?C3D_CLEAR_DEPTH:0)),0x000000ff,0);
   C3D_RenderTargetClear(target,
                         (C3D_ClearBits)((color ? C3D_CLEAR_COLOR : 0) |
@@ -1440,6 +1579,7 @@ extern "C" void native_graphics_shutdown() {
   clear_shaders();
   C3D_TexDelete(&scalar_ramp);
   for(auto &tex:noise_samples) C3D_TexDelete(&tex);
+  linearFree(depth_copy);depth_copy=nullptr;
   linearFree(watch_vertices);watch_vertices=nullptr;
   watch_end_output();
   C3D_RenderTargetDelete(watch_target);watch_target=nullptr;

@@ -1,0 +1,42 @@
+Eyes of Gold Launcher - credits
+
+Engine and port
+
+GoldenEye decompilation contributors, and James Dansereau and contributors
+for the GoldenEye PC port on which this project is built.
+https://github.com/jkdansereau/goldeneye-pc-port
+Their original notices and the Fast3D renderer license are included unchanged.
+
+Controls
+
+Julian "Jibb" Smart and contributors: GamepadMotionHelpers for gyro processing,
+orientation spaces and calibration, and JoyShockMapper for the adapted
+flick-stick timing and rotation smoothing.
+https://github.com/JibbSmart/GamepadMotionHelpers
+https://github.com/JibbSmart/JoyShockMapper
+
+3D
+
+OneUp (oneup03) and RT64 contributors: the dynamic3d guidance and rt64-3ds
+stereo implementation used for convergence, depth sampling and reticle depth.
+https://github.com/oneup03/3D-Skills/tree/main/dynamic3d
+https://github.com/oneup03/rt64-3ds
+The port adapts parts of this work; it does not include the complete RT64 renderer.
+
+Thanks
+
+IDrinkLava on GBAtemp for the gyro feedback and for pointing us toward
+JibbSmart's GamepadMotionHelpers and the DK64 port's motion-control approach.
+
+OneUp on GBAtemp for pointing us toward the dynamic3d guidance and rt64-3ds
+stereo implementation.
+
+Libraries and tools
+
+Thanks to devkitPro and the contributors to devkitARM, libctru, Citro3D,
+newlib, GCC, curl, Mbed TLS, zlib, MiniZip, jsmn and Mozilla's CA collection.
+See licenses/SOURCES.txt for component versions, source links and the individual
+license documents. This credits file supplements those notices.
+
+The original game was made by Rare. GoldenEye 007 and its assets belong to
+their respective rights holders; game assets are supplied through the user's ROM.

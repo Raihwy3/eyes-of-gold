@@ -1,5 +1,6 @@
 #include <ultra64.h>
 #include "game/player.h"
+#include "game/gun.h"
 #include "game/bondview.h"
 #include "native_controls.h"
 #include "native_settings.h"
@@ -20,12 +21,17 @@ static int current_player;
 s32 get_cur_playernum(void){return current_player;}
 static struct player player;
 struct player *g_CurrentPlayer=&player;
+s32 g_PlayerIsInTank;
 struct player *g_playerPointers[4]={&player,NULL,NULL,NULL};
 enum CAMERAMODE g_CameraMode=CAMERAMODE_FP;
 static int menu=11,locked,allowed=1,mx,my,reloads;
 static int demo_active;
 int get_is_ramrom_flag(void){return demo_active;}
-static unsigned actions;
+static int scoped_weapon;
+ITEM_IDS getCurrentPlayerWeaponId(GUNHAND hand){(void)hand;return ITEM_SNIPERRIFLE;}
+u32 bondwalkItemCheckBitflags(ITEM_IDS item,u32 mask){(void)item;return scoped_weapon?mask:0;}
+static unsigned actions,held_buttons;
+unsigned native_input_menu_buttons(void){return held_buttons;}
 static int tx,ty;
 f32 getPlayer_c_screenwidth(void){return 320;}
 f32 getPlayer_c_screenheight(void){return 240;}
@@ -36,7 +42,7 @@ void native_input_take_touch_look(int *x,int *y){*x=tx;*y=ty;tx=ty=0;}
 int get_currentmenu(void){return menu;}
 int lvlGetControlsLockedFlag(void){return locked;}
 int disablePlayerActionsWhenPausedOrInMpMenu(void){return allowed;}
-void attempt_reload_item_in_hand(s32 hand){assert(hand==GUNRIGHT || hand==GUNLEFT);reloads++;}
+void attempt_reload_item_in_hand(GUNHAND hand){assert(hand==GUNRIGHT || hand==GUNLEFT);reloads++;}
 void native_input_take_motion(int *x,int *y,unsigned *a){*x=mx;*y=my;*a=actions;actions=0;}
 extern int native_game_input_gameplay(void);
 s32 g_ClockTimer=1;
@@ -44,6 +50,10 @@ void bondviewUpdateSpeedSideways(s32 value){player.speedsideways=value;}
 void bondviewUpdateSpeedForwards(s32 value){player.speedforwards=value;}
 static void original_movement_commit(struct MoveData moveData) {
 #include "native-movement-commit.h"
+}
+#include "native-lean-target.h"
+static void original_lean_commit(struct MoveData moveData){
+#include "native-lean-consumer.h"
 }
 f32 g_GlobalTimerDelta=1.f;
 f32 viGetFovY(void){return 60.f;}
@@ -109,14 +119,27 @@ int main(void) {
     assert(m.analogWalk==31 && m.analogStrafe==-22);
     assert(m.analogTurn==25 && m.analogPitch==-15 && m.btap && m.crouchDown && reloads==4);
     struct MoveData before_touch_aim=m;
-    player.insightaimmode=1;player.docentreupdown=1;memset(&m,0,sizeof m);tx=24;ty=-18;
+    native_setting_set_gyro(0);player.insightaimmode=1;player.docentreupdown=1;
+    memset(&m,0,sizeof m);tx=24;ty=-18;
+    float aim_theta=player.vv_theta,aim_pitch=player.vv_verta;
     native_controls_apply(&m);
-    assert(m.canNaturalTurn && m.canNaturalPitch && m.disableLookAhead && !player.docentreupdown);
-    assert(m.analogTurn==24 && m.analogPitch==-18);
+    assert(!m.canNaturalTurn && !m.canNaturalPitch && m.disableLookAhead && !player.docentreupdown);
+    assert(!m.analogTurn && !m.analogPitch);
+    float touch_ax=0,touch_ay=0;assert(native_controls_aim_turn(&touch_ax,&touch_ay));
+    assert(fabsf(touch_ax-.05f)<.00001f && fabsf(touch_ay-.05f)<.00001f && player.vv_theta==aim_theta && player.vv_verta==aim_pitch);
+    float hold_ax=touch_ax,hold_ay=touch_ay;
+    memset(&m,0,sizeof m);native_controls_apply(&m);touch_ax=touch_ay=0;
+    assert(native_controls_aim_turn(&touch_ax,&touch_ay));
+    assert(fabsf(touch_ax-hold_ax)<.00001f && fabsf(touch_ay-hold_ay)<.00001f);
+    current_player=1;touch_ax=touch_ay=0;assert(!native_controls_aim_turn(&touch_ax,&touch_ay));current_player=0;
+    touch_ax=touch_ay=0;assert(native_controls_aim_turn(&touch_ax,&touch_ay));assert(fabsf(touch_ax-hold_ax)<.00001f);
+    player.insightaimmode=0;memset(&m,0,sizeof m);native_controls_apply(&m);
+    player.insightaimmode=1;touch_ax=touch_ay=0;assert(!native_controls_aim_turn(&touch_ax,&touch_ay));
+    native_setting_set_aim_lock(1);memset(&m,0,sizeof m);tx=24;ty=-18;native_controls_apply(&m);
+    assert(m.canNaturalTurn && m.canNaturalPitch && m.analogTurn==24 && m.analogPitch==-18);
     player.speedtheta=player.speedverta=0;original_touch_aim_rates(m);
     assert(player.speedtheta>0 && player.speedverta>0);
-    player.speedtheta=player.speedverta=0;
-    memset(&m,0,sizeof m);native_controls_apply(&m);assert(!m.canNaturalTurn && !m.canNaturalPitch);
+    player.speedtheta=player.speedverta=0;native_setting_set_aim_lock(0);
     player.insightaimmode=0;m=before_touch_aim;
     player.watch_animation_state=1;tx=50;ty=50;actions=EOG_RELOAD;
     native_controls_apply(&m);assert(m.analogTurn==25 && reloads==4 && tx==0 && ty==0);
@@ -128,20 +151,20 @@ int main(void) {
     native_setting_set_sensitivity(100);native_controls_adjust_look(&yaw,&pitch);assert(yaw==1 && pitch==-.5f);
     // Run the original aim-speed easing at both corners, high sensitivity,
     // reversal and release. Consuming a rate must never amplify stored state.
-    native_setting_set_sensitivity(200);
+    native_setting_set_sensitivity(1000);
     for(int dt=1;dt<=3;dt++) {
         g_GlobalTimerDelta=dt;player.speedtheta=0;
         for(int tick=0;tick<10000;tick++) {
             float input=tick<3000?-1.f:tick<6000?1.f:0.f;
             bondviewCurrentPlayerUpdateSpeedTheta(input);
             float stored=player.speedtheta,consumed=native_controls_look_rate(stored);
-            assert(player.speedtheta==stored && __builtin_isfinite(consumed) && __builtin_fabsf(consumed)<=2.f);
+            assert(player.speedtheta==stored && __builtin_isfinite(consumed) && __builtin_fabsf(consumed)<=10.f);
             assert(__builtin_fabsf(stored)<=.701f);
         }
         assert(player.speedtheta==0);
     }
     assert(native_controls_look_rate(__builtin_inff())==0 && native_controls_look_rate(__builtin_nanf(""))==0);
-    assert(native_controls_look_rate(1e30f)==2 && native_controls_look_rate(-1e30f)==-2);
+    assert(native_controls_look_rate(1e30f)==10 && native_controls_look_rate(-1e30f)==-10);
     native_demo_replay_begin();assert(demo_logs==1);
     native_demo_replay_seed(1,1);assert(demo_logs==1);
     native_demo_replay_seed(1,2);native_demo_replay_seed(1,3);assert(demo_logs==2);
@@ -152,24 +175,72 @@ int main(void) {
     assert(native_controls_look_rate(.4f)==.4f);
     demo_active=0;assert(native_game_input_gameplay());
     menu=11;locked=0;allowed=1;player.bonddead=0;player.watch_animation_state=WATCH_ANIMATION_0x0;player.mpmenuon=0;player.fovy=60;
+    assert(native_setting_gyro_sensitivity()==250);
+    native_setting_set_gyro(2);player.vv_theta=180;player.vv_verta=0;gy=gp=1;
+    native_controls_apply_gyro();assert(player.vv_theta==177.5f && player.vv_verta==-2.5f);
     native_setting_set_gyro(2);native_setting_set_gyro_sensitivity(100);player.vv_theta=180;player.vv_verta=0;gy=2;gp=1;
-    native_controls_apply_gyro();assert(player.vv_theta==176 && player.vv_verta==-1);
-    native_controls_apply_gyro();assert(player.vv_theta==176 && player.vv_verta==-1);
-    native_setting_set_sensitivity(25);gy=2;gp=1;native_controls_apply_gyro();assert(player.vv_theta==172 && player.vv_verta==-2);
-    native_setting_set_gyro(1);player.insightaimmode=0;gy=3;gp=3;native_controls_apply_gyro();assert(player.vv_theta==172 && player.vv_verta==-2);
+    native_controls_apply_gyro();assert(player.vv_theta==178 && player.vv_verta==-1);
+    native_controls_apply_gyro();assert(player.vv_theta==178 && player.vv_verta==-1);
+    native_setting_set_sensitivity(25);gy=2;gp=1;native_controls_apply_gyro();assert(player.vv_theta==176 && player.vv_verta==-2);
+    native_setting_set_gyro(1);player.insightaimmode=0;gy=3;gp=3;native_controls_apply_gyro();assert(player.vv_theta==176 && player.vv_verta==-2);
     player.insightaimmode=1;native_setting_set_gyro_sensitivity(200);gy=2;gp=1;
     float ax=0,ay=0;assert(native_controls_aim_turn(&ax,&ay));
-    assert(ax<0 && ay>0 && player.vv_theta==172 && player.vv_verta==-2 && gy==0 && gp==0);
+    assert(ax<0 && ay>0 && player.vv_theta==176 && player.vv_verta==-2 && gy==0 && gp==0);
     float held_x=ax,held_y=ay;ax=ay=0;assert(native_controls_aim_turn(&ax,&ay));
     assert(fabsf(ax-held_x)<.00001f && fabsf(ay-held_y)<.00001f);
-    native_controls_apply_gyro();assert(player.vv_theta==172 && player.vv_verta==-2);
+    native_controls_apply_gyro();assert(player.vv_theta==176 && player.vv_verta==-2);
     for(int i=0;i<10;i++){gy=-10;gp=0;ax=ay=0;assert(native_controls_aim_turn(&ax,&ay));assert(ax<=.65f && ax>=-.65f);}
-    assert(player.vv_theta!=172);
+    assert(player.vv_theta!=176);
     float edge_theta=player.vv_theta;ax=ay=0;native_controls_aim_turn(&ax,&ay);assert(player.vv_theta==edge_theta);
     locked=1;gy=3;gp=3;ax=ay=0;assert(!native_controls_aim_turn(&ax,&ay));
     native_controls_apply_gyro();assert(player.vv_theta==edge_theta && gy==0 && gp==0);locked=0;
     player.insightaimmode=0;native_setting_set_gyro(2);
-    player.vv_theta=1;player.vv_verta=88;gy=15;gp=-15;native_controls_apply_gyro();assert(player.vv_theta==301 && player.vv_verta==89);
+    player.vv_theta=1;player.vv_verta=88;gy=15;gp=-15;native_controls_apply_gyro();assert(player.vv_theta==331 && player.vv_verta==89);
+    native_setting_set_gyro_sensitivity(100);player.insightaimmode=0;player.vv_theta=180;player.vv_verta=0;gy=gp=1;
+    native_controls_apply_gyro();assert(player.vv_theta==179 && player.vv_verta==-1);
+    scoped_weapon=1;player.insightaimmode=1;native_setting_set_style(8);held_buttons=EOG_DUP;memset(&m,0,sizeof m);native_controls_apply(&m);
+    assert(m.zooming && m.zoomInFovPersec==2 && !m.zoomOutFovPersec);
+    held_buttons=EOG_DDOWN;memset(&m,0,sizeof m);native_controls_apply(&m);assert(m.zoomOutFovPersec==2 && !m.zoomInFovPersec);
+    native_setting_set_style(9);held_buttons=EOG_X;memset(&m,0,sizeof m);native_controls_apply(&m);assert(m.zoomInFovPersec==2 && !m.analogPitch);
+    held_buttons=EOG_B;memset(&m,0,sizeof m);native_controls_apply(&m);assert(m.zoomOutFovPersec==2 && !m.analogPitch);
+    scoped_weapon=0;held_buttons=EOG_X;memset(&m,0,sizeof m);m.analogPitch=40;native_controls_apply(&m);assert(m.analogPitch==40);
+    held_buttons=0;native_setting_set_aim_lock(1);gy=gp=1;ax=ay=0;float before=player.vv_theta;
+    assert(native_controls_aim_turn(&ax,&ay));assert(!ax && !ay && player.vv_theta==before-1);
+    native_setting_set_aim_lock(0);player.insightaimmode=0;
+    player.fovy=7;player.headlook.f[0]=.2f;player.headlook.f[1]=.3f;player.headlook.f[2]=.8f;
+    player.headup.f[0]=.2f;player.headup.f[1]=.8f;player.headup.f[2]=.3f;
+    native_controls_scope_head();assert(player.headlook.f[0]==0 && player.headlook.f[2]==1 && player.headup.f[1]==1);
+    player.fovy=60;
+    for(int style=8;style<=9;style++){
+        native_setting_set_style(style);native_setting_set_aim_movement(1);
+        player.insightaimmode=1;player.crouchpos=CROUCH_STAND;scoped_weapon=0;held_buttons=0;
+        mx=75;my=-70;memset(&m,0,sizeof m);m.digitalStepForward=m.digitalStepBack=1;
+        native_controls_apply(&m);
+        assert(m.analogWalk==0 && m.analogStrafe==0 && !m.digitalStepForward && !m.digitalStepBack && !m.digitalStepLeft && !m.digitalStepRight && m.rLeanRight && !m.rLeanLeft);
+        assert(m.crouchDown && !m.crouchUp);
+        original_movement_commit(m);assert(player.speedforwards==0 && player.speedsideways==0);
+        original_lean_commit(m);assert(player.swaytarget==75.f);
+        mx=-75;memset(&m,0,sizeof m);native_controls_apply(&m);
+        assert(m.rLeanLeft && !m.rLeanRight && !m.analogStrafe && !m.analogWalk);
+        original_lean_commit(m);assert(player.swaytarget==-75.f);
+        mx=0;memset(&m,0,sizeof m);native_controls_apply(&m);
+        original_lean_commit(m);assert(player.swaytarget==0);
+        mx=30;memset(&m,0,sizeof m);native_controls_apply(&m);assert(!m.rLeanLeft && !m.rLeanRight);
+        mx=-30;memset(&m,0,sizeof m);native_controls_apply(&m);assert(!m.rLeanLeft && !m.rLeanRight);
+        mx=75;
+        my=70;memset(&m,0,sizeof m);native_controls_apply(&m);assert(!m.analogWalk && m.crouchUp && !m.crouchDown);
+        my=0;memset(&m,0,sizeof m);native_controls_apply(&m);assert(!m.crouchDown && !m.crouchUp);
+        scoped_weapon=1;my=70;memset(&m,0,sizeof m);native_controls_apply(&m);
+        assert(!m.analogWalk && m.zoomInFovPersec>0 && !m.zoomOutFovPersec && !m.crouchDown && !m.crouchUp);
+        my=-70;memset(&m,0,sizeof m);native_controls_apply(&m);assert(m.zoomOutFovPersec>0 && !m.zoomInFovPersec);
+        scoped_weapon=0;player.crouchpos=CROUCH_SQUAT;player.insightaimmode=0;my=70;
+        memset(&m,0,sizeof m);native_controls_apply(&m);assert(m.analogWalk==65 && !m.crouchUp && !m.crouchDown && !m.rLeanLeft && !m.rLeanRight);
+        original_lean_commit(m);assert(player.swaytarget==0);
+        player.insightaimmode=1;native_setting_set_aim_movement(0);memset(&m,0,sizeof m);native_controls_apply(&m);assert(m.analogWalk==65);
+        native_setting_set_aim_movement(1);g_PlayerIsInTank=1;memset(&m,0,sizeof m);native_controls_apply(&m);assert(m.analogWalk==65);g_PlayerIsInTank=0;
+    }
+    native_setting_set_aim_movement(0);player.insightaimmode=0;mx=my=0;
+    puts("PASS classic aim movement: Vesper/Jinx original lean targets, no walking/strafe, directional crouch/stand, neutral stance, scoped zoom, release/free movement and tank bypass");
     puts("PASS gyro reticle: centred camera, retained target, original aim-path handoff, bounded edge overflow and no idle edge drift");
     native_setting_set_gyro(0);
     native_setting_set_style(8);native_setting_set_flick(1);player.vv_theta=350;fy=90;
@@ -182,7 +253,7 @@ int main(void) {
     puts("PASS Flick Stick camera: gyro-off turns, yaw wrap, consume-once and gameplay/style/lock gating");
     puts("PASS camera gyro: independent gain, aim-only, consume-once, locks, yaw wrap and pitch clamp");
     puts("PASS attract playback: recorded MoveData, control style and look speed preserved");
-    puts("PASS 30000 original aim acceleration ticks: corner/reverse/release, 200% gain, bounded consumed rate and unchanged stored state");
+    puts("PASS 30000 original aim acceleration ticks: corner/reverse/release, new 400% maximum (10x gain), bounded consumed rate and unchanged stored state");
     puts("PASS look gain: 50/100/200 percent, full-stick speed scaling after curve, watch/locked input excluded");
     puts("PASS touch look preserves legacy movement and ignores watch/control-locked gameplay");
     puts("PASS original MoveData hook separates movement/look, toggles crouch, reloads once and respects menus/death/control locks");

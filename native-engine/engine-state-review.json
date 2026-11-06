@@ -461,6 +461,141 @@
       "symbol": "CSWTCH.927",
       "review": "independently authored native menu/control implementation data",
       "evidence": "All pointer targets inspected against independently authored native control/watch labels, including gyro and Controls. Imported matching literals remain ROM-backed: [b'Advanced', b'Back', b'Audio', b'Experimental', b'Controls']"
+    },
+    {
+      "symbol": "rows.26",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
+    },
+    {
+      "symbol": "rows.27",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
+    },
+    {
+      "symbol": "rows.28",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
+    },
+    {
+      "symbol": "CSWTCH.793",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
+    },
+    {
+      "symbol": "last.23",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
+    },
+    {
+      "symbol": "jinx.17",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
+    },
+    {
+      "symbol": "vesper.16",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
+    },
+    {
+      "symbol": "levels.2",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
+    },
+    {
+      "symbol": "modes.7",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
+    },
+    {
+      "symbol": "levels.5",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
+    },
+    {
+      "symbol": "levels.6",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
+    },
+    {
+      "symbol": "glass.3",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
+    },
+    {
+      "symbol": "levels.1",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
+    },
+    {
+      "symbol": "rates.12",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
+    },
+    {
+      "symbol": "native_previous_watch_page.29",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
+    },
+    {
+      "symbol": "labels.11",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
+    },
+    {
+      "symbol": "spaces.10",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
+    },
+    {
+      "symbol": "CSWTCH.931",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
+    },
+    {
+      "symbol": "CSWTCH.934",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
+    },
+    {
+      "symbol": "CSWTCH.935",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
+    },
+    {
+      "symbol": "last.22",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Inspected options.o saved assembly and native watch headers after calibration progress update. Custom calibration states are Try again/Calibrated/Start/Keep still; page headings and control help/state are independently authored native UI, not original game-content records."
+    },
+    {
+      "symbol": "jinx.16",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Inspected options.o saved assembly and native watch headers after calibration progress update. Custom calibration states are Try again/Calibrated/Start/Keep still; page headings and control help/state are independently authored native UI, not original game-content records."
+    },
+    {
+      "symbol": "vesper.15",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Inspected options.o saved assembly and native watch headers after calibration progress update. Custom calibration states are Try again/Calibrated/Start/Keep still; page headings and control help/state are independently authored native UI, not original game-content records."
+    },
+    {
+      "symbol": "native_previous_watch_page.28",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Inspected options.o saved assembly and native watch headers after calibration progress update. Custom calibration states are Try again/Calibrated/Start/Keep still; page headings and control help/state are independently authored native UI, not original game-content records."
+    },
+    {
+      "symbol": "CSWTCH.930",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Inspected options.o saved assembly and native watch headers after calibration progress update. Custom calibration states are Try again/Calibrated/Start/Keep still; page headings and control help/state are independently authored native UI, not original game-content records."
+    },
+    {
+      "symbol": "CSWTCH.932",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Inspected options.o saved assembly and native watch headers after calibration progress update. Custom calibration states are Try again/Calibrated/Start/Keep still; page headings and control help/state are independently authored native UI, not original game-content records."
+    },
+    {
+      "symbol": "CSWTCH.936",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Inspected options.o saved assembly and native watch headers after calibration progress update. Custom calibration states are Try again/Calibrated/Start/Keep still; page headings and control help/state are independently authored native UI, not original game-content records."
     }
   ]
 }
