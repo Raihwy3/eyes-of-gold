@@ -96,7 +96,7 @@ static void check_bottom_watch(void) {
     native_watch_option_back();native_bottom_watch_publish();
     assert(captured.context==203 && captured.rows[9].tag==NATIVE_WATCH_MOTION);
     bottom_command=(struct EogBottomCommand){203,EOG_BOTTOM_ACTIVATE,9,1};command_pending=1;
-    native_bottom_watch_publish();assert(native_watch_motion && captured.context==1003 && captured.count==5);
+    native_bottom_watch_publish();assert(native_watch_motion && captured.context==1003 && captured.count==6);
     assert(captured.rows[0].tag==15 && captured.rows[1].tag==31 && captured.rows[2].tag==29 && captured.rows[3].tag==30);
     bottom_command=(struct EogBottomCommand){1003,EOG_BOTTOM_ADJUST,native_watch_option_y(1),1};command_pending=1;
     native_bottom_watch_publish();assert(native_setting_touch_sensitivity()==125);
@@ -104,6 +104,9 @@ static void check_bottom_watch(void) {
     native_bottom_watch_publish();assert(native_setting_gyro()==1);
     bottom_command=(struct EogBottomCommand){1003,EOG_BOTTOM_ACTIVATE,3,1};command_pending=1;
     native_bottom_watch_publish();assert(native_setting_gyro_sensitivity()==125);
+    assert(captured.rows[4].tag==32 && !native_setting_flick());
+    bottom_command=(struct EogBottomCommand){1003,EOG_BOTTOM_ACTIVATE,4,1};command_pending=1;
+    native_bottom_watch_publish();assert(native_setting_flick());
     bottom_command=(struct EogBottomCommand){1003,EOG_BOTTOM_BACK,0,1};command_pending=1;
     native_bottom_watch_publish();assert(!native_watch_motion && captured.context==203 && native_watch_nav.selected==9);
     native_watch_option_action(NATIVE_WATCH_ADVANCED,1);native_bottom_watch_publish();
@@ -288,7 +291,7 @@ int main(void) {
     effects=0;native_menu_options_restore_audio();assert(effects==31129);
     sub_GAME_7F0A91A0(0);assert(effects==31129);
     char path[512];snprintf(path,sizeof path,"%s/native-options.ini",directory);assert(!unlink(path));assert(!rmdir(directory));
-    puts("PASS shared original watch/main options: all 32 choices survive reload, blue palettes, audio application, legacy save priority");
+    puts("PASS shared original watch/main options: all 33 choices survive reload, blue palettes, audio application, legacy save priority");
 }
 s16 viGetX(void){return 320;}
 s16 viGetY(void){return 240;}

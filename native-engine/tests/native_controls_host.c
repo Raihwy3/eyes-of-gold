@@ -27,7 +27,8 @@ static int demo_active;
 int get_is_ramrom_flag(void){return demo_active;}
 static unsigned actions;
 static int tx,ty;
-static float gy,gp;
+static float gy,gp,fy;
+void native_input_take_flick(float *yaw){*yaw=fy;fy=0;}
 void native_input_take_gyro(float *y,float *p){*y=gy;*p=gp;gy=gp=0;}
 void native_input_take_touch_look(int *x,int *y){*x=tx;*y=ty;tx=ty=0;}
 int get_currentmenu(void){return menu;}
@@ -158,6 +159,14 @@ int main(void) {
     locked=1;gy=3;gp=3;native_controls_apply_gyro();assert(player.vv_theta==164 && gy==0 && gp==0);locked=0;
     player.vv_theta=1;player.vv_verta=88;gy=15;gp=-15;native_controls_apply_gyro();assert(player.vv_theta==301 && player.vv_verta==89);
     native_setting_set_gyro(0);
+    native_setting_set_style(8);native_setting_set_flick(1);player.vv_theta=350;fy=90;
+    native_controls_apply_gyro();assert(player.vv_theta==80 && fy==0);
+    native_controls_apply_gyro();assert(player.vv_theta==80);
+    locked=1;fy=90;native_controls_apply_gyro();assert(player.vv_theta==80 && fy==0);locked=0;
+    menu=1;fy=90;native_controls_apply_gyro();assert(player.vv_theta==80 && fy==0);menu=11;
+    native_setting_set_style(9);fy=90;native_controls_apply_gyro();assert(player.vv_theta==80);
+    native_setting_set_style(8);native_setting_set_flick(0);fy=90;native_controls_apply_gyro();assert(player.vv_theta==80);
+    puts("PASS Flick Stick camera: gyro-off turns, yaw wrap, consume-once and gameplay/style/lock gating");
     puts("PASS camera gyro: independent gain, aim-only, consume-once, locks, yaw wrap and pitch clamp");
     puts("PASS attract playback: recorded MoveData, control style and look speed preserved");
     puts("PASS 30000 original aim acceleration ticks: corner/reverse/release, 200% gain, bounded consumed rate and unchanged stored state");

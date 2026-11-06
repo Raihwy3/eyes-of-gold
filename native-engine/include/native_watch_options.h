@@ -12,10 +12,10 @@
 static int native_watch_motion;
 static int native_watch_advanced,native_watch_audio,native_watch_experimental,native_watch_wait_neutral,native_watch_editing;
 static struct NativeMenuState native_watch_nav;
-static int native_watch_option_count(void){return native_watch_motion?5:native_watch_experimental?3:native_watch_audio?4:native_watch_advanced?16:10;}
+static int native_watch_option_count(void){return native_watch_motion?6:native_watch_experimental?3:native_watch_audio?4:native_watch_advanced?16:10;}
 static int native_watch_option_y(int index) {return NATIVE_WATCH_OPTION_Y+index*(native_watch_advanced && !native_watch_motion?NATIVE_WATCH_OPTION_PITCH:16);}
 static int native_watch_option_tag(int index) {
-    if(native_watch_motion){static const int rows[]={15,31,29,30,NATIVE_WATCH_BACK};return rows[index];}
+    if(native_watch_motion){static const int rows[]={15,31,29,30,32,NATIVE_WATCH_BACK};return rows[index];}
     if(native_watch_experimental){static const int rows[]={27,28,NATIVE_WATCH_BACK};return rows[index];}
     if(native_watch_audio){static const int rows[]={1,2,25,NATIVE_WATCH_BACK};return rows[index];}
     if(!native_watch_advanced)return index<7?index+3:index==7?NATIVE_WATCH_AUDIO:index==8?NATIVE_WATCH_ADVANCED:NATIVE_WATCH_MOTION;

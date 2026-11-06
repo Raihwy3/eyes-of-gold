@@ -30,6 +30,8 @@ int native_setting_aspect(void);
 int native_setting_aa(void);
 int native_setting_fps(void);
 int native_setting_sensitivity(void);
+int native_setting_flick(void);
+void native_setting_set_flick(int value);
 int native_setting_gyro(void);
 int native_setting_gyro_sensitivity(void);
 void native_setting_set_gyro(int value);

@@ -3,15 +3,17 @@
 #include "native_input.h"
 #include "native_pad.h"
 #include "native_settings.h"
+#include "native_flick.h"
+#include <math.h>
 #include <assert.h>
 #include <stdio.h>
 angularRate test_gyro_rate;
 static unsigned held;
-static int gameplay=1;
+static int gameplay=1,rx,ry;
 void hidScanInput(void){}
 u32 hidKeysHeld(void){return held;}
 void hidCircleRead(circlePosition *p){p->dx=50;p->dy=-50;}
-void hidCstickRead(circlePosition *p){p->dx=p->dy=0;}
+void hidCstickRead(circlePosition *p){p->dx=rx;p->dy=ry;}
 int native_game_input_gameplay(void){return gameplay;}
 extern void inputUpdate(void);
 extern unsigned inputComputePad(int,signed char *,signed char *);
@@ -52,6 +54,36 @@ int main(void) {
  gameplay=0;inputUpdate();native_input_take_gyro(&gy,&gp);assert(gy==0 && gp==0);
  native_input_suspend();native_input_take_gyro(&gy,&gp);assert(gy==0 && gp==0);
  native_setting_set_gyro(0);
+ /* Real sampler: suppress conventional C-stick look, retain left movement,
+  * deliver each turn once and reset on menus/suspend. */
+ native_setting_set_style(8);native_setting_set_flick(1);native_input_init();
+ gameplay=1;held=0;rx=ry=0;inputUpdate();rx=156;
+ float turn,total=0; signed char px,py;
+ for(int i=0;i<9;i++){inputUpdate();native_input_take_flick(&turn);total+=turn;}
+ assert(fabsf(total-90)<.01f);
+ inputComputePad(0,&px,&py);assert(px==0 && py==0);
+ int mx,my;unsigned ma;native_input_take_motion(&mx,&my,&ma);assert(mx>0 && my<0);
+ inputUpdate();native_input_take_flick(&turn);assert(turn==0);
+ native_input_take_flick(&turn);assert(turn==0);
+ ry=-156;rx=0;inputUpdate();native_input_take_flick(&turn);assert(fabsf(turn-90)<.01f);
+ gameplay=0;inputUpdate();native_input_take_flick(&turn);assert(turn==0);
+ gameplay=1;inputUpdate();native_input_take_flick(&turn);assert(turn==0); // Held through menu: centre first.
+ rx=ry=0;inputUpdate();rx=-156;inputUpdate();native_input_suspend();native_input_take_flick(&turn);assert(turn==0);
+ native_setting_set_flick(0);native_input_init();rx=156;ry=0;inputUpdate();inputComputePad(0,&px,&py);assert(px==80 && py==0);
+ rx=ry=0;
+ for(int hz=30;hz<=60;hz+=30)for(int dir=-1;dir<=1;dir+=2) {
+   struct NativeFlick f={0};uint64_t now=1000000;
+   native_flick_sample(&f,now,0,0,1);
+   for(int i=0;i<12;i++){now+=1000000/hz;native_flick_sample(&f,now,dir*156,0,1);}
+   assert(fabsf(f.pending-dir*90)<.01f && f.remaining_us==0);
+   native_flick_sample(&f,now+200000,0,-156,1);assert(f.pending==0 && !f.active);
+ }
+ struct NativeFlick wrap={0};native_flick_sample(&wrap,1000000,0,0,1);
+ native_flick_sample(&wrap,1010000,1,-156,1);wrap.pending=wrap.remaining=0;wrap.remaining_us=0;
+ native_flick_sample(&wrap,1020000,-1,-156,1);assert(wrap.pending>0 && wrap.pending<1);
+ native_flick_sample(&wrap,1030000,0,0,0);assert(wrap.pending==0);
+ puts("PASS Flick Stick: directional angles, 30/60Hz timing, edge rotation/wrap, consume-once, unchanged movement, default stick look and menu/suspend/stall resets");
+
  puts("PASS HID gyro integration: degrees/sec, consume-once, aim-only, menus and suspend discard motion");
  puts("PASS SELECT no longer changes weapon rendering; menu input and exit chord preserved");
  puts("PASS actual HID sampler: Vesper A/Jinx D-right taps survive intervening polls/releases, fire once, and clear on menu entry");

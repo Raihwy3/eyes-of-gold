@@ -102,9 +102,9 @@ int main(void) {
     uint64_t seen=0;
     for(int i=0;i<NATIVE_MENU_OPTIONS_COUNT;i++){int row=native_menu_option_at(i);assert(row>=0 && row<NATIVE_MENU_OPTIONS_COUNT && !(seen&(1ull<<row)));seen|=1ull<<row;}
     assert(seen==((1ull<<NATIVE_MENU_OPTIONS_COUNT)-1));
-    assert(native_menu_option_at(14)==22 && native_menu_option_at(15)==23 && native_menu_option_at(16)==21);
-    assert(native_menu_option_at(22)==17 && native_menu_option_at(23)==24);
-    assert(native_menu_option_at(26)==12 && native_menu_option_at(27)==20);
+    assert(native_menu_option_at(15)==22 && native_menu_option_at(16)==23 && native_menu_option_at(17)==21);
+    assert(native_menu_option_at(23)==17 && native_menu_option_at(24)==24);
+    assert(native_menu_option_at(27)==12 && native_menu_option_at(28)==20);
     assert(!native_setting_guard_visibility() && native_setting_guard_ai_hz()==30);
     native_setting_set_guard_ai_hz(0);native_setting_set_guard_ai_hz(60);native_setting_set_guard_visibility(2);
     assert(!native_setting_guard_visibility() && native_setting_guard_ai_hz()==30);
@@ -180,9 +180,9 @@ int main(void) {
     assert(!strcmp(native_string(0xf000),"1.5 Vesper\n"));assert(!strcmp(native_string(0xf001),"1.6 Jinx\n"));assert(!native_string(0xffffffffu));
     char purple_directory[]="/tmp/eog-purple-XXXXXX";assert(mkdtemp(purple_directory));
     native_settings_init(purple_directory);native_setting_set_style(8);native_setting_set_aspect(0);
-    native_setting_set_crosshair(6);native_setting_set_watch(6);
+    native_setting_set_crosshair(6);native_setting_set_watch(6);native_setting_set_flick(1);
     native_settings_init(purple_directory);
-    assert(native_setting_crosshair()==6 && native_setting_watch()==6);
+    assert(native_setting_crosshair()==6 && native_setting_watch()==6 && native_setting_flick());
     assert(!strcmp(native_colour_name(0,6),"Purple\n") && !strcmp(native_colour_name(1,6),"Purple\n"));
     snprintf(path,sizeof path,"%s/native-options.ini",purple_directory);unlink(path);rmdir(purple_directory);
     native_settings_init(NULL);

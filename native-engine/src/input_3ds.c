@@ -3,6 +3,7 @@
 #include "native_input.h"
 #include "native_pad.h"
 #include "native_gyro.h"
+#include "native_flick.h"
 #include "native_settings.h"
 #include "native_bottom.h"
 #include "native_menu_focus.h"
@@ -10,6 +11,8 @@ _Static_assert((unsigned)KEY_A==(unsigned)EOG_A && (unsigned)KEY_Y==(unsigned)EO
 extern int native_game_input_gameplay(void) __attribute__((weak));
 static LightLock input_lock;
 static struct NativeGyro gyro;
+static struct NativeFlick flick;
+void native_input_take_flick(float *yaw){LightLock_Lock(&input_lock);*yaw=flick.pending;flick.pending=0;LightLock_Unlock(&input_lock);}
 static int gyro_enabled,gyro_failed;
 static float gyro_coefficient;
 extern unsigned native_game_render_state(void) __attribute__((weak));
@@ -25,8 +28,8 @@ unsigned native_input_menu_buttons(void){LightLock_Lock(&input_lock);unsigned v=
 static int exit_requested,suspended;
 
 
-void native_input_init(void) {gyro=(struct NativeGyro){0};gyro_enabled=gyro_failed=0;gyro_coefficient=0;LightLock_Init(&input_lock);pad=(struct NativePad){0};touch_look_x=touch_look_y=0;pending_actions=last_actions=menu_buttons=pressed=0;exit_requested=suspended=0;}
-void native_input_suspend(void) {LightLock_Lock(&input_lock);suspended=1;gyro=(struct NativeGyro){0};if(gyro_enabled)HIDUSER_DisableGyroscope();gyro_enabled=0;LightLock_Unlock(&input_lock);}
+void native_input_init(void) {flick=(struct NativeFlick){0};gyro=(struct NativeGyro){0};gyro_enabled=gyro_failed=0;gyro_coefficient=0;LightLock_Init(&input_lock);pad=(struct NativePad){0};touch_look_x=touch_look_y=0;pending_actions=last_actions=menu_buttons=pressed=0;exit_requested=suspended=0;}
+void native_input_suspend(void) {LightLock_Lock(&input_lock);suspended=1;flick=(struct NativeFlick){0};gyro=(struct NativeGyro){0};if(gyro_enabled)HIDUSER_DisableGyroscope();gyro_enabled=0;LightLock_Unlock(&input_lock);}
 void inputUpdate(void) {
     LightLock_Lock(&input_lock);
     if(suspended){LightLock_Unlock(&input_lock);return;}
@@ -59,7 +62,10 @@ void inputUpdate(void) {
         menu_buttons=held;
     }
     if(native_bottom_seed_active && native_bottom_seed_active()){circle.dx=circle.dy=cstick.dx=cstick.dy=0;}
+    int use_flick=native_setting_flick() && native_setting_style()==8 && gameplay && (render_state&1);
+    native_flick_sample(&flick,now,cstick.dx,cstick.dy,use_flick);
     pad=native_pad_map(held,circle.dx,circle.dy,cstick.dx,cstick.dy,native_setting_style(),gameplay);
+    if(use_flick)pad.x=pad.y=0;
     pad.buttons|=touch_buttons;pad.actions|=touch_actions;
     if(gameplay) {
         touch_look_x=touch_look_x+dx>80?80:touch_look_x+dx< -80?-80:touch_look_x+dx;

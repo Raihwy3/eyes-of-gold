@@ -88,7 +88,7 @@ def main():
     build_probe.run(['gcc','-no-pie','-Wl,--gc-sections',*menu_objects,'-lm','-o',menu_binary])
     print(build_probe.run([menu_binary]).stdout)
     hid_binary=out/'native-hid-check'
-    build_probe.run(['gcc','-std=c11','-O2','-Wall','-Wextra','-Werror','-I'+str(build.TARGET/'tests/input/mock'),'-I'+str(build.TARGET/'include'),build.TARGET/'src/input_3ds.c',build.TARGET/'src/native_settings.c',build.TARGET/'tests/input/check.c','-o',hid_binary])
+    build_probe.run(['gcc','-std=c11','-O2','-Wall','-Wextra','-Werror','-I'+str(build.TARGET/'tests/input/mock'),'-I'+str(build.TARGET/'include'),build.TARGET/'src/input_3ds.c',build.TARGET/'src/native_settings.c',build.TARGET/'tests/input/check.c','-lm','-o',hid_binary])
     print(build_probe.run([hid_binary]).stdout)
     import check_bottom
     check_bottom.main()

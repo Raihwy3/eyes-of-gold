@@ -1,10 +1,10 @@
 {
-  "files": 417,
-  "bytes": 9471841,
+  "files": 418,
+  "bytes": 9501134,
   "python_syntax": "passed",
   "upstream_included": false,
   "roms_or_generated_binaries_included": false,
-  "validation": "ARM engine build, menu/settings checks, stereo/gyro checks, cheat checks, updater checks and strict ROM-data release audit passed. The final 0.9.6 binary has not been tested on a console.",
+  "validation": "ARM engine build, watch-menu/settings checks, gyro/Flick Stick/touch camera checks, cheat checks, updater checks and strict ROM-data release audit passed. The final binary has not been tested on a console.",
   "inventory": [
     {
       "path": ".gitignore",
@@ -24,7 +24,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "4d15fd69445c7180b3157c11a50a7a0565421fe3b28b7864b10fed90c7284358"
+      "sha256": "e56d27af3434ae5de66e5e70717ff6a009a5137541435704cee4cb65128df9dc"
     },
     {
       "path": "SOURCE-RELEASE.md",
@@ -40,7 +40,7 @@
     },
     {
       "path": "docs/gyro-stereo.md",
-      "sha256": "4aa2c6e54bae5a9ab0b2f4089941551cc89991d8ffd809236f5575e031a4a2fd"
+      "sha256": "2cdcdbbf99681eeb863f928b21af61c836a5b8f52aaa158cf6f152f2425c7c22"
     },
     {
       "path": "docs/randomiser.md",
@@ -160,7 +160,7 @@
     },
     {
       "path": "native-engine/engine-state-review.json",
-      "sha256": "69cf39252950c30a4b66b2ce53efb874c363b3daf18605a3923c9387bacc036e"
+      "sha256": "6f10be93f07240ed2bc731b5beebef2ecdf0f94c6bbc1aa1a42785956c9458ef"
     },
     {
       "path": "native-engine/include/PR/R4300.h",
@@ -315,6 +315,10 @@
       "sha256": "c71f6fe8dc7b2216f41ad58c713897cc41043627378fde8108fcb76d8e2a2463"
     },
     {
+      "path": "native-engine/include/native_flick.h",
+      "sha256": "96fe6d1f8bd22072f216a97261b82b42c15dd148ee6765ab78ba3fc3162fae0e"
+    },
+    {
       "path": "native-engine/include/native_frame_limit.h",
       "sha256": "cd46e6a7b9c88c3dbe1ef2b0c49c5947abcdf776a4c3f63b011221c4deee5679"
     },
@@ -372,7 +376,7 @@
     },
     {
       "path": "native-engine/include/native_input.h",
-      "sha256": "89c3e1695d4dc2350f74e899c6a9fc70b7f71c324d0a023f264907af23ee235d"
+      "sha256": "a7610ca8a13bb8827ccff41de3eeab6d4484237952d4ec6044239c1ac29d5bc7"
     },
     {
       "path": "native-engine/include/native_lod_scope.h",
@@ -392,7 +396,7 @@
     },
     {
       "path": "native-engine/include/native_menu_options.h",
-      "sha256": "45e6de9ca04ea1bffdb15a4538300d3984ff00019e46205dbf042c9bb376c4a3"
+      "sha256": "fd21ddb7f8747de1adad72862d1e8bb39d258ba59764f47e0351f57a1d5fcecc"
     },
     {
       "path": "native-engine/include/native_menu_state.h",
@@ -424,7 +428,7 @@
     },
     {
       "path": "native-engine/include/native_options_bridge.h",
-      "sha256": "fe4bd59115c412da6a3e8cd18ba74a246a94671cdf8bf36d4240c15503c0f865"
+      "sha256": "015609645ac2715ff5c0893304fa5a039a693c606511723f005d1d0d78213e5a"
     },
     {
       "path": "native-engine/include/native_pad.h",
@@ -512,7 +516,7 @@
     },
     {
       "path": "native-engine/include/native_settings.h",
-      "sha256": "069ee0cbcf23d9c3b423a5bddde5d7587b7c07081cc71a7059c99c6aee26d68d"
+      "sha256": "cc7cc3abe684d95ce8e33ab7ac61fc923fa9c39ee4ecefb9c52e45d95eeb7f68"
     },
     {
       "path": "native-engine/include/native_setup_lod.h",
@@ -568,7 +572,7 @@
     },
     {
       "path": "native-engine/include/native_watch_options.h",
-      "sha256": "765a4ebb57f15ea9078b3a1d4ad38b808181bd225304ab4071142b19f3982194"
+      "sha256": "5ee6bfe04496ded362e3a253f6c517ac90868441bd6905b3a2f78668875e8622"
     },
     {
       "path": "native-engine/include/native_watch_skin.h",
@@ -676,11 +680,11 @@
     },
     {
       "path": "native-engine/rom-code-pool-review.json",
-      "sha256": "ccbe525c50d47e746a38309b6524a3e6f397a5e114eb6541d4c9337e02162d04"
+      "sha256": "ad5f93e86bcce5462e86c840053989c1d205ce339b39838d6615832955300f0c"
     },
     {
       "path": "native-engine/rom-data-code-review.json",
-      "sha256": "6b1c88df048234a3ca3482000f86f3d31f33f0d3d0ddf36a1131effb190c9f16"
+      "sha256": "c965f4f97072e232145ea5cf431a3e26fc2bd77bd30ade6455e5aebbe032e9ea"
     },
     {
       "path": "native-engine/rom-data-layout.json",
@@ -736,7 +740,7 @@
     },
     {
       "path": "native-engine/src/input_3ds.c",
-      "sha256": "b56c3b9df4e12bf5e36a198d039d541ef8c69191b3e33b667829747c1a5fc59c"
+      "sha256": "1488621d4283fe9d7e02ef59820e6f728e96e72f006c1409544ff6b43bb47e1f"
     },
     {
       "path": "native-engine/src/native_assets.c",
@@ -760,7 +764,7 @@
     },
     {
       "path": "native-engine/src/native_controls.c",
-      "sha256": "41ada059caeb16c1bf2a6b4596a197fd38c0130e8b83046f264ea1a5df00518f"
+      "sha256": "ff6fb75a4af158b1419a9584f1bc67355e1beea3539107c754d316601708375e"
     },
     {
       "path": "native-engine/src/native_convert.c",
@@ -820,7 +824,7 @@
     },
     {
       "path": "native-engine/src/native_settings.c",
-      "sha256": "6aff47fbf5f560e49bcd4fac9539ff85b3fe56f1b0cbf7ec7a7a5e660e203352"
+      "sha256": "658f70654e24819c2e1494b6eb379e3ce24546ef30891cf650d5a5e184e742c6"
     },
     {
       "path": "native-engine/src/native_update.c",
@@ -948,7 +952,7 @@
     },
     {
       "path": "native-engine/tests/input/check.c",
-      "sha256": "18ff0c4484ebafea4712cee591ac4e51cb90156750db3a54a908455f5de01f2c"
+      "sha256": "93a36af725499cbaa6ec140566c8dd859340765978152016256ed41ada5da98a"
     },
     {
       "path": "native-engine/tests/input/mock/3ds.h",
@@ -1004,7 +1008,7 @@
     },
     {
       "path": "native-engine/tests/native_controls_host.c",
-      "sha256": "10341e689eb4418568fab78a42a1302923d9421917d6b2e9c54a954af3066ae9"
+      "sha256": "d48fa506761540dfdf9a51fbc7e42489442d3045df547c0618a0f6929fc322c7"
     },
     {
       "path": "native-engine/tests/native_convert_host.c",
@@ -1048,7 +1052,7 @@
     },
     {
       "path": "native-engine/tests/native_menu_host.c",
-      "sha256": "bf1f36b05fca59a60e4242fb73bc1c9cc183b437220a1d68a037aeacce319e2d"
+      "sha256": "eeee03c690943986267804933012e126407c5c78d1ce4a0fc482873dde80fc7c"
     },
     {
       "path": "native-engine/tests/native_pickup_host.c",
@@ -1060,7 +1064,7 @@
     },
     {
       "path": "native-engine/tests/native_preferences_host.c",
-      "sha256": "29d42c78e2d6bda44526eb9e6610dc11e530550050a53bc7eb39e167c1a5d263"
+      "sha256": "71092e9ae6667473873129b6a27cd09ebcb10078c6d2d5254cf79a064f395b21"
     },
     {
       "path": "native-engine/tests/native_prop_lod_host.c",
@@ -1276,7 +1280,7 @@
     },
     {
       "path": "native-engine/tools/check_game_assets.py",
-      "sha256": "26a25699e5c78ec6d37d867f12905b090200b6b1c4c6c4076c9033d94c996901"
+      "sha256": "53c90f9d3204a1b383331ccb308f624734956d28496914797983f550f23461f9"
     },
     {
       "path": "native-engine/tools/check_graphics_host.py",

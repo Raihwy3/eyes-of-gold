@@ -116,11 +116,19 @@ void native_controls_adjust_look(float *yaw,float *pitch) {
 /* Applied once after the original camera integrators, before their final clamp.
  * This bypasses stick acceleration and stick sensitivity intentionally. */
 void native_controls_apply_gyro(void){
- if(get_cur_playernum()!=0 || !native_input_take_gyro)return;
- float yaw=0,pitch=0;native_input_take_gyro(&yaw,&pitch);
+ if(get_cur_playernum()!=0)return;
+ float yaw=0,pitch=0,flick=0;
+ if(native_input_take_gyro)native_input_take_gyro(&yaw,&pitch);
+ if(native_input_take_flick)native_input_take_flick(&flick);
+ if(!native_game_input_gameplay() || lvlGetControlsLockedFlag() || !disablePlayerActionsWhenPausedOrInMpMenu())return;
+ if(native_setting_flick() && native_setting_style()==8 && __builtin_isfinite(flick)) {
+   if(flick>360)flick=360;else if(flick< -360)flick=-360;
+   g_CurrentPlayer->vv_theta+=flick;
+   while(g_CurrentPlayer->vv_theta<0)g_CurrentPlayer->vv_theta+=360;
+   while(g_CurrentPlayer->vv_theta>=360)g_CurrentPlayer->vv_theta-=360;
+ }
  int mode=native_setting_gyro();
- if(!mode || !native_game_input_gameplay() || lvlGetControlsLockedFlag() || !disablePlayerActionsWhenPausedOrInMpMenu())return;
- if(mode==1 && !g_CurrentPlayer->insightaimmode)return;
+ if(!mode || (mode==1 && !g_CurrentPlayer->insightaimmode))return;
  if(!__builtin_isfinite(yaw) || !__builtin_isfinite(pitch))return;
  float gain=native_setting_gyro_sensitivity()*.01f;
  /* Match the game's FOV scaling while zoomed, including the sniper scope. */

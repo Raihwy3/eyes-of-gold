@@ -1,6 +1,7 @@
 /* Included after the original options.c; both menus use the same settings. */
 #include "native_menu_options.h"
 int native_menu_option_value(int row) {
+    if(row==32)return native_setting_flick();
     if(row==31)return (native_setting_touch_sensitivity()-25)/25;
     if(row==29)return native_setting_gyro();
     if(row==30)return (native_setting_gyro_sensitivity()-25)/25;
@@ -26,6 +27,7 @@ int native_menu_option_value(int row) {
 }
 void native_menu_option_change(int row,int direction) {
     if(row<0 || row>=NATIVE_MENU_OPTIONS_COUNT)return;
+    if(row==32){native_setting_set_flick(!native_setting_flick());return;}
     if(row==31){native_setting_set_touch_sensitivity(25+25*((native_menu_option_value(row)+direction+8)%8));return;}
     if(row==29){native_setting_set_gyro((native_setting_gyro()+direction+3)%3);return;}
     if(row==30){native_setting_set_gyro_sensitivity(25+25*((native_menu_option_value(row)+direction+8)%8));return;}
@@ -55,7 +57,7 @@ void native_menu_option_change(int row,int direction) {
     else native_setting_set_vignette_mode(value);
 }
 const char *native_menu_option_label(int row) {
-    static const char *const labels[]={0,"Music volume\n","Effects volume\n",0,0,0,0,0,0,0,"Aspect ratio\n","Crosshair\n","Watch colour\n","Supersampling\n","FPS limit\n","Look sensitivity\n","Image filter\n","Vignette\n","Bloom\n","Film grain\n","Watch skin\n","Glass detail\n","LOD strength\n","View distance\n","Vignette when\n","Mixer (restart)\n","Unlock everything\n","Guard LOS (exp)\n","Guard AI rate\n","Gyro look\n","Gyro sensitivity\n","Touch sensitivity\n"};
+    static const char *const labels[]={0,"Music volume\n","Effects volume\n",0,0,0,0,0,0,0,"Aspect ratio\n","Crosshair\n","Watch colour\n","Supersampling\n","FPS limit\n","Look sensitivity\n","Image filter\n","Vignette\n","Bloom\n","Film grain\n","Watch skin\n","Glass detail\n","LOD strength\n","View distance\n","Vignette when\n","Mixer (restart)\n","Unlock everything\n","Guard LOS (exp)\n","Guard AI rate\n","Gyro look\n","Gyro sensitivity\n","Touch sensitivity\n","Flick stick\n"};
     if(row==0)return (const char *)langGet(getStringID(LOPTIONS,OPTION_STR_32_CONTROLSTYLE_LF));
     if(row>=3 && row<=9)return (const char *)langGet(game_options_entries[row-3].text[0]);
     return row>=0 && row<NATIVE_MENU_OPTIONS_COUNT?labels[row]:"\n";
@@ -63,6 +65,7 @@ const char *native_menu_option_label(int row) {
 const char *native_menu_option_text(int row,char *buffer,unsigned size) {
     if(row<0 || row>=NATIVE_MENU_OPTIONS_COUNT)return "\n";
     static const char *const styles[]={"1.5 Vesper\n","1.6 Jinx\n"};
+    if(row==32)return native_setting_flick()?"On\n":"Off\n";
     if(row==31){snprintf(buffer,size,"%d%%\n",native_setting_touch_sensitivity());return buffer;}
     if(row==29){static const char *const modes[]={"Off\n","Aim only\n","Look + aim\n"};return modes[native_setting_gyro()];}
     if(row==30){snprintf(buffer,size,"%d%%\n",native_setting_gyro_sensitivity());return buffer;}
