@@ -101,6 +101,10 @@ int main(void) {
     input(0,1,100,100,0,&dx,&dy,&b,&a);input(0,1,100,80,0,&dx,&dy,&b,&a);
     assert(native_bottom_take(200,&c) && c.kind==EOG_BOTTOM_SCROLL && c.direction==1);
     input(0,0,100,80,0,&dx,&dy,&b,&a);assert(!native_bottom_take(200,&c));
+    v.page=3;native_bottom_publish(&v);
+    input(0,1,150,80,0,&dx,&dy,&b,&a);input(0,1,200,80,0,&dx,&dy,&b,&a);
+    assert(native_bottom_take(200,&c) && c.kind==EOG_BOTTOM_ADJUST && c.direction==1);
+    input(0,0,0,0,0,&dx,&dy,&b,&a);assert(!native_bottom_take(200,&c));
     native_bottom_gpu_release();v.kind=EOG_BOTTOM_GAME;v.context=300;native_bottom_publish(&v);native_bottom_draw();assert(swaps==before_swaps+1);
     v.kind=EOG_BOTTOM_WATCH;v.context=200;native_bottom_publish(&v);assert(native_bottom_gpu_acquire());
     // Old-context events are discarded on transition; bounded queue wraps safely.
@@ -126,6 +130,29 @@ int main(void) {
     assert(native_glyph_sample(pattern,2,2,2,1,1,3,3)==128);
     assert(native_glyph_sample(pattern,2,2,2,0,0,3,3)==0);
     assert(native_glyph_sample(pattern,2,2,2,2,0,3,3)==255);
+    // Fractional touch gain must preserve slow one-pixel drags.
+    memset(&v,0,sizeof v);v.kind=EOG_BOTTOM_GAME;v.context=300;native_bottom_publish(&v);
+    native_setting_set_touch_sensitivity(25);input(0,1,100,100,1,&dx,&dy,&b,&a);
+    int sum=0;for(int x=101;x<=104;x++){input(0,1,x,100,1,&dx,&dy,&b,&a);sum+=dx;}
+    assert(sum==3);input(0,0,0,0,1,&dx,&dy,&b,&a);
+    native_setting_set_touch_sensitivity(200);input(0,1,100,100,1,&dx,&dy,&b,&a);input(0,1,101,99,1,&dx,&dy,&b,&a);assert(dx==6 && dy==6);
+    input(0,0,0,0,1,&dx,&dy,&b,&a);native_setting_set_touch_sensitivity(100);
+    // Modal numeric entry: replace, delete, clear, length limit, invalid zero,
+    // save/cancel and release gating without leaking an A press to Cheats.
+    v.kind=EOG_BOTTOM_MENU;v.context=15;native_bottom_publish(&v);
+    native_setting_set_randomiser_seed(123);native_bottom_seed_open(123);
+    input(0,0,0,0,0,&dx,&dy,&b,&a);assert(native_bottom_seed_active());native_bottom_draw();
+    for(int key=0;key<6;key++)tap(70+(key%3)*90,94+(key/3)*30);
+    assert(!strcmp(seed_digits,"123456"));tap(70,94);assert(!strcmp(seed_digits,"123456"));
+    tap(70,184);assert(!strcmp(seed_digits,"12345"));tap(250,184);assert(!seed_digits[0]);
+    tap(160,184);tap(80,218);assert(seed_editing && seed_invalid && native_setting_randomiser_seed()==123);
+    tap(250,184);tap(70,94);tap(160,94);
+    input(0,1,80,218,0,&dx,&dy,&b,&a);input(0,0,0,0,0,&dx,&dy,&b,&a);
+    assert(native_setting_randomiser_seed()==12 && !seed_editing);
+    assert(input(EOG_A,0,0,0,0,&dx,&dy,&b,&a)==0);assert(!native_bottom_take(15,&c));
+    input(0,0,0,0,0,&dx,&dy,&b,&a);assert(!native_bottom_seed_active());
+    native_bottom_seed_open(12);input(0,0,0,0,0,&dx,&dy,&b,&a);tap(250,94);tap(230,218);
+    assert(native_setting_randomiser_seed()==12);input(0,0,0,0,0,&dx,&dy,&b,&a);
     native_bottom_stop();assert(native_bottom_input(EOG_A,1,0,0,0,&dx,&dy,&b,&a)==EOG_A);
     puts("PASS actual bottom LCD: rotated RGB565 buffers, stable-frame reuse, D-pad/touch rows, disabled choices, option changes, full-screen drag-look, timed hold/open/back, original bottom page strips, horizontal swipes, transition gating, GPU ownership, inverse touch mapping, result headings, original watch objective glyph layout/colours and bounded queue");
     return 0;

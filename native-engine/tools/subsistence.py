@@ -26,7 +26,7 @@ static void native_custom_cheats_sync(void);
     text=replace_once(text,'u32 arrayUnlockedCheats[CHEAT_INVALID];','u32 arrayUnlockedCheats[CHEAT_MAX];')
     a=text.index('void init_menu15_cheat(void)\n{');b=text.index('void update_menu15_cheat(void)',a)
     body=text[a:b]
-    body=replace_once(body,'    load_walletbond();','    arrayUnlockedCheats[totalunlockedcheats++]=0;\n    arrayUnlockedCheats[totalunlockedcheats++]=CHEAT_INVALID+1;\n    arrayUnlockedCheats[totalunlockedcheats++]=CHEAT_INVALID+2;\n    load_walletbond();')
+    body=replace_once(body,'    load_walletbond();','    arrayUnlockedCheats[totalunlockedcheats++]=0;\n    arrayUnlockedCheats[totalunlockedcheats++]=CHEAT_INVALID+1;\n    arrayUnlockedCheats[totalunlockedcheats++]=CHEAT_INVALID+2;\n    arrayUnlockedCheats[totalunlockedcheats++]=CHEAT_INVALID+3;\n    load_walletbond();')
     text=text[:a]+body+text[b:]
     text=replace_once(text,'    is_cheat_menu_available = FALSE;','    is_cheat_menu_available = TRUE;\n    native_custom_cheats_sync();')
     text=replace_once(text,'  appendsp = FALSE;','  appendsp = native_setting_subsistence() || native_setting_randomiser();')
@@ -41,23 +41,25 @@ static void native_custom_cheats_sync(void);
     body=text[a:b].replace('cheatGetMenuTextPointer(', 'native_cheat_label(')
     import re
     body=re.sub(r'g_CheatActivated\[(arrayUnlockedCheats\[var_fp(?: \+ 12)?\])\]',r'native_cheat_active(\1)',body)
-    body=body.replace('temp_v0 = langGet(strID);','temp_v0 = native_cheat_value(arrayUnlockedCheats[var_fp],langGet(strID));',1)
-    body=body.replace('temp_v0 = langGet(strID);','temp_v0 = native_cheat_value(arrayUnlockedCheats[var_fp + 12],langGet(strID));',1)
+    body=body.replace('temp_v0 = langGet(strID);','temp_v0 = arrayUnlockedCheats[var_fp]==CHEAT_INVALID+2?(u8 *)"":native_cheat_value(arrayUnlockedCheats[var_fp],langGet(strID));',1)
+    body=body.replace('temp_v0 = langGet(strID);','temp_v0 = arrayUnlockedCheats[var_fp + 12]==CHEAT_INVALID+2?(u8 *)"":native_cheat_value(arrayUnlockedCheats[var_fp + 12],langGet(strID));',1)
     body=body.replace('((totalunlockedcheats >= 0xD) ? 0xC : totalunlockedcheats)','((totalunlockedcheats > native_cheat_split(totalunlockedcheats)) ? native_cheat_split(totalunlockedcheats) : totalunlockedcheats)')
     body=body.replace('totalunlockedcheats >= 0xd','totalunlockedcheats > native_cheat_split(totalunlockedcheats)')
     body=body.replace('totalunlockedcheats - 0xC','totalunlockedcheats - native_cheat_split(totalunlockedcheats)')
+    body=body.replace('sp88 = 0xB3;','sp88 = native_cheat_value_x(0,arrayUnlockedCheats[var_fp]==CHEAT_INVALID+2,sp7C);')
+    body=body.replace('sp88 = 0x158;','sp88 = native_cheat_value_x(1,arrayUnlockedCheats[var_fp + 12]==CHEAT_INVALID+2,sp7C);')
     body=body.replace('var_fp + 12','var_fp + native_cheat_split(totalunlockedcheats)').replace('var_fp + 0xc','var_fp + native_cheat_split(totalunlockedcheats)')
     body=body.replace('(var_fp * 0x14) + 0x35','native_cheat_row_y(var_fp,totalunlockedcheats)')
     text=text[:a]+body+text[b:]
     return text+'''
 static int native_cheat_active(int id) {
-    return id==0?native_setting_subsistence():id==CHEAT_INVALID+1?native_setting_randomiser():id==CHEAT_INVALID+2?0:g_CheatActivated[id];
+    return id==0?native_setting_subsistence():id==CHEAT_INVALID+1?native_setting_randomiser():id>=CHEAT_INVALID+2?0:g_CheatActivated[id];
 }
 static u8 *native_cheat_label(int id) {
-    return id==0?(u8 *)native_subsistence_label():id==CHEAT_INVALID+1?(u8 *)native_randomiser_label():id==CHEAT_INVALID+2?(u8 *)native_randomiser_seed_label():(u8 *)cheatGetMenuTextPointer(id);
+    return id==0?(u8 *)native_subsistence_label():id==CHEAT_INVALID+1?(u8 *)native_randomiser_label():id==CHEAT_INVALID+2?(u8 *)native_randomiser_seed_label():id==CHEAT_INVALID+3?(u8 *)"Change seed":(u8 *)cheatGetMenuTextPointer(id);
 }
 static u8 *native_cheat_value(int id,u8 *value) {
-    return id==CHEAT_INVALID+2?(u8 *)native_randomiser_seed_text():value;
+    return id==CHEAT_INVALID+3?(u8 *)"":id==CHEAT_INVALID+2?(u8 *)native_randomiser_seed_text():value;
 }
 static int native_cheat_changes_loadout(int id) {
     switch(id) {
@@ -80,9 +82,15 @@ static void native_cheat_toggle(int id) {
     else if(id==CHEAT_INVALID+1)native_setting_set_randomiser(!native_setting_randomiser());
     else if(id==CHEAT_INVALID+2) {
         unsigned old=native_setting_randomiser_seed();
-        unsigned seed=(old*1664525u+1013904223u)%999999u+1u;
+        extern unsigned native_bottom_seed_entropy(void) __attribute__((weak));
+        unsigned entropy=native_bottom_seed_entropy?native_bottom_seed_entropy():0;
+        unsigned seed=(old*1664525u+1013904223u+entropy)%999999u+1u;
         if(seed==old)seed=old%999999u+1u;
         native_setting_set_randomiser_seed(seed);
+    }
+    else if(id==CHEAT_INVALID+3) {
+        extern void native_bottom_seed_open(int) __attribute__((weak));
+        if(native_bottom_seed_open)native_bottom_seed_open(native_setting_randomiser_seed());
     }
     else {
         g_CheatActivated[id]=!g_CheatActivated[id];

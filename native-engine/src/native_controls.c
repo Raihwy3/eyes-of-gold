@@ -69,6 +69,11 @@ void native_controls_apply(struct MoveData *m) {
     /* Keep a press captured between game ticks, and consume it once.
      * The original btap consumer handles doors/panels and tank entry/exit. */
     if(modern || (actions&EOG_INTERACT))m->btap=(actions&EOG_INTERACT)!=0;
+    /* Manual aim normally disables these analog camera axes. Touch dragging
+     * must remain a look input while aiming, without replacing reticle/stick
+     * input or letting automatic pitch centring cancel a vertical drag. */
+    if(touch_x)m->canNaturalTurn=1;
+    if(touch_y){m->canNaturalPitch=1;m->disableLookAhead=1;g_CurrentPlayer->docentreupdown=0;}
     m->analogTurn+=touch_x;m->analogPitch+=touch_y;
     if(m->analogTurn>80)m->analogTurn=80;else if(m->analogTurn< -80)m->analogTurn=-80;
     if(m->analogPitch>80)m->analogPitch=80;else if(m->analogPitch< -80)m->analogPitch=-80;
@@ -106,4 +111,24 @@ float native_controls_look_rate(float rate) {
 }
 void native_controls_adjust_look(float *yaw,float *pitch) {
     *yaw=native_controls_look_rate(*yaw);*pitch=native_controls_look_rate(*pitch);
+}
+
+/* Applied once after the original camera integrators, before their final clamp.
+ * This bypasses stick acceleration and stick sensitivity intentionally. */
+void native_controls_apply_gyro(void){
+ if(get_cur_playernum()!=0 || !native_input_take_gyro)return;
+ float yaw=0,pitch=0;native_input_take_gyro(&yaw,&pitch);
+ int mode=native_setting_gyro();
+ if(!mode || !native_game_input_gameplay() || lvlGetControlsLockedFlag() || !disablePlayerActionsWhenPausedOrInMpMenu())return;
+ if(mode==1 && !g_CurrentPlayer->insightaimmode)return;
+ if(!__builtin_isfinite(yaw) || !__builtin_isfinite(pitch))return;
+ float gain=native_setting_gyro_sensitivity()*.01f;
+ /* Match the game's FOV scaling while zoomed, including the sniper scope. */
+ float fov=g_CurrentPlayer->fovy;
+ if(fov>0 && fov<60)gain*=fov/60.f;
+ g_CurrentPlayer->vv_theta-=yaw*gain*2.f;g_CurrentPlayer->vv_verta-=pitch*gain;
+ while(g_CurrentPlayer->vv_theta<0)g_CurrentPlayer->vv_theta+=360;
+ while(g_CurrentPlayer->vv_theta>=360)g_CurrentPlayer->vv_theta-=360;
+ if(g_CurrentPlayer->vv_verta>89)g_CurrentPlayer->vv_verta=89;
+ if(g_CurrentPlayer->vv_verta< -89)g_CurrentPlayer->vv_verta=-89;
 }

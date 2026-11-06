@@ -1,6 +1,9 @@
 /* Included after the original options.c; both menus use the same settings. */
 #include "native_menu_options.h"
 int native_menu_option_value(int row) {
+    if(row==31)return (native_setting_touch_sensitivity()-25)/25;
+    if(row==29)return native_setting_gyro();
+    if(row==30)return (native_setting_gyro_sensitivity()-25)/25;
     if(row==27)return native_setting_guard_visibility();
     if(row==28){int hz=native_setting_guard_ai_hz();return hz==5?2:hz==15?1:0;}
     if(row==26)return native_setting_unlock_all();
@@ -23,13 +26,16 @@ int native_menu_option_value(int row) {
 }
 void native_menu_option_change(int row,int direction) {
     if(row<0 || row>=NATIVE_MENU_OPTIONS_COUNT)return;
+    if(row==31){native_setting_set_touch_sensitivity(25+25*((native_menu_option_value(row)+direction+8)%8));return;}
+    if(row==29){native_setting_set_gyro((native_setting_gyro()+direction+3)%3);return;}
+    if(row==30){native_setting_set_gyro_sensitivity(25+25*((native_menu_option_value(row)+direction+8)%8));return;}
     if(row==27){native_setting_set_guard_visibility(!native_setting_guard_visibility());return;}
     if(row==28){static const int rates[]={30,15,5};native_setting_set_guard_ai_hz(rates[(native_menu_option_value(row)+direction+3)%3]);return;}
     if(row==26){native_setting_set_unlock_all(!native_setting_unlock_all());return;}
     if(row==25){native_setting_set_audio_mixer(!native_setting_audio_mixer());return;}
     int value=native_menu_option_value(row);
     if(row==1 || row==2){value+=direction*5;if(value<0)value=0;if(value>100)value=100;int volume=(value*32767+50)/100;native_setting_set_volume(row==2,volume);if(row==1)set_mTrack2Vol(volume);else sndApplyVolumeAllSfxSlot(volume);return;}
-    int count=row==22?5:row>=23?4:row==20?5:row==21?2:row==0?6:row==9 || row==10?3:row==11?6:row==12?6:row==15?8:row==16?7:row>=17?3:2;
+    int count=row==22?5:row>=23?4:row==20?5:row==21?2:row==0?6:row==9 || row==10?3:row==11?7:row==12?7:row==15?8:row==16?7:row>=17?3:2;
     value=(value+direction+count)%count;
     if(row==0){int style=value>=4?value+4:value;native_setting_set_style(style);if(g_CurrentPlayer)cur_player_set_control_type(style);}
     else if(row<=10){native_setting_set_game(row-3,value);game_options_entries[row-3].current_value=value;}
@@ -49,7 +55,7 @@ void native_menu_option_change(int row,int direction) {
     else native_setting_set_vignette_mode(value);
 }
 const char *native_menu_option_label(int row) {
-    static const char *const labels[]={0,"Music volume\n","Effects volume\n",0,0,0,0,0,0,0,"Aspect ratio\n","Crosshair\n","Watch colour\n","Supersampling\n","FPS limit\n","Look sensitivity\n","Image filter\n","Vignette\n","Bloom\n","Film grain\n","Watch skin\n","Glass detail\n","LOD strength\n","View distance\n","Vignette when\n","Mixer (restart)\n","Unlock everything\n","Guard LOS (exp)\n","Guard AI rate\n"};
+    static const char *const labels[]={0,"Music volume\n","Effects volume\n",0,0,0,0,0,0,0,"Aspect ratio\n","Crosshair\n","Watch colour\n","Supersampling\n","FPS limit\n","Look sensitivity\n","Image filter\n","Vignette\n","Bloom\n","Film grain\n","Watch skin\n","Glass detail\n","LOD strength\n","View distance\n","Vignette when\n","Mixer (restart)\n","Unlock everything\n","Guard LOS (exp)\n","Guard AI rate\n","Gyro look\n","Gyro sensitivity\n","Touch sensitivity\n"};
     if(row==0)return (const char *)langGet(getStringID(LOPTIONS,OPTION_STR_32_CONTROLSTYLE_LF));
     if(row>=3 && row<=9)return (const char *)langGet(game_options_entries[row-3].text[0]);
     return row>=0 && row<NATIVE_MENU_OPTIONS_COUNT?labels[row]:"\n";
@@ -57,6 +63,9 @@ const char *native_menu_option_label(int row) {
 const char *native_menu_option_text(int row,char *buffer,unsigned size) {
     if(row<0 || row>=NATIVE_MENU_OPTIONS_COUNT)return "\n";
     static const char *const styles[]={"1.5 Vesper\n","1.6 Jinx\n"};
+    if(row==31){snprintf(buffer,size,"%d%%\n",native_setting_touch_sensitivity());return buffer;}
+    if(row==29){static const char *const modes[]={"Off\n","Aim only\n","Look + aim\n"};return modes[native_setting_gyro()];}
+    if(row==30){snprintf(buffer,size,"%d%%\n",native_setting_gyro_sensitivity());return buffer;}
     if(row==27)return native_setting_guard_visibility()?"On\n":"Off\n";
     if(row==28){snprintf(buffer,size,"%d Hz\n",native_setting_guard_ai_hz());return buffer;}
     if(row==26)return native_setting_unlock_all()?"On\n":"Off\n";

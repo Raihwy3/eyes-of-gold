@@ -27,6 +27,8 @@ static int demo_active;
 int get_is_ramrom_flag(void){return demo_active;}
 static unsigned actions;
 static int tx,ty;
+static float gy,gp;
+void native_input_take_gyro(float *y,float *p){*y=gy;*p=gp;gy=gp=0;}
 void native_input_take_touch_look(int *x,int *y){*x=tx;*y=ty;tx=ty=0;}
 int get_currentmenu(void){return menu;}
 int lvlGetControlsLockedFlag(void){return locked;}
@@ -43,6 +45,11 @@ static void original_movement_commit(struct MoveData moveData) {
 f32 g_GlobalTimerDelta=1.f;
 f32 viGetFovY(void){return 60.f;}
 #include "native-aim-acceleration.h"
+static void original_touch_aim_rates(struct MoveData moveData){
+ float ftemp_nostack_sp8C,ftemp_nostack_sp84,ftemp_nostack_sp88,ftemp_nostack_sp98,ftemp_nostack_sp94;
+#include "native-touch-aim-axes.h"
+}
+
 extern unsigned native_game_render_state(void);
 int main(void) {
     struct MoveData m;
@@ -98,6 +105,16 @@ int main(void) {
     native_controls_apply(&m);
     assert(m.analogWalk==31 && m.analogStrafe==-22);
     assert(m.analogTurn==25 && m.analogPitch==-15 && m.btap && m.crouchDown && reloads==4);
+    struct MoveData before_touch_aim=m;
+    player.insightaimmode=1;player.docentreupdown=1;memset(&m,0,sizeof m);tx=24;ty=-18;
+    native_controls_apply(&m);
+    assert(m.canNaturalTurn && m.canNaturalPitch && m.disableLookAhead && !player.docentreupdown);
+    assert(m.analogTurn==24 && m.analogPitch==-18);
+    player.speedtheta=player.speedverta=0;original_touch_aim_rates(m);
+    assert(player.speedtheta>0 && player.speedverta>0);
+    player.speedtheta=player.speedverta=0;
+    memset(&m,0,sizeof m);native_controls_apply(&m);assert(!m.canNaturalTurn && !m.canNaturalPitch);
+    player.insightaimmode=0;m=before_touch_aim;
     player.watch_animation_state=1;tx=50;ty=50;actions=EOG_RELOAD;
     native_controls_apply(&m);assert(m.analogTurn==25 && reloads==4 && tx==0 && ty==0);
     player.watch_animation_state=0;native_setting_set_sensitivity(50);
@@ -131,6 +148,17 @@ int main(void) {
     assert(!native_game_input_gameplay() && native_controls_restore(2)==2);
     assert(native_controls_look_rate(.4f)==.4f);
     demo_active=0;assert(native_game_input_gameplay());
+    menu=11;locked=0;allowed=1;player.bonddead=0;player.watch_animation_state=WATCH_ANIMATION_0x0;player.mpmenuon=0;player.fovy=60;
+    native_setting_set_gyro(2);native_setting_set_gyro_sensitivity(100);player.vv_theta=180;player.vv_verta=0;gy=2;gp=1;
+    native_controls_apply_gyro();assert(player.vv_theta==176 && player.vv_verta==-1);
+    native_controls_apply_gyro();assert(player.vv_theta==176 && player.vv_verta==-1);
+    native_setting_set_sensitivity(25);gy=2;gp=1;native_controls_apply_gyro();assert(player.vv_theta==172 && player.vv_verta==-2);
+    native_setting_set_gyro(1);player.insightaimmode=0;gy=3;gp=3;native_controls_apply_gyro();assert(player.vv_theta==172 && player.vv_verta==-2);
+    player.insightaimmode=1;native_setting_set_gyro_sensitivity(200);gy=2;gp=1;native_controls_apply_gyro();assert(player.vv_theta==164 && player.vv_verta==-4);
+    locked=1;gy=3;gp=3;native_controls_apply_gyro();assert(player.vv_theta==164 && gy==0 && gp==0);locked=0;
+    player.vv_theta=1;player.vv_verta=88;gy=15;gp=-15;native_controls_apply_gyro();assert(player.vv_theta==301 && player.vv_verta==89);
+    native_setting_set_gyro(0);
+    puts("PASS camera gyro: independent gain, aim-only, consume-once, locks, yaw wrap and pitch clamp");
     puts("PASS attract playback: recorded MoveData, control style and look speed preserved");
     puts("PASS 30000 original aim acceleration ticks: corner/reverse/release, 200% gain, bounded consumed rate and unchanged stored state");
     puts("PASS look gain: 50/100/200 percent, full-stick speed scaling after curve, watch/locked input excluded");

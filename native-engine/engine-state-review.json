@@ -344,8 +344,8 @@
     },
     {
       "symbol": "styles.8",
-      "review": "independently authored custom control labels",
-      "evidence": "The two Vesper/Jinx labels in native_options_bridge.h; original style labels are read through the ROM language bank."
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "All pointer targets inspected against independently authored native control/watch labels, including gyro and Controls. Imported matching literals remain ROM-backed: [b'1.5 Vesper\\n', b'1.6 Jinx\\n']"
     },
     {
       "symbol": "CSWTCH.897",
@@ -358,9 +358,109 @@
       "evidence": "Saved chraction.s references this table only from native_guard_activity_beyond_fog. Its complete 12-byte payload equals the independently authored Far/Medium/Near distances [4000,2200,1200] in native_detail.h, not ROM asset data."
     },
     {
-      "symbol": "CSWTCH.2704",
+      "symbol": "CSWTCH.2708",
       "review": "compiler-generated custom watch skin colour lookup",
       "evidence": "Complete four-entry seconds-hand finish lookup generated from native_watch_skin_mesh.h, including independently added muted Gold. All four u32 colours checked against the custom skin implementation and saved assembly references."
+    },
+    {
+      "symbol": "rows.22",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Complete custom watch/control table or native UI state checked against native_watch_options.h/native_watch_ui.h/native_options_bridge.h: [14, 10, 13, 22, 23, 21, 16, 17, 24, 18, 19, 12, 20, 11, 10003, 10001]"
+    },
+    {
+      "symbol": "rows.24",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Complete custom watch/control table or native UI state checked against native_watch_options.h/native_watch_ui.h/native_options_bridge.h: [27, 28, 10001]"
+    },
+    {
+      "symbol": "rows.25",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Complete custom watch/control table or native UI state checked against native_watch_options.h/native_watch_ui.h/native_options_bridge.h: [15, 31, 29, 30, 10001]"
+    },
+    {
+      "symbol": "rows.23",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Complete custom watch/control table or native UI state checked against native_watch_options.h/native_watch_ui.h/native_options_bridge.h: [1, 2, 25, 10001]"
+    },
+    {
+      "symbol": "last.21",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Complete custom watch/control table or native UI state checked against native_watch_options.h/native_watch_ui.h/native_options_bridge.h: [-999]"
+    },
+    {
+      "symbol": "jinx.15",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "All pointer targets inspected against independently authored native control/watch labels, including gyro and Controls. Imported matching literals remain ROM-backed: [b'Circle Pad: move\\n', b'X/B/Y/A: look up/down/left/right\\n', b'D-right: action   D-down: weapon\\n', b'D-up: reload     D-left: crouch\\n', b'R/ZR: fire    L: aim\\n', b'Menus: A accept / B back\\n', b'START: watch\\n']"
+    },
+    {
+      "symbol": "vesper.14",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "All pointer targets inspected against independently authored native control/watch labels, including gyro and Controls. Imported matching literals remain ROM-backed: [b'Circle Pad: move\\n', b'C-stick: look\\n', b'R/ZR: fire    L: aim\\n', b'A: action / accept\\n', b'B: weapon / back\\n', b'Y: crouch    X: reload\\n', b'START: watch\\n']"
+    },
+    {
+      "symbol": "modes.9",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "All pointer targets inspected against independently authored native control/watch labels, including gyro and Controls. Imported matching literals remain ROM-backed: [b'Off\\n', b'Aim only\\n', b'Look + aim\\n']"
+    },
+    {
+      "symbol": "skins.4",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "All pointer targets inspected against independently authored native control/watch labels, including gyro and Controls. Imported matching literals remain ROM-backed: [b'Original\\n', b'Field\\n', b'Dress\\n', b'Tactical\\n', b'Gold\\n']"
+    },
+    {
+      "symbol": "rates.11",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Complete custom watch/control table or native UI state checked against native_watch_options.h/native_watch_ui.h/native_options_bridge.h: [30, 15, 5]"
+    },
+    {
+      "symbol": "native_previous_watch_page.26",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Complete custom watch/control table or native UI state checked against native_watch_options.h/native_watch_ui.h/native_options_bridge.h: [-1]"
+    },
+    {
+      "symbol": "labels.10",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "All pointer targets inspected against independently authored native control/watch labels, including gyro and Controls. Imported matching literals remain ROM-backed: [None, b'Music volume\\n', b'Effects volume\\n', None, None, None, None, None, None, None, b'Aspect ratio\\n', b'Crosshair\\n', b'Watch colour\\n', b'Supersampling\\n', b'FPS limit\\n', b'Look sensitivity\\n', b'Image filter\\n', b'Vignette\\n', b'Bloom\\n', b'Film grain\\n', b'Watch skin\\n', b'Glass detail\\n', b'LOD strength\\n', b'View distance\\n', b'Vignette when\\n', b'Mixer (restart)\\n', b'Unlock everything\\n', b'Guard LOS (exp)\\n', b'Guard AI rate\\n', b'Gyro look\\n', b'Gyro sensitivity\\n', b'Touch sensitivity\\n']"
+    },
+    {
+      "symbol": "CSWTCH.903",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "All pointer targets inspected against independently authored native control/watch labels, including gyro and Look Controls. Imported matching literals remain ROM-backed: [b'Advanced\\n', b'Back\\n', b'Audio\\n', b'Experimental\\n', b'Look controls\\n']"
+    },
+    {
+      "symbol": "CSWTCH.906",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "All pointer targets inspected against independently authored native control/watch labels, including gyro and Look Controls. Imported matching literals remain ROM-backed: [b'', b'', b'', b'', b'']"
+    },
+    {
+      "symbol": "CSWTCH.907",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "All pointer targets inspected against independently authored native control/watch labels, including gyro and Controls. Imported matching literals remain ROM-backed: [b'', b'', b'', b'', b'']"
+    },
+    {
+      "symbol": "CSWTCH.904",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "All pointer targets inspected against independently authored native control/watch labels, including gyro and Controls. Imported matching literals remain ROM-backed: [b'Advanced\\n', b'Back\\n', b'Audio\\n', b'Experimental\\n', b'Controls\\n']"
+    },
+    {
+      "symbol": "CSWTCH.908",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "All pointer targets inspected against independently authored native control/watch labels, including gyro and Controls. Imported matching literals remain ROM-backed: [b'Advanced', b'Back', b'Audio', b'Experimental', b'Controls']"
+    },
+    {
+      "symbol": "CSWTCH.923",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "All pointer targets inspected against independently authored native control/watch labels, including gyro and Controls. Imported matching literals remain ROM-backed: [b'Advanced\\n', b'Back\\n', b'Audio\\n', b'Experimental\\n', b'Controls\\n']"
+    },
+    {
+      "symbol": "CSWTCH.926",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "All pointer targets inspected against independently authored native control/watch labels, including gyro and Controls. Imported matching literals remain ROM-backed: [b'', b'', b'', b'', b'']"
+    },
+    {
+      "symbol": "CSWTCH.927",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "All pointer targets inspected against independently authored native control/watch labels, including gyro and Controls. Imported matching literals remain ROM-backed: [b'Advanced', b'Back', b'Audio', b'Experimental', b'Controls']"
     }
   ]
 }

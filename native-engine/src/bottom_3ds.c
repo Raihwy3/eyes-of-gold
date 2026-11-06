@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "native_bottom.h"
+#include "native_settings.h"
 #include "native_menu_focus.h"
 #include "native_pad.h"
 #include "native_theme.h"
@@ -19,7 +20,9 @@ static int kerns[2][169],classes[2][94];
 static int gpu_owned;
 static int page_bounds[5][4];
 static uint64_t touch_started;
-static int touch_start_x;
+static int touch_start_x,touch_fraction_x,touch_fraction_y;
+static int seed_editing,seed_cooldown,seed_gate,seed_fresh,seed_invalid,seed_focus,seed_touch=-1;
+static char seed_digits[7];
 static LightLock lock;
 static struct EogBottomView view,draw_view;
 static struct EogBottomCommand queue[16];
@@ -27,6 +30,16 @@ static unsigned read_pos,write_pos,last_buttons;
 static unsigned generation,last_drawn;
 static int menu_stick_owned,menu_accept_bottom;
 static int active,stopped,focus,scroll,last_touch,touch_x,touch_y,touch_start_y,scroll_touch_y,moved,nav_dir,nav_ticks,release_gate;
+unsigned native_bottom_seed_entropy(void){uint64_t t=osGetTime();return (unsigned)t^(unsigned)(t>>32);}
+int native_bottom_seed_active(void){LightLock_Lock(&lock);int editing=seed_editing || seed_cooldown;LightLock_Unlock(&lock);return editing;}
+void native_bottom_seed_open(int value){
+    LightLock_Lock(&lock);
+    snprintf(seed_digits,sizeof seed_digits,"%06d",value);
+    read_pos=write_pos;
+    seed_editing=seed_gate=seed_fresh=1;seed_invalid=seed_focus=0;seed_touch=-1;generation++;
+    LightLock_Unlock(&lock);
+}
+
 static u16 pixels[320*240];
 static int min(int a,int b){return a<b?a:b;}
 static int max(int a,int b){return a>b?a:b;}
@@ -89,6 +102,28 @@ void native_bottom_spacing(int font,const int *kerning,const int *indices) {
 static int row_height(void){return view.kind==EOG_BOTTOM_GAME?35:25;}
 static int visible_rows(void){return view.kind==EOG_BOTTOM_GAME?4:6;}
 static void reveal(void){int visible=visible_rows();scroll=min(scroll,max(0,view.count-visible));if(focus<scroll)scroll=focus;if(focus>=scroll+visible)scroll=focus-visible+1;}
+static int seed_key_at(int x,int y){
+    if(y>=204 && y<234)return x>=16 && x<154?12:x>=166 && x<304?13:-1;
+    if(x<28 || x>=292 || y<82 || y>=198)return -1;
+    int col=(x-28)/90,row=(y-82)/30;
+    return col<3 && row<4 && (x-28)%90<84 && (y-82)%30<26?row*3+col:-1;
+}
+static int seed_key(int key){
+    if(key==13){seed_editing=0;seed_cooldown=1;return 0;}
+    if(key==12){
+        int value=0;for(int i=0;seed_digits[i];i++)value=value*10+seed_digits[i]-'0';
+        if(!value){seed_invalid=1;return 0;}
+        seed_editing=0;seed_cooldown=1;return value;
+    }
+    int n=(int)strlen(seed_digits);seed_invalid=0;
+    if(key==9){if(n)seed_digits[n-1]=0;seed_fresh=0;}
+    else if(key==11){seed_digits[0]=0;seed_fresh=0;}
+    else if(key>=0 && key<12){
+        if(seed_fresh){seed_digits[0]=0;n=0;seed_fresh=0;}
+        if(n<6){seed_digits[n]=(char)('0'+(key==10?0:key+1));seed_digits[n+1]=0;}
+    }
+    return 0;
+}
 unsigned native_bottom_input(unsigned held,int touching,int tx,int ty,int gameplay,int *dx,int *dy,unsigned *buttons,unsigned *actions) {
     (void)actions;
     if(!active || bottom_stopped())return held;
@@ -96,13 +131,44 @@ unsigned native_bottom_input(unsigned held,int touching,int tx,int ty,int gamepl
     int previous_focus=focus,previous_scroll=scroll;
     if(release_gate){if(!touching)release_gate=0;touching=last_touch=0;}
     unsigned down=held&~last_buttons;last_buttons=held;
+    if(seed_cooldown){
+        if(!held && !touching)seed_cooldown=0;
+        last_touch=0;LightLock_Unlock(&lock);return 0;
+    }
+    if(seed_editing){
+        if(touching || last_touch)menu_stick_owned=0;
+        int commit=0;
+        if(seed_gate){if(!held && !touching)seed_gate=0;}
+        else {
+            if(down&EOG_B)commit=seed_key(13);
+            else if(down&EOG_START)commit=seed_key(12);
+            else {
+                if(down&EOG_DUP)seed_focus=(seed_focus+11)%14;
+                if(down&EOG_DDOWN)seed_focus=(seed_focus+3)%14;
+                if(down&EOG_DLEFT)seed_focus=(seed_focus+13)%14;
+                if(down&EOG_DRIGHT)seed_focus=(seed_focus+1)%14;
+                if(down&EOG_A)commit=seed_key(seed_focus);
+                if(touching && !last_touch)seed_touch=seed_key_at(tx,ty);
+                if(!touching && last_touch && seed_touch>=0 && seed_touch==seed_key_at(touch_x,touch_y))commit=seed_key(seed_touch);
+            }
+        }
+        generation++;last_touch=touching;touch_x=tx;touch_y=ty;
+        LightLock_Unlock(&lock);
+        if(commit)native_setting_set_randomiser_seed(commit);
+        return 0;
+    }
     if(view.kind==EOG_BOTTOM_WATCH && !gpu_owned){last_touch=0;LightLock_Unlock(&lock);return held;}
-    if(touching && !last_touch){touch_started=osGetTime();touch_start_x=tx;touch_start_y=scroll_touch_y=ty;moved=0;}
+    if(touching && !last_touch){touch_started=osGetTime();touch_start_x=tx;touch_start_y=scroll_touch_y=ty;moved=0;touch_fraction_x=touch_fraction_y=0;}
     int total_x=tx-touch_start_x,total_y=ty-touch_start_y;
     if(view.kind==EOG_BOTTOM_GAME) {
         if(gameplay && touching && last_touch) {
             if(total_x>8 || total_x< -8 || total_y>8 || total_y< -8)moved=1;
-            if(moved!=2){*dx=max(-80,min(80,(tx-touch_x)*3));*dy=max(-80,min(80,(touch_y-ty)*3));}
+            if(moved!=2){
+                int gain=native_setting_touch_sensitivity();
+                touch_fraction_x+=(tx-touch_x)*3*gain;touch_fraction_y+=(touch_y-ty)*3*gain;
+                *dx=max(-80,min(80,touch_fraction_x/100));*dy=max(-80,min(80,touch_fraction_y/100));
+                touch_fraction_x%=100;touch_fraction_y%=100;
+            }
             if(!moved && osGetTime()-touch_started>=650){*buttons|=0x1000;moved=2;}
         }
     } else if(view.kind) {
@@ -118,9 +184,15 @@ unsigned native_bottom_input(unsigned held,int touching,int tx,int ty,int gamepl
             held&=~(EOG_DUP|EOG_DDOWN|EOG_DLEFT|EOG_DRIGHT|EOG_B|(menu_accept_bottom?EOG_A:0));
         }
         if(touching && last_touch && moved!=2) {
-            if(view.kind==EOG_BOTTOM_WATCH && (total_x>35 || total_x< -35) && total_x*total_x>total_y*total_y) {
-                command(EOG_BOTTOM_PAGE,(view.page+(total_x<0?1:4))%5,0);moved=2;
-            } else if(total_y>12 || total_y< -12) {
+            if(!moved && view.kind==EOG_BOTTOM_WATCH && (total_x>35 || total_x< -35) && total_x*total_x>total_y*total_y) {
+                int authored_y=native_watch_page_touch_y(touch_start_y,view.page);
+                int pitch=view.context==403 || view.context==803?10:16;
+                int setting_row=view.page==3 && authored_y>=35 && authored_y<40+(view.count-1)*pitch+12;
+                if(setting_row || (view.page==2 && authored_y>=20 && authored_y<40))
+                    command(EOG_BOTTOM_ADJUST,authored_y,total_x>0?1:-1);
+                else command(EOG_BOTTOM_PAGE,(view.page+(total_x<0?1:4))%5,0);
+                moved=2;
+            } else if((total_y>12 || total_y< -12) && total_y*total_y>=total_x*total_x) {
                 moved=1;
                 if(ty-scroll_touch_y>15){if(gpu_owned && view.kind==EOG_BOTTOM_WATCH)command(EOG_BOTTOM_SCROLL,0,-1);else scroll=max(0,scroll-1);scroll_touch_y=ty;}
                 if(ty-scroll_touch_y< -15){if(gpu_owned && view.kind==EOG_BOTTOM_WATCH)command(EOG_BOTTOM_SCROLL,0,1);else scroll=min(max(0,view.count-visible_rows()),scroll+1);scroll_touch_y=ty;}
@@ -128,7 +200,7 @@ unsigned native_bottom_input(unsigned held,int touching,int tx,int ty,int gamepl
                 command(EOG_BOTTOM_BACK,0,gpu_owned?1:0);moved=2;
             }
         }
-        if(!touching && last_touch && !moved) {
+        if(!touching && last_touch && !moved && touch_x-touch_start_x<=8 && touch_x-touch_start_x>=-8 && touch_y-touch_start_y<=8 && touch_y-touch_start_y>=-8) {
             if(view.kind==EOG_BOTTOM_WATCH && gpu_owned) {
                 int page=-1;
                 for(int i=0;i<5;i++)if(page_bounds[i][2]>page_bounds[i][0] && page_bounds[i][3]>page_bounds[i][1] && touch_x>=page_bounds[i][0]-4 && touch_x<=page_bounds[i][2]+4 && touch_y>=page_bounds[i][1]-4 && touch_y<=page_bounds[i][3]+4)page=i;
@@ -222,6 +294,20 @@ void native_bottom_draw(void) {
     unsigned r=0,g=220,b=0;native_theme_rgb(draw_view.theme,&r,&g,&b);
     int game=draw_view.kind==EOG_BOTTOM_GAME;
     u16 accent=game?rgb(r,g,b):rgb(235,214,122),ink=game?rgb(209,217,166):rgb(229,214,163);
+    if(seed_editing){
+        rect(0,0,320,240,rgb(4,4,3));centred(15,"CHANGE SEED",accent);
+        centred(39,seed_digits[0]?seed_digits:"_",ink);
+        centred(61,seed_invalid?"ENTER 1 TO 999999":"UP TO SIX DIGITS",accent);
+        const char *keys[]={"1","2","3","4","5","6","7","8","9","DEL","0","CLEAR"};
+        for(int i=0;i<12;i++){
+            int x=28+(i%3)*90,y=82+(i/3)*30;
+            rect(x,y,84,26,i==seed_focus?rgb(70,59,25):rgb(30,27,16));
+            text(0,x+42-text_width(0,keys[i])/2,y+7,keys[i],ink,x+82,1);
+        }
+        rect(16,204,138,29,seed_focus==12?rgb(70,59,25):rgb(48,40,14));rect(166,204,138,29,seed_focus==13?rgb(70,59,25):rgb(48,40,14));
+        text(0,68,212,"SAVE",accent,153,1);text(0,209,212,"CANCEL",accent,303,1);
+        goto present;
+    }
     int watch_objectives=game && draw_view.objectives.count>0;
     if(watch_objectives) {
         unsigned br=0,bg=24,bb=0;native_theme_rgb(draw_view.theme,&br,&bg,&bb);rect(0,0,320,240,rgb(br,bg,bb));
@@ -249,6 +335,7 @@ void native_bottom_draw(void) {
         rect(301,y,1,track,rgb(50,60,40));
         rect(300,y+first*track/draw_view.count,3,max(4,visible*track/draw_view.count),accent);
     }
+    present:;
     static int prepared;
     if(!prepared){gfxSetScreenFormat(GFX_BOTTOM,GSP_RGB565_OES);gfxSetDoubleBuffering(GFX_BOTTOM,true);prepared=1;}
     u16 w,h;u16 *lcd=(u16 *)gfxGetFramebuffer(GFX_BOTTOM,GFX_LEFT,&w,&h);

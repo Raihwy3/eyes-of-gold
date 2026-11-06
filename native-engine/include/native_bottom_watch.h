@@ -18,7 +18,7 @@ void native_bottom_game_tick(void) {
     if(get_cur_playernum()!=0)return;
     if(!native_bottom_publish || !g_CurrentPlayer || g_CurrentPlayer->watch_animation_state!=WATCH_ANIMATION_0x0)return;
     static struct EogBottomView v;memset(&v,0,sizeof v);
-    native_bottom_abort=0;native_watch_options_reset();
+    native_bottom_abort=0;native_watch_brief_scroll=0;native_watch_options_reset();
     v.kind=EOG_BOTTOM_GAME;v.context=300;v.theme=native_setting_watch();
     if(getPlayerCount()>1) {
         native_bottom_string(v.title,sizeof v.title,"LOCAL MULTIPLAYER");
@@ -30,6 +30,12 @@ void native_bottom_game_tick(void) {
 }
 /* Hit test the same 320x240 authored canvas used by the original page. */
 static void native_bottom_watch_point(int x,int y) {
+    if(y<(watch_screen_index==WATCH_INDEX_MISSION_STATUS?58:watch_screen_index==WATCH_INDEX_CONTROL_OPTIONS?18:35)){
+        if(watch_screen_index==WATCH_INDEX_GAME_OPTIONS && native_watch_option_back())return;
+        if(watch_item_is_actively_selected){watch_item_is_actively_selected=0;D_800409A4=0;}
+        else if(native_input_press)native_input_press(START_BUTTON);
+        return;
+    }
     if(watch_screen_index==WATCH_INDEX_GAME_OPTIONS) {
         int row=-1;
         for(int i=0;i<native_watch_option_count();i++) {
@@ -60,6 +66,7 @@ static void native_bottom_watch_point(int x,int y) {
             else {watch_item_is_actively_selected=0;D_800409A4=0;}
         }
     } else if(watch_screen_index==WATCH_INDEX_MISSION_BRIEFING) {
+        native_watch_brief_scroll=0;
         mission_brief_index=(mission_brief_index+(x<160?4:1))%5;
         native_bottom_brief=mission_brief_index;
     }
@@ -69,13 +76,19 @@ static void native_bottom_watch_events(void) {
     struct EogBottomCommand c;
     int context=native_watch_options_context();
     while(native_bottom_take(context,&c)) {
+        if(c.kind==EOG_BOTTOM_ADJUST){
+            if(watch_screen_index==WATCH_INDEX_GAME_OPTIONS || watch_screen_index==WATCH_INDEX_CONTROL_OPTIONS)
+                native_bottom_watch_point(c.direction<0?80:220,c.index);
+            if(native_watch_options_context()!=context)return;
+            continue;
+        }
         if(c.kind==EOG_BOTTOM_POINT){native_bottom_watch_point(c.index,c.direction);if(native_watch_options_context()!=context)return;continue;}
         if(c.kind==EOG_BOTTOM_SCROLL) {
             if(watch_screen_index==WATCH_INDEX_INVENTORY) {
                 int next=g_curWatchItemIndex+c.direction,count=bondinvCountTotalItemsInInv();
-                if(next>=0 && next<count){g_curWatchItemIndex=next;watch_inventory_cursor_pos=(float)next;}
+                if(next>=0 && next<count){g_curWatchItemIndex=next;watch_inventory_cursor_pos=(float)next;watch_inventory_text_target_y=2*(j_text_trigger?14:12)-next*(j_text_trigger?14:12);}
             } else if(watch_screen_index==WATCH_INDEX_MISSION_BRIEFING) {
-                mission_brief_index=(mission_brief_index+(c.direction<0?4:1))%5;native_bottom_brief=mission_brief_index;
+                if(mission_brief_index!=BRIEF_INDEX_OBJECTIVES){native_watch_brief_scroll+=c.direction*12;if(native_watch_brief_scroll<0)native_watch_brief_scroll=0;if(native_watch_brief_scroll>4096)native_watch_brief_scroll=4096;}
             } else if(watch_screen_index==WATCH_INDEX_CONTROL_OPTIONS)native_menu_option_change(0,c.direction);
             else if(watch_screen_index==WATCH_INDEX_GAME_OPTIONS){native_watch_editing=0;watch_item_is_actively_selected=0;native_watch_nav.selected=(native_watch_nav.selected+c.direction+native_watch_option_count())%native_watch_option_count();game_options_index=native_watch_advanced?9:native_watch_nav.selected;}
             continue;
@@ -93,7 +106,7 @@ static void native_bottom_watch_events(void) {
             return;
         }
         if(c.kind==EOG_BOTTOM_PAGE && c.index>=0 && c.index<=4) {
-            native_watch_options_reset();watch_screen_index=c.index;watch_item_is_actively_selected=0;native_bottom_abort=0;
+            native_watch_brief_scroll=0;native_watch_options_reset();watch_screen_index=c.index;watch_item_is_actively_selected=0;native_bottom_abort=0;
             trigger_watch_zoom(c.index==0?WATCHZOOM2:c.index==2 || c.index==3?WATCHZOOM3:WATCHZOOM1,15.0f);
             set_controlstick_lr_disabled();return;
         }
@@ -126,7 +139,7 @@ static void native_bottom_watch_events(void) {
             } else {watch_screen_index=WATCH_INDEX_MISSION_BRIEFING;mission_brief_index=BRIEF_INDEX_OBJECTIVES;native_bottom_brief=4;}
         } else if(watch_screen_index==WATCH_INDEX_MISSION_BRIEFING) {
             if(tag==2999)native_bottom_brief=-1;
-            else if(tag>=2000 && tag<=2004){native_bottom_brief=tag-2000;mission_brief_index=tag-2000;}
+            else if(tag>=2000 && tag<=2004){native_watch_brief_scroll=0;native_bottom_brief=tag-2000;mission_brief_index=tag-2000;}
         }
     }
 }
@@ -152,7 +165,7 @@ static void native_bottom_watch_publish(void) {
         native_bottom_string(v.title,sizeof v.title,native_watch_options_title());
         for(int i=0;i<native_watch_option_count();i++) {
             int tag=native_watch_option_tag(i);char value[32];
-            const char *label=tag==NATIVE_WATCH_AUDIO?"Audio":tag==NATIVE_WATCH_ADVANCED?"Advanced":tag==NATIVE_WATCH_EXPERIMENTAL?"Experimental":tag==NATIVE_WATCH_BACK?"Back":native_menu_option_label(tag);
+            const char *label=tag==NATIVE_WATCH_MOTION?"Controls":tag==NATIVE_WATCH_AUDIO?"Audio":tag==NATIVE_WATCH_ADVANCED?"Advanced":tag==NATIVE_WATCH_EXPERIMENTAL?"Experimental":tag==NATIVE_WATCH_BACK?"Back":native_menu_option_label(tag);
             native_bottom_row(&v,label,tag<NATIVE_WATCH_ADVANCED?native_menu_option_text(tag,value,sizeof value):"",tag,0);
         }
         v.selected=native_watch_nav.selected;

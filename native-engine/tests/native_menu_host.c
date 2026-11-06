@@ -86,16 +86,30 @@ static void check_bottom_watch(void) {
     bottom_command=(struct EogBottomCommand){201,EOG_BOTTOM_ACTIVATE,1,0};command_pending=1;injected=0;
     native_bottom_watch_publish();assert(g_curWatchItemIndex==1 && watch_inventory_cursor_pos==1 && injected==A_BUTTON);
     bottom_command=(struct EogBottomCommand){201,EOG_BOTTOM_PAGE,3,0};command_pending=1;
-    native_bottom_watch_publish();assert(captured.count==9 && captured.rows[0].tag==3 && captured.rows[7].tag==NATIVE_WATCH_AUDIO && captured.rows[8].tag==NATIVE_WATCH_ADVANCED);
+    native_bottom_watch_publish();assert(captured.count==10 && captured.rows[0].tag==3 && captured.rows[7].tag==NATIVE_WATCH_AUDIO && captured.rows[8].tag==NATIVE_WATCH_ADVANCED);
     int old=native_setting_crosshair();
     bottom_command=(struct EogBottomCommand){203,EOG_BOTTOM_ACTIVATE,8,1};command_pending=1;
-    native_bottom_watch_publish();assert(native_watch_advanced && captured.context==403 && captured.count==17);
+    native_bottom_watch_publish();assert(native_watch_advanced && captured.context==403 && captured.count==16);
     assert(native_watch_option_y(native_watch_option_count()-1)<=200);
-    const int grouped[]={15,14,10,13,22,23,21,16,17,24,18,19,12,20,11,NATIVE_WATCH_EXPERIMENTAL,NATIVE_WATCH_BACK};
+    const int grouped[]={14,10,13,22,23,21,16,17,24,18,19,12,20,11,NATIVE_WATCH_EXPERIMENTAL,NATIVE_WATCH_BACK};
     for(unsigned i=0;i<sizeof grouped/sizeof *grouped;i++)assert(captured.rows[i].tag==grouped[i]);
+    native_watch_option_back();native_bottom_watch_publish();
+    assert(captured.context==203 && captured.rows[9].tag==NATIVE_WATCH_MOTION);
+    bottom_command=(struct EogBottomCommand){203,EOG_BOTTOM_ACTIVATE,9,1};command_pending=1;
+    native_bottom_watch_publish();assert(native_watch_motion && captured.context==1003 && captured.count==5);
+    assert(captured.rows[0].tag==15 && captured.rows[1].tag==31 && captured.rows[2].tag==29 && captured.rows[3].tag==30);
+    bottom_command=(struct EogBottomCommand){1003,EOG_BOTTOM_ADJUST,native_watch_option_y(1),1};command_pending=1;
+    native_bottom_watch_publish();assert(native_setting_touch_sensitivity()==125);
+    bottom_command=(struct EogBottomCommand){1003,EOG_BOTTOM_ACTIVATE,2,1};command_pending=1;
+    native_bottom_watch_publish();assert(native_setting_gyro()==1);
+    bottom_command=(struct EogBottomCommand){1003,EOG_BOTTOM_ACTIVATE,3,1};command_pending=1;
+    native_bottom_watch_publish();assert(native_setting_gyro_sensitivity()==125);
+    bottom_command=(struct EogBottomCommand){1003,EOG_BOTTOM_BACK,0,1};command_pending=1;
+    native_bottom_watch_publish();assert(!native_watch_motion && captured.context==203 && native_watch_nav.selected==9);
+    native_watch_option_action(NATIVE_WATCH_ADVANCED,1);native_bottom_watch_publish();
+    bottom_command=(struct EogBottomCommand){403,EOG_BOTTOM_ACTIVATE,13,1};command_pending=1;
+    native_bottom_watch_publish();assert(native_setting_crosshair()==(old+1)%7);
     bottom_command=(struct EogBottomCommand){403,EOG_BOTTOM_ACTIVATE,14,1};command_pending=1;
-    native_bottom_watch_publish();assert(native_setting_crosshair()==(old+1)%6);
-    bottom_command=(struct EogBottomCommand){403,EOG_BOTTOM_ACTIVATE,15,1};command_pending=1;
     native_bottom_watch_publish();assert(native_watch_experimental && captured.context==803 && captured.count==3);
     int visibility=native_setting_guard_visibility(),rate=native_setting_guard_ai_hz();
     bottom_command=(struct EogBottomCommand){803,EOG_BOTTOM_ACTIVATE,0,1};command_pending=1;
@@ -103,9 +117,9 @@ static void check_bottom_watch(void) {
     bottom_command=(struct EogBottomCommand){803,EOG_BOTTOM_ACTIVATE,1,1};command_pending=1;
     native_bottom_watch_publish();assert(native_setting_guard_ai_hz()!=rate);
     bottom_command=(struct EogBottomCommand){803,EOG_BOTTOM_BACK,0,1};command_pending=1;
-    native_bottom_watch_publish();assert(!native_watch_experimental && native_watch_advanced && captured.context==403 && native_watch_nav.selected==15);
+    native_bottom_watch_publish();assert(!native_watch_experimental && native_watch_advanced && captured.context==403 && native_watch_nav.selected==14);
     bottom_command=(struct EogBottomCommand){403,EOG_BOTTOM_BACK,0,1};command_pending=1;injected=0;
-    native_bottom_watch_publish();assert(!native_watch_advanced && !injected && captured.context==203 && captured.count==9);
+    native_bottom_watch_publish();assert(!native_watch_advanced && !injected && captured.context==203 && captured.count==10);
     bottom_command=(struct EogBottomCommand){203,EOG_BOTTOM_ACTIVATE,7,1};command_pending=1;
     native_bottom_watch_publish();assert(native_watch_audio && captured.context==603 && captured.count==4);
     assert(captured.rows[0].tag==1 && captured.rows[1].tag==2 && captured.rows[2].tag==25);
@@ -120,12 +134,17 @@ static void check_bottom_watch(void) {
     native_bottom_watch_publish();assert(captured.rows[0].tag==2999 && captured.count>1);
     bottom_command=(struct EogBottomCommand){204,EOG_BOTTOM_BACK,0,0};command_pending=1;
     native_bottom_watch_publish();assert(captured.count==5 && native_bottom_brief==-1);
+    mission_brief_index=BRIEF_INDEX_M;native_watch_brief_scroll=0;
+    bottom_command=(struct EogBottomCommand){204,EOG_BOTTOM_SCROLL,0,1};command_pending=1;
+    native_bottom_watch_publish();assert(native_watch_brief_scroll==12 && mission_brief_index==BRIEF_INDEX_M);
+    bottom_command=(struct EogBottomCommand){204,EOG_BOTTOM_POINT,100,60};command_pending=1;
+    native_bottom_watch_publish();assert(native_watch_brief_scroll==0);
     // Touch points use the original page coordinates, not custom list rows.
     watch_screen_index=WATCH_INDEX_GAME_OPTIONS;watch_item_is_actively_selected=0;
     bottom_command=(struct EogBottomCommand){203,EOG_BOTTOM_POINT,220,native_watch_option_y(8)};command_pending=1;
     native_bottom_watch_publish();assert(native_watch_advanced && captured.context==403);
-    old=native_setting_crosshair();bottom_command=(struct EogBottomCommand){403,EOG_BOTTOM_POINT,220,native_watch_option_y(14)};command_pending=1;
-    native_bottom_watch_publish();assert(native_setting_crosshair()==(old+1)%6);
+    old=native_setting_crosshair();bottom_command=(struct EogBottomCommand){403,EOG_BOTTOM_POINT,220,native_watch_option_y(13)};command_pending=1;
+    native_bottom_watch_publish();assert(native_setting_crosshair()==(old+1)%7);
     native_watch_options_reset();native_watch_nav.selected=8;watch_held=EOG_A;
     native_watch_options_input();assert(!native_watch_advanced);watch_held=0;native_watch_options_input();watch_held=EOG_A;
     native_watch_options_input();assert(native_watch_advanced && native_watch_nav.selected==0);
@@ -194,7 +213,7 @@ int main(void) {
     watch_held=0;watch_screen_index=WATCH_INDEX_GAME_OPTIONS;stick_x=80;stick_y=0;
     native_watch_options_reset();native_watch_options_input();assert(native_watch_wait_neutral);
     stick_x=0;stick_y=80;native_watch_options_input();assert(!native_watch_wait_neutral);
-    native_watch_options_input();assert(native_watch_nav.selected==8);
+    native_watch_options_input();assert(native_watch_nav.selected==9);
     stick_y=0;native_watch_options_input();stick_x=80;native_watch_options_input();
     assert(watch_screen_index==WATCH_INDEX_MISSION_BRIEFING);
     stick_x=stick_y=0;
@@ -203,8 +222,8 @@ int main(void) {
     char directory[]="/tmp/eog-shared-options-XXXXXX";assert(mkdtemp(directory));
     native_settings_init(directory);native_setting_set_style(8);native_setting_set_aspect(0);
     native_menu_option_change(0,1);assert(native_setting_style()==9 && test_player.cur_player_control_type_0==9);
-    native_menu_option_change(11,-1);assert(native_setting_crosshair()==5);
-    native_menu_option_change(12,-1);assert(native_setting_watch()==5);
+    native_menu_option_change(11,-1);assert(native_setting_crosshair()==6);
+    native_menu_option_change(12,-1);assert(native_setting_watch()==6);
     native_menu_option_change(13,1);assert(!native_setting_aa());
     native_menu_option_change(14,-1);assert(native_setting_fps()==30);
     native_menu_option_change(15,1);assert(native_setting_sensitivity()==125);
@@ -269,7 +288,7 @@ int main(void) {
     effects=0;native_menu_options_restore_audio();assert(effects==31129);
     sub_GAME_7F0A91A0(0);assert(effects==31129);
     char path[512];snprintf(path,sizeof path,"%s/native-options.ini",directory);assert(!unlink(path));assert(!rmdir(directory));
-    puts("PASS shared original watch/main options: all 29 choices survive reload, blue palettes, audio application, legacy save priority");
+    puts("PASS shared original watch/main options: all 32 choices survive reload, blue palettes, audio application, legacy save priority");
 }
 s16 viGetX(void){return 320;}
 s16 viGetY(void){return 240;}

@@ -97,6 +97,7 @@ extern "C" int native_pica_retained_supported(void){
   return !disabled && retained_meshes.available();
 }
 static C3D_RenderTarget *target,*watch_target,*right_target;
+static float stereo_slider;
 static bool stereo_active,ui_rect_scope,frontend_ui,viewmodel_scope;
 static int top_sample_scale=1;
 static unsigned top_output_flags;
@@ -115,6 +116,7 @@ static void mirror_draw(int first,int count);
 static DVLB_s *shader;
 static shaderProgram_s program;
 static int tilt_uniform,clip_tilt_uniform,world_tilt_uniform,world_matrix_uniform;
+static int clip_stereo_uniform,world_stereo_uniform;
 static DVLB_s *world_shader;
 static shaderProgram_s world_program;
 static bool gpu_world;
@@ -171,19 +173,29 @@ static PicaOrderedDraw pending_draw;
 static unsigned gpu_draws,merged_draws;
 static void flush_draw() {
   if(!pending_draw.count)return;
+  const bool flat_overlay=watch_body; // physical watch and screen-space gauges
   const bool raised=(frontend_ui && !gpu_world) || watch_scope || ui_rect_scope;
-  const unsigned left_eye=viewmodel_scope?3:raised?1:5;
-  const unsigned right_eye=viewmodel_scope?4:raised?2:6;
+  const unsigned left_eye=flat_overlay?0:viewmodel_scope?3:raised?1:5;
+  const unsigned right_eye=flat_overlay?0:viewmodel_scope?4:raised?2:6;
+  const float eye_translation=stereo_active && !flat_overlay && !raised?native_stereo_eye_translation(stereo_slider,false,viewmodel_scope):0.f;
+  const int stereo_uniform=world_palette_active?world_stereo_uniform:clip_stereo_uniform;
+  // World geometry must retain the full off-axis eye projection. Clamping
+  // each vertex separately collapses all close surfaces onto one depth plane.
+  const float full_world_depth=stereo_active && !flat_overlay && !raised && !viewmodel_scope?1.f:0.f;
+  C3D_FVUnifSet(GPU_VERTEX_SHADER,stereo_uniform,stereo_active?stereo_slider*.03f:0.f,eye_translation,full_world_depth,0);
   if(stereo_active)C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER,tilt_uniform,&stereo_tilt[left_eye]);
   if(pending_indexed)C3D_DrawElements(GPU_TRIANGLES,pending_draw.count,C3D_UNSIGNED_SHORT,(pending_elements?pending_elements:world_indices)+pending_draw.first);
   else C3D_DrawArrays(GPU_TRIANGLES,pending_draw.first,pending_draw.count);
   if(stereo_active) {
     C3D_FrameDrawOn(right_target);restore_top_view();
+    C3D_FVUnifSet(GPU_VERTEX_SHADER,stereo_uniform,stereo_slider*.03f,-eye_translation,full_world_depth,0);
     C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER,tilt_uniform,&stereo_tilt[right_eye]);
     if(pending_indexed)C3D_DrawElements(GPU_TRIANGLES,pending_draw.count,C3D_UNSIGNED_SHORT,(pending_elements?pending_elements:world_indices)+pending_draw.first);
     else C3D_DrawArrays(GPU_TRIANGLES,pending_draw.first,pending_draw.count);
     C3D_FrameDrawOn(target);restore_top_view();
     C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER,tilt_uniform,&stereo_tilt[0]);
+    // Direct bottom-screen and postprocess draws use the restored flat camera.
+    C3D_FVUnifSet(GPU_VERTEX_SHADER,stereo_uniform,0,0,0,0);
   }
   if(!pending_indexed)mirror_draw(pending_draw.first,pending_draw.count);
   ++gpu_draws;pending_draw.clear();pending_indexed=false;pending_elements=nullptr;
@@ -1116,10 +1128,14 @@ static void init() {
   tilt_uniform=shaderInstanceGetUniformLocation(program.vertexShader,"tilt");
   if(tilt_uniform<0)sysFatalError("Native PICA: vertex uniforms missing");
   clip_tilt_uniform=tilt_uniform;
+  clip_stereo_uniform=shaderInstanceGetUniformLocation(program.vertexShader,"stereo");
+  if(clip_stereo_uniform<0)sysFatalError("Native PICA: stereo uniform missing");
   world_shader=DVLB_ParseFile((u32 *)native_world_shbin,native_world_shbin_size);
   if(!world_shader)sysFatalError("Native PICA: invalid world shader");
   shaderProgramInit(&world_program);shaderProgramSetVsh(&world_program,&world_shader->DVLE[0]);
   world_tilt_uniform=shaderInstanceGetUniformLocation(world_program.vertexShader,"tilt");
+  world_stereo_uniform=shaderInstanceGetUniformLocation(world_program.vertexShader,"stereo");
+  if(world_stereo_uniform<0)sysFatalError("Native PICA: world stereo uniform missing");
   world_matrix_uniform=shaderInstanceGetUniformLocation(world_program.vertexShader,"world");
   if(world_tilt_uniform<0 || world_matrix_uniform<0 || world_matrix_uniform+WORLD_PALETTE_SIZE*4>96)
     sysFatalError("Native PICA: world uniforms missing/overflow");
@@ -1180,7 +1196,7 @@ static void start() {
   for (auto &t : retired)
     C3D_TexDelete(&t);
   retired.clear();
-  stereo_active=osGet3DSliderState()>0.f;
+  stereo_slider=osGet3DSliderState();stereo_active=stereo_slider>0.f;
   ui_rect_scope=false;
   if(stereo_active)C3D_RenderTargetClear(right_target,C3D_CLEAR_ALL,0x000000ff,0);
   C3D_RenderTargetClear(target, C3D_CLEAR_ALL, 0x000000ff, 0);
@@ -1199,10 +1215,10 @@ static void start() {
   C3D_Mtx tilt;
   Mtx_OrthoTilt(&tilt, -1, 1, -1, 1, 0, 1, true);
   stereo_tilt[0]=tilt;
-  const float disparity=4.f*osGet3DSliderState()/400.f;
+  const float disparity=4.f*stereo_slider/400.f;
   Mtx_OrthoTilt(&stereo_tilt[1],-1-disparity,1-disparity,-1,1,0,1,true);
   Mtx_OrthoTilt(&stereo_tilt[2],-1+disparity,1+disparity,-1,1,0,1,true);
-  const float slider=osGet3DSliderState();
+  const float slider=stereo_slider;
   native_weapon_stereo(stereo_tilt[3],tilt,slider,false);
   native_weapon_stereo(stereo_tilt[4],tilt,slider,true);
   native_world_stereo(stereo_tilt[5],tilt,slider,false);

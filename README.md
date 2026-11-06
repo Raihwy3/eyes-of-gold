@@ -10,13 +10,14 @@ The game is playable, but there are still bugs and performance issues. New 3DS s
 
 The original campaign, menus, intros, idle demos and watch run through the native engine. On top of that, the port adds features for the 3DS:
 
-- **Dual-screen support.** The bottom screen has touch controls for menus and a full-screen version of the watch interface. During gameplay it shows your mission objectives, and you can drag on it to look around.
+- **Dual-screen support.** The bottom screen has touch controls for menus and a full-screen version of the watch interface. During gameplay it shows your mission objectives, and you can drag on it to look around, with adjustable touch sensitivity.
 - **Stereoscopic 3D.** The 3D slider controls depth for the game world and first-person weapons, alongside supported menu, HUD and watch elements. The bottom-screen interface stays flat.
+- **Gyro look.** Choose Aim Only or Look + Aim, with sensitivity separate from the sticks. It is off by default. The watch settings are under Game Options → Controls. [Motion and stereo details](docs/gyro-stereo.md).
 - **Two extra control styles.** **1.5 Vesper** uses the Circle Pad for movement and the C-stick for looking. **1.6 Jinx** uses the Circle Pad for movement, the face buttons for looking and the D-pad for the actions moved from those buttons. The original control styles are still available, and look sensitivity is adjustable.
 - **Display options.** Choose 4:3, 5:4 or the top screen's native 5:3 aspect ratio, with a 30 or 60 FPS cap. These are limits, not guaranteed frame rates. There is also optional supersampling and a choice of smoothing or sharpening filters.
 - **Performance settings.** Adjust model and texture detail, view distance, glass and effects. Dynamic LOD changes the detail level as the frame rate changes. Experimental guard settings can reduce update rates and work spent on distant or hidden guards, but may affect their behaviour.
 - **Extra screen effects.** Optional bloom, film grain and vignette. The vignette can stay on or appear only while crouching, aiming, or either.
-- **Watch and crosshair customisation.** Choose interface and crosshair colours, including blue and gold, along with alternate watch-hand styles.
+- **Watch and crosshair customisation.** Choose interface and crosshair colours, including blue, gold and purple, along with alternate watch-hand styles.
 - **Audio options.** Music and sound effects come from the ROM. You can choose CPU or DSP-assisted mixing; the DSP option still leaves some audio work on the CPU.
 - **Saved settings.** Port-specific options are stored in `native-options.ini`. First-launch defaults depend on the console model and do not replace an existing settings file.
 - **Campaign modifiers.** Cheat Options includes Subsistence and a seeded Randomiser for starting guns, ordinary guard appearances and weapons, weapon pickups and ammo-crate contents. [Randomiser details](docs/randomiser.md).
@@ -39,7 +40,7 @@ This repository contains the source. If you want to build your own install ZIP, 
 
 ## Building from source
 
-The build scripts currently expect devkitPro at `/opt/devkitpro`. Install its 3DS tools, including devkitARM, libctru, Citro3D, picasso, smdhtool and 3dsxtool. You also need Python 3, GCC/G++, make, Git and the Python package `pyelftools`. Pillow is only used for optional image previews. The updater also needs devkitPro packages `3ds-curl`, `3ds-mbedtls` and `3ds-zlib`. Its host checks use curl, MiniZip, zlib and OpenSSL development libraries, plus the `openssl` command.
+The build scripts currently expect devkitPro at `/opt/devkitpro`. Install its 3DS tools, including devkitARM, libctru, Citro3D, picasso, smdhtool and 3dsxtool. You also need Python 3, GCC/G++, make, Git and the Python package `pyelftools`. Pillow is needed for the optional CIA banner and image previews. The updater also needs devkitPro packages `3ds-curl`, `3ds-mbedtls` and `3ds-zlib`. Its host checks use curl, MiniZip, zlib and OpenSSL development libraries, plus the `openssl` command.
 
 Install the Python build dependency in your environment with:
 
@@ -68,6 +69,8 @@ The install ZIP will be written to:
 ```text
 local/releases/eyes-of-gold-launcher.zip
 ```
+
+An optional standalone HOME Menu build is available with `make cia`. It shares the same SD data folder as the 3DSX. See [CIA build and installation](docs/cia.md) for its extra tools and limitations.
 
 The tools accept all three common N64 ROM byte orders. After conversion to big endian, the expected SHA-1 is `abe01e4aeb033b6c0836819f549c791b26cfde83`.
 

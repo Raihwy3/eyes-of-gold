@@ -28,6 +28,9 @@ static std::map<const C3D_BufInfo *,const void *> driver_buffers;
 static bool driver_current_backend;
 static unsigned submissions;
 static std::vector<float> draw_uniforms;
+#ifndef BACKEND_REFERENCE
+static std::vector<float> draw_eye_offsets,draw_world_depth;
+#endif
 static GPU_CULLMODE driver_cull=GPU_CULL_NONE;
 static shaderProgram_s *driver_program;
 #ifndef BACKEND_REFERENCE
@@ -141,11 +144,19 @@ static void record_vertex(int i) {
 }
 void C3D_DrawArrays(GPU_Primitive_t,int first,int count) {
  submissions++;draw_uniforms.push_back(C3D_FVUnif[0][0].x);
+#ifndef BACKEND_REFERENCE
+ draw_eye_offsets.push_back(C3D_FVUnif[0][world_palette_active?world_stereo_uniform:clip_stereo_uniform].y);
+ draw_world_depth.push_back(C3D_FVUnif[0][world_palette_active?world_stereo_uniform:clip_stereo_uniform].z);
+#endif
  for(int i=first;i<first+count;i++)record_vertex(i);
 }
 void C3D_DrawElements(GPU_Primitive_t,int count,int type,const void *indices) {
  assert(type==C3D_UNSIGNED_SHORT && indices);
  submissions++;draw_uniforms.push_back(C3D_FVUnif[0][0].x);
+#ifndef BACKEND_REFERENCE
+ draw_eye_offsets.push_back(C3D_FVUnif[0][world_palette_active?world_stereo_uniform:clip_stereo_uniform].y);
+ draw_world_depth.push_back(C3D_FVUnif[0][world_palette_active?world_stereo_uniform:clip_stereo_uniform].z);
+#endif
  auto *elements=static_cast<const uint16_t *>(indices);
  for(int i=0;i<count;i++)record_vertex(elements[i]);
 }
@@ -201,6 +212,10 @@ static void run_material(uint64_t id,uint32_t flags,bool scalar=false) {
  barrier();
 }
 int main(int argc,char **argv) {
+#ifndef BACKEND_REFERENCE
+ clip_stereo_uniform=4;world_stereo_uniform=88;
+#endif
+
  assert(argc==2);
 #ifdef BACKEND_REFERENCE
  driver_current_backend=false;
@@ -285,7 +300,7 @@ int main(int argc,char **argv) {
  {
    NativeGpuWorld world={};for(unsigned i=0;i<4;i++)world.rows[i][i]=1;
    world.rows[0][3]=12;world.rows[2][3]=-500;world.cull=2;
-   clip_tilt_uniform=0;world_tilt_uniform=4;world_matrix_uniform=8;
+   clip_tilt_uniform=0;world_tilt_uniform=4;world_matrix_uniform=8;clip_stereo_uniform=4;world_stereo_uniform=88;
    native_pica_gpu_world(&world);
    assert(gpu_world && driver_program==&world_program && driver_cull==GPU_CULL_BACK_CCW);
    assert(C3D_FVUnif[0][8].w==12 && C3D_FVUnif[0][10].w==-250.5f);
@@ -921,7 +936,7 @@ int main(int argc,char **argv) {
  C3D_RenderTarget stereo_left={},stereo_right={};
  target=&stereo_left;right_target=&stereo_right;
  viewport(40,0,320,240);scissor(40,0,320,240);
- stereo_active=true;tilt_uniform=0;
+ stereo_active=true;stereo_slider=1.f;tilt_uniform=0;
  stereo_tilt[0].r[0].x=0.f;stereo_tilt[1].r[0].x=-.01f;stereo_tilt[2].r[0].x=.01f;
  stereo_tilt[3].r[0].x=-.02f;stereo_tilt[4].r[0].x=.02f;
  stereo_tilt[5].r[0].x=-.03f;stereo_tilt[6].r[0].x=.03f;
@@ -933,10 +948,14 @@ int main(int argc,char **argv) {
  barrier();
  assert(recorded.size()==before+12 && draw_uniforms.size()==u+2);
  assert(draw_uniforms[u]==-.03f && draw_uniforms[u+1]==.03f);
+ assert(draw_eye_offsets[u]==-6.f && draw_eye_offsets[u+1]==6.f);
+ assert(draw_world_depth[u]==1.f && draw_world_depth[u+1]==1.f);
  u=draw_uniforms.size();before=recorded.size();
  native_pica_ui_rect(1);draw(data.data(),data.size(),2);barrier();native_pica_ui_rect(0);
  assert(recorded.size()==before+12 && draw_uniforms.size()==u+2);
  assert(draw_uniforms[u]==-.01f && draw_uniforms[u+1]==.01f);
+ assert(draw_eye_offsets[u]==0.f && draw_eye_offsets[u+1]==0.f);
+ assert(draw_world_depth[u]==0.f && draw_world_depth[u+1]==0.f);
  assert(C3D_FVUnif[0][0].x==0.f && driver.target==(uintptr_t)target);
  for(unsigned v=0;v<6;v++) {
    assert(!memcmp(recorded[before+v].pos,recorded[before+6+v].pos,4*sizeof(float)));
@@ -948,9 +967,40 @@ int main(int argc,char **argv) {
  native_pica_set_viewmodel(1);draw(data.data(),data.size(),2);barrier();native_pica_set_viewmodel(0);
  assert(recorded.size()==before+12 && draw_uniforms.size()==u+2);
  assert(draw_uniforms[u]==-.02f && draw_uniforms[u+1]==.02f);
+ assert(draw_eye_offsets[u]==-.8f && draw_eye_offsets[u+1]==.8f);
+ assert(draw_world_depth[u]==0.f && draw_world_depth[u+1]==0.f);
  assert(C3D_FVUnif[0][0].x==0.f && driver.target==(uintptr_t)target);
  u=draw_uniforms.size();draw(data.data(),data.size(),2);barrier();
  assert(draw_uniforms[u]==-.03f && draw_uniforms[u+1]==.03f);
+ assert(draw_eye_offsets[u]==-6.f && draw_eye_offsets[u+1]==6.f);
+ assert(draw_world_depth[u]==1.f && draw_world_depth[u+1]==1.f);
+ // Orthographic HUD gauges and the physical watch must not inherit the
+ // perspective-world eye translation (W=1 gauges would move off the LCD).
+ for(int watch_ui=0;watch_ui<2;watch_ui++) {
+   watch_scope=watch_ui!=0;
+   native_pica_set_watch_body(1);
+   u=draw_uniforms.size();before=recorded.size();
+   draw(data.data(),data.size(),2);barrier();
+   assert(recorded.size()==before+12);
+   assert(draw_uniforms[u]==0.f && draw_uniforms[u+1]==0.f);
+   assert(draw_eye_offsets[u]==0.f && draw_eye_offsets[u+1]==0.f);
+   assert(draw_world_depth[u]==0.f && draw_world_depth[u+1]==0.f);
+   native_pica_set_watch_body(0);
+   u=draw_uniforms.size();draw(data.data(),data.size(),2);barrier();
+   assert(draw_uniforms[u]==(watch_ui?-.01f:-.03f));
+   assert(draw_uniforms[u+1]==(watch_ui?.01f:.03f));
+   assert(draw_world_depth[u]==(watch_ui?0.f:1.f));
+ }
+ watch_scope=false;
+ // The model-space GPU path must receive the same full-depth flag and eye
+ // separation as CPU-transformed world vertices, in its own uniform bank.
+ NativeGpuWorld world={};for(unsigned row=0;row<4;row++)world.rows[row][row]=1.f;
+ u=draw_uniforms.size();before=recorded.size();
+ native_pica_gpu_world(&world);draw(data.data(),data.size(),2);barrier();native_pica_gpu_world(nullptr);
+ assert(recorded.size()==before+12 && draw_eye_offsets.size()==u+2);
+ assert(draw_eye_offsets[u]==-6.f && draw_eye_offsets[u+1]==6.f);
+ assert(draw_world_depth[u]==1.f && draw_world_depth[u+1]==1.f);
+ assert(C3D_FVUnif[0][world_stereo_uniform].z==0.f);
  stereo_active=false;right_target=nullptr;
  }
  puts("PASS stereo submissions: world/weapon/UI eye projections, redundant scopes preserve queued draws, identical geometry/viewport, flat bottom output");

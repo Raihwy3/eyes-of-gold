@@ -56,6 +56,8 @@ def main():
     check_derived.main()
     import check_scenery_cache
     check_scenery_cache.main()
+    import check_weapon_stereo
+    check_weapon_stereo.main()
     import check_pica_backend
     check_pica_backend.main()
     import check_graphics_host,check_display_host

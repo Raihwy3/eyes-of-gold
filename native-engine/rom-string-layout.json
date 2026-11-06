@@ -4,85 +4,6 @@
   "sections": [
     {
       "unit": "bg.c",
-      "section": ".rodata.bgInit.str1.4",
-      "destination": ".data.eog_rom_strings_0e54349cc830e02b",
-      "bytes": 11,
-      "sha256": "be52137b06b7852768507f196c61558eadd12ba14ce123f5dc1fdf377fd13823",
-      "rows": [
-        {
-          "unit": "bg.c",
-          "symbol": "eog_rom_string_0e54349cc830e02b_0",
-          "link_name": "eog_rom_string_0e54349cc830e02b_0",
-          "bytes": 11,
-          "bank": "cdata",
-          "source_offset": 229036,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ],
-            [
-              3,
-              1,
-              "scalar"
-            ],
-            [
-              4,
-              1,
-              "scalar"
-            ],
-            [
-              5,
-              1,
-              "scalar"
-            ],
-            [
-              6,
-              1,
-              "scalar"
-            ],
-            [
-              7,
-              1,
-              "scalar"
-            ],
-            [
-              8,
-              1,
-              "scalar"
-            ],
-            [
-              9,
-              1,
-              "scalar"
-            ],
-            [
-              10,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 2319822360,
-          "pool_section": ".rodata.bgInit.str1.4",
-          "pool_destination": ".data.eog_rom_strings_0e54349cc830e02b",
-          "pool_offset": 0,
-          "storage": "zeroed-string-pool"
-        }
-      ]
-    },
-    {
-      "unit": "bg.c",
       "section": ".rodata.bgDebPrintPORTALID.str1.4",
       "destination": ".data.eog_rom_strings_2ee54ab0f6cdb710",
       "bytes": 7,
@@ -194,6 +115,85 @@
           "hash": 1635498705,
           "pool_section": ".rodata.bgDebPrintROOMID.str1.4",
           "pool_destination": ".data.eog_rom_strings_192b4a31ce530e59",
+          "pool_offset": 0,
+          "storage": "zeroed-string-pool"
+        }
+      ]
+    },
+    {
+      "unit": "bg.c",
+      "section": ".rodata.bgInit.str1.4",
+      "destination": ".data.eog_rom_strings_0e54349cc830e02b",
+      "bytes": 11,
+      "sha256": "be52137b06b7852768507f196c61558eadd12ba14ce123f5dc1fdf377fd13823",
+      "rows": [
+        {
+          "unit": "bg.c",
+          "symbol": "eog_rom_string_0e54349cc830e02b_0",
+          "link_name": "eog_rom_string_0e54349cc830e02b_0",
+          "bytes": 11,
+          "bank": "cdata",
+          "source_offset": 229036,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ],
+            [
+              3,
+              1,
+              "scalar"
+            ],
+            [
+              4,
+              1,
+              "scalar"
+            ],
+            [
+              5,
+              1,
+              "scalar"
+            ],
+            [
+              6,
+              1,
+              "scalar"
+            ],
+            [
+              7,
+              1,
+              "scalar"
+            ],
+            [
+              8,
+              1,
+              "scalar"
+            ],
+            [
+              9,
+              1,
+              "scalar"
+            ],
+            [
+              10,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 2319822360,
+          "pool_section": ".rodata.bgInit.str1.4",
+          "pool_destination": ".data.eog_rom_strings_0e54349cc830e02b",
           "pool_offset": 0,
           "storage": "zeroed-string-pool"
         }
@@ -5062,45 +5062,6 @@
     },
     {
       "unit": "file2.c",
-      "section": ".rodata.fileValidateSaves.str1.4",
-      "destination": ".data.eog_rom_strings_d23807f47c762f41",
-      "bytes": 135,
-      "sha256": "2ec4560b2baaef5dab58670b9141c30b7bca8d2eefc36a0fb96097fd6f8840b1",
-      "rows": [
-        {
-          "unit": "file2.c",
-          "symbol": "eog_rom_string_d23807f47c762f41_84",
-          "link_name": "eog_rom_string_d23807f47c762f41_84",
-          "bytes": 3,
-          "bank": "rom",
-          "source_offset": 1550422,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 4128109053,
-          "pool_section": ".rodata.fileValidateSaves.str1.4",
-          "pool_destination": ".data.eog_rom_strings_d23807f47c762f41",
-          "pool_offset": 132,
-          "storage": "zeroed-string-pool"
-        }
-      ]
-    },
-    {
-      "unit": "file2.c",
       "section": ".rodata",
       "destination": ".data.eog_rom_strings_37545534df7521e9",
       "bytes": 128,
@@ -5710,6 +5671,45 @@
           "pool_destination": ".data.eog_rom_strings_37545534df7521e9",
           "pool_offset": 96,
           "storage": "zeroed-compiler-pool"
+        }
+      ]
+    },
+    {
+      "unit": "file2.c",
+      "section": ".rodata.fileValidateSaves.str1.4",
+      "destination": ".data.eog_rom_strings_d23807f47c762f41",
+      "bytes": 135,
+      "sha256": "2ec4560b2baaef5dab58670b9141c30b7bca8d2eefc36a0fb96097fd6f8840b1",
+      "rows": [
+        {
+          "unit": "file2.c",
+          "symbol": "eog_rom_string_d23807f47c762f41_84",
+          "link_name": "eog_rom_string_d23807f47c762f41_84",
+          "bytes": 3,
+          "bank": "rom",
+          "source_offset": 1550422,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 4128109053,
+          "pool_section": ".rodata.fileValidateSaves.str1.4",
+          "pool_destination": ".data.eog_rom_strings_d23807f47c762f41",
+          "pool_offset": 132,
+          "storage": "zeroed-string-pool"
         }
       ]
     },
@@ -8519,45 +8519,6 @@
     },
     {
       "unit": "front.c",
-      "section": ".rodata.print_current_solo_briefing_stage_name.str1.4",
-      "destination": ".data.eog_rom_strings_94f4c9e504247db9",
-      "bytes": 3,
-      "sha256": "009837f45c558b8c59e1d415d41e65141be5d51ca7bf56ef3eed489187825a88",
-      "rows": [
-        {
-          "unit": "front.c",
-          "symbol": "eog_rom_string_94f4c9e504247db9_0",
-          "link_name": "eog_rom_string_94f4c9e504247db9_0",
-          "bytes": 3,
-          "bank": "cdata",
-          "source_offset": 190228,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 3399895445,
-          "pool_section": ".rodata.print_current_solo_briefing_stage_name.str1.4",
-          "pool_destination": ".data.eog_rom_strings_94f4c9e504247db9",
-          "pool_offset": 0,
-          "storage": "zeroed-string-pool"
-        }
-      ]
-    },
-    {
-      "unit": "front.c",
       "section": ".rodata.constructor_menu09_007options.str1.4",
       "destination": ".data.eog_rom_strings_0fe3e91218f584ed",
       "bytes": 6,
@@ -8605,89 +8566,6 @@
           "hash": 1048815200,
           "pool_section": ".rodata.constructor_menu09_007options.str1.4",
           "pool_destination": ".data.eog_rom_strings_0fe3e91218f584ed",
-          "pool_offset": 0,
-          "storage": "zeroed-string-pool"
-        }
-      ]
-    },
-    {
-      "unit": "front.c",
-      "section": ".rodata.constructor_menu0E_mpoptions.str1.4",
-      "destination": ".data.eog_rom_strings_7d4a7b74bada91ed",
-      "bytes": 3,
-      "sha256": "0b782fc3030dbdf3756f17e7adf2ce5808dfc513ca7589adeb679c7d25eaef6f",
-      "rows": [
-        {
-          "unit": "front.c",
-          "symbol": "eog_rom_string_7d4a7b74bada91ed_0",
-          "link_name": "eog_rom_string_7d4a7b74bada91ed_0",
-          "bytes": 3,
-          "bank": "cdata",
-          "source_offset": 196284,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 1163859812,
-          "pool_section": ".rodata.constructor_menu0E_mpoptions.str1.4",
-          "pool_destination": ".data.eog_rom_strings_7d4a7b74bada91ed",
-          "pool_offset": 0,
-          "storage": "zeroed-string-pool"
-        }
-      ]
-    },
-    {
-      "unit": "front.c",
-      "section": ".rodata.print_objectives_and_status_to_menu.str1.4",
-      "destination": ".data.eog_rom_strings_8908adf1498801e9",
-      "bytes": 4,
-      "sha256": "b921441ab959f6e3e04e035d10cb863c6470304fde580e65fc9b79ffca8aa481",
-      "rows": [
-        {
-          "unit": "front.c",
-          "symbol": "eog_rom_string_8908adf1498801e9_0",
-          "link_name": "eog_rom_string_8908adf1498801e9_0",
-          "bytes": 4,
-          "bank": "cdata",
-          "source_offset": 196288,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ],
-            [
-              3,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 2283227148,
-          "pool_section": ".rodata.print_objectives_and_status_to_menu.str1.4",
-          "pool_destination": ".data.eog_rom_strings_8908adf1498801e9",
           "pool_offset": 0,
           "storage": "zeroed-string-pool"
         }
@@ -9108,6 +8986,167 @@
           "pool_section": ".rodata.constructor_menu0D_missioncomplete.str1.4",
           "pool_destination": ".data.eog_rom_strings_49b566ab3c5350d9",
           "pool_offset": 64,
+          "storage": "zeroed-string-pool"
+        }
+      ]
+    },
+    {
+      "unit": "front.c",
+      "section": ".rodata.constructor_menu0E_mpoptions.str1.4",
+      "destination": ".data.eog_rom_strings_7d4a7b74bada91ed",
+      "bytes": 3,
+      "sha256": "0b782fc3030dbdf3756f17e7adf2ce5808dfc513ca7589adeb679c7d25eaef6f",
+      "rows": [
+        {
+          "unit": "front.c",
+          "symbol": "eog_rom_string_7d4a7b74bada91ed_0",
+          "link_name": "eog_rom_string_7d4a7b74bada91ed_0",
+          "bytes": 3,
+          "bank": "cdata",
+          "source_offset": 196284,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 1163859812,
+          "pool_section": ".rodata.constructor_menu0E_mpoptions.str1.4",
+          "pool_destination": ".data.eog_rom_strings_7d4a7b74bada91ed",
+          "pool_offset": 0,
+          "storage": "zeroed-string-pool"
+        }
+      ]
+    },
+    {
+      "unit": "front.c",
+      "section": ".rodata.native_bottom_front_publish.part.0.str1.4",
+      "destination": ".data.eog_rom_strings_0fcbcaa210e4e12a",
+      "bytes": 533,
+      "sha256": "40907ff6321b1e00c2dd3d6c18e6d9fc531c599bfb0a0c665871ec4b09612b33",
+      "rows": [
+        {
+          "unit": "front.c",
+          "symbol": "eog_rom_string_0fcbcaa210e4e12a_20",
+          "link_name": "eog_rom_string_0fcbcaa210e4e12a_20",
+          "bytes": 3,
+          "bank": "rom",
+          "source_offset": 7406596,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 2008170704,
+          "pool_section": ".rodata.native_bottom_front_publish.part.0.str1.4",
+          "pool_destination": ".data.eog_rom_strings_0fcbcaa210e4e12a",
+          "pool_offset": 32,
+          "storage": "zeroed-string-pool"
+        }
+      ]
+    },
+    {
+      "unit": "front.c",
+      "section": ".rodata.print_current_solo_briefing_stage_name.str1.4",
+      "destination": ".data.eog_rom_strings_94f4c9e504247db9",
+      "bytes": 3,
+      "sha256": "009837f45c558b8c59e1d415d41e65141be5d51ca7bf56ef3eed489187825a88",
+      "rows": [
+        {
+          "unit": "front.c",
+          "symbol": "eog_rom_string_94f4c9e504247db9_0",
+          "link_name": "eog_rom_string_94f4c9e504247db9_0",
+          "bytes": 3,
+          "bank": "cdata",
+          "source_offset": 190228,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 3399895445,
+          "pool_section": ".rodata.print_current_solo_briefing_stage_name.str1.4",
+          "pool_destination": ".data.eog_rom_strings_94f4c9e504247db9",
+          "pool_offset": 0,
+          "storage": "zeroed-string-pool"
+        }
+      ]
+    },
+    {
+      "unit": "front.c",
+      "section": ".rodata.print_objectives_and_status_to_menu.str1.4",
+      "destination": ".data.eog_rom_strings_8908adf1498801e9",
+      "bytes": 4,
+      "sha256": "b921441ab959f6e3e04e035d10cb863c6470304fde580e65fc9b79ffca8aa481",
+      "rows": [
+        {
+          "unit": "front.c",
+          "symbol": "eog_rom_string_8908adf1498801e9_0",
+          "link_name": "eog_rom_string_8908adf1498801e9_0",
+          "bytes": 4,
+          "bank": "cdata",
+          "source_offset": 196288,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ],
+            [
+              3,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 2283227148,
+          "pool_section": ".rodata.print_objectives_and_status_to_menu.str1.4",
+          "pool_destination": ".data.eog_rom_strings_8908adf1498801e9",
+          "pool_offset": 0,
           "storage": "zeroed-string-pool"
         }
       ]
@@ -9887,85 +9926,6 @@
     },
     {
       "unit": "lv.c",
-      "section": ".rodata.lvlRender.str1.4",
-      "destination": ".data.eog_rom_strings_a6f3d80551a4c9b5",
-      "bytes": 11,
-      "sha256": "16e8a1f439ca9782229af66076013fbb5e645c438592580f7deef4c381cdf602",
-      "rows": [
-        {
-          "unit": "lv.c",
-          "symbol": "eog_rom_string_a6f3d80551a4c9b5_0",
-          "link_name": "eog_rom_string_a6f3d80551a4c9b5_0",
-          "bytes": 11,
-          "bank": "cdata",
-          "source_offset": 239916,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ],
-            [
-              3,
-              1,
-              "scalar"
-            ],
-            [
-              4,
-              1,
-              "scalar"
-            ],
-            [
-              5,
-              1,
-              "scalar"
-            ],
-            [
-              6,
-              1,
-              "scalar"
-            ],
-            [
-              7,
-              1,
-              "scalar"
-            ],
-            [
-              8,
-              1,
-              "scalar"
-            ],
-            [
-              9,
-              1,
-              "scalar"
-            ],
-            [
-              10,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 2727350170,
-          "pool_section": ".rodata.lvlRender.str1.4",
-          "pool_destination": ".data.eog_rom_strings_a6f3d80551a4c9b5",
-          "pool_offset": 0,
-          "storage": "zeroed-string-pool"
-        }
-      ]
-    },
-    {
-      "unit": "lv.c",
       "section": ".rodata.lvlManageMpGame.str1.4",
       "destination": ".data.eog_rom_strings_1da64601b084e469",
       "bytes": 16,
@@ -10069,19 +10029,19 @@
       ]
     },
     {
-      "unit": "mema.c",
-      "section": ".rodata.memaInit.str1.4",
-      "destination": ".data.eog_rom_strings_a5c3d163e751d6e8",
-      "bytes": 13,
-      "sha256": "936d56273e03a85187a86f64a6aaa2f94d0e8293e80d988865b8d66c6ff3d3ee",
+      "unit": "lv.c",
+      "section": ".rodata.lvlRender.str1.4",
+      "destination": ".data.eog_rom_strings_a6f3d80551a4c9b5",
+      "bytes": 11,
+      "sha256": "16e8a1f439ca9782229af66076013fbb5e645c438592580f7deef4c381cdf602",
       "rows": [
         {
-          "unit": "mema.c",
-          "symbol": "eog_rom_string_a5c3d163e751d6e8_0",
-          "link_name": "eog_rom_string_a5c3d163e751d6e8_0",
-          "bytes": 13,
+          "unit": "lv.c",
+          "symbol": "eog_rom_string_a6f3d80551a4c9b5_0",
+          "link_name": "eog_rom_string_a6f3d80551a4c9b5_0",
+          "bytes": 11,
           "bank": "cdata",
-          "source_offset": 33856,
+          "source_offset": 239916,
           "fields": [
             [
               0,
@@ -10137,21 +10097,11 @@
               10,
               1,
               "scalar"
-            ],
-            [
-              11,
-              1,
-              "scalar"
-            ],
-            [
-              12,
-              1,
-              "scalar"
             ]
           ],
-          "hash": 826358613,
-          "pool_section": ".rodata.memaInit.str1.4",
-          "pool_destination": ".data.eog_rom_strings_a5c3d163e751d6e8",
+          "hash": 2727350170,
+          "pool_section": ".rodata.lvlRender.str1.4",
+          "pool_destination": ".data.eog_rom_strings_a6f3d80551a4c9b5",
           "pool_offset": 0,
           "storage": "zeroed-string-pool"
         }
@@ -10277,19 +10227,19 @@
       ]
     },
     {
-      "unit": "memp.c",
-      "section": ".rodata.mempInit.str1.4",
-      "destination": ".data.eog_rom_strings_5188ae4c51a48dae",
+      "unit": "mema.c",
+      "section": ".rodata.memaInit.str1.4",
+      "destination": ".data.eog_rom_strings_a5c3d163e751d6e8",
       "bytes": 13,
-      "sha256": "f089a779febf59debdde2452a0f2cc67163814565dd1653ad7ecf6f8ac3aea73",
+      "sha256": "936d56273e03a85187a86f64a6aaa2f94d0e8293e80d988865b8d66c6ff3d3ee",
       "rows": [
         {
-          "unit": "memp.c",
-          "symbol": "eog_rom_string_5188ae4c51a48dae_0",
-          "link_name": "eog_rom_string_5188ae4c51a48dae_0",
+          "unit": "mema.c",
+          "symbol": "eog_rom_string_a5c3d163e751d6e8_0",
+          "link_name": "eog_rom_string_a5c3d163e751d6e8_0",
           "bytes": 13,
           "bank": "cdata",
-          "source_offset": 33808,
+          "source_offset": 33856,
           "fields": [
             [
               0,
@@ -10357,9 +10307,9 @@
               "scalar"
             ]
           ],
-          "hash": 3564927300,
-          "pool_section": ".rodata.mempInit.str1.4",
-          "pool_destination": ".data.eog_rom_strings_5188ae4c51a48dae",
+          "hash": 826358613,
+          "pool_section": ".rodata.memaInit.str1.4",
+          "pool_destination": ".data.eog_rom_strings_a5c3d163e751d6e8",
           "pool_offset": 0,
           "storage": "zeroed-string-pool"
         }
@@ -10481,6 +10431,95 @@
     },
     {
       "unit": "memp.c",
+      "section": ".rodata.mempInit.str1.4",
+      "destination": ".data.eog_rom_strings_5188ae4c51a48dae",
+      "bytes": 13,
+      "sha256": "f089a779febf59debdde2452a0f2cc67163814565dd1653ad7ecf6f8ac3aea73",
+      "rows": [
+        {
+          "unit": "memp.c",
+          "symbol": "eog_rom_string_5188ae4c51a48dae_0",
+          "link_name": "eog_rom_string_5188ae4c51a48dae_0",
+          "bytes": 13,
+          "bank": "cdata",
+          "source_offset": 33808,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ],
+            [
+              3,
+              1,
+              "scalar"
+            ],
+            [
+              4,
+              1,
+              "scalar"
+            ],
+            [
+              5,
+              1,
+              "scalar"
+            ],
+            [
+              6,
+              1,
+              "scalar"
+            ],
+            [
+              7,
+              1,
+              "scalar"
+            ],
+            [
+              8,
+              1,
+              "scalar"
+            ],
+            [
+              9,
+              1,
+              "scalar"
+            ],
+            [
+              10,
+              1,
+              "scalar"
+            ],
+            [
+              11,
+              1,
+              "scalar"
+            ],
+            [
+              12,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 3564927300,
+          "pool_section": ".rodata.mempInit.str1.4",
+          "pool_destination": ".data.eog_rom_strings_5188ae4c51a48dae",
+          "pool_offset": 0,
+          "storage": "zeroed-string-pool"
+        }
+      ]
+    },
+    {
+      "unit": "memp.c",
       "section": ".rodata.mempRedzoneCheck.str1.4",
       "destination": ".data.eog_rom_strings_d641532124f11336",
       "bytes": 174,
@@ -10508,6 +10547,175 @@
           "hash": 4026134410,
           "pool_section": ".rodata.mempRedzoneCheck.str1.4",
           "pool_destination": ".data.eog_rom_strings_d641532124f11336",
+          "pool_offset": 0,
+          "storage": "zeroed-string-pool"
+        }
+      ]
+    },
+    {
+      "unit": "model.c",
+      "section": ".rodata.dogfnegx.str1.4",
+      "destination": ".data.eog_rom_strings_0d56809975687933",
+      "bytes": 29,
+      "sha256": "62a6cf7fb8768bd452e5268b4463fdb473daf2bb007d5466c34ef2bc64594bb7",
+      "rows": [
+        {
+          "unit": "model.c",
+          "symbol": "eog_rom_string_0d56809975687933_0",
+          "link_name": "eog_rom_string_0d56809975687933_0",
+          "bytes": 29,
+          "bank": "cdata",
+          "source_offset": 212196,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ],
+            [
+              3,
+              1,
+              "scalar"
+            ],
+            [
+              4,
+              1,
+              "scalar"
+            ],
+            [
+              5,
+              1,
+              "scalar"
+            ],
+            [
+              6,
+              1,
+              "scalar"
+            ],
+            [
+              7,
+              1,
+              "scalar"
+            ],
+            [
+              8,
+              1,
+              "scalar"
+            ],
+            [
+              9,
+              1,
+              "scalar"
+            ],
+            [
+              10,
+              1,
+              "scalar"
+            ],
+            [
+              11,
+              1,
+              "scalar"
+            ],
+            [
+              12,
+              1,
+              "scalar"
+            ],
+            [
+              13,
+              1,
+              "scalar"
+            ],
+            [
+              14,
+              1,
+              "scalar"
+            ],
+            [
+              15,
+              1,
+              "scalar"
+            ],
+            [
+              16,
+              1,
+              "scalar"
+            ],
+            [
+              17,
+              1,
+              "scalar"
+            ],
+            [
+              18,
+              1,
+              "scalar"
+            ],
+            [
+              19,
+              1,
+              "scalar"
+            ],
+            [
+              20,
+              1,
+              "scalar"
+            ],
+            [
+              21,
+              1,
+              "scalar"
+            ],
+            [
+              22,
+              1,
+              "scalar"
+            ],
+            [
+              23,
+              1,
+              "scalar"
+            ],
+            [
+              24,
+              1,
+              "scalar"
+            ],
+            [
+              25,
+              1,
+              "scalar"
+            ],
+            [
+              26,
+              1,
+              "scalar"
+            ],
+            [
+              27,
+              1,
+              "scalar"
+            ],
+            [
+              28,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 842466918,
+          "pool_section": ".rodata.dogfnegx.str1.4",
+          "pool_destination": ".data.eog_rom_strings_0d56809975687933",
           "pool_offset": 0,
           "storage": "zeroed-string-pool"
         }
@@ -10678,6 +10886,937 @@
           "pool_section": ".rodata.dorottex.part.0.isra.0.str1.4",
           "pool_destination": ".data.eog_rom_strings_7db619a6032d3883",
           "pool_offset": 0,
+          "storage": "zeroed-string-pool"
+        }
+      ]
+    },
+    {
+      "unit": "model.c",
+      "section": ".rodata.dotube.str1.4",
+      "destination": ".data.eog_rom_strings_8511f115579d811e",
+      "bytes": 27,
+      "sha256": "d17041d53656567b375648f3b9aeb09aa1cbcb433f1dd63354b2edf1875765c2",
+      "rows": [
+        {
+          "unit": "model.c",
+          "symbol": "eog_rom_string_8511f115579d811e_0",
+          "link_name": "eog_rom_string_8511f115579d811e_0",
+          "bytes": 27,
+          "bank": "cdata",
+          "source_offset": 212168,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ],
+            [
+              3,
+              1,
+              "scalar"
+            ],
+            [
+              4,
+              1,
+              "scalar"
+            ],
+            [
+              5,
+              1,
+              "scalar"
+            ],
+            [
+              6,
+              1,
+              "scalar"
+            ],
+            [
+              7,
+              1,
+              "scalar"
+            ],
+            [
+              8,
+              1,
+              "scalar"
+            ],
+            [
+              9,
+              1,
+              "scalar"
+            ],
+            [
+              10,
+              1,
+              "scalar"
+            ],
+            [
+              11,
+              1,
+              "scalar"
+            ],
+            [
+              12,
+              1,
+              "scalar"
+            ],
+            [
+              13,
+              1,
+              "scalar"
+            ],
+            [
+              14,
+              1,
+              "scalar"
+            ],
+            [
+              15,
+              1,
+              "scalar"
+            ],
+            [
+              16,
+              1,
+              "scalar"
+            ],
+            [
+              17,
+              1,
+              "scalar"
+            ],
+            [
+              18,
+              1,
+              "scalar"
+            ],
+            [
+              19,
+              1,
+              "scalar"
+            ],
+            [
+              20,
+              1,
+              "scalar"
+            ],
+            [
+              21,
+              1,
+              "scalar"
+            ],
+            [
+              22,
+              1,
+              "scalar"
+            ],
+            [
+              23,
+              1,
+              "scalar"
+            ],
+            [
+              24,
+              1,
+              "scalar"
+            ],
+            [
+              25,
+              1,
+              "scalar"
+            ],
+            [
+              26,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 3449379973,
+          "pool_section": ".rodata.dotube.str1.4",
+          "pool_destination": ".data.eog_rom_strings_8511f115579d811e",
+          "pool_offset": 0,
+          "storage": "zeroed-string-pool"
+        }
+      ]
+    },
+    {
+      "unit": "model.c",
+      "section": ".rodata.getinstsize.str1.4",
+      "destination": ".data.eog_rom_strings_7a04d5668213d97f",
+      "bytes": 54,
+      "sha256": "46c17347f306809db78a1e69bedbed40663cf6b126ea38dd7eedda90d4605590",
+      "rows": [
+        {
+          "unit": "model.c",
+          "symbol": "eog_rom_string_7a04d5668213d97f_0",
+          "link_name": "eog_rom_string_7a04d5668213d97f_0",
+          "bytes": 26,
+          "bank": "cdata",
+          "source_offset": 211600,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ],
+            [
+              3,
+              1,
+              "scalar"
+            ],
+            [
+              4,
+              1,
+              "scalar"
+            ],
+            [
+              5,
+              1,
+              "scalar"
+            ],
+            [
+              6,
+              1,
+              "scalar"
+            ],
+            [
+              7,
+              1,
+              "scalar"
+            ],
+            [
+              8,
+              1,
+              "scalar"
+            ],
+            [
+              9,
+              1,
+              "scalar"
+            ],
+            [
+              10,
+              1,
+              "scalar"
+            ],
+            [
+              11,
+              1,
+              "scalar"
+            ],
+            [
+              12,
+              1,
+              "scalar"
+            ],
+            [
+              13,
+              1,
+              "scalar"
+            ],
+            [
+              14,
+              1,
+              "scalar"
+            ],
+            [
+              15,
+              1,
+              "scalar"
+            ],
+            [
+              16,
+              1,
+              "scalar"
+            ],
+            [
+              17,
+              1,
+              "scalar"
+            ],
+            [
+              18,
+              1,
+              "scalar"
+            ],
+            [
+              19,
+              1,
+              "scalar"
+            ],
+            [
+              20,
+              1,
+              "scalar"
+            ],
+            [
+              21,
+              1,
+              "scalar"
+            ],
+            [
+              22,
+              1,
+              "scalar"
+            ],
+            [
+              23,
+              1,
+              "scalar"
+            ],
+            [
+              24,
+              1,
+              "scalar"
+            ],
+            [
+              25,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 2204458355,
+          "pool_section": ".rodata.getinstsize.str1.4",
+          "pool_destination": ".data.eog_rom_strings_7a04d5668213d97f",
+          "pool_offset": 0,
+          "storage": "zeroed-string-pool"
+        },
+        {
+          "unit": "model.c",
+          "symbol": "eog_rom_string_7a04d5668213d97f_1c",
+          "link_name": "eog_rom_string_7a04d5668213d97f_1c",
+          "bytes": 26,
+          "bank": "cdata",
+          "source_offset": 211628,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ],
+            [
+              3,
+              1,
+              "scalar"
+            ],
+            [
+              4,
+              1,
+              "scalar"
+            ],
+            [
+              5,
+              1,
+              "scalar"
+            ],
+            [
+              6,
+              1,
+              "scalar"
+            ],
+            [
+              7,
+              1,
+              "scalar"
+            ],
+            [
+              8,
+              1,
+              "scalar"
+            ],
+            [
+              9,
+              1,
+              "scalar"
+            ],
+            [
+              10,
+              1,
+              "scalar"
+            ],
+            [
+              11,
+              1,
+              "scalar"
+            ],
+            [
+              12,
+              1,
+              "scalar"
+            ],
+            [
+              13,
+              1,
+              "scalar"
+            ],
+            [
+              14,
+              1,
+              "scalar"
+            ],
+            [
+              15,
+              1,
+              "scalar"
+            ],
+            [
+              16,
+              1,
+              "scalar"
+            ],
+            [
+              17,
+              1,
+              "scalar"
+            ],
+            [
+              18,
+              1,
+              "scalar"
+            ],
+            [
+              19,
+              1,
+              "scalar"
+            ],
+            [
+              20,
+              1,
+              "scalar"
+            ],
+            [
+              21,
+              1,
+              "scalar"
+            ],
+            [
+              22,
+              1,
+              "scalar"
+            ],
+            [
+              23,
+              1,
+              "scalar"
+            ],
+            [
+              24,
+              1,
+              "scalar"
+            ],
+            [
+              25,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 4198349612,
+          "pool_section": ".rodata.getinstsize.str1.4",
+          "pool_destination": ".data.eog_rom_strings_7a04d5668213d97f",
+          "pool_offset": 28,
+          "storage": "zeroed-string-pool"
+        }
+      ]
+    },
+    {
+      "unit": "model.c",
+      "section": ".rodata.getjointsize.str1.4",
+      "destination": ".data.eog_rom_strings_e37162094a18ffd2",
+      "bytes": 27,
+      "sha256": "4e5f585fdd42060cee932540b01e627af6450e8938f22b4410f059b62446ade6",
+      "rows": [
+        {
+          "unit": "model.c",
+          "symbol": "eog_rom_string_e37162094a18ffd2_0",
+          "link_name": "eog_rom_string_e37162094a18ffd2_0",
+          "bytes": 27,
+          "bank": "cdata",
+          "source_offset": 211572,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ],
+            [
+              3,
+              1,
+              "scalar"
+            ],
+            [
+              4,
+              1,
+              "scalar"
+            ],
+            [
+              5,
+              1,
+              "scalar"
+            ],
+            [
+              6,
+              1,
+              "scalar"
+            ],
+            [
+              7,
+              1,
+              "scalar"
+            ],
+            [
+              8,
+              1,
+              "scalar"
+            ],
+            [
+              9,
+              1,
+              "scalar"
+            ],
+            [
+              10,
+              1,
+              "scalar"
+            ],
+            [
+              11,
+              1,
+              "scalar"
+            ],
+            [
+              12,
+              1,
+              "scalar"
+            ],
+            [
+              13,
+              1,
+              "scalar"
+            ],
+            [
+              14,
+              1,
+              "scalar"
+            ],
+            [
+              15,
+              1,
+              "scalar"
+            ],
+            [
+              16,
+              1,
+              "scalar"
+            ],
+            [
+              17,
+              1,
+              "scalar"
+            ],
+            [
+              18,
+              1,
+              "scalar"
+            ],
+            [
+              19,
+              1,
+              "scalar"
+            ],
+            [
+              20,
+              1,
+              "scalar"
+            ],
+            [
+              21,
+              1,
+              "scalar"
+            ],
+            [
+              22,
+              1,
+              "scalar"
+            ],
+            [
+              23,
+              1,
+              "scalar"
+            ],
+            [
+              24,
+              1,
+              "scalar"
+            ],
+            [
+              25,
+              1,
+              "scalar"
+            ],
+            [
+              26,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 134223193,
+          "pool_section": ".rodata.getjointsize.str1.4",
+          "pool_destination": ".data.eog_rom_strings_e37162094a18ffd2",
+          "pool_offset": 0,
+          "storage": "zeroed-string-pool"
+        }
+      ]
+    },
+    {
+      "unit": "model.c",
+      "section": ".rodata.getpartoffset.str1.4",
+      "destination": ".data.eog_rom_strings_104080d47a45adc2",
+      "bytes": 56,
+      "sha256": "2ed46f8af7c0eef52d649f30bf49530d64d4456e33864c910b808a9a835c333d",
+      "rows": [
+        {
+          "unit": "model.c",
+          "symbol": "eog_rom_string_104080d47a45adc2_0",
+          "link_name": "eog_rom_string_104080d47a45adc2_0",
+          "bytes": 27,
+          "bank": "cdata",
+          "source_offset": 211124,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ],
+            [
+              3,
+              1,
+              "scalar"
+            ],
+            [
+              4,
+              1,
+              "scalar"
+            ],
+            [
+              5,
+              1,
+              "scalar"
+            ],
+            [
+              6,
+              1,
+              "scalar"
+            ],
+            [
+              7,
+              1,
+              "scalar"
+            ],
+            [
+              8,
+              1,
+              "scalar"
+            ],
+            [
+              9,
+              1,
+              "scalar"
+            ],
+            [
+              10,
+              1,
+              "scalar"
+            ],
+            [
+              11,
+              1,
+              "scalar"
+            ],
+            [
+              12,
+              1,
+              "scalar"
+            ],
+            [
+              13,
+              1,
+              "scalar"
+            ],
+            [
+              14,
+              1,
+              "scalar"
+            ],
+            [
+              15,
+              1,
+              "scalar"
+            ],
+            [
+              16,
+              1,
+              "scalar"
+            ],
+            [
+              17,
+              1,
+              "scalar"
+            ],
+            [
+              18,
+              1,
+              "scalar"
+            ],
+            [
+              19,
+              1,
+              "scalar"
+            ],
+            [
+              20,
+              1,
+              "scalar"
+            ],
+            [
+              21,
+              1,
+              "scalar"
+            ],
+            [
+              22,
+              1,
+              "scalar"
+            ],
+            [
+              23,
+              1,
+              "scalar"
+            ],
+            [
+              24,
+              1,
+              "scalar"
+            ],
+            [
+              25,
+              1,
+              "scalar"
+            ],
+            [
+              26,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 481905092,
+          "pool_section": ".rodata.getpartoffset.str1.4",
+          "pool_destination": ".data.eog_rom_strings_104080d47a45adc2",
+          "pool_offset": 0,
+          "storage": "zeroed-string-pool"
+        },
+        {
+          "unit": "model.c",
+          "symbol": "eog_rom_string_104080d47a45adc2_1c",
+          "link_name": "eog_rom_string_104080d47a45adc2_1c",
+          "bytes": 28,
+          "bank": "cdata",
+          "source_offset": 211152,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ],
+            [
+              3,
+              1,
+              "scalar"
+            ],
+            [
+              4,
+              1,
+              "scalar"
+            ],
+            [
+              5,
+              1,
+              "scalar"
+            ],
+            [
+              6,
+              1,
+              "scalar"
+            ],
+            [
+              7,
+              1,
+              "scalar"
+            ],
+            [
+              8,
+              1,
+              "scalar"
+            ],
+            [
+              9,
+              1,
+              "scalar"
+            ],
+            [
+              10,
+              1,
+              "scalar"
+            ],
+            [
+              11,
+              1,
+              "scalar"
+            ],
+            [
+              12,
+              1,
+              "scalar"
+            ],
+            [
+              13,
+              1,
+              "scalar"
+            ],
+            [
+              14,
+              1,
+              "scalar"
+            ],
+            [
+              15,
+              1,
+              "scalar"
+            ],
+            [
+              16,
+              1,
+              "scalar"
+            ],
+            [
+              17,
+              1,
+              "scalar"
+            ],
+            [
+              18,
+              1,
+              "scalar"
+            ],
+            [
+              19,
+              1,
+              "scalar"
+            ],
+            [
+              20,
+              1,
+              "scalar"
+            ],
+            [
+              21,
+              1,
+              "scalar"
+            ],
+            [
+              22,
+              1,
+              "scalar"
+            ],
+            [
+              23,
+              1,
+              "scalar"
+            ],
+            [
+              24,
+              1,
+              "scalar"
+            ],
+            [
+              25,
+              1,
+              "scalar"
+            ],
+            [
+              26,
+              1,
+              "scalar"
+            ],
+            [
+              27,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 3981939133,
+          "pool_section": ".rodata.getpartoffset.str1.4",
+          "pool_destination": ".data.eog_rom_strings_104080d47a45adc2",
+          "pool_offset": 28,
           "storage": "zeroed-string-pool"
         }
       ]
@@ -11048,634 +12187,6 @@
     },
     {
       "unit": "model.c",
-      "section": ".rodata.getpartoffset.str1.4",
-      "destination": ".data.eog_rom_strings_104080d47a45adc2",
-      "bytes": 56,
-      "sha256": "2ed46f8af7c0eef52d649f30bf49530d64d4456e33864c910b808a9a835c333d",
-      "rows": [
-        {
-          "unit": "model.c",
-          "symbol": "eog_rom_string_104080d47a45adc2_0",
-          "link_name": "eog_rom_string_104080d47a45adc2_0",
-          "bytes": 27,
-          "bank": "cdata",
-          "source_offset": 211124,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ],
-            [
-              3,
-              1,
-              "scalar"
-            ],
-            [
-              4,
-              1,
-              "scalar"
-            ],
-            [
-              5,
-              1,
-              "scalar"
-            ],
-            [
-              6,
-              1,
-              "scalar"
-            ],
-            [
-              7,
-              1,
-              "scalar"
-            ],
-            [
-              8,
-              1,
-              "scalar"
-            ],
-            [
-              9,
-              1,
-              "scalar"
-            ],
-            [
-              10,
-              1,
-              "scalar"
-            ],
-            [
-              11,
-              1,
-              "scalar"
-            ],
-            [
-              12,
-              1,
-              "scalar"
-            ],
-            [
-              13,
-              1,
-              "scalar"
-            ],
-            [
-              14,
-              1,
-              "scalar"
-            ],
-            [
-              15,
-              1,
-              "scalar"
-            ],
-            [
-              16,
-              1,
-              "scalar"
-            ],
-            [
-              17,
-              1,
-              "scalar"
-            ],
-            [
-              18,
-              1,
-              "scalar"
-            ],
-            [
-              19,
-              1,
-              "scalar"
-            ],
-            [
-              20,
-              1,
-              "scalar"
-            ],
-            [
-              21,
-              1,
-              "scalar"
-            ],
-            [
-              22,
-              1,
-              "scalar"
-            ],
-            [
-              23,
-              1,
-              "scalar"
-            ],
-            [
-              24,
-              1,
-              "scalar"
-            ],
-            [
-              25,
-              1,
-              "scalar"
-            ],
-            [
-              26,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 481905092,
-          "pool_section": ".rodata.getpartoffset.str1.4",
-          "pool_destination": ".data.eog_rom_strings_104080d47a45adc2",
-          "pool_offset": 0,
-          "storage": "zeroed-string-pool"
-        },
-        {
-          "unit": "model.c",
-          "symbol": "eog_rom_string_104080d47a45adc2_1c",
-          "link_name": "eog_rom_string_104080d47a45adc2_1c",
-          "bytes": 28,
-          "bank": "cdata",
-          "source_offset": 211152,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ],
-            [
-              3,
-              1,
-              "scalar"
-            ],
-            [
-              4,
-              1,
-              "scalar"
-            ],
-            [
-              5,
-              1,
-              "scalar"
-            ],
-            [
-              6,
-              1,
-              "scalar"
-            ],
-            [
-              7,
-              1,
-              "scalar"
-            ],
-            [
-              8,
-              1,
-              "scalar"
-            ],
-            [
-              9,
-              1,
-              "scalar"
-            ],
-            [
-              10,
-              1,
-              "scalar"
-            ],
-            [
-              11,
-              1,
-              "scalar"
-            ],
-            [
-              12,
-              1,
-              "scalar"
-            ],
-            [
-              13,
-              1,
-              "scalar"
-            ],
-            [
-              14,
-              1,
-              "scalar"
-            ],
-            [
-              15,
-              1,
-              "scalar"
-            ],
-            [
-              16,
-              1,
-              "scalar"
-            ],
-            [
-              17,
-              1,
-              "scalar"
-            ],
-            [
-              18,
-              1,
-              "scalar"
-            ],
-            [
-              19,
-              1,
-              "scalar"
-            ],
-            [
-              20,
-              1,
-              "scalar"
-            ],
-            [
-              21,
-              1,
-              "scalar"
-            ],
-            [
-              22,
-              1,
-              "scalar"
-            ],
-            [
-              23,
-              1,
-              "scalar"
-            ],
-            [
-              24,
-              1,
-              "scalar"
-            ],
-            [
-              25,
-              1,
-              "scalar"
-            ],
-            [
-              26,
-              1,
-              "scalar"
-            ],
-            [
-              27,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 3981939133,
-          "pool_section": ".rodata.getpartoffset.str1.4",
-          "pool_destination": ".data.eog_rom_strings_104080d47a45adc2",
-          "pool_offset": 28,
-          "storage": "zeroed-string-pool"
-        }
-      ]
-    },
-    {
-      "unit": "model.c",
-      "section": ".rodata.setpartoffset.str1.4",
-      "destination": ".data.eog_rom_strings_fcd282ef67386f93",
-      "bytes": 56,
-      "sha256": "fa9b0f043514eba854b7ebe9c276d75e601d8193af87875b4961c6d6501b5fb4",
-      "rows": [
-        {
-          "unit": "model.c",
-          "symbol": "eog_rom_string_fcd282ef67386f93_0",
-          "link_name": "eog_rom_string_fcd282ef67386f93_0",
-          "bytes": 27,
-          "bank": "cdata",
-          "source_offset": 211180,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ],
-            [
-              3,
-              1,
-              "scalar"
-            ],
-            [
-              4,
-              1,
-              "scalar"
-            ],
-            [
-              5,
-              1,
-              "scalar"
-            ],
-            [
-              6,
-              1,
-              "scalar"
-            ],
-            [
-              7,
-              1,
-              "scalar"
-            ],
-            [
-              8,
-              1,
-              "scalar"
-            ],
-            [
-              9,
-              1,
-              "scalar"
-            ],
-            [
-              10,
-              1,
-              "scalar"
-            ],
-            [
-              11,
-              1,
-              "scalar"
-            ],
-            [
-              12,
-              1,
-              "scalar"
-            ],
-            [
-              13,
-              1,
-              "scalar"
-            ],
-            [
-              14,
-              1,
-              "scalar"
-            ],
-            [
-              15,
-              1,
-              "scalar"
-            ],
-            [
-              16,
-              1,
-              "scalar"
-            ],
-            [
-              17,
-              1,
-              "scalar"
-            ],
-            [
-              18,
-              1,
-              "scalar"
-            ],
-            [
-              19,
-              1,
-              "scalar"
-            ],
-            [
-              20,
-              1,
-              "scalar"
-            ],
-            [
-              21,
-              1,
-              "scalar"
-            ],
-            [
-              22,
-              1,
-              "scalar"
-            ],
-            [
-              23,
-              1,
-              "scalar"
-            ],
-            [
-              24,
-              1,
-              "scalar"
-            ],
-            [
-              25,
-              1,
-              "scalar"
-            ],
-            [
-              26,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 3756210632,
-          "pool_section": ".rodata.setpartoffset.str1.4",
-          "pool_destination": ".data.eog_rom_strings_fcd282ef67386f93",
-          "pool_offset": 0,
-          "storage": "zeroed-string-pool"
-        },
-        {
-          "unit": "model.c",
-          "symbol": "eog_rom_string_fcd282ef67386f93_1c",
-          "link_name": "eog_rom_string_fcd282ef67386f93_1c",
-          "bytes": 28,
-          "bank": "cdata",
-          "source_offset": 211208,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ],
-            [
-              3,
-              1,
-              "scalar"
-            ],
-            [
-              4,
-              1,
-              "scalar"
-            ],
-            [
-              5,
-              1,
-              "scalar"
-            ],
-            [
-              6,
-              1,
-              "scalar"
-            ],
-            [
-              7,
-              1,
-              "scalar"
-            ],
-            [
-              8,
-              1,
-              "scalar"
-            ],
-            [
-              9,
-              1,
-              "scalar"
-            ],
-            [
-              10,
-              1,
-              "scalar"
-            ],
-            [
-              11,
-              1,
-              "scalar"
-            ],
-            [
-              12,
-              1,
-              "scalar"
-            ],
-            [
-              13,
-              1,
-              "scalar"
-            ],
-            [
-              14,
-              1,
-              "scalar"
-            ],
-            [
-              15,
-              1,
-              "scalar"
-            ],
-            [
-              16,
-              1,
-              "scalar"
-            ],
-            [
-              17,
-              1,
-              "scalar"
-            ],
-            [
-              18,
-              1,
-              "scalar"
-            ],
-            [
-              19,
-              1,
-              "scalar"
-            ],
-            [
-              20,
-              1,
-              "scalar"
-            ],
-            [
-              21,
-              1,
-              "scalar"
-            ],
-            [
-              22,
-              1,
-              "scalar"
-            ],
-            [
-              23,
-              1,
-              "scalar"
-            ],
-            [
-              24,
-              1,
-              "scalar"
-            ],
-            [
-              25,
-              1,
-              "scalar"
-            ],
-            [
-              26,
-              1,
-              "scalar"
-            ],
-            [
-              27,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 665074473,
-          "pool_section": ".rodata.setpartoffset.str1.4",
-          "pool_destination": ".data.eog_rom_strings_fcd282ef67386f93",
-          "pool_offset": 28,
-          "storage": "zeroed-string-pool"
-        }
-      ]
-    },
-    {
-      "unit": "model.c",
       "section": ".rodata.getsuboffset.str1.4",
       "destination": ".data.eog_rom_strings_67d9713bfc551bd5",
       "bytes": 65,
@@ -12023,360 +12534,6 @@
           "hash": 1839979060,
           "pool_section": ".rodata.getsuboffset.str1.4",
           "pool_destination": ".data.eog_rom_strings_67d9713bfc551bd5",
-          "pool_offset": 28,
-          "storage": "zeroed-string-pool"
-        }
-      ]
-    },
-    {
-      "unit": "model.c",
-      "section": ".rodata.setsuboffset.str1.4",
-      "destination": ".data.eog_rom_strings_e3a0802c74070a29",
-      "bytes": 65,
-      "sha256": "16206ab61ac3b1d35f0d8cbce12e1082b982ede651d9d614275b78f242b505e9",
-      "rows": [
-        {
-          "unit": "model.c",
-          "symbol": "eog_rom_string_e3a0802c74070a29_0",
-          "link_name": "eog_rom_string_e3a0802c74070a29_0",
-          "bytes": 26,
-          "bank": "cdata",
-          "source_offset": 211304,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ],
-            [
-              3,
-              1,
-              "scalar"
-            ],
-            [
-              4,
-              1,
-              "scalar"
-            ],
-            [
-              5,
-              1,
-              "scalar"
-            ],
-            [
-              6,
-              1,
-              "scalar"
-            ],
-            [
-              7,
-              1,
-              "scalar"
-            ],
-            [
-              8,
-              1,
-              "scalar"
-            ],
-            [
-              9,
-              1,
-              "scalar"
-            ],
-            [
-              10,
-              1,
-              "scalar"
-            ],
-            [
-              11,
-              1,
-              "scalar"
-            ],
-            [
-              12,
-              1,
-              "scalar"
-            ],
-            [
-              13,
-              1,
-              "scalar"
-            ],
-            [
-              14,
-              1,
-              "scalar"
-            ],
-            [
-              15,
-              1,
-              "scalar"
-            ],
-            [
-              16,
-              1,
-              "scalar"
-            ],
-            [
-              17,
-              1,
-              "scalar"
-            ],
-            [
-              18,
-              1,
-              "scalar"
-            ],
-            [
-              19,
-              1,
-              "scalar"
-            ],
-            [
-              20,
-              1,
-              "scalar"
-            ],
-            [
-              21,
-              1,
-              "scalar"
-            ],
-            [
-              22,
-              1,
-              "scalar"
-            ],
-            [
-              23,
-              1,
-              "scalar"
-            ],
-            [
-              24,
-              1,
-              "scalar"
-            ],
-            [
-              25,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 506137309,
-          "pool_section": ".rodata.setsuboffset.str1.4",
-          "pool_destination": ".data.eog_rom_strings_e3a0802c74070a29",
-          "pool_offset": 0,
-          "storage": "zeroed-string-pool"
-        },
-        {
-          "unit": "model.c",
-          "symbol": "eog_rom_string_e3a0802c74070a29_1c",
-          "link_name": "eog_rom_string_e3a0802c74070a29_1c",
-          "bytes": 37,
-          "bank": "cdata",
-          "source_offset": 211332,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ],
-            [
-              3,
-              1,
-              "scalar"
-            ],
-            [
-              4,
-              1,
-              "scalar"
-            ],
-            [
-              5,
-              1,
-              "scalar"
-            ],
-            [
-              6,
-              1,
-              "scalar"
-            ],
-            [
-              7,
-              1,
-              "scalar"
-            ],
-            [
-              8,
-              1,
-              "scalar"
-            ],
-            [
-              9,
-              1,
-              "scalar"
-            ],
-            [
-              10,
-              1,
-              "scalar"
-            ],
-            [
-              11,
-              1,
-              "scalar"
-            ],
-            [
-              12,
-              1,
-              "scalar"
-            ],
-            [
-              13,
-              1,
-              "scalar"
-            ],
-            [
-              14,
-              1,
-              "scalar"
-            ],
-            [
-              15,
-              1,
-              "scalar"
-            ],
-            [
-              16,
-              1,
-              "scalar"
-            ],
-            [
-              17,
-              1,
-              "scalar"
-            ],
-            [
-              18,
-              1,
-              "scalar"
-            ],
-            [
-              19,
-              1,
-              "scalar"
-            ],
-            [
-              20,
-              1,
-              "scalar"
-            ],
-            [
-              21,
-              1,
-              "scalar"
-            ],
-            [
-              22,
-              1,
-              "scalar"
-            ],
-            [
-              23,
-              1,
-              "scalar"
-            ],
-            [
-              24,
-              1,
-              "scalar"
-            ],
-            [
-              25,
-              1,
-              "scalar"
-            ],
-            [
-              26,
-              1,
-              "scalar"
-            ],
-            [
-              27,
-              1,
-              "scalar"
-            ],
-            [
-              28,
-              1,
-              "scalar"
-            ],
-            [
-              29,
-              1,
-              "scalar"
-            ],
-            [
-              30,
-              1,
-              "scalar"
-            ],
-            [
-              31,
-              1,
-              "scalar"
-            ],
-            [
-              32,
-              1,
-              "scalar"
-            ],
-            [
-              33,
-              1,
-              "scalar"
-            ],
-            [
-              34,
-              1,
-              "scalar"
-            ],
-            [
-              35,
-              1,
-              "scalar"
-            ],
-            [
-              36,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 3899877104,
-          "pool_section": ".rodata.setsuboffset.str1.4",
-          "pool_destination": ".data.eog_rom_strings_e3a0802c74070a29",
           "pool_offset": 28,
           "storage": "zeroed-string-pool"
         }
@@ -12923,6 +13080,1193 @@
     },
     {
       "unit": "model.c",
+      "section": ".rodata.instcalcmatrices.str1.4",
+      "destination": ".data.eog_rom_strings_78857dd5176e4c4d",
+      "bytes": 95,
+      "sha256": "3ee5aba9b174435160ef1b62157fc2ee4c397e329d20b4e14a5dd3c73a1bee9e",
+      "rows": [
+        {
+          "unit": "model.c",
+          "symbol": "eog_rom_string_78857dd5176e4c4d_0",
+          "link_name": "eog_rom_string_78857dd5176e4c4d_0",
+          "bytes": 31,
+          "bank": "cdata",
+          "source_offset": 211712,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ],
+            [
+              3,
+              1,
+              "scalar"
+            ],
+            [
+              4,
+              1,
+              "scalar"
+            ],
+            [
+              5,
+              1,
+              "scalar"
+            ],
+            [
+              6,
+              1,
+              "scalar"
+            ],
+            [
+              7,
+              1,
+              "scalar"
+            ],
+            [
+              8,
+              1,
+              "scalar"
+            ],
+            [
+              9,
+              1,
+              "scalar"
+            ],
+            [
+              10,
+              1,
+              "scalar"
+            ],
+            [
+              11,
+              1,
+              "scalar"
+            ],
+            [
+              12,
+              1,
+              "scalar"
+            ],
+            [
+              13,
+              1,
+              "scalar"
+            ],
+            [
+              14,
+              1,
+              "scalar"
+            ],
+            [
+              15,
+              1,
+              "scalar"
+            ],
+            [
+              16,
+              1,
+              "scalar"
+            ],
+            [
+              17,
+              1,
+              "scalar"
+            ],
+            [
+              18,
+              1,
+              "scalar"
+            ],
+            [
+              19,
+              1,
+              "scalar"
+            ],
+            [
+              20,
+              1,
+              "scalar"
+            ],
+            [
+              21,
+              1,
+              "scalar"
+            ],
+            [
+              22,
+              1,
+              "scalar"
+            ],
+            [
+              23,
+              1,
+              "scalar"
+            ],
+            [
+              24,
+              1,
+              "scalar"
+            ],
+            [
+              25,
+              1,
+              "scalar"
+            ],
+            [
+              26,
+              1,
+              "scalar"
+            ],
+            [
+              27,
+              1,
+              "scalar"
+            ],
+            [
+              28,
+              1,
+              "scalar"
+            ],
+            [
+              29,
+              1,
+              "scalar"
+            ],
+            [
+              30,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 786647965,
+          "pool_section": ".rodata.instcalcmatrices.str1.4",
+          "pool_destination": ".data.eog_rom_strings_78857dd5176e4c4d",
+          "pool_offset": 0,
+          "storage": "zeroed-string-pool"
+        },
+        {
+          "unit": "model.c",
+          "symbol": "eog_rom_string_78857dd5176e4c4d_20",
+          "link_name": "eog_rom_string_78857dd5176e4c4d_20",
+          "bytes": 31,
+          "bank": "cdata",
+          "source_offset": 211744,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ],
+            [
+              3,
+              1,
+              "scalar"
+            ],
+            [
+              4,
+              1,
+              "scalar"
+            ],
+            [
+              5,
+              1,
+              "scalar"
+            ],
+            [
+              6,
+              1,
+              "scalar"
+            ],
+            [
+              7,
+              1,
+              "scalar"
+            ],
+            [
+              8,
+              1,
+              "scalar"
+            ],
+            [
+              9,
+              1,
+              "scalar"
+            ],
+            [
+              10,
+              1,
+              "scalar"
+            ],
+            [
+              11,
+              1,
+              "scalar"
+            ],
+            [
+              12,
+              1,
+              "scalar"
+            ],
+            [
+              13,
+              1,
+              "scalar"
+            ],
+            [
+              14,
+              1,
+              "scalar"
+            ],
+            [
+              15,
+              1,
+              "scalar"
+            ],
+            [
+              16,
+              1,
+              "scalar"
+            ],
+            [
+              17,
+              1,
+              "scalar"
+            ],
+            [
+              18,
+              1,
+              "scalar"
+            ],
+            [
+              19,
+              1,
+              "scalar"
+            ],
+            [
+              20,
+              1,
+              "scalar"
+            ],
+            [
+              21,
+              1,
+              "scalar"
+            ],
+            [
+              22,
+              1,
+              "scalar"
+            ],
+            [
+              23,
+              1,
+              "scalar"
+            ],
+            [
+              24,
+              1,
+              "scalar"
+            ],
+            [
+              25,
+              1,
+              "scalar"
+            ],
+            [
+              26,
+              1,
+              "scalar"
+            ],
+            [
+              27,
+              1,
+              "scalar"
+            ],
+            [
+              28,
+              1,
+              "scalar"
+            ],
+            [
+              29,
+              1,
+              "scalar"
+            ],
+            [
+              30,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 1783441170,
+          "pool_section": ".rodata.instcalcmatrices.str1.4",
+          "pool_destination": ".data.eog_rom_strings_78857dd5176e4c4d",
+          "pool_offset": 32,
+          "storage": "zeroed-string-pool"
+        },
+        {
+          "unit": "model.c",
+          "symbol": "eog_rom_string_78857dd5176e4c4d_40",
+          "link_name": "eog_rom_string_78857dd5176e4c4d_40",
+          "bytes": 31,
+          "bank": "cdata",
+          "source_offset": 211776,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ],
+            [
+              3,
+              1,
+              "scalar"
+            ],
+            [
+              4,
+              1,
+              "scalar"
+            ],
+            [
+              5,
+              1,
+              "scalar"
+            ],
+            [
+              6,
+              1,
+              "scalar"
+            ],
+            [
+              7,
+              1,
+              "scalar"
+            ],
+            [
+              8,
+              1,
+              "scalar"
+            ],
+            [
+              9,
+              1,
+              "scalar"
+            ],
+            [
+              10,
+              1,
+              "scalar"
+            ],
+            [
+              11,
+              1,
+              "scalar"
+            ],
+            [
+              12,
+              1,
+              "scalar"
+            ],
+            [
+              13,
+              1,
+              "scalar"
+            ],
+            [
+              14,
+              1,
+              "scalar"
+            ],
+            [
+              15,
+              1,
+              "scalar"
+            ],
+            [
+              16,
+              1,
+              "scalar"
+            ],
+            [
+              17,
+              1,
+              "scalar"
+            ],
+            [
+              18,
+              1,
+              "scalar"
+            ],
+            [
+              19,
+              1,
+              "scalar"
+            ],
+            [
+              20,
+              1,
+              "scalar"
+            ],
+            [
+              21,
+              1,
+              "scalar"
+            ],
+            [
+              22,
+              1,
+              "scalar"
+            ],
+            [
+              23,
+              1,
+              "scalar"
+            ],
+            [
+              24,
+              1,
+              "scalar"
+            ],
+            [
+              25,
+              1,
+              "scalar"
+            ],
+            [
+              26,
+              1,
+              "scalar"
+            ],
+            [
+              27,
+              1,
+              "scalar"
+            ],
+            [
+              28,
+              1,
+              "scalar"
+            ],
+            [
+              29,
+              1,
+              "scalar"
+            ],
+            [
+              30,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 1511003015,
+          "pool_section": ".rodata.instcalcmatrices.str1.4",
+          "pool_destination": ".data.eog_rom_strings_78857dd5176e4c4d",
+          "pool_offset": 64,
+          "storage": "zeroed-string-pool"
+        }
+      ]
+    },
+    {
+      "unit": "model.c",
+      "section": ".rodata.setpartoffset.str1.4",
+      "destination": ".data.eog_rom_strings_fcd282ef67386f93",
+      "bytes": 56,
+      "sha256": "fa9b0f043514eba854b7ebe9c276d75e601d8193af87875b4961c6d6501b5fb4",
+      "rows": [
+        {
+          "unit": "model.c",
+          "symbol": "eog_rom_string_fcd282ef67386f93_0",
+          "link_name": "eog_rom_string_fcd282ef67386f93_0",
+          "bytes": 27,
+          "bank": "cdata",
+          "source_offset": 211180,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ],
+            [
+              3,
+              1,
+              "scalar"
+            ],
+            [
+              4,
+              1,
+              "scalar"
+            ],
+            [
+              5,
+              1,
+              "scalar"
+            ],
+            [
+              6,
+              1,
+              "scalar"
+            ],
+            [
+              7,
+              1,
+              "scalar"
+            ],
+            [
+              8,
+              1,
+              "scalar"
+            ],
+            [
+              9,
+              1,
+              "scalar"
+            ],
+            [
+              10,
+              1,
+              "scalar"
+            ],
+            [
+              11,
+              1,
+              "scalar"
+            ],
+            [
+              12,
+              1,
+              "scalar"
+            ],
+            [
+              13,
+              1,
+              "scalar"
+            ],
+            [
+              14,
+              1,
+              "scalar"
+            ],
+            [
+              15,
+              1,
+              "scalar"
+            ],
+            [
+              16,
+              1,
+              "scalar"
+            ],
+            [
+              17,
+              1,
+              "scalar"
+            ],
+            [
+              18,
+              1,
+              "scalar"
+            ],
+            [
+              19,
+              1,
+              "scalar"
+            ],
+            [
+              20,
+              1,
+              "scalar"
+            ],
+            [
+              21,
+              1,
+              "scalar"
+            ],
+            [
+              22,
+              1,
+              "scalar"
+            ],
+            [
+              23,
+              1,
+              "scalar"
+            ],
+            [
+              24,
+              1,
+              "scalar"
+            ],
+            [
+              25,
+              1,
+              "scalar"
+            ],
+            [
+              26,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 3756210632,
+          "pool_section": ".rodata.setpartoffset.str1.4",
+          "pool_destination": ".data.eog_rom_strings_fcd282ef67386f93",
+          "pool_offset": 0,
+          "storage": "zeroed-string-pool"
+        },
+        {
+          "unit": "model.c",
+          "symbol": "eog_rom_string_fcd282ef67386f93_1c",
+          "link_name": "eog_rom_string_fcd282ef67386f93_1c",
+          "bytes": 28,
+          "bank": "cdata",
+          "source_offset": 211208,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ],
+            [
+              3,
+              1,
+              "scalar"
+            ],
+            [
+              4,
+              1,
+              "scalar"
+            ],
+            [
+              5,
+              1,
+              "scalar"
+            ],
+            [
+              6,
+              1,
+              "scalar"
+            ],
+            [
+              7,
+              1,
+              "scalar"
+            ],
+            [
+              8,
+              1,
+              "scalar"
+            ],
+            [
+              9,
+              1,
+              "scalar"
+            ],
+            [
+              10,
+              1,
+              "scalar"
+            ],
+            [
+              11,
+              1,
+              "scalar"
+            ],
+            [
+              12,
+              1,
+              "scalar"
+            ],
+            [
+              13,
+              1,
+              "scalar"
+            ],
+            [
+              14,
+              1,
+              "scalar"
+            ],
+            [
+              15,
+              1,
+              "scalar"
+            ],
+            [
+              16,
+              1,
+              "scalar"
+            ],
+            [
+              17,
+              1,
+              "scalar"
+            ],
+            [
+              18,
+              1,
+              "scalar"
+            ],
+            [
+              19,
+              1,
+              "scalar"
+            ],
+            [
+              20,
+              1,
+              "scalar"
+            ],
+            [
+              21,
+              1,
+              "scalar"
+            ],
+            [
+              22,
+              1,
+              "scalar"
+            ],
+            [
+              23,
+              1,
+              "scalar"
+            ],
+            [
+              24,
+              1,
+              "scalar"
+            ],
+            [
+              25,
+              1,
+              "scalar"
+            ],
+            [
+              26,
+              1,
+              "scalar"
+            ],
+            [
+              27,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 665074473,
+          "pool_section": ".rodata.setpartoffset.str1.4",
+          "pool_destination": ".data.eog_rom_strings_fcd282ef67386f93",
+          "pool_offset": 28,
+          "storage": "zeroed-string-pool"
+        }
+      ]
+    },
+    {
+      "unit": "model.c",
+      "section": ".rodata.setsuboffset.str1.4",
+      "destination": ".data.eog_rom_strings_e3a0802c74070a29",
+      "bytes": 65,
+      "sha256": "16206ab61ac3b1d35f0d8cbce12e1082b982ede651d9d614275b78f242b505e9",
+      "rows": [
+        {
+          "unit": "model.c",
+          "symbol": "eog_rom_string_e3a0802c74070a29_0",
+          "link_name": "eog_rom_string_e3a0802c74070a29_0",
+          "bytes": 26,
+          "bank": "cdata",
+          "source_offset": 211304,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ],
+            [
+              3,
+              1,
+              "scalar"
+            ],
+            [
+              4,
+              1,
+              "scalar"
+            ],
+            [
+              5,
+              1,
+              "scalar"
+            ],
+            [
+              6,
+              1,
+              "scalar"
+            ],
+            [
+              7,
+              1,
+              "scalar"
+            ],
+            [
+              8,
+              1,
+              "scalar"
+            ],
+            [
+              9,
+              1,
+              "scalar"
+            ],
+            [
+              10,
+              1,
+              "scalar"
+            ],
+            [
+              11,
+              1,
+              "scalar"
+            ],
+            [
+              12,
+              1,
+              "scalar"
+            ],
+            [
+              13,
+              1,
+              "scalar"
+            ],
+            [
+              14,
+              1,
+              "scalar"
+            ],
+            [
+              15,
+              1,
+              "scalar"
+            ],
+            [
+              16,
+              1,
+              "scalar"
+            ],
+            [
+              17,
+              1,
+              "scalar"
+            ],
+            [
+              18,
+              1,
+              "scalar"
+            ],
+            [
+              19,
+              1,
+              "scalar"
+            ],
+            [
+              20,
+              1,
+              "scalar"
+            ],
+            [
+              21,
+              1,
+              "scalar"
+            ],
+            [
+              22,
+              1,
+              "scalar"
+            ],
+            [
+              23,
+              1,
+              "scalar"
+            ],
+            [
+              24,
+              1,
+              "scalar"
+            ],
+            [
+              25,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 506137309,
+          "pool_section": ".rodata.setsuboffset.str1.4",
+          "pool_destination": ".data.eog_rom_strings_e3a0802c74070a29",
+          "pool_offset": 0,
+          "storage": "zeroed-string-pool"
+        },
+        {
+          "unit": "model.c",
+          "symbol": "eog_rom_string_e3a0802c74070a29_1c",
+          "link_name": "eog_rom_string_e3a0802c74070a29_1c",
+          "bytes": 37,
+          "bank": "cdata",
+          "source_offset": 211332,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ],
+            [
+              3,
+              1,
+              "scalar"
+            ],
+            [
+              4,
+              1,
+              "scalar"
+            ],
+            [
+              5,
+              1,
+              "scalar"
+            ],
+            [
+              6,
+              1,
+              "scalar"
+            ],
+            [
+              7,
+              1,
+              "scalar"
+            ],
+            [
+              8,
+              1,
+              "scalar"
+            ],
+            [
+              9,
+              1,
+              "scalar"
+            ],
+            [
+              10,
+              1,
+              "scalar"
+            ],
+            [
+              11,
+              1,
+              "scalar"
+            ],
+            [
+              12,
+              1,
+              "scalar"
+            ],
+            [
+              13,
+              1,
+              "scalar"
+            ],
+            [
+              14,
+              1,
+              "scalar"
+            ],
+            [
+              15,
+              1,
+              "scalar"
+            ],
+            [
+              16,
+              1,
+              "scalar"
+            ],
+            [
+              17,
+              1,
+              "scalar"
+            ],
+            [
+              18,
+              1,
+              "scalar"
+            ],
+            [
+              19,
+              1,
+              "scalar"
+            ],
+            [
+              20,
+              1,
+              "scalar"
+            ],
+            [
+              21,
+              1,
+              "scalar"
+            ],
+            [
+              22,
+              1,
+              "scalar"
+            ],
+            [
+              23,
+              1,
+              "scalar"
+            ],
+            [
+              24,
+              1,
+              "scalar"
+            ],
+            [
+              25,
+              1,
+              "scalar"
+            ],
+            [
+              26,
+              1,
+              "scalar"
+            ],
+            [
+              27,
+              1,
+              "scalar"
+            ],
+            [
+              28,
+              1,
+              "scalar"
+            ],
+            [
+              29,
+              1,
+              "scalar"
+            ],
+            [
+              30,
+              1,
+              "scalar"
+            ],
+            [
+              31,
+              1,
+              "scalar"
+            ],
+            [
+              32,
+              1,
+              "scalar"
+            ],
+            [
+              33,
+              1,
+              "scalar"
+            ],
+            [
+              34,
+              1,
+              "scalar"
+            ],
+            [
+              35,
+              1,
+              "scalar"
+            ],
+            [
+              36,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 3899877104,
+          "pool_section": ".rodata.setsuboffset.str1.4",
+          "pool_destination": ".data.eog_rom_strings_e3a0802c74070a29",
+          "pool_offset": 28,
+          "storage": "zeroed-string-pool"
+        }
+      ]
+    },
+    {
+      "unit": "model.c",
       "section": ".rodata.setsubroty.str1.4",
       "destination": ".data.eog_rom_strings_102bb85798cf49d0",
       "bytes": 98,
@@ -13456,1954 +14800,6 @@
           "pool_section": ".rodata.setsubroty.str1.4",
           "pool_destination": ".data.eog_rom_strings_102bb85798cf49d0",
           "pool_offset": 60,
-          "storage": "zeroed-string-pool"
-        }
-      ]
-    },
-    {
-      "unit": "model.c",
-      "section": ".rodata.getjointsize.str1.4",
-      "destination": ".data.eog_rom_strings_e37162094a18ffd2",
-      "bytes": 27,
-      "sha256": "4e5f585fdd42060cee932540b01e627af6450e8938f22b4410f059b62446ade6",
-      "rows": [
-        {
-          "unit": "model.c",
-          "symbol": "eog_rom_string_e37162094a18ffd2_0",
-          "link_name": "eog_rom_string_e37162094a18ffd2_0",
-          "bytes": 27,
-          "bank": "cdata",
-          "source_offset": 211572,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ],
-            [
-              3,
-              1,
-              "scalar"
-            ],
-            [
-              4,
-              1,
-              "scalar"
-            ],
-            [
-              5,
-              1,
-              "scalar"
-            ],
-            [
-              6,
-              1,
-              "scalar"
-            ],
-            [
-              7,
-              1,
-              "scalar"
-            ],
-            [
-              8,
-              1,
-              "scalar"
-            ],
-            [
-              9,
-              1,
-              "scalar"
-            ],
-            [
-              10,
-              1,
-              "scalar"
-            ],
-            [
-              11,
-              1,
-              "scalar"
-            ],
-            [
-              12,
-              1,
-              "scalar"
-            ],
-            [
-              13,
-              1,
-              "scalar"
-            ],
-            [
-              14,
-              1,
-              "scalar"
-            ],
-            [
-              15,
-              1,
-              "scalar"
-            ],
-            [
-              16,
-              1,
-              "scalar"
-            ],
-            [
-              17,
-              1,
-              "scalar"
-            ],
-            [
-              18,
-              1,
-              "scalar"
-            ],
-            [
-              19,
-              1,
-              "scalar"
-            ],
-            [
-              20,
-              1,
-              "scalar"
-            ],
-            [
-              21,
-              1,
-              "scalar"
-            ],
-            [
-              22,
-              1,
-              "scalar"
-            ],
-            [
-              23,
-              1,
-              "scalar"
-            ],
-            [
-              24,
-              1,
-              "scalar"
-            ],
-            [
-              25,
-              1,
-              "scalar"
-            ],
-            [
-              26,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 134223193,
-          "pool_section": ".rodata.getjointsize.str1.4",
-          "pool_destination": ".data.eog_rom_strings_e37162094a18ffd2",
-          "pool_offset": 0,
-          "storage": "zeroed-string-pool"
-        }
-      ]
-    },
-    {
-      "unit": "model.c",
-      "section": ".rodata.getinstsize.str1.4",
-      "destination": ".data.eog_rom_strings_7a04d5668213d97f",
-      "bytes": 54,
-      "sha256": "46c17347f306809db78a1e69bedbed40663cf6b126ea38dd7eedda90d4605590",
-      "rows": [
-        {
-          "unit": "model.c",
-          "symbol": "eog_rom_string_7a04d5668213d97f_0",
-          "link_name": "eog_rom_string_7a04d5668213d97f_0",
-          "bytes": 26,
-          "bank": "cdata",
-          "source_offset": 211600,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ],
-            [
-              3,
-              1,
-              "scalar"
-            ],
-            [
-              4,
-              1,
-              "scalar"
-            ],
-            [
-              5,
-              1,
-              "scalar"
-            ],
-            [
-              6,
-              1,
-              "scalar"
-            ],
-            [
-              7,
-              1,
-              "scalar"
-            ],
-            [
-              8,
-              1,
-              "scalar"
-            ],
-            [
-              9,
-              1,
-              "scalar"
-            ],
-            [
-              10,
-              1,
-              "scalar"
-            ],
-            [
-              11,
-              1,
-              "scalar"
-            ],
-            [
-              12,
-              1,
-              "scalar"
-            ],
-            [
-              13,
-              1,
-              "scalar"
-            ],
-            [
-              14,
-              1,
-              "scalar"
-            ],
-            [
-              15,
-              1,
-              "scalar"
-            ],
-            [
-              16,
-              1,
-              "scalar"
-            ],
-            [
-              17,
-              1,
-              "scalar"
-            ],
-            [
-              18,
-              1,
-              "scalar"
-            ],
-            [
-              19,
-              1,
-              "scalar"
-            ],
-            [
-              20,
-              1,
-              "scalar"
-            ],
-            [
-              21,
-              1,
-              "scalar"
-            ],
-            [
-              22,
-              1,
-              "scalar"
-            ],
-            [
-              23,
-              1,
-              "scalar"
-            ],
-            [
-              24,
-              1,
-              "scalar"
-            ],
-            [
-              25,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 2204458355,
-          "pool_section": ".rodata.getinstsize.str1.4",
-          "pool_destination": ".data.eog_rom_strings_7a04d5668213d97f",
-          "pool_offset": 0,
-          "storage": "zeroed-string-pool"
-        },
-        {
-          "unit": "model.c",
-          "symbol": "eog_rom_string_7a04d5668213d97f_1c",
-          "link_name": "eog_rom_string_7a04d5668213d97f_1c",
-          "bytes": 26,
-          "bank": "cdata",
-          "source_offset": 211628,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ],
-            [
-              3,
-              1,
-              "scalar"
-            ],
-            [
-              4,
-              1,
-              "scalar"
-            ],
-            [
-              5,
-              1,
-              "scalar"
-            ],
-            [
-              6,
-              1,
-              "scalar"
-            ],
-            [
-              7,
-              1,
-              "scalar"
-            ],
-            [
-              8,
-              1,
-              "scalar"
-            ],
-            [
-              9,
-              1,
-              "scalar"
-            ],
-            [
-              10,
-              1,
-              "scalar"
-            ],
-            [
-              11,
-              1,
-              "scalar"
-            ],
-            [
-              12,
-              1,
-              "scalar"
-            ],
-            [
-              13,
-              1,
-              "scalar"
-            ],
-            [
-              14,
-              1,
-              "scalar"
-            ],
-            [
-              15,
-              1,
-              "scalar"
-            ],
-            [
-              16,
-              1,
-              "scalar"
-            ],
-            [
-              17,
-              1,
-              "scalar"
-            ],
-            [
-              18,
-              1,
-              "scalar"
-            ],
-            [
-              19,
-              1,
-              "scalar"
-            ],
-            [
-              20,
-              1,
-              "scalar"
-            ],
-            [
-              21,
-              1,
-              "scalar"
-            ],
-            [
-              22,
-              1,
-              "scalar"
-            ],
-            [
-              23,
-              1,
-              "scalar"
-            ],
-            [
-              24,
-              1,
-              "scalar"
-            ],
-            [
-              25,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 4198349612,
-          "pool_section": ".rodata.getinstsize.str1.4",
-          "pool_destination": ".data.eog_rom_strings_7a04d5668213d97f",
-          "pool_offset": 28,
-          "storage": "zeroed-string-pool"
-        }
-      ]
-    },
-    {
-      "unit": "model.c",
-      "section": ".rodata.subcalcpos.str1.4",
-      "destination": ".data.eog_rom_strings_a04ad25ba4b08b08",
-      "bytes": 53,
-      "sha256": "31af5158623a73877adcfda2cc48dabc6036da09c7459389600cd3030efb6b5d",
-      "rows": [
-        {
-          "unit": "model.c",
-          "symbol": "eog_rom_string_a04ad25ba4b08b08_0",
-          "link_name": "eog_rom_string_a04ad25ba4b08b08_0",
-          "bytes": 25,
-          "bank": "cdata",
-          "source_offset": 211656,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ],
-            [
-              3,
-              1,
-              "scalar"
-            ],
-            [
-              4,
-              1,
-              "scalar"
-            ],
-            [
-              5,
-              1,
-              "scalar"
-            ],
-            [
-              6,
-              1,
-              "scalar"
-            ],
-            [
-              7,
-              1,
-              "scalar"
-            ],
-            [
-              8,
-              1,
-              "scalar"
-            ],
-            [
-              9,
-              1,
-              "scalar"
-            ],
-            [
-              10,
-              1,
-              "scalar"
-            ],
-            [
-              11,
-              1,
-              "scalar"
-            ],
-            [
-              12,
-              1,
-              "scalar"
-            ],
-            [
-              13,
-              1,
-              "scalar"
-            ],
-            [
-              14,
-              1,
-              "scalar"
-            ],
-            [
-              15,
-              1,
-              "scalar"
-            ],
-            [
-              16,
-              1,
-              "scalar"
-            ],
-            [
-              17,
-              1,
-              "scalar"
-            ],
-            [
-              18,
-              1,
-              "scalar"
-            ],
-            [
-              19,
-              1,
-              "scalar"
-            ],
-            [
-              20,
-              1,
-              "scalar"
-            ],
-            [
-              21,
-              1,
-              "scalar"
-            ],
-            [
-              22,
-              1,
-              "scalar"
-            ],
-            [
-              23,
-              1,
-              "scalar"
-            ],
-            [
-              24,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 1542702056,
-          "pool_section": ".rodata.subcalcpos.str1.4",
-          "pool_destination": ".data.eog_rom_strings_a04ad25ba4b08b08",
-          "pool_offset": 0,
-          "storage": "zeroed-string-pool"
-        },
-        {
-          "unit": "model.c",
-          "symbol": "eog_rom_string_a04ad25ba4b08b08_1c",
-          "link_name": "eog_rom_string_a04ad25ba4b08b08_1c",
-          "bytes": 25,
-          "bank": "cdata",
-          "source_offset": 211684,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ],
-            [
-              3,
-              1,
-              "scalar"
-            ],
-            [
-              4,
-              1,
-              "scalar"
-            ],
-            [
-              5,
-              1,
-              "scalar"
-            ],
-            [
-              6,
-              1,
-              "scalar"
-            ],
-            [
-              7,
-              1,
-              "scalar"
-            ],
-            [
-              8,
-              1,
-              "scalar"
-            ],
-            [
-              9,
-              1,
-              "scalar"
-            ],
-            [
-              10,
-              1,
-              "scalar"
-            ],
-            [
-              11,
-              1,
-              "scalar"
-            ],
-            [
-              12,
-              1,
-              "scalar"
-            ],
-            [
-              13,
-              1,
-              "scalar"
-            ],
-            [
-              14,
-              1,
-              "scalar"
-            ],
-            [
-              15,
-              1,
-              "scalar"
-            ],
-            [
-              16,
-              1,
-              "scalar"
-            ],
-            [
-              17,
-              1,
-              "scalar"
-            ],
-            [
-              18,
-              1,
-              "scalar"
-            ],
-            [
-              19,
-              1,
-              "scalar"
-            ],
-            [
-              20,
-              1,
-              "scalar"
-            ],
-            [
-              21,
-              1,
-              "scalar"
-            ],
-            [
-              22,
-              1,
-              "scalar"
-            ],
-            [
-              23,
-              1,
-              "scalar"
-            ],
-            [
-              24,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 4153925152,
-          "pool_section": ".rodata.subcalcpos.str1.4",
-          "pool_destination": ".data.eog_rom_strings_a04ad25ba4b08b08",
-          "pool_offset": 28,
-          "storage": "zeroed-string-pool"
-        }
-      ]
-    },
-    {
-      "unit": "model.c",
-      "section": ".rodata.instcalcmatrices.str1.4",
-      "destination": ".data.eog_rom_strings_78857dd5176e4c4d",
-      "bytes": 95,
-      "sha256": "3ee5aba9b174435160ef1b62157fc2ee4c397e329d20b4e14a5dd3c73a1bee9e",
-      "rows": [
-        {
-          "unit": "model.c",
-          "symbol": "eog_rom_string_78857dd5176e4c4d_0",
-          "link_name": "eog_rom_string_78857dd5176e4c4d_0",
-          "bytes": 31,
-          "bank": "cdata",
-          "source_offset": 211712,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ],
-            [
-              3,
-              1,
-              "scalar"
-            ],
-            [
-              4,
-              1,
-              "scalar"
-            ],
-            [
-              5,
-              1,
-              "scalar"
-            ],
-            [
-              6,
-              1,
-              "scalar"
-            ],
-            [
-              7,
-              1,
-              "scalar"
-            ],
-            [
-              8,
-              1,
-              "scalar"
-            ],
-            [
-              9,
-              1,
-              "scalar"
-            ],
-            [
-              10,
-              1,
-              "scalar"
-            ],
-            [
-              11,
-              1,
-              "scalar"
-            ],
-            [
-              12,
-              1,
-              "scalar"
-            ],
-            [
-              13,
-              1,
-              "scalar"
-            ],
-            [
-              14,
-              1,
-              "scalar"
-            ],
-            [
-              15,
-              1,
-              "scalar"
-            ],
-            [
-              16,
-              1,
-              "scalar"
-            ],
-            [
-              17,
-              1,
-              "scalar"
-            ],
-            [
-              18,
-              1,
-              "scalar"
-            ],
-            [
-              19,
-              1,
-              "scalar"
-            ],
-            [
-              20,
-              1,
-              "scalar"
-            ],
-            [
-              21,
-              1,
-              "scalar"
-            ],
-            [
-              22,
-              1,
-              "scalar"
-            ],
-            [
-              23,
-              1,
-              "scalar"
-            ],
-            [
-              24,
-              1,
-              "scalar"
-            ],
-            [
-              25,
-              1,
-              "scalar"
-            ],
-            [
-              26,
-              1,
-              "scalar"
-            ],
-            [
-              27,
-              1,
-              "scalar"
-            ],
-            [
-              28,
-              1,
-              "scalar"
-            ],
-            [
-              29,
-              1,
-              "scalar"
-            ],
-            [
-              30,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 786647965,
-          "pool_section": ".rodata.instcalcmatrices.str1.4",
-          "pool_destination": ".data.eog_rom_strings_78857dd5176e4c4d",
-          "pool_offset": 0,
-          "storage": "zeroed-string-pool"
-        },
-        {
-          "unit": "model.c",
-          "symbol": "eog_rom_string_78857dd5176e4c4d_20",
-          "link_name": "eog_rom_string_78857dd5176e4c4d_20",
-          "bytes": 31,
-          "bank": "cdata",
-          "source_offset": 211744,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ],
-            [
-              3,
-              1,
-              "scalar"
-            ],
-            [
-              4,
-              1,
-              "scalar"
-            ],
-            [
-              5,
-              1,
-              "scalar"
-            ],
-            [
-              6,
-              1,
-              "scalar"
-            ],
-            [
-              7,
-              1,
-              "scalar"
-            ],
-            [
-              8,
-              1,
-              "scalar"
-            ],
-            [
-              9,
-              1,
-              "scalar"
-            ],
-            [
-              10,
-              1,
-              "scalar"
-            ],
-            [
-              11,
-              1,
-              "scalar"
-            ],
-            [
-              12,
-              1,
-              "scalar"
-            ],
-            [
-              13,
-              1,
-              "scalar"
-            ],
-            [
-              14,
-              1,
-              "scalar"
-            ],
-            [
-              15,
-              1,
-              "scalar"
-            ],
-            [
-              16,
-              1,
-              "scalar"
-            ],
-            [
-              17,
-              1,
-              "scalar"
-            ],
-            [
-              18,
-              1,
-              "scalar"
-            ],
-            [
-              19,
-              1,
-              "scalar"
-            ],
-            [
-              20,
-              1,
-              "scalar"
-            ],
-            [
-              21,
-              1,
-              "scalar"
-            ],
-            [
-              22,
-              1,
-              "scalar"
-            ],
-            [
-              23,
-              1,
-              "scalar"
-            ],
-            [
-              24,
-              1,
-              "scalar"
-            ],
-            [
-              25,
-              1,
-              "scalar"
-            ],
-            [
-              26,
-              1,
-              "scalar"
-            ],
-            [
-              27,
-              1,
-              "scalar"
-            ],
-            [
-              28,
-              1,
-              "scalar"
-            ],
-            [
-              29,
-              1,
-              "scalar"
-            ],
-            [
-              30,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 1783441170,
-          "pool_section": ".rodata.instcalcmatrices.str1.4",
-          "pool_destination": ".data.eog_rom_strings_78857dd5176e4c4d",
-          "pool_offset": 32,
-          "storage": "zeroed-string-pool"
-        },
-        {
-          "unit": "model.c",
-          "symbol": "eog_rom_string_78857dd5176e4c4d_40",
-          "link_name": "eog_rom_string_78857dd5176e4c4d_40",
-          "bytes": 31,
-          "bank": "cdata",
-          "source_offset": 211776,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ],
-            [
-              3,
-              1,
-              "scalar"
-            ],
-            [
-              4,
-              1,
-              "scalar"
-            ],
-            [
-              5,
-              1,
-              "scalar"
-            ],
-            [
-              6,
-              1,
-              "scalar"
-            ],
-            [
-              7,
-              1,
-              "scalar"
-            ],
-            [
-              8,
-              1,
-              "scalar"
-            ],
-            [
-              9,
-              1,
-              "scalar"
-            ],
-            [
-              10,
-              1,
-              "scalar"
-            ],
-            [
-              11,
-              1,
-              "scalar"
-            ],
-            [
-              12,
-              1,
-              "scalar"
-            ],
-            [
-              13,
-              1,
-              "scalar"
-            ],
-            [
-              14,
-              1,
-              "scalar"
-            ],
-            [
-              15,
-              1,
-              "scalar"
-            ],
-            [
-              16,
-              1,
-              "scalar"
-            ],
-            [
-              17,
-              1,
-              "scalar"
-            ],
-            [
-              18,
-              1,
-              "scalar"
-            ],
-            [
-              19,
-              1,
-              "scalar"
-            ],
-            [
-              20,
-              1,
-              "scalar"
-            ],
-            [
-              21,
-              1,
-              "scalar"
-            ],
-            [
-              22,
-              1,
-              "scalar"
-            ],
-            [
-              23,
-              1,
-              "scalar"
-            ],
-            [
-              24,
-              1,
-              "scalar"
-            ],
-            [
-              25,
-              1,
-              "scalar"
-            ],
-            [
-              26,
-              1,
-              "scalar"
-            ],
-            [
-              27,
-              1,
-              "scalar"
-            ],
-            [
-              28,
-              1,
-              "scalar"
-            ],
-            [
-              29,
-              1,
-              "scalar"
-            ],
-            [
-              30,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 1511003015,
-          "pool_section": ".rodata.instcalcmatrices.str1.4",
-          "pool_destination": ".data.eog_rom_strings_78857dd5176e4c4d",
-          "pool_offset": 64,
-          "storage": "zeroed-string-pool"
-        }
-      ]
-    },
-    {
-      "unit": "model.c",
-      "section": ".rodata.dotube.str1.4",
-      "destination": ".data.eog_rom_strings_8511f115579d811e",
-      "bytes": 27,
-      "sha256": "d17041d53656567b375648f3b9aeb09aa1cbcb433f1dd63354b2edf1875765c2",
-      "rows": [
-        {
-          "unit": "model.c",
-          "symbol": "eog_rom_string_8511f115579d811e_0",
-          "link_name": "eog_rom_string_8511f115579d811e_0",
-          "bytes": 27,
-          "bank": "cdata",
-          "source_offset": 212168,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ],
-            [
-              3,
-              1,
-              "scalar"
-            ],
-            [
-              4,
-              1,
-              "scalar"
-            ],
-            [
-              5,
-              1,
-              "scalar"
-            ],
-            [
-              6,
-              1,
-              "scalar"
-            ],
-            [
-              7,
-              1,
-              "scalar"
-            ],
-            [
-              8,
-              1,
-              "scalar"
-            ],
-            [
-              9,
-              1,
-              "scalar"
-            ],
-            [
-              10,
-              1,
-              "scalar"
-            ],
-            [
-              11,
-              1,
-              "scalar"
-            ],
-            [
-              12,
-              1,
-              "scalar"
-            ],
-            [
-              13,
-              1,
-              "scalar"
-            ],
-            [
-              14,
-              1,
-              "scalar"
-            ],
-            [
-              15,
-              1,
-              "scalar"
-            ],
-            [
-              16,
-              1,
-              "scalar"
-            ],
-            [
-              17,
-              1,
-              "scalar"
-            ],
-            [
-              18,
-              1,
-              "scalar"
-            ],
-            [
-              19,
-              1,
-              "scalar"
-            ],
-            [
-              20,
-              1,
-              "scalar"
-            ],
-            [
-              21,
-              1,
-              "scalar"
-            ],
-            [
-              22,
-              1,
-              "scalar"
-            ],
-            [
-              23,
-              1,
-              "scalar"
-            ],
-            [
-              24,
-              1,
-              "scalar"
-            ],
-            [
-              25,
-              1,
-              "scalar"
-            ],
-            [
-              26,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 3449379973,
-          "pool_section": ".rodata.dotube.str1.4",
-          "pool_destination": ".data.eog_rom_strings_8511f115579d811e",
-          "pool_offset": 0,
-          "storage": "zeroed-string-pool"
-        }
-      ]
-    },
-    {
-      "unit": "model.c",
-      "section": ".rodata.dogfnegx.str1.4",
-      "destination": ".data.eog_rom_strings_0d56809975687933",
-      "bytes": 29,
-      "sha256": "62a6cf7fb8768bd452e5268b4463fdb473daf2bb007d5466c34ef2bc64594bb7",
-      "rows": [
-        {
-          "unit": "model.c",
-          "symbol": "eog_rom_string_0d56809975687933_0",
-          "link_name": "eog_rom_string_0d56809975687933_0",
-          "bytes": 29,
-          "bank": "cdata",
-          "source_offset": 212196,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ],
-            [
-              3,
-              1,
-              "scalar"
-            ],
-            [
-              4,
-              1,
-              "scalar"
-            ],
-            [
-              5,
-              1,
-              "scalar"
-            ],
-            [
-              6,
-              1,
-              "scalar"
-            ],
-            [
-              7,
-              1,
-              "scalar"
-            ],
-            [
-              8,
-              1,
-              "scalar"
-            ],
-            [
-              9,
-              1,
-              "scalar"
-            ],
-            [
-              10,
-              1,
-              "scalar"
-            ],
-            [
-              11,
-              1,
-              "scalar"
-            ],
-            [
-              12,
-              1,
-              "scalar"
-            ],
-            [
-              13,
-              1,
-              "scalar"
-            ],
-            [
-              14,
-              1,
-              "scalar"
-            ],
-            [
-              15,
-              1,
-              "scalar"
-            ],
-            [
-              16,
-              1,
-              "scalar"
-            ],
-            [
-              17,
-              1,
-              "scalar"
-            ],
-            [
-              18,
-              1,
-              "scalar"
-            ],
-            [
-              19,
-              1,
-              "scalar"
-            ],
-            [
-              20,
-              1,
-              "scalar"
-            ],
-            [
-              21,
-              1,
-              "scalar"
-            ],
-            [
-              22,
-              1,
-              "scalar"
-            ],
-            [
-              23,
-              1,
-              "scalar"
-            ],
-            [
-              24,
-              1,
-              "scalar"
-            ],
-            [
-              25,
-              1,
-              "scalar"
-            ],
-            [
-              26,
-              1,
-              "scalar"
-            ],
-            [
-              27,
-              1,
-              "scalar"
-            ],
-            [
-              28,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 842466918,
-          "pool_section": ".rodata.dogfnegx.str1.4",
-          "pool_destination": ".data.eog_rom_strings_0d56809975687933",
-          "pool_offset": 0,
-          "storage": "zeroed-string-pool"
-        }
-      ]
-    },
-    {
-      "unit": "model.c",
-      "section": ".rodata.subdraw.str1.4",
-      "destination": ".data.eog_rom_strings_9ddf830bcea2bc18",
-      "bytes": 65,
-      "sha256": "942afeeae800f133e7c12de6bbff07f8b985a92a3be449d6dec19c0d4590cecb",
-      "rows": [
-        {
-          "unit": "model.c",
-          "symbol": "eog_rom_string_9ddf830bcea2bc18_0",
-          "link_name": "eog_rom_string_9ddf830bcea2bc18_0",
-          "bytes": 22,
-          "bank": "cdata",
-          "source_offset": 212260,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ],
-            [
-              3,
-              1,
-              "scalar"
-            ],
-            [
-              4,
-              1,
-              "scalar"
-            ],
-            [
-              5,
-              1,
-              "scalar"
-            ],
-            [
-              6,
-              1,
-              "scalar"
-            ],
-            [
-              7,
-              1,
-              "scalar"
-            ],
-            [
-              8,
-              1,
-              "scalar"
-            ],
-            [
-              9,
-              1,
-              "scalar"
-            ],
-            [
-              10,
-              1,
-              "scalar"
-            ],
-            [
-              11,
-              1,
-              "scalar"
-            ],
-            [
-              12,
-              1,
-              "scalar"
-            ],
-            [
-              13,
-              1,
-              "scalar"
-            ],
-            [
-              14,
-              1,
-              "scalar"
-            ],
-            [
-              15,
-              1,
-              "scalar"
-            ],
-            [
-              16,
-              1,
-              "scalar"
-            ],
-            [
-              17,
-              1,
-              "scalar"
-            ],
-            [
-              18,
-              1,
-              "scalar"
-            ],
-            [
-              19,
-              1,
-              "scalar"
-            ],
-            [
-              20,
-              1,
-              "scalar"
-            ],
-            [
-              21,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 3592254038,
-          "pool_section": ".rodata.subdraw.str1.4",
-          "pool_destination": ".data.eog_rom_strings_9ddf830bcea2bc18",
-          "pool_offset": 0,
-          "storage": "zeroed-string-pool"
-        },
-        {
-          "unit": "model.c",
-          "symbol": "eog_rom_string_9ddf830bcea2bc18_18",
-          "link_name": "eog_rom_string_9ddf830bcea2bc18_18",
-          "bytes": 41,
-          "bank": "cdata",
-          "source_offset": 212284,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ],
-            [
-              3,
-              1,
-              "scalar"
-            ],
-            [
-              4,
-              1,
-              "scalar"
-            ],
-            [
-              5,
-              1,
-              "scalar"
-            ],
-            [
-              6,
-              1,
-              "scalar"
-            ],
-            [
-              7,
-              1,
-              "scalar"
-            ],
-            [
-              8,
-              1,
-              "scalar"
-            ],
-            [
-              9,
-              1,
-              "scalar"
-            ],
-            [
-              10,
-              1,
-              "scalar"
-            ],
-            [
-              11,
-              1,
-              "scalar"
-            ],
-            [
-              12,
-              1,
-              "scalar"
-            ],
-            [
-              13,
-              1,
-              "scalar"
-            ],
-            [
-              14,
-              1,
-              "scalar"
-            ],
-            [
-              15,
-              1,
-              "scalar"
-            ],
-            [
-              16,
-              1,
-              "scalar"
-            ],
-            [
-              17,
-              1,
-              "scalar"
-            ],
-            [
-              18,
-              1,
-              "scalar"
-            ],
-            [
-              19,
-              1,
-              "scalar"
-            ],
-            [
-              20,
-              1,
-              "scalar"
-            ],
-            [
-              21,
-              1,
-              "scalar"
-            ],
-            [
-              22,
-              1,
-              "scalar"
-            ],
-            [
-              23,
-              1,
-              "scalar"
-            ],
-            [
-              24,
-              1,
-              "scalar"
-            ],
-            [
-              25,
-              1,
-              "scalar"
-            ],
-            [
-              26,
-              1,
-              "scalar"
-            ],
-            [
-              27,
-              1,
-              "scalar"
-            ],
-            [
-              28,
-              1,
-              "scalar"
-            ],
-            [
-              29,
-              1,
-              "scalar"
-            ],
-            [
-              30,
-              1,
-              "scalar"
-            ],
-            [
-              31,
-              1,
-              "scalar"
-            ],
-            [
-              32,
-              1,
-              "scalar"
-            ],
-            [
-              33,
-              1,
-              "scalar"
-            ],
-            [
-              34,
-              1,
-              "scalar"
-            ],
-            [
-              35,
-              1,
-              "scalar"
-            ],
-            [
-              36,
-              1,
-              "scalar"
-            ],
-            [
-              37,
-              1,
-              "scalar"
-            ],
-            [
-              38,
-              1,
-              "scalar"
-            ],
-            [
-              39,
-              1,
-              "scalar"
-            ],
-            [
-              40,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 1966425841,
-          "pool_section": ".rodata.subdraw.str1.4",
-          "pool_destination": ".data.eog_rom_strings_9ddf830bcea2bc18",
-          "pool_offset": 24,
           "storage": "zeroed-string-pool"
         }
       ]
@@ -17138,6 +16534,649 @@
       ]
     },
     {
+      "unit": "model.c",
+      "section": ".rodata.subcalcpos.str1.4",
+      "destination": ".data.eog_rom_strings_a04ad25ba4b08b08",
+      "bytes": 53,
+      "sha256": "31af5158623a73877adcfda2cc48dabc6036da09c7459389600cd3030efb6b5d",
+      "rows": [
+        {
+          "unit": "model.c",
+          "symbol": "eog_rom_string_a04ad25ba4b08b08_0",
+          "link_name": "eog_rom_string_a04ad25ba4b08b08_0",
+          "bytes": 25,
+          "bank": "cdata",
+          "source_offset": 211656,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ],
+            [
+              3,
+              1,
+              "scalar"
+            ],
+            [
+              4,
+              1,
+              "scalar"
+            ],
+            [
+              5,
+              1,
+              "scalar"
+            ],
+            [
+              6,
+              1,
+              "scalar"
+            ],
+            [
+              7,
+              1,
+              "scalar"
+            ],
+            [
+              8,
+              1,
+              "scalar"
+            ],
+            [
+              9,
+              1,
+              "scalar"
+            ],
+            [
+              10,
+              1,
+              "scalar"
+            ],
+            [
+              11,
+              1,
+              "scalar"
+            ],
+            [
+              12,
+              1,
+              "scalar"
+            ],
+            [
+              13,
+              1,
+              "scalar"
+            ],
+            [
+              14,
+              1,
+              "scalar"
+            ],
+            [
+              15,
+              1,
+              "scalar"
+            ],
+            [
+              16,
+              1,
+              "scalar"
+            ],
+            [
+              17,
+              1,
+              "scalar"
+            ],
+            [
+              18,
+              1,
+              "scalar"
+            ],
+            [
+              19,
+              1,
+              "scalar"
+            ],
+            [
+              20,
+              1,
+              "scalar"
+            ],
+            [
+              21,
+              1,
+              "scalar"
+            ],
+            [
+              22,
+              1,
+              "scalar"
+            ],
+            [
+              23,
+              1,
+              "scalar"
+            ],
+            [
+              24,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 1542702056,
+          "pool_section": ".rodata.subcalcpos.str1.4",
+          "pool_destination": ".data.eog_rom_strings_a04ad25ba4b08b08",
+          "pool_offset": 0,
+          "storage": "zeroed-string-pool"
+        },
+        {
+          "unit": "model.c",
+          "symbol": "eog_rom_string_a04ad25ba4b08b08_1c",
+          "link_name": "eog_rom_string_a04ad25ba4b08b08_1c",
+          "bytes": 25,
+          "bank": "cdata",
+          "source_offset": 211684,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ],
+            [
+              3,
+              1,
+              "scalar"
+            ],
+            [
+              4,
+              1,
+              "scalar"
+            ],
+            [
+              5,
+              1,
+              "scalar"
+            ],
+            [
+              6,
+              1,
+              "scalar"
+            ],
+            [
+              7,
+              1,
+              "scalar"
+            ],
+            [
+              8,
+              1,
+              "scalar"
+            ],
+            [
+              9,
+              1,
+              "scalar"
+            ],
+            [
+              10,
+              1,
+              "scalar"
+            ],
+            [
+              11,
+              1,
+              "scalar"
+            ],
+            [
+              12,
+              1,
+              "scalar"
+            ],
+            [
+              13,
+              1,
+              "scalar"
+            ],
+            [
+              14,
+              1,
+              "scalar"
+            ],
+            [
+              15,
+              1,
+              "scalar"
+            ],
+            [
+              16,
+              1,
+              "scalar"
+            ],
+            [
+              17,
+              1,
+              "scalar"
+            ],
+            [
+              18,
+              1,
+              "scalar"
+            ],
+            [
+              19,
+              1,
+              "scalar"
+            ],
+            [
+              20,
+              1,
+              "scalar"
+            ],
+            [
+              21,
+              1,
+              "scalar"
+            ],
+            [
+              22,
+              1,
+              "scalar"
+            ],
+            [
+              23,
+              1,
+              "scalar"
+            ],
+            [
+              24,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 4153925152,
+          "pool_section": ".rodata.subcalcpos.str1.4",
+          "pool_destination": ".data.eog_rom_strings_a04ad25ba4b08b08",
+          "pool_offset": 28,
+          "storage": "zeroed-string-pool"
+        }
+      ]
+    },
+    {
+      "unit": "model.c",
+      "section": ".rodata.subdraw.str1.4",
+      "destination": ".data.eog_rom_strings_9ddf830bcea2bc18",
+      "bytes": 65,
+      "sha256": "942afeeae800f133e7c12de6bbff07f8b985a92a3be449d6dec19c0d4590cecb",
+      "rows": [
+        {
+          "unit": "model.c",
+          "symbol": "eog_rom_string_9ddf830bcea2bc18_0",
+          "link_name": "eog_rom_string_9ddf830bcea2bc18_0",
+          "bytes": 22,
+          "bank": "cdata",
+          "source_offset": 212260,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ],
+            [
+              3,
+              1,
+              "scalar"
+            ],
+            [
+              4,
+              1,
+              "scalar"
+            ],
+            [
+              5,
+              1,
+              "scalar"
+            ],
+            [
+              6,
+              1,
+              "scalar"
+            ],
+            [
+              7,
+              1,
+              "scalar"
+            ],
+            [
+              8,
+              1,
+              "scalar"
+            ],
+            [
+              9,
+              1,
+              "scalar"
+            ],
+            [
+              10,
+              1,
+              "scalar"
+            ],
+            [
+              11,
+              1,
+              "scalar"
+            ],
+            [
+              12,
+              1,
+              "scalar"
+            ],
+            [
+              13,
+              1,
+              "scalar"
+            ],
+            [
+              14,
+              1,
+              "scalar"
+            ],
+            [
+              15,
+              1,
+              "scalar"
+            ],
+            [
+              16,
+              1,
+              "scalar"
+            ],
+            [
+              17,
+              1,
+              "scalar"
+            ],
+            [
+              18,
+              1,
+              "scalar"
+            ],
+            [
+              19,
+              1,
+              "scalar"
+            ],
+            [
+              20,
+              1,
+              "scalar"
+            ],
+            [
+              21,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 3592254038,
+          "pool_section": ".rodata.subdraw.str1.4",
+          "pool_destination": ".data.eog_rom_strings_9ddf830bcea2bc18",
+          "pool_offset": 0,
+          "storage": "zeroed-string-pool"
+        },
+        {
+          "unit": "model.c",
+          "symbol": "eog_rom_string_9ddf830bcea2bc18_18",
+          "link_name": "eog_rom_string_9ddf830bcea2bc18_18",
+          "bytes": 41,
+          "bank": "cdata",
+          "source_offset": 212284,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ],
+            [
+              3,
+              1,
+              "scalar"
+            ],
+            [
+              4,
+              1,
+              "scalar"
+            ],
+            [
+              5,
+              1,
+              "scalar"
+            ],
+            [
+              6,
+              1,
+              "scalar"
+            ],
+            [
+              7,
+              1,
+              "scalar"
+            ],
+            [
+              8,
+              1,
+              "scalar"
+            ],
+            [
+              9,
+              1,
+              "scalar"
+            ],
+            [
+              10,
+              1,
+              "scalar"
+            ],
+            [
+              11,
+              1,
+              "scalar"
+            ],
+            [
+              12,
+              1,
+              "scalar"
+            ],
+            [
+              13,
+              1,
+              "scalar"
+            ],
+            [
+              14,
+              1,
+              "scalar"
+            ],
+            [
+              15,
+              1,
+              "scalar"
+            ],
+            [
+              16,
+              1,
+              "scalar"
+            ],
+            [
+              17,
+              1,
+              "scalar"
+            ],
+            [
+              18,
+              1,
+              "scalar"
+            ],
+            [
+              19,
+              1,
+              "scalar"
+            ],
+            [
+              20,
+              1,
+              "scalar"
+            ],
+            [
+              21,
+              1,
+              "scalar"
+            ],
+            [
+              22,
+              1,
+              "scalar"
+            ],
+            [
+              23,
+              1,
+              "scalar"
+            ],
+            [
+              24,
+              1,
+              "scalar"
+            ],
+            [
+              25,
+              1,
+              "scalar"
+            ],
+            [
+              26,
+              1,
+              "scalar"
+            ],
+            [
+              27,
+              1,
+              "scalar"
+            ],
+            [
+              28,
+              1,
+              "scalar"
+            ],
+            [
+              29,
+              1,
+              "scalar"
+            ],
+            [
+              30,
+              1,
+              "scalar"
+            ],
+            [
+              31,
+              1,
+              "scalar"
+            ],
+            [
+              32,
+              1,
+              "scalar"
+            ],
+            [
+              33,
+              1,
+              "scalar"
+            ],
+            [
+              34,
+              1,
+              "scalar"
+            ],
+            [
+              35,
+              1,
+              "scalar"
+            ],
+            [
+              36,
+              1,
+              "scalar"
+            ],
+            [
+              37,
+              1,
+              "scalar"
+            ],
+            [
+              38,
+              1,
+              "scalar"
+            ],
+            [
+              39,
+              1,
+              "scalar"
+            ],
+            [
+              40,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 1966425841,
+          "pool_section": ".rodata.subdraw.str1.4",
+          "pool_destination": ".data.eog_rom_strings_9ddf830bcea2bc18",
+          "pool_offset": 24,
+          "storage": "zeroed-string-pool"
+        }
+      ]
+    },
+    {
       "unit": "mpmenu.c",
       "section": ".rodata.display_text_for_playerdata_on_MP_menu.str1.4",
       "destination": ".data.eog_rom_strings_749a56c3ff996f49",
@@ -17975,70 +18014,6 @@
     },
     {
       "unit": "options.c",
-      "section": ".rodata.sub_GAME_7F0A4B40.str1.4",
-      "destination": ".data.eog_rom_strings_d1bad5b0beb440d2",
-      "bytes": 8,
-      "sha256": "802f503066cf881ac3cc06941af1c1b1158ddcd45899bfcc20f2de073e68f48c",
-      "rows": [
-        {
-          "unit": "options.c",
-          "symbol": "eog_rom_string_d1bad5b0beb440d2_0",
-          "link_name": "eog_rom_string_d1bad5b0beb440d2_0",
-          "bytes": 8,
-          "bank": "cdata",
-          "source_offset": 223696,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ],
-            [
-              3,
-              1,
-              "scalar"
-            ],
-            [
-              4,
-              1,
-              "scalar"
-            ],
-            [
-              5,
-              1,
-              "scalar"
-            ],
-            [
-              6,
-              1,
-              "scalar"
-            ],
-            [
-              7,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 861261955,
-          "pool_section": ".rodata.sub_GAME_7F0A4B40.str1.4",
-          "pool_destination": ".data.eog_rom_strings_d1bad5b0beb440d2",
-          "pool_offset": 0,
-          "storage": "zeroed-string-pool"
-        }
-      ]
-    },
-    {
-      "unit": "options.c",
       "section": ".rodata.draw_watch_inventory_page.str1.4",
       "destination": ".data.eog_rom_strings_7b286b347bc7bdc4",
       "bytes": 14,
@@ -18133,15 +18108,49 @@
     },
     {
       "unit": "options.c",
-      "section": ".rodata.native_menu_option_text.part.0.str1.4",
-      "destination": ".data.eog_rom_strings_40a9d37ad92ea36d",
-      "bytes": 38,
-      "sha256": "558ccbe5d6ef56a1a52fcdf905447e8afb9fb059e068062cc74c6fabef8411f6",
+      "section": ".rodata.native_menu_option_label.str1.4",
+      "destination": ".data.eog_rom_strings_765c43c0594fe5df",
+      "bytes": 2,
+      "sha256": "102b51b9765a56a3e899f7cf0ee38e5251f9c503b357b330a49183eb7b155604",
       "rows": [
         {
           "unit": "options.c",
-          "symbol": "eog_rom_string_40a9d37ad92ea36d_20",
-          "link_name": "eog_rom_string_40a9d37ad92ea36d_20",
+          "symbol": "eog_rom_string_765c43c0594fe5df_0",
+          "link_name": "eog_rom_string_765c43c0594fe5df_0",
+          "bytes": 2,
+          "bank": "cdata",
+          "source_offset": 6334,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 2374983655,
+          "pool_section": ".rodata.native_menu_option_label.str1.4",
+          "pool_destination": ".data.eog_rom_strings_765c43c0594fe5df",
+          "pool_offset": 0,
+          "storage": "zeroed-string-pool"
+        }
+      ]
+    },
+    {
+      "unit": "options.c",
+      "section": ".rodata.native_menu_option_text.part.0.str1.4",
+      "destination": ".data.eog_rom_strings_40a9d37ad92ea36d",
+      "bytes": 39,
+      "sha256": "9a62c854154f7f453cb09f195c6f7c73ceddc9547932767d43056cad2de2834b",
+      "rows": [
+        {
+          "unit": "options.c",
+          "symbol": "eog_rom_string_40a9d37ad92ea36d_18",
+          "link_name": "eog_rom_string_40a9d37ad92ea36d_18",
           "bytes": 6,
           "bank": "cdata",
           "source_offset": 196252,
@@ -18180,41 +18189,7 @@
           "hash": 1048815200,
           "pool_section": ".rodata.native_menu_option_text.part.0.str1.4",
           "pool_destination": ".data.eog_rom_strings_40a9d37ad92ea36d",
-          "pool_offset": 32,
-          "storage": "zeroed-string-pool"
-        }
-      ]
-    },
-    {
-      "unit": "options.c",
-      "section": ".rodata.native_menu_option_label.str1.4",
-      "destination": ".data.eog_rom_strings_765c43c0594fe5df",
-      "bytes": 2,
-      "sha256": "102b51b9765a56a3e899f7cf0ee38e5251f9c503b357b330a49183eb7b155604",
-      "rows": [
-        {
-          "unit": "options.c",
-          "symbol": "eog_rom_string_765c43c0594fe5df_0",
-          "link_name": "eog_rom_string_765c43c0594fe5df_0",
-          "bytes": 2,
-          "bank": "cdata",
-          "source_offset": 6334,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 2374983655,
-          "pool_section": ".rodata.native_menu_option_label.str1.4",
-          "pool_destination": ".data.eog_rom_strings_765c43c0594fe5df",
-          "pool_offset": 0,
+          "pool_offset": 24,
           "storage": "zeroed-string-pool"
         }
       ]
@@ -18223,13 +18198,13 @@
       "unit": "options.c",
       "section": ".rodata.native_watch_options_draw.str1.4",
       "destination": ".data.eog_rom_strings_d3f3dbeb75408f82",
-      "bytes": 56,
-      "sha256": "ee9d1fa2aeba53a6b33de987aebf04ad9c3eaa50fa13acef083ad62749d6ac9b",
+      "bytes": 68,
+      "sha256": "20cd5248db5ab626e852fd049bc9cf4d5f411e30bddd88d9bb9e7962f476b455",
       "rows": [
         {
           "unit": "options.c",
-          "symbol": "eog_rom_string_d3f3dbeb75408f82_34",
-          "link_name": "eog_rom_string_d3f3dbeb75408f82_34",
+          "symbol": "eog_rom_string_d3f3dbeb75408f82_40",
+          "link_name": "eog_rom_string_d3f3dbeb75408f82_40",
           "bytes": 4,
           "bank": "cdata",
           "source_offset": 208502,
@@ -18258,7 +18233,71 @@
           "hash": 1680307547,
           "pool_section": ".rodata.native_watch_options_draw.str1.4",
           "pool_destination": ".data.eog_rom_strings_d3f3dbeb75408f82",
-          "pool_offset": 52,
+          "pool_offset": 64,
+          "storage": "zeroed-string-pool"
+        }
+      ]
+    },
+    {
+      "unit": "options.c",
+      "section": ".rodata.sub_GAME_7F0A4B40.str1.4",
+      "destination": ".data.eog_rom_strings_d1bad5b0beb440d2",
+      "bytes": 8,
+      "sha256": "802f503066cf881ac3cc06941af1c1b1158ddcd45899bfcc20f2de073e68f48c",
+      "rows": [
+        {
+          "unit": "options.c",
+          "symbol": "eog_rom_string_d1bad5b0beb440d2_0",
+          "link_name": "eog_rom_string_d1bad5b0beb440d2_0",
+          "bytes": 8,
+          "bank": "cdata",
+          "source_offset": 223696,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ],
+            [
+              3,
+              1,
+              "scalar"
+            ],
+            [
+              4,
+              1,
+              "scalar"
+            ],
+            [
+              5,
+              1,
+              "scalar"
+            ],
+            [
+              6,
+              1,
+              "scalar"
+            ],
+            [
+              7,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 861261955,
+          "pool_section": ".rodata.sub_GAME_7F0A4B40.str1.4",
+          "pool_destination": ".data.eog_rom_strings_d1bad5b0beb440d2",
+          "pool_offset": 0,
           "storage": "zeroed-string-pool"
         }
       ]
@@ -18458,158 +18497,6 @@
           "pool_section": ".rodata.proplvreset2.str1.4",
           "pool_destination": ".data.eog_rom_strings_eaa08453bda857c9",
           "pool_offset": 68,
-          "storage": "zeroed-string-pool"
-        }
-      ]
-    },
-    {
-      "unit": "propobj.c",
-      "section": ".rodata.prepare_ammo_type_collection_text.str1.4",
-      "destination": ".data.eog_rom_strings_ba88f5b589bf6ea1",
-      "bytes": 7,
-      "sha256": "1bc24098ab85b536ed65bbb812c11501c50cca58fbaee7cfb3b17807dc32b47b",
-      "rows": [
-        {
-          "unit": "propobj.c",
-          "symbol": "eog_rom_string_ba88f5b589bf6ea1_0",
-          "link_name": "eog_rom_string_ba88f5b589bf6ea1_0",
-          "bytes": 2,
-          "bank": "cdata",
-          "source_offset": 6334,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 2374983655,
-          "pool_section": ".rodata.prepare_ammo_type_collection_text.str1.4",
-          "pool_destination": ".data.eog_rom_strings_ba88f5b589bf6ea1",
-          "pool_offset": 0,
-          "storage": "zeroed-string-pool"
-        },
-        {
-          "unit": "propobj.c",
-          "symbol": "eog_rom_string_ba88f5b589bf6ea1_4",
-          "link_name": "eog_rom_string_ba88f5b589bf6ea1_4",
-          "bytes": 3,
-          "bank": "cdata",
-          "source_offset": 126284,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 487087347,
-          "pool_section": ".rodata.prepare_ammo_type_collection_text.str1.4",
-          "pool_destination": ".data.eog_rom_strings_ba88f5b589bf6ea1",
-          "pool_offset": 4,
-          "storage": "zeroed-string-pool"
-        }
-      ]
-    },
-    {
-      "unit": "propobj.c",
-      "section": ".rodata.doorSndProbe.str1.4",
-      "destination": ".data.eog_rom_strings_f1252c1b85ee5c42",
-      "bytes": 192,
-      "sha256": "6510f0e9d8d6922655d734b8e4771e7909ecc2826e0726f48be6abf704e617d2",
-      "rows": [
-        {
-          "unit": "propobj.c",
-          "symbol": "eog_rom_string_f1252c1b85ee5c42_20",
-          "link_name": "eog_rom_string_f1252c1b85ee5c42_20",
-          "bytes": 2,
-          "bank": "cdata",
-          "source_offset": 1117,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 723832900,
-          "pool_section": ".rodata.doorSndProbe.str1.4",
-          "pool_destination": ".data.eog_rom_strings_f1252c1b85ee5c42",
-          "pool_offset": 32,
-          "storage": "zeroed-string-pool"
-        }
-      ]
-    },
-    {
-      "unit": "propobj.c",
-      "section": ".rodata.chrobjRenderProp.str1.4",
-      "destination": ".data.eog_rom_strings_4a025fdb850306a9",
-      "bytes": 84,
-      "sha256": "b1df9aba8f22a57640c0d958df8c3ca180d3f9f6785868f69a5e803eb9314fe3",
-      "rows": [
-        {
-          "unit": "propobj.c",
-          "symbol": "eog_rom_string_4a025fdb850306a9_0",
-          "link_name": "eog_rom_string_4a025fdb850306a9_0",
-          "bytes": 6,
-          "bank": "cdata",
-          "source_offset": 214724,
-          "fields": [
-            [
-              0,
-              1,
-              "scalar"
-            ],
-            [
-              1,
-              1,
-              "scalar"
-            ],
-            [
-              2,
-              1,
-              "scalar"
-            ],
-            [
-              3,
-              1,
-              "scalar"
-            ],
-            [
-              4,
-              1,
-              "scalar"
-            ],
-            [
-              5,
-              1,
-              "scalar"
-            ]
-          ],
-          "hash": 1944547331,
-          "pool_section": ".rodata.chrobjRenderProp.str1.4",
-          "pool_destination": ".data.eog_rom_strings_4a025fdb850306a9",
-          "pool_offset": 0,
           "storage": "zeroed-string-pool"
         }
       ]
@@ -18840,6 +18727,158 @@
           "pool_destination": ".data.eog_rom_strings_9fc0745439c05e0d",
           "pool_offset": 0,
           "storage": "zeroed-compiler-pool"
+        }
+      ]
+    },
+    {
+      "unit": "propobj.c",
+      "section": ".rodata.chrobjRenderProp.str1.4",
+      "destination": ".data.eog_rom_strings_4a025fdb850306a9",
+      "bytes": 84,
+      "sha256": "b1df9aba8f22a57640c0d958df8c3ca180d3f9f6785868f69a5e803eb9314fe3",
+      "rows": [
+        {
+          "unit": "propobj.c",
+          "symbol": "eog_rom_string_4a025fdb850306a9_0",
+          "link_name": "eog_rom_string_4a025fdb850306a9_0",
+          "bytes": 6,
+          "bank": "cdata",
+          "source_offset": 214724,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ],
+            [
+              3,
+              1,
+              "scalar"
+            ],
+            [
+              4,
+              1,
+              "scalar"
+            ],
+            [
+              5,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 1944547331,
+          "pool_section": ".rodata.chrobjRenderProp.str1.4",
+          "pool_destination": ".data.eog_rom_strings_4a025fdb850306a9",
+          "pool_offset": 0,
+          "storage": "zeroed-string-pool"
+        }
+      ]
+    },
+    {
+      "unit": "propobj.c",
+      "section": ".rodata.doorSndProbe.str1.4",
+      "destination": ".data.eog_rom_strings_f1252c1b85ee5c42",
+      "bytes": 192,
+      "sha256": "6510f0e9d8d6922655d734b8e4771e7909ecc2826e0726f48be6abf704e617d2",
+      "rows": [
+        {
+          "unit": "propobj.c",
+          "symbol": "eog_rom_string_f1252c1b85ee5c42_20",
+          "link_name": "eog_rom_string_f1252c1b85ee5c42_20",
+          "bytes": 2,
+          "bank": "cdata",
+          "source_offset": 1117,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 723832900,
+          "pool_section": ".rodata.doorSndProbe.str1.4",
+          "pool_destination": ".data.eog_rom_strings_f1252c1b85ee5c42",
+          "pool_offset": 32,
+          "storage": "zeroed-string-pool"
+        }
+      ]
+    },
+    {
+      "unit": "propobj.c",
+      "section": ".rodata.prepare_ammo_type_collection_text.str1.4",
+      "destination": ".data.eog_rom_strings_ba88f5b589bf6ea1",
+      "bytes": 7,
+      "sha256": "1bc24098ab85b536ed65bbb812c11501c50cca58fbaee7cfb3b17807dc32b47b",
+      "rows": [
+        {
+          "unit": "propobj.c",
+          "symbol": "eog_rom_string_ba88f5b589bf6ea1_0",
+          "link_name": "eog_rom_string_ba88f5b589bf6ea1_0",
+          "bytes": 2,
+          "bank": "cdata",
+          "source_offset": 6334,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 2374983655,
+          "pool_section": ".rodata.prepare_ammo_type_collection_text.str1.4",
+          "pool_destination": ".data.eog_rom_strings_ba88f5b589bf6ea1",
+          "pool_offset": 0,
+          "storage": "zeroed-string-pool"
+        },
+        {
+          "unit": "propobj.c",
+          "symbol": "eog_rom_string_ba88f5b589bf6ea1_4",
+          "link_name": "eog_rom_string_ba88f5b589bf6ea1_4",
+          "bytes": 3,
+          "bank": "cdata",
+          "source_offset": 126284,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ],
+            [
+              2,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 487087347,
+          "pool_section": ".rodata.prepare_ammo_type_collection_text.str1.4",
+          "pool_destination": ".data.eog_rom_strings_ba88f5b589bf6ea1",
+          "pool_offset": 4,
+          "storage": "zeroed-string-pool"
         }
       ]
     },

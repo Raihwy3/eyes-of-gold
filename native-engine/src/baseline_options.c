@@ -25,7 +25,7 @@ int portCrosshairPersistent(void){return 0;}
 int portCrosshairStyle(void){return 0;}
 f32 portCrosshairScale(void){return 1.0f;}
 void portCrosshairTint(s32 *r,s32 *g,s32 *b) {
-    static const u8 palette[6][3]={{255,255,255},{255,255,255},{64,255,64},{255,176,32},{255,48,48},{64,160,255}};
+    static const u8 palette[7][3]={{255,255,255},{255,255,255},{64,255,64},{255,176,32},{255,48,48},{64,160,255},{192,96,255}};
     int colour=native_setting_crosshair();*r=palette[colour][0];*g=palette[colour][1];*b=palette[colour][2];
 }
 void portCrosshairApplyTintCombine(Gfx *command) {

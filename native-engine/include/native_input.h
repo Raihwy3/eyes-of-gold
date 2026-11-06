@@ -3,6 +3,7 @@
 /* Platform device exit chord; START alone remains the original watch button. */
 void native_input_init(void);
 void native_input_suspend(void);
+void native_input_take_gyro(float *yaw,float *pitch) __attribute__((weak));
 int native_input_exit_requested(void);
 unsigned native_input_menu_buttons(void);
 void native_input_press(unsigned buttons) __attribute__((weak));

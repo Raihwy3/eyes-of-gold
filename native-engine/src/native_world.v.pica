@@ -1,5 +1,6 @@
-; Model-space world path. Keep clip-space UI/viewmodel shader unchanged.
+; Model-space world path with the same bounded stereo as the clip shader.
 .fvec tilt[4]
+.fvec stereo
 .fvec world[80]
 .constf constants(0.0, 1.0, 0.5, -1.0)
 .out outpos position
@@ -23,7 +24,19 @@
  dp4 r1.z, world[a0.x+2], r0
  dp4 r1.w, world[a0.x+3], r0
  dp4 outpos.x, tilt[0], r1
- dp4 outpos.y, tilt[1], r1
+ dp4 r2.y, tilt[1], r1
+ ; Keep full off-axis world depth; bound only weapon/UI separation.
+ mul r3.w, tilt[1].wwww, r1.wwww
+ add r3.x, stereo.yyyy, r3.wwww
+ mul r3.y, stereo.xxxx, r1.wwww
+ max r3.z, r3.xxxx, -r3.yyyy
+ min r3.z, r3.zzzz, r3.yyyy
+ ; stereo.z selects unclamped world disparity without a shader branch.
+ add r4.x, r3.xxxx, -r3.zzzz
+ mul r4.x, stereo.zzzz, r4.xxxx
+ add r3.z, r3.zzzz, r4.xxxx
+ add r2.y, r2.yyyy, -r3.wwww
+ add outpos.y, r2.yyyy, r3.zzzz
  ; Row 2 already maps N64 depth to PICA [-W,0]. Avoid float24 Z-W
  ; cancellation after transforming distant world vertices.
  mov outpos.z, r1.z

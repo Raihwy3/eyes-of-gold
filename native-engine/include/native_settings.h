@@ -3,6 +3,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+int native_setting_touch_sensitivity(void);
+void native_setting_set_touch_sensitivity(int value);
 int native_setting_randomiser(void);
 void native_setting_set_randomiser(int value);
 int native_setting_randomiser_seed(void);
@@ -28,6 +30,10 @@ int native_setting_aspect(void);
 int native_setting_aa(void);
 int native_setting_fps(void);
 int native_setting_sensitivity(void);
+int native_setting_gyro(void);
+int native_setting_gyro_sensitivity(void);
+void native_setting_set_gyro(int value);
+void native_setting_set_gyro_sensitivity(int value);
 int native_setting_sharpness(void);
 int native_setting_vignette(void);
 int native_setting_bloom(void);

@@ -1,6 +1,7 @@
 ; Fast3D has already transformed vertices into homogeneous clip space.
-; Citro3D's tilt matrix supplies the LCD rotation only. Preserve perspective W.
+; Apply LCD rotation and bounded stereo displacement. Preserve perspective W.
 .fvec tilt[4]
+.fvec stereo
 .constf constants(0.0, 1.0, 0.5, -1.0)
 .out outpos position
 .out outcolor color
@@ -14,7 +15,19 @@
 .alias uv2 v4
 .proc main
  dp4 outpos.x, tilt[0], inpos
- dp4 outpos.y, tilt[1], inpos
+ dp4 r2.y, tilt[1], inpos
+ ; Keep full off-axis world depth; bound only weapon/UI separation.
+ mul r3.w, tilt[1].wwww, inpos.wwww
+ add r3.x, stereo.yyyy, r3.wwww
+ mul r3.y, stereo.xxxx, inpos.wwww
+ max r3.z, r3.xxxx, -r3.yyyy
+ min r3.z, r3.zzzz, r3.yyyy
+ ; stereo.z selects unclamped world disparity without a shader branch.
+ add r4.x, r3.xxxx, -r3.zzzz
+ mul r4.x, stereo.zzzz, r4.xxxx
+ add r3.z, r3.zzzz, r4.xxxx
+ add r2.y, r2.yyyy, -r3.wwww
+ add outpos.y, r2.yyyy, r3.zzzz
  ; Backend preconverts depth to [-W,0] before float24 upload. This must
  ; match the world shader even for CPU-clipped triangles and decals.
  mov outpos.z, inpos.z

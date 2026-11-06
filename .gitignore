@@ -24,3 +24,6 @@ __pycache__/
 *.log
 
 /.venv/
+
+*.cia
+*.cxi

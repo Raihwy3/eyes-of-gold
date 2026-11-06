@@ -18,11 +18,15 @@ def runtime_rows():
     return [row for group in json.loads(PLAN.read_text())['sections'] for row in group['rows']]
 
 
-def generate():
+def generate(units=None):
+    previous=json.loads(PLAN.read_text())["sections"] if units and PLAN.exists() else []
     cart=canonical_rom(build.ROOT/'local/roms/GoldenEye.n64');cdata=zlib.decompress(cart[0x21992:0x331e0],-15);groups=[];count=0;total=0
     import build_probe,rom_data_plan
     build.prepare()
     sources={Path(p).name:p for p in build.source_files() if p.suffix=='.c'}
+    if units:
+        assert set(units)<=set(sources), "Unknown string-plan unit"
+        sources={name:rel for name,rel in sources.items() if name in units}
     folder=build.BUILD/'rom-string-input';folder.mkdir(exist_ok=True)
     def compile_input(item):
         unit,rel=item;source=build.source_path(rel);args=[build.CC,*build_probe.engine_args()]
@@ -66,6 +70,7 @@ def generate():
                             count+=1;total+=len(value)
                     at=end+1
                 if rows:groups.append(dict(unit=unit,section=section.name,destination=new,bytes=len(blob),sha256=hashlib.sha256(blob).hexdigest(),rows=rows))
+    if units:groups=sorted([g for g in previous if g["unit"] not in units]+groups,key=lambda g:(g["unit"],g["section"]))
     PLAN.write_text(json.dumps(dict(version=1,upstream=build.UPSTREAM_REV,sections=groups),indent=2)+'\n')
     print('Original compiler-pool strings:',count,'strings;',total,'bytes in',len(groups),'sections')
 

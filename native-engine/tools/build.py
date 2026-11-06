@@ -97,7 +97,7 @@ def source_path(rel):
         for old,new in replacements.items():
             if text.count(old)!=1:raise ValueError('Original Full viewport boundary changed: '+old)
             text=text.replace(old,new)
-        text='#include "native_watch_environment.h"\n#include "native_controls.h"\n'+text
+        text='#include "native_watch_environment.h"\n#include "native_controls.h"\n#include "native_theme.h"\n'+text
         old='    g_CurrentPlayer->field_D0 = 0;'
         if text.count(old)!=1:raise ValueError('Original movement hook boundary changed')
         text=text.replace(old,'    native_controls_apply(&moveData);\n'+old)
@@ -107,6 +107,9 @@ def source_path(rel):
             old='g_CurrentPlayer->speed'+axis+' * g_GlobalTimerDelta * 3.5f'
             assert text.count(old)==1,(axis,text.count(old))
             text=text.replace(old,'native_controls_look_rate(g_CurrentPlayer->speed'+axis+') * g_GlobalTimerDelta * 3.5f')
+        anchor='    bondviewApplyVertaTheta();\n\n    // Handle crouching'
+        assert text.count(anchor)==1
+        text=text.replace(anchor,'    native_controls_apply_gyro();\n'+anchor)
         signature='Gfx *bondviewRenderWatch(Gfx *gdl)'
         declarations='static void native_watch_skin_begin(ModelFileHeader *);\nstatic void native_watch_skin_end(void);\nstatic Gfx *native_watch_skin_draw(Gfx *,Mtxf *);\n'
         text=text.replace(signature,declarations+signature,1)
@@ -123,12 +126,31 @@ def source_path(rel):
         text=text[:a]+'''        renderdata.envcolour.word = native_watch_environment_rgba(g_CurrentPlayer->tileColor.r,g_CurrentPlayer->tileColor.g,g_CurrentPlayer->tileColor.b,g_CurrentPlayer->tileColor.a);
 
 '''+text[b:]
+        # The physical watch and orthographic HUD gauges are not world-camera
+        # geometry. End the model scope before drawing the watch UI itself.
+        a=text.index('Gfx *bondviewRenderWatch(Gfx *gdl)')
+        b=text.index('Gfx *bondviewRenderGaugeBars(Gfx *gdl)',a)
+        watch=text[a:b]
+        old='        renderdata.gdl = gdl;'
+        assert watch.count(old)==1
+        watch=watch.replace(old,'        gDma0p(gdl++,0x3a,NATIVE_WATCH_BODY_SCOPE,0xffffffu);\n'+old)
+        old='        gdl=native_watch_skin_draw(gdl,matrices);'
+        assert watch.count(old)==1
+        watch=watch.replace(old,old+'\n        gDma0p(gdl++,0x3a,0,(~NATIVE_WATCH_BODY_SCOPE)&0xffffffu);')
+        text=text[:a]+watch+text[b:]
+        a=text.index('Gfx *bondviewRenderGaugeBars(Gfx *gdl)')
+        b=text.index('\nvoid mp_respawn_handler(',a)
+        gauges=text[a:b]
+        assert gauges.count('    return gdl;')==1
+        gauges=gauges.replace('{\n','{\n    gDma0p(gdl++,0x3a,NATIVE_WATCH_BODY_SCOPE,0xffffffu);\n',1)
+        gauges=gauges.replace('    return gdl;','    gDma0p(gdl++,0x3a,0,(~NATIVE_WATCH_BODY_SCOPE)&0xffffffu);\n    return gdl;')
+        text=text[:a]+gauges+text[b:]
         text+='\n#include "native_watch_skin.h"\n'
         dest=BUILD/'overlay/bondview2.c';dest.parent.mkdir(exist_ok=True);dest.write_text(text)
         (dest.parent/'bondview2.patch').write_text(''.join(difflib.unified_diff(source.read_text().splitlines(True),text.splitlines(True),fromfile='upstream/src/game/bondview2.c',tofile='native/src/game/bondview2.c')))
         return dest
     if str(rel)=='src/game/options.c':
-        text='#include <ultra64.h>\n#include "native_aspect.h"\n#include "native_settings.h"\n#include "native_theme.h"\nstatic Gfx *native_draw_control_styles(Gfx *);\nstatic Gfx *native_draw_controls_help(Gfx *);\nstatic Gfx *native_draw_colour_choice(Gfx *,int,int,unsigned);\nstatic Gfx *native_watch_theme_scope(Gfx *,int);\n'+source.read_text()
+        text='#include <ultra64.h>\n#include "native_aspect.h"\n#include "native_settings.h"\n#include "native_theme.h"\nstatic Gfx *native_draw_control_styles(Gfx *);\nstatic Gfx *native_draw_controls_help(Gfx *);\nstatic Gfx *native_draw_colour_choice(Gfx *,int,int,unsigned);\nstatic Gfx *native_watch_theme_scope(Gfx *,int);\nstatic int native_watch_brief_scroll;\n'+source.read_text()
         text='#include <ultra64.h>\n#include "bondconstants.h"\nextern u8 *get_ptr_text_for_watch_breifing_page(WATCH_BRIEFING_PAGE);\nextern u8 *get_text_for_objective(int);\nextern s32 get_difficulty_for_objective(s32);\nextern u16 *bondinvGetFirstTitlebyIndex(s32);\nextern u16 *bondinvGetSecondTitlebyIndex(s32);\nstatic void native_bottom_watch_publish(void);\n'+text
         text='#include "native_objectives_capture.h"\n'+text
         # Collect the ORIGINAL briefing/objective layout in read-only mode
@@ -180,7 +202,7 @@ def source_path(rel):
         text=text.replace('y_offset = y_offset + YINC','y_offset = y_offset + 11')
         old='void game_option_toggle_input(s32 option_index)\n{'
         new=old+\
-            '\n    if(option_index>=8) {\n        if(!watch_item_is_actively_selected)return;\n        int value=option_index==8?native_setting_crosshair():option_index==9?native_setting_watch():option_index==10?native_setting_aa():native_setting_fps()==60;\n        int count=option_index==8?6:option_index==9?6:2;\n        int left=joyGetButtonsPressedThisFrame(PLAYER_1,L_CBUTTONS|L_TRIG|L_JPAD)||sub_GAME_7F0A4FB0();\n        int right=joyGetButtonsPressedThisFrame(PLAYER_1,R_CBUTTONS|R_TRIG|R_JPAD)||sub_GAME_7F0A4FEC();\n        if(left || right) {\n            value=(value+(left?-1:1)+count)%count;\n            game_option_select_value(&game_options_entries[option_index].current_value,value);\n            if(option_index==8)native_setting_set_crosshair(value);else if(option_index==9)native_setting_set_watch(value);else if(option_index==10)native_setting_set_aa(value);else native_setting_set_fps(value?60:30);\n        }\n        return;\n    }'
+            '\n    if(option_index>=8) {\n        if(!watch_item_is_actively_selected)return;\n        int value=option_index==8?native_setting_crosshair():option_index==9?native_setting_watch():option_index==10?native_setting_aa():native_setting_fps()==60;\n        int count=option_index==8?7:option_index==9?7:2;\n        int left=joyGetButtonsPressedThisFrame(PLAYER_1,L_CBUTTONS|L_TRIG|L_JPAD)||sub_GAME_7F0A4FB0();\n        int right=joyGetButtonsPressedThisFrame(PLAYER_1,R_CBUTTONS|R_TRIG|R_JPAD)||sub_GAME_7F0A4FEC();\n        if(left || right) {\n            value=(value+(left?-1:1)+count)%count;\n            game_option_select_value(&game_options_entries[option_index].current_value,value);\n            if(option_index==8)native_setting_set_crosshair(value);else if(option_index==9)native_setting_set_watch(value);else if(option_index==10)native_setting_set_aa(value);else native_setting_set_fps(value?60:30);\n        }\n        return;\n    }'
         text=text.replace(old,new)
         old='Gfx *draw_toggle_option_values(Gfx *gdl, s32 y, s32 option_index, u32 state)\n{'
         text=text.replace(old,old+'\n    if(option_index>=8)return native_draw_colour_choice(gdl,y,option_index,state);')
@@ -196,6 +218,24 @@ def source_path(rel):
         needle='    gSPDisplayList(gdl++, OS_PHYSICAL_TO_K0(g_CurrentPlayer->buffer_for_watch_greenbackdrop_DL));'
         assert text.count(needle)==1
         text=text.replace(needle,'    gDma0p(gdl++,0x3a,NATIVE_WATCH_TABS_SCOPE,0xffffffu);\n'+needle+'\n    gDma0p(gdl++,0x3a,0,(~NATIVE_WATCH_TABS_SCOPE)&0xffffffu);')
+        # Scroll original briefing glyphs inside a fixed body window on both
+        # displays. Read-only objective capture must not emit display commands.
+        a=text.index('Gfx *draw_watch_mission_briefing_page(Gfx *gdl, Mtx *param_2)\n{')
+        b=text.index('//D:80058440',a)
+        briefing=text[a:b]
+        old='        gdl = native_objective_text(gdl, &boxLeft, &boxTop, wrappedText, chars, font, 0x00ff00b0, viGetX(), viGetY(), 0, 10);'
+        assert briefing.count(old)==1
+        new='''        if(!native_objective_is_collecting()) {
+            int bodyTop=boxTop,available=210-bodyTop;
+            int maximum=textHeight>available?textHeight-available:0;
+            if(native_watch_brief_scroll>maximum)native_watch_brief_scroll=maximum;
+            boxTop-=native_watch_brief_scroll;
+            gDPSetScissor(gdl++,G_SC_NON_INTERLACE,0,bodyTop,viGetX(),210);
+        }
+'''+old+'''
+        if(!native_objective_is_collecting())gDPSetScissor(gdl++,G_SC_NON_INTERLACE,0,0,viGetX(),viGetY());'''
+        briefing=briefing.replace(old,new)
+        text=text[:a]+briefing+text[b:]
         signature='Gfx *draw_background_health_and_armor(Gfx *gdl, Mtx *arg1, s32 zoom_squish)'
         a=text.index(signature+'\n{');b=text.index('\nGfx *draw_background_health_and_armor_transitioning',a)
         background=text[a:b]

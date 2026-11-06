@@ -2,6 +2,11 @@
 #define EOG_NATIVE_CHEAT_LAYOUT_H
 /* Original dossier coordinates. Keep the full list above the cursor's lower
  * boundary, using the same rows for drawing, pointing and bottom-screen input. */
+/* The seed is wider than On/Off. Fit the measured six-digit value inside
+ * each dossier column, keeping the original positions for other values. */
+static inline int native_cheat_value_x(int second_column,int seed,int width){
+    return seed?(second_column?364:200)-width:second_column?344:179;
+}
 static inline int native_cheat_split(int count){return count>24?(count+1)/2:12;}
 static inline int native_cheat_pitch(int count){
     int split=native_cheat_split(count),rows=count<split?count:split;

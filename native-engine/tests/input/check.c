@@ -5,6 +5,7 @@
 #include "native_settings.h"
 #include <assert.h>
 #include <stdio.h>
+angularRate test_gyro_rate;
 static unsigned held;
 static int gameplay=1;
 void hidScanInput(void){}
@@ -41,6 +42,17 @@ int main(void) {
  held=0;inputUpdate();native_input_press(0x8000);
  assert(inputComputePad(0,NULL,NULL)&0x8000);assert(!(inputComputePad(0,NULL,NULL)&0x8000));
  native_input_press(0x1000);native_input_init();assert(!(inputComputePad(0,NULL,NULL)&0x1000));
+ held=0;gameplay=1;test_gyro_rate.z=1438;test_gyro_rate.x=719;
+ native_setting_set_gyro(2);float gy=0,gp=0,total_y=0,total_p=0;
+ for(int i=0;i<60;i++){inputUpdate();native_input_take_gyro(&gy,&gp);total_y+=gy;total_p+=gp;}
+ assert(total_y>95 && total_y<105 && total_p>45 && total_p<55);
+ native_input_take_gyro(&gy,&gp);assert(gy==0 && gp==0);
+ native_setting_set_gyro(1);inputUpdate();native_input_take_gyro(&gy,&gp);assert(gy==0 && gp==0);
+ held=EOG_L;inputUpdate();native_input_take_gyro(&gy,&gp);assert(gy>0 && gp>0);
+ gameplay=0;inputUpdate();native_input_take_gyro(&gy,&gp);assert(gy==0 && gp==0);
+ native_input_suspend();native_input_take_gyro(&gy,&gp);assert(gy==0 && gp==0);
+ native_setting_set_gyro(0);
+ puts("PASS HID gyro integration: degrees/sec, consume-once, aim-only, menus and suspend discard motion");
  puts("PASS SELECT no longer changes weapon rendering; menu input and exit chord preserved");
  puts("PASS actual HID sampler: Vesper A/Jinx D-right taps survive intervening polls/releases, fire once, and clear on menu entry");
 }

@@ -328,8 +328,10 @@ int main(void) {
   consoleInit(GFX_TOP, &top);
   consoleInit(GFX_BOTTOM, &bottom);
 
+#ifndef NATIVE_CIA_BUILD
   extern int native_update_startup(const char *,PrintConsole *,PrintConsole *);
   if(!native_update_startup("sdmc:/3ds/eyes-of-gold-native-game",&top,&bottom)){gfxExit();return 0;}
+#endif
 
   native_input_init();
   native_bottom_init();

@@ -3,9 +3,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define EOG_BOTTOM_ROWS 32
+#define EOG_BOTTOM_ROWS 96
 enum {EOG_BOTTOM_MENU=1,EOG_BOTTOM_OPTIONS,EOG_BOTTOM_WATCH,EOG_BOTTOM_GAME};
-enum {EOG_BOTTOM_SELECT=1,EOG_BOTTOM_ACTIVATE,EOG_BOTTOM_CHANGE,EOG_BOTTOM_BACK,EOG_BOTTOM_PAGE,EOG_BOTTOM_POINT,EOG_BOTTOM_SCROLL};
+enum {EOG_BOTTOM_SELECT=1,EOG_BOTTOM_ACTIVATE,EOG_BOTTOM_CHANGE,EOG_BOTTOM_BACK,EOG_BOTTOM_PAGE,EOG_BOTTOM_POINT,EOG_BOTTOM_SCROLL,EOG_BOTTOM_ADJUST};
 struct EogBottomRow {char label[192],value[64];int tag,disabled,status;};
 #define EOG_OBJECTIVE_TEXTS 24
 struct EogObjectiveText {int x,y,width,height,lineheight,overlap,spacing;unsigned colour;char text[512];};
@@ -25,6 +25,9 @@ void native_bottom_spacing(int font,const int *kerning,const int *classes) __att
 int native_bottom_gpu_acquire(void) __attribute__((weak));
 void native_bottom_gpu_release(void) __attribute__((weak));
 void native_bottom_watch_regions(const int bounds[5][4]) __attribute__((weak));
+void native_bottom_seed_open(int value) __attribute__((weak));
+int native_bottom_seed_active(void) __attribute__((weak));
+unsigned native_bottom_seed_entropy(void) __attribute__((weak));
 void native_bottom_init(void);
 void native_bottom_draw(void);
 void native_bottom_stop(void);

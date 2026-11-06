@@ -38,13 +38,15 @@ static u8 cheat_available[CHEAT_MAX],g_CheatActivated[CHEAT_MAX];
 static u32 arrayUnlockedCheats[CHEAT_MAX];
 static int cheatCheckIfMPCheat(int id){(void)id;return 0;}
 static char *cheatGetMenuTextPointer(int id){assert(id>0 && id<CHEAT_INVALID);return "Retail cheat";}
+static int seed_requested;
+void native_bottom_seed_open(int seed){seed_requested=seed;}
 static void load_walletbond(void){}
 /* CHEAT_HELPERS */
 /* RETAIL_FIXTURES */
 int main(void){
  /* Regression: even a full retail list plus the three custom entries must
   * remain selectable, with draw coordinates and touch focus agreeing. */
- for(int count=3;count<=31;count++)for(int tag=0;tag<count;tag++){
+ for(int count=3;count<=32;count++)for(int tag=0;tag<count;tag++){
   int split=native_cheat_split(count),row=tag<split?tag:tag-split;
   int y=native_cheat_row_y(row,count),x=tag<split?100:240;
   assert(y>=53 && y+14<=287 && native_cheat_pitch(count)>=14);
@@ -57,15 +59,26 @@ int main(void){
  native_setting_set_style(8);native_setting_set_aspect(1);
  native_setting_set_subsistence(1);native_settings_init(directory);assert(native_setting_subsistence());
  cheat_available[1]=cheat_available[2]=1;
- init_menu15_cheat();assert(totalunlockedcheats==5);
+ init_menu15_cheat();assert(totalunlockedcheats==6);
  assert(arrayUnlockedCheats[0]==1 && arrayUnlockedCheats[1]==2);
  assert(arrayUnlockedCheats[2]==0 && arrayUnlockedCheats[3]==CHEAT_INVALID+1 && arrayUnlockedCheats[4]==CHEAT_INVALID+2);
+ assert(arrayUnlockedCheats[5]==CHEAT_INVALID+3);
+ assert(!strcmp((char *)native_cheat_label(CHEAT_INVALID+3),"Change seed"));
+ native_cheat_toggle(CHEAT_INVALID+3);assert(seed_requested==native_setting_randomiser_seed());
  assert(!strcmp((char *)native_cheat_label(0),"Subsistence"));assert(native_cheat_active(0));
  assert(!native_cheat_active(CHEAT_INVALID+1));
  native_cheat_toggle(CHEAT_INVALID+1);assert(native_setting_randomiser());
  assert(!strcmp((char *)native_cheat_label(CHEAT_INVALID+1),"Randomiser"));
  int oldseed=native_setting_randomiser_seed();native_cheat_toggle(CHEAT_INVALID+2);assert(native_setting_randomiser_seed()!=oldseed);
  assert(strlen((char *)native_cheat_value(CHEAT_INVALID+2,(u8 *)"Off"))==6);
+ assert(!native_cheat_value(CHEAT_INVALID+3,(u8 *)"Off")[0]);
+ for(int column=0;column<2;column++)for(int width=6;width<=54;width++){
+  int x=native_cheat_value_x(column,1,width);
+  assert(x+width==(column?364:200));
+  assert(x>=(column?310:146));
+  assert(native_cheat_value_x(column,0,width)==(column?344:179));
+ }
+
  native_cheat_toggle(CHEAT_INVALID+1);assert(!native_setting_randomiser());
  native_custom_cheats_sync();assert(g_AppendCheatSinglePlayer && !g_AppendCheatMultiPlayer);
  native_cheat_toggle(CHEAT_ALLGUNS);assert(!native_setting_subsistence() && g_CheatActivated[CHEAT_ALLGUNS]);

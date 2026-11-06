@@ -99,12 +99,12 @@ static void check_guard_preferences(void) {
     puts("PASS guard options: Off/30Hz defaults, every saved toggle/rate, invalid setters/config rejection and legacy-file fallback");
 }
 int main(void) {
-    unsigned seen=0;
-    for(int i=0;i<NATIVE_MENU_OPTIONS_COUNT;i++){int row=native_menu_option_at(i);assert(row>=0 && row<NATIVE_MENU_OPTIONS_COUNT && !(seen&(1u<<row)));seen|=1u<<row;}
-    assert(seen==((1u<<NATIVE_MENU_OPTIONS_COUNT)-1));
-    assert(native_menu_option_at(11)==22 && native_menu_option_at(12)==23 && native_menu_option_at(13)==21);
-    assert(native_menu_option_at(19)==17 && native_menu_option_at(20)==24);
-    assert(native_menu_option_at(23)==12 && native_menu_option_at(24)==20);
+    uint64_t seen=0;
+    for(int i=0;i<NATIVE_MENU_OPTIONS_COUNT;i++){int row=native_menu_option_at(i);assert(row>=0 && row<NATIVE_MENU_OPTIONS_COUNT && !(seen&(1ull<<row)));seen|=1ull<<row;}
+    assert(seen==((1ull<<NATIVE_MENU_OPTIONS_COUNT)-1));
+    assert(native_menu_option_at(14)==22 && native_menu_option_at(15)==23 && native_menu_option_at(16)==21);
+    assert(native_menu_option_at(22)==17 && native_menu_option_at(23)==24);
+    assert(native_menu_option_at(26)==12 && native_menu_option_at(27)==20);
     assert(!native_setting_guard_visibility() && native_setting_guard_ai_hz()==30);
     native_setting_set_guard_ai_hz(0);native_setting_set_guard_ai_hz(60);native_setting_set_guard_visibility(2);
     assert(!native_setting_guard_visibility() && native_setting_guard_ai_hz()==30);
@@ -125,6 +125,16 @@ int main(void) {
     native_settings_init(directory);
     assert(native_setting_style()==-1 && native_setting_aspect()==-1);
     assert(!native_setting_crosshair() && !native_setting_watch() && native_setting_aa()==1);
+    assert(native_setting_gyro()==0 && native_setting_gyro_sensitivity()==100 && native_setting_touch_sensitivity()==100);
+    native_setting_set_style(8);native_setting_set_aspect(1);
+    for(int mode=0;mode<=2;mode++)for(int gain=25;gain<=200;gain+=25){
+        native_setting_set_gyro(mode);native_setting_set_gyro_sensitivity(gain);native_settings_init(directory);
+        assert(native_setting_gyro()==mode && native_setting_gyro_sensitivity()==gain);
+    }
+    native_setting_set_gyro(3);native_setting_set_gyro_sensitivity(0);native_setting_set_gyro_sensitivity(101);
+    assert(native_setting_gyro()==2 && native_setting_gyro_sensitivity()==200);
+    for(int gain=25;gain<=200;gain+=25){native_setting_set_touch_sensitivity(gain);native_settings_init(directory);assert(native_setting_touch_sensitivity()==gain);}
+    native_setting_set_touch_sensitivity(24);native_setting_set_touch_sensitivity(101);assert(native_setting_touch_sensitivity()==200);
     native_setting_set_style(8);native_setting_set_crosshair(1);native_setting_set_watch(2);native_setting_set_aspect(1);native_setting_set_aa(0);native_setting_set_fps(30);native_setting_set_sensitivity(75);native_setting_set_sharpness(2);
     native_settings_init(directory);
     assert(native_setting_style()==8 && native_setting_crosshair()==1 && native_setting_watch()==2 && native_setting_aspect()==1);
@@ -168,7 +178,15 @@ int main(void) {
     }
     puts("PASS N64 AA: persisted toggle, legacy preferences migration, invalid rejection and exact AA-only render-mode masking");
     assert(!strcmp(native_string(0xf000),"1.5 Vesper\n"));assert(!strcmp(native_string(0xf001),"1.6 Jinx\n"));assert(!native_string(0xffffffffu));
-    for(int theme=0;theme<6;++theme) {
+    char purple_directory[]="/tmp/eog-purple-XXXXXX";assert(mkdtemp(purple_directory));
+    native_settings_init(purple_directory);native_setting_set_style(8);native_setting_set_aspect(0);
+    native_setting_set_crosshair(6);native_setting_set_watch(6);
+    native_settings_init(purple_directory);
+    assert(native_setting_crosshair()==6 && native_setting_watch()==6);
+    assert(!strcmp(native_colour_name(0,6),"Purple\n") && !strcmp(native_colour_name(1,6),"Purple\n"));
+    snprintf(path,sizeof path,"%s/native-options.ini",purple_directory);unlink(path);rmdir(purple_directory);
+    native_settings_init(NULL);
+    for(int theme=0;theme<7;++theme) {
         unsigned r=0,g=160,b=0;native_theme_rgb(theme,&r,&g,&b);
         if(!theme)assert(!r && g==160 && !b);
         if(theme==1)assert(r==160 && g==160 && b==160);
@@ -176,6 +194,7 @@ int main(void) {
         if(theme==3)assert(r==160 && g<40 && b<40);
         if(theme==4)assert(r==40 && g==100 && b==160);
         if(theme==5)assert(r==144 && g==119 && b==40);
+        if(theme==6)assert(r==120 && g==60 && b==160);
         r=255;g=0;b=0;native_theme_rgb(theme,&r,&g,&b);assert(r==255 && !g && !b);
         r=g=b=200;native_theme_rgb(theme,&r,&g,&b);assert(r==200 && g==200 && b==200);
     }

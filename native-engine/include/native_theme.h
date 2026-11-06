@@ -6,8 +6,8 @@
 /* Recolour green UI chroma while retaining pale highlights, warning colours
  * and original alpha. This does not modify any texture or source vertex. */
 static inline void native_theme_rgb(int theme,unsigned *r,unsigned *g,unsigned *b) {
-    static const unsigned palette[6][3]={{0,255,0},{255,255,255},{255,176,32},{255,48,48},{64,160,255},{230,190,64}};
-    if(theme<1 || theme>5 || *g<*r || *g<*b)return;
+    static const unsigned palette[7][3]={{0,255,0},{255,255,255},{255,176,32},{255,48,48},{64,160,255},{230,190,64},{192,96,255}};
+    if(theme<1 || theme>6 || *g<*r || *g<*b)return;
     unsigned neutral=*r<*b?*r:*b,green=*g-neutral;
     *r=neutral+(green*palette[theme][0]+127)/255;
     *g=neutral+(green*palette[theme][1]+127)/255;

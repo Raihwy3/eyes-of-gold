@@ -124,6 +124,11 @@ def main():
     assert movement.count('native_controls_look_rate(g_CurrentPlayer->speed')==2
     a=movement.index('f32 sub_GAME_7F080228(');b=movement.index('Gfx *currentPlayerDrawFade(',a)
     (out/'native-aim-acceleration.h').write_text(movement[a:b])
+    turn=movement.index('    if (moveData.canNaturalTurn)\n    {\n        ftemp_nostack_sp8C')
+    turn_end=movement.index('    else if (moveData.aimTurnLeftSpeed > 0)',turn)
+    pitch=movement.index('            if (moveData.canNaturalPitch)\n            {')
+    pitch_end=movement.index('            else if (moveData.speedVertaDown > 0)',pitch)
+    (out/'native-touch-aim-axes.h').write_text(movement[turn:turn_end]+movement[pitch:pitch_end])
     control_objects=[]
     for source in (build.TARGET/'src/native_controls.c',build.TARGET/'src/native_settings.c',build.UP/'src/str.c',build.TARGET/'tests/native_controls_host.c'):
         obj=out/(source.name+'.controls.o')
