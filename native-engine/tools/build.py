@@ -56,6 +56,7 @@ def prepare():
         inputs += sorted(p for p in (TARGET/folder).rglob('*') if p.suffix in ('.c','.cpp','.h','.py','.pica'))
     inputs += sorted((TARGET/'vendor/GamepadMotionHelpers').glob('*'))
     inputs += sorted((TARGET/'vendor/rt64-stereo').glob('*'))
+    inputs += sorted(p for p in (TARGET/'vendor/OpenDSP').rglob('*') if p.is_file() and not any(x in p.parts for x in ('build','lib')))
     for path in inputs:
         digest.update(str(path.relative_to(TARGET)).encode());digest.update(path.read_bytes())
     (BUILD/'include/native_build.h').write_text('#define NATIVE_BUILD_ID "'+digest.hexdigest()[:12]+'"\n')
@@ -108,7 +109,7 @@ def source_path(rel):
         for axis in ('verta','theta'):
             old='g_CurrentPlayer->speed'+axis+' * g_GlobalTimerDelta * 3.5f'
             assert text.count(old)==1,(axis,text.count(old))
-            text=text.replace(old,'native_controls_look_rate(g_CurrentPlayer->speed'+axis+') * g_GlobalTimerDelta * 3.5f')
+            text=text.replace(old,('native_controls_pitch_rate' if axis=='verta' else 'native_controls_look_rate')+'(g_CurrentPlayer->speed'+axis+') * g_GlobalTimerDelta * 3.5f')
         anchor='    bondviewApplyVertaTheta();\n\n    // Handle crouching'
         assert text.count(anchor)==1
         text=text.replace(anchor,'    native_controls_apply_gyro();\n'+anchor)
@@ -118,6 +119,9 @@ def source_path(rel):
         old='    bheadUpdate(percent_speed, speedsideways);'
         assert text.count(old)==1
         text=text.replace(old,old+"\n    native_controls_scope_head();")
+        old='        time = watch_time_0;'
+        assert text.count(old)==1
+        text=text.replace(old,'        time = native_watch_clock_time(watch_time_0);')
         signature='Gfx *bondviewRenderWatch(Gfx *gdl)'
         declarations='static void native_watch_skin_begin(ModelFileHeader *);\nstatic void native_watch_skin_end(void);\nstatic Gfx *native_watch_skin_draw(Gfx *,Mtxf *);\n'
         text=text.replace(signature,declarations+signature,1)
@@ -385,7 +389,32 @@ def source_path(rel):
         text=effect_lod.explosion(source.read_text()) if rel.name=='explosion.c' else effect_lod.glass(source.read_text())
         dest=BUILD/'overlay'/rel.name;dest.write_text(text);return dest
     if str(rel)=='src/game/gunfire.c':
-        text='#include "native_viewmodel.h"\n'+source.read_text()
+        text='#include "native_crosshair_shapes.h"\n#include "native_controls.h"\n#include "native_viewmodel.h"\n'+source.read_text()
+        # Preserve the original stick/weapon filters. The desktop mouse hook
+        # replaces their damping for the whole input, including the C-stick.
+        a=text.index('void sub_GAME_7F067FBC(')
+        begin=text.index('#ifdef PORT',a);end=text.index('#endif',begin)+len('#endif')
+        assert 'portMouseAimPdGetTurn' in text[begin:end]
+        text=text[:begin]+text[end:]
+        a=text.index('void caclulate_gun_crosshair_position_rotation(')
+        end=text.index('\n}',a)+2;body=text[a:end]
+        anchor='    g_CurrentPlayer->crosshair_angle.f[0] = '
+        begin=body.index(anchor)
+        body=body[:begin]+'    /* Motion offsets follow, rather than replace, original stick damping.\n     * Keep the persistent stock accumulators untouched for the next tick. */\n    f32 native_stock_x=g_CurrentPlayer->crosshair_x_pos*(1.0f-guncrossdamp);\n    f32 native_stock_y=g_CurrentPlayer->crosshair_y_pos*(1.0f-guncrossdamp);\n    f32 native_aim_x=native_stock_x,native_aim_y=native_stock_y;\n    native_controls_aim_turn(&native_aim_x,&native_aim_y);\n    f32 native_offset_x=native_aim_x-native_stock_x;\n    f32 native_offset_y=native_aim_y-native_stock_y;\n\n'+body[begin:]
+        for axis,field in (('x','f[0]'),('y','f[1]')):
+            old='g_CurrentPlayer->crosshair_'+axis+'_pos * (1.0f - guncrossdamp)'
+            assert body.count(old)==1
+            body=body.replace(old,'(native_stock_'+axis+' + native_offset_'+axis+')')
+        anchor='    g_CurrentPlayer->field_FFC.x += getPlayer_c_screenleft();'
+        assert body.count(anchor)==1
+        body=body.replace(anchor,'    g_CurrentPlayer->field_FFC.x += native_offset_x*screen_width*0.5f;\n    g_CurrentPlayer->field_FFC.y += native_offset_y*screen_height*0.5f;\n'+anchor)
+        text=text[:a]+body+text[end:]
+        anchor='        portCrosshairTint(&crosshair_r, &crosshair_g, &crosshair_b);'
+        assert text.count(anchor)==1
+        text=text.replace(anchor,'        if(native_setting_crosshair_shape()){\n            extern f32 portNativeAspect(void);\n            Gfx *native_gdl=*(Gfx **)gdl;\n            native_gdl=native_crosshair_draw(native_gdl,native_setting_crosshair_shape(),g_CurrentPlayer->crosshair_angle.f[0],g_CurrentPlayer->crosshair_angle.f[1],(int)getPlayer_c_screenwidth(),(int)getPlayer_c_screenheight(),(int)getPlayer_c_screenleft(),(int)getPlayer_c_screentop(),portNativeAspect());\n            *(Gfx **)gdl=native_gdl;return;\n        }\n'+anchor)
+        original_alpha='crosshair_r, crosshair_g, crosshair_b, 0x6E, (sightimage->level > 0)'
+        assert text.count(original_alpha)==1
+        text=text.replace(original_alpha,'crosshair_r, crosshair_g, crosshair_b, native_crosshair_alpha(), (sightimage->level > 0)')
         a=text.index('void gunRenderFirstPersonGunModels(Gfx **gdlptr)')
         b=text.index('Gfx *set_enviro_fog_for_items_in_solo_watch_menu',a)
         body=text[a:b]
@@ -638,6 +667,10 @@ static f32 native_frontend_aspect(f32 authored) {
         text=text.replace(old,'\t\t\t\tif (rz_hufts > NATIVE_HUFT_ENTRIES || z + 1 > NATIVE_HUFT_ENTRIES - rz_hufts)\n\t\t\t\t\tsysFatalError("Original inflate Huffman workspace exhausted (%u + %u)",rz_hufts,z+1);\n'+old)
         dest=BUILD/'overlay/zlib.c';dest.write_text(text)
         return dest
+    if str(rel)=='src/libultrare/audio/reverb.c':
+        import dsp_audio
+        text=dsp_audio.reverb(source.read_text())
+        dest=BUILD/'overlay/reverb.c';dest.write_text(text);return dest
     if str(rel)=='src/libultra/audio/synthesizer.c':
         import dsp_audio
         text=dsp_audio.synth(source.read_text())
@@ -664,6 +697,12 @@ static f32 native_frontend_aspect(f32 authored) {
         render='    cmdlp = (Acmd*)alAudioFrame(g_AudioManager.cmdList[g_CurrentAcmdList], &g_CommandLength, outBuffer, info->frameSamples);'
         assert text.count(render)==1
         text=text.replace(render,'    native_dsp_mix_begin(info->data,info->frameSamples);\n    const uint64_t native_audio_start=sysGetMicroseconds();\n'+render+'\n    native_dsp_mix_end();'+'\n    static uint64_t native_audio_work,native_audio_peak;\n    static unsigned native_audio_frames;\n    const uint64_t native_audio_elapsed=sysGetMicroseconds()-native_audio_start;\n    native_audio_work+=native_audio_elapsed;if(native_audio_elapsed>native_audio_peak)native_audio_peak=native_audio_elapsed;\n    if(++native_audio_frames==300) {\n        uint32_t hits,misses;native_audio_pcm_stats(&hits,&misses);\n        sysLogPrintf(LOG_NOTE,"Audio work: avgUs=%u peakUs=%u PCMframes=%u decodeFallbacks=%u",(unsigned)(native_audio_work/300),(unsigned)native_audio_peak,hits,misses);\n        uint32_t dsp_spans,dsp_samples,dsp_fallbacks;native_dsp_mix_stats(&dsp_spans,&dsp_samples,&dsp_fallbacks);\n        sysLogPrintf(LOG_NOTE,"DSP dry mix: spans=%u samples=%u CPUfallbacks=%u",dsp_spans,dsp_samples,dsp_fallbacks);\n        native_audio_frames=0;native_audio_work=native_audio_peak=0;\n    }\n')
+        # alAudioFrame already executes the CPU mixer synchronously. There
+        # is no remaining RSP audio task: routing its completion through the
+        # shared RSP scheduler needlessly waits for a graphics frame to end.
+        handoff='    osSendMesg(osScGetCmdQ(&os_scheduler), (OSMesg)&info->task, OS_MESG_NOBLOCK);'
+        if text.count(handoff)!=1:raise ValueError('Original audio completion boundary changed')
+        text=text.replace(handoff,'    osSendMesg(&g_AudioManager.replyMessageQueue, (OSMesg)info, OS_MESG_BLOCK);')
         dest=BUILD/'overlay/audi.c';dest.write_text(text)
         return dest
     if str(rel)=='src/game/title.c':

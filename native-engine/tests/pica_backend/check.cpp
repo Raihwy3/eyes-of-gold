@@ -95,6 +95,19 @@ int native_setting_bloom(void){return test_bloom;}
 void native_setting_set_vignette(int v){test_vignette=v;}
 void native_setting_set_bloom(int v){test_bloom=v;}
 int native_setting_stereo_strength(void){return 100;}
+static int test_stereo_auto=1,test_stereo_convergence=100,test_stereo_comfort=0,test_stereo_hud=75,test_stereo_crosshair=0,test_ghost_contrast=100,test_black_floor;
+int native_setting_stereo_auto(void){return test_stereo_auto;}
+int native_setting_stereo_convergence(void){return test_stereo_convergence;}
+int native_setting_stereo_comfort(void){return test_stereo_comfort;}
+int native_setting_stereo_hud_depth(void){return test_stereo_hud;}
+int native_setting_stereo_crosshair_hud(void){return test_stereo_crosshair;}
+int native_setting_stereo_ghost_contrast(void){return test_ghost_contrast;}
+int native_setting_stereo_black_floor(void){return test_black_floor;}
+void native_setting_set_stereo_ghost_contrast(int v){test_ghost_contrast=v;}
+void native_setting_set_stereo_black_floor(int v){test_black_floor=v;}
+static u32 ghost_blend_colour;
+void C3D_BlendingColor(u32 colour){ghost_blend_colour=colour;}
+
 int native_setting_aa(void){return test_aa;}
 void native_setting_set_aa(int value){test_aa=value;}
 int native_setting_sharpness(void){return test_sharpness;}
@@ -1313,6 +1326,35 @@ int main(int argc,char **argv) {
    sharp_release_targets();assert(live_targets==1);
  }
  C3D_RenderTargetDelete(watch_target);watch_target=nullptr;assert(!live_targets);
+ for(int samples:{1,2})for(bool stereo:{false,true}){
+  test_sharpness=test_vignette=test_bloom=test_grain=0;test_ghost_contrast=80;test_black_floor=10;
+  in_frame=false;update_sharp_targets(samples,0);assert(sharp_enabled);
+  in_frame=true;stereo_active=stereo;size_t before=recorded.size();sharp_present();
+  assert(recorded.size()==before+(stereo?24:6));
+  if(stereo){
+   const auto ghost=native_stereo_options::ghost(80,10);
+   assert((ghost_blend_colour&255)==unsigned(ghost.a*255+.5f));
+   for(unsigned eye=0;eye<2;eye++){
+    const auto &state=recorded[before+eye*12+6].state;
+    assert(state.blend_src==GPU_ONE && state.blend_dst==GPU_CONSTANT_COLOR);
+    assert((state.env[0].color&255)==unsigned(ghost.b*255+.5f));
+    assert(!state.depth && !state.alpha);
+   }
+  }
+  in_frame=false;test_ghost_contrast=100;test_black_floor=0;update_sharp_targets(samples,0);
+  sharp_release_targets();if(watch_target){C3D_RenderTargetDelete(watch_target);watch_target=nullptr;}assert(!live_targets);
+ }
+ test_ghost_contrast=80;fail_create=1;update_sharp_targets(1,0);
+ assert(test_ghost_contrast==100 && test_black_floor==0 && !sharp_enabled);
+ sharp_release_targets();if(watch_target){C3D_RenderTargetDelete(watch_target);watch_target=nullptr;}assert(!live_targets);
+ puts("PASS actual GPU ghost reduction: one affine blend per stereo eye, disabled in 2D, native/AA surfaces, preserved alpha/depth and allocation-failure reset");
+ { C3D_RenderTarget scene={};target=&scene;stereo_active=true;frontend_ui=watch_seen=false;
+   test_stereo_auto=0;test_stereo_convergence=50;test_stereo_crosshair=1;update_stereo_depth(.016f);
+   assert(world_convergence==1500 && !aim_depth.have && reticle_shift==0);
+   test_stereo_convergence=200;update_stereo_depth(.016f);assert(world_convergence==6000);
+   test_stereo_auto=1;test_stereo_convergence=100;test_stereo_crosshair=0;target=nullptr;stereo_active=false;
+ }
+
  // Evaluate the actual configured TEV stages and blend equations against
  // an independent unclamped unsharp reference, including both signs.
  auto fragment=[](const C3D_TexEnv *env,float center,float left,float right) {

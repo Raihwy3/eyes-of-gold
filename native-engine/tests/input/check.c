@@ -149,6 +149,25 @@ int main(void) {
  ft+=16667;native_flick_sample(&fine,ft,39,39,1);
  assert(fabsf(fine.pending-before)<.01f); // A single dropout does not re-flick.
  native_flick_sample(&fine,ft-1,0,55,1);assert(!fine.active && fine.pending==0);
+ /* C-stick pressure near a cardinal should produce an exact initial turn,
+  * while intentional diagonals retain their angle. */
+ for(int direction=-1;direction<=1;direction+=2){
+  struct NativeFlick f={0};native_flick_sample(&f,1000000,0,0,1);
+  native_flick_sample(&f,1010000,direction*156,20,1);
+  native_flick_sample(&f,1120000,direction*156,20,1);
+  assert(fabsf(f.pending-direction*90)<.001f);
+ }
+ struct NativeFlick diagonal={0};native_flick_sample(&diagonal,1000000,0,0,1);
+ native_flick_sample(&diagonal,1010000,100,100,1);native_flick_sample(&diagonal,1120000,100,100,1);
+ assert(fabsf(diagonal.pending-45)<.001f);
+ /* Flick mode must not eat the C-stick's ordinary free-aim input. */
+ native_settings_init(NULL);native_setting_set_style(8);native_setting_set_flick(1);native_input_init();
+ gameplay=1;held=KEY_L;rx=156;ry=80;inputUpdate();
+ signed char aim_x=0,aim_y=0;inputComputePad(0,&aim_x,&aim_y);
+ assert(aim_x==80 && aim_y>35);
+ float aim_flick=1;native_input_take_flick(&aim_flick);assert(aim_flick==0);
+ held=0;rx=ry=0;inputUpdate();
+ puts("PASS flick-stick aiming: held aim restores C-stick X/Y and discards queued flick turns");
  puts("PASS Flick Stick: directional angles, 30/60Hz timing, edge rotation/wrap, consume-once, unchanged movement, default stick look and menu/suspend/stall resets");
 
  puts("PASS HID gyro integration: degrees/sec, consume-once, aim-only, menus and suspend discard motion");

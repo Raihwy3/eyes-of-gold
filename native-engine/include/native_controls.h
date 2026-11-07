@@ -2,6 +2,7 @@
 #define EOG_NATIVE_CONTROLS_H
 struct MoveData;
 float native_controls_look_rate(float rate);
+float native_controls_pitch_rate(float rate);
 void native_controls_adjust_look(float *yaw,float *pitch);
 void native_controls_apply_gyro(void);
 void native_controls_scope_head(void);

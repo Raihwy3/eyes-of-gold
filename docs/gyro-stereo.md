@@ -6,17 +6,17 @@ Enable **Gyro look** in the main menu options, or open **Watch → Game Options 
 - **Aim only** uses motion while Bond is aiming.
 - **Look + aim** uses motion during normal looking and aiming.
 
-**Look, Gyro and Touch sensitivity** all use 10–400%, in 10% steps, with a faster 100% default. Existing saved speeds are preserved: the previous 100% appears as 40%. Set it to 100% to use the faster baseline. The config file retains its legacy gain units for compatibility.
+**Gyro sensitivity** now displays the real angle multiplier: 100% means one degree of camera rotation per degree of device rotation, and 250% means 2.5 degrees. The range is 25–400% in 25% steps, default 250%. Previously that same default was misleadingly displayed as 100%; saved gains up to 400 are preserved, and larger legacy gyro gains are capped at 400. Zoom retains the existing FOV scaling, so the real-angle ratio applies at the normal 60-degree FOV.
 
-**Gyro sensitivity** ranges from 10% to 200%. It is independent of **Look sensitivity**, which controls the sticks. Settings are saved in `native-options.ini`. Existing files without gyro settings start with gyro off and 100% sensitivity.
+**Look horizontal**, **Look vertical** and **Touch sensitivity** keep their existing 10–400% scale and faster baseline. Older configs without a vertical setting inherit their saved horizontal value. The two stick axes can now be changed independently, including during aiming. Touch gain is unchanged.
 
-The input sampler converts gyro readings to degrees per second and accelerometer readings to g before passing them to [GamepadMotionHelpers](https://github.com/JibbSmart/GamepadMotionHelpers). At every setting, equal pitch and yaw rotations have equal angular gain. The new 100% gyro baseline is 2.5 degrees of camera rotation per degree of device rotation before zoom scaling; horizontal motion has no separate multiplier. Zoom applies the same FOV adjustment to both axes. Sticks retain their separate look sensitivity.
+The input sampler converts gyro readings to degrees per second and acceleration to g before passing them to [GamepadMotionHelpers](https://github.com/JibbSmart/GamepadMotionHelpers). Both axes use the same gyro gain. **Gyro filter** is an optional adaptive low-pass filter, Off by default. It reduces small alternating motion and raises its cutoff during faster movement. Disengaging gyro, changing space/axis, calibration and long sampling gaps discard filter history.
 
-**Gyro space** offers Local, World and Player. Local uses pitch plus exactly one **Local turn axis**, Yaw or Roll. World projects rotation against gravity; Player uses gravity-relative turning with local pitch. These gravity-relative modes intentionally use different sensor axes as the handheld tilts, rather than adding local yaw and roll together. The axis selector displays Gravity in these modes. Local/Yaw remains the default.
+**Gyro space** offers Local, World and Player. Local uses pitch plus exactly one **Local turn axis**, Yaw or Roll. World projects rotation against a normalized, briefly smoothed accelerometer reference; Player uses that same vertical reference for turning and keeps local pitch. This avoids depending on an accumulated orientation estimate for the vertical direction. Physical acceleration can still disturb the estimate; moving-device console tests remain necessary. These gravity-relative modes intentionally use different sensor axes as the handheld tilts, rather than adding local yaw and roll together. The axis selector displays Gravity in these modes. Local/Yaw remains the default.
 
 Choose **Calibrate gyro**, then leave the console still for three seconds. The menu shows the percentage while sampling and Calibrated when finished. Movement restarts the sampling period. Stillness uses changes in the sensor readings, so a stable raw gyro offset or accelerometer scale difference does not prevent calibration. After twelve seconds without a stable window, Try again appears and the previous calibration is kept. Calibration also works with gyro look off. Calibration offsets last for the session; repeat after restarting if needed. Hybrid automatic calibration runs only while motion look is disengaged, so deliberate slow aiming is not learned as drift. Menus, watch pages, scripted locks, attract demos and suspension discard motion, and long stalls cannot accumulate a camera jump.
 
-**Watch → Game Options → Accessibility** contains Aim lock (default Off), Stamina sway (default Off) and Steady scope (default On). Aim lock centres the reticle and routes aiming into the camera while aiming; Off keeps free aiming. Stamina sway controls extra fatigue-related breathing sway rather than recoil or all movement bob. Steady scope fades head-animation drift as FOV narrows from 50 to 20 degrees. Demo playback retains its original camera behaviour. These choices are also available in main-menu options and are saved.
+**Watch → Game Options → Accessibility** contains Aim lock (default Off), Stamina sway (default Off), Steady scope (default On) and Always crosshair (default Off). Always crosshair ignores only the original not-aiming hide reason; damage, cutscene, watch and multiplayer-menu restrictions remain. Aim lock centres the reticle and routes aiming into the camera while aiming; Off keeps free aiming. Stamina sway controls extra fatigue-related breathing sway rather than recoil or all movement bob. Steady scope fades head-animation drift as FOV narrows from 50 to 20 degrees. Demo playback retains its original camera behaviour. These choices are also available in main-menu options and are saved.
 
 **Watch → Game Options → Controls → Aim movement** switches between Free (the current default) and Classic for Vesper/Jinx. Classic uses Circle Pad left/right to lean in place through the original engine lean system, blocks walking and strafing, and uses down/up to crouch/stand. With scoped weapons, up/down adjusts zoom instead, as in the original controls. Releasing aim restores normal movement and keeps the selected crouch height. Tank controls and the original control styles retain their existing behaviour. The choice is also available in main-menu options and is saved.
 
@@ -28,7 +28,7 @@ Hardware testing is required for gyro axis direction, gravity-space feel, drift 
 
 SDK references: [libctru HID API](https://github.com/devkitPro/libctru/blob/master/libctru/include/3ds/services/hid.h), [HID service implementation](https://github.com/devkitPro/libctru/blob/master/libctru/source/services/hid.c).
 
-**Touch sensitivity** is under **Game Options → Controls** and in the main menu options. It ranges from 10% to 200%, defaults to 100%, and is saved between launches. In the watch, swipe a setting left/right to change it, swipe outside settings rows to switch pages, and swipe vertically to browse weapons or scroll briefing text. Tap the page title or hold a stationary touch to go back. The existing watch page tabs remain touch targets.
+**Touch sensitivity** is under **Game Options → Controls** and in the main menu options. It ranges from 10% to 400%, defaults to 100%, and is saved between launches. In the watch, swipe a setting left/right to change it, swipe outside settings rows to switch pages, and swipe vertically to browse weapons or scroll briefing text. Tap the page title or hold a stationary touch to go back. The existing watch page tabs remain touch targets.
 
 **Flick stick (exp)** is under **Game Options → Controls** and in the main menu options. It defaults to off and is saved between launches. With **1.5 Vesper**, the C-stick chooses a horizontal turn direction: right turns 90°, down turns 180°, and moving around the edge rotates the view by the same angle. JoyShockMapper’s flick timing and magnitude-dependent rotation smoothing are adapted directly from revision `980dc52c09fbdfb3378b04a8a1895ea3157c29e1` (MIT). The initial turn eases out over 100ms; holding the stick still does not keep turning. Slow circular movement also works at lighter pressure. Return to centre briefly before another flick; a single neutral dropout does not re-arm it. Use **Gyro look → Look + aim** or touch dragging for vertical look. Flick turns have fixed angles, independent of stick/gyro sensitivity and zoom. Menus, cutscenes, control locks and suspension discard queued turns. Other control styles retain their existing mapping.
 
@@ -80,6 +80,52 @@ References:
 
 The adapter uses JSM’s default unsnapped angles, 100ms flick time, zero timing exponent, and 0.08/0.16-radian smoothing thresholds with a roughly 64ms history. Mouse calibration is replaced by direct camera degrees. C-stick pressure thresholds, neutral debounce and smoothing-tail draining are 3DS-specific; desktop device mapping and mouse output are not included.
 
-Advanced → Experimental → 3D strength scales the physical slider from 0% to 200% in 25% steps, defaults to 100%, and is saved. Look, gyro and touch sensitivity now extend to 400%; existing saved values retain the same speed.
+Advanced → 3D settings → 3D strength scales the physical slider from 0% to 200% in 25% steps, defaults to 100%, and is saved. Look, gyro and touch sensitivity now extend to 400%; existing saved values retain the same speed.
 
 World-depth tuning: the shared clip-space separation is now 0.03 (12 pixels total background disparity on a 400-pixel eye image at full slider/100% strength). The manual convergence ceiling is 3000 camera-W units; the reference controller still pulls it inward for nearby geometry. Projection, depth-aware reticle sampling and sky coverage use the same separation constant. Weapon and watch placement retain their separate profiles. This tuning requires console evaluation.
+
+Initial flicks now snap to a cardinal direction within 12 degrees; continuous stick rotation remains unsnapped. The C-stick pressure sensor still needs hardware testing and Flick stick remains experimental.
+
+
+### Saved stereo settings
+
+Watch → Game Options → Advanced → 3D settings contains the same stereo controls available in the main-menu options. The user-facing controls follow the pinned [RT64 3DS settings](https://github.com/oneup03/rt64-3ds/tree/0d783be0c9f51fa7edc696ac33a0992b5f021ecb); the native renderer retains its existing separation scale and GoldenEye distance units.
+
+- **3D strength** controls separation alongside the physical slider; 100% preserves the previous depth.
+- **Auto convergence** defaults On. It pulls the screen plane toward nearby geometry.
+- **Convergence** is 10–200% of the existing 3000-unit distance, default 100%. It sets the manual distance with auto convergence Off, or the maximum distance with it On.
+- **Pop-out limit** is the reference comfort target, from -2.0% to +3.0% of viewport width, default 0. Negative values push significant nearby geometry behind the screen plane; positive values permit pop-out. It affects auto convergence only.
+- **HUD depth** ranges from 0 to 100. 50 is the LCD plane; higher values bring UI forward. The default 75 preserves the launcher's previous UI offset. It applies to supported top-screen UI, including menus and watch UI; the bottom screen stays flat.
+- **Crosshair depth** chooses Dynamic (default, follows sampled scene depth) or HUD (uses the selected HUD plane). This changes stereo placement only, never the 2D aiming position or controls.
+- **Ghost contrast** ranges from 50–100%, default 100%; **Black floor** from 0–20%, default 0%. These apply the reference contrast compression and black lift once per finished stereo eye, after the other effects. They are inactive in 2D. Both defaults leave colour unchanged. They reduce contrast and can make dark scenes look grey; they do not reconstruct or remove physical panel crosstalk.
+
+Ghost reduction uses one extra full-screen fixed-function blend per eye through the existing postprocess targets. If those targets cannot be allocated, the ghost settings reset to their disabled defaults alongside the existing effects fallback. Disabling both auto convergence and Dynamic crosshair depth avoids depth-copy requests; world stereo remains active with manual convergence.
+
+With Flick Stick enabled, holding aim now restores ordinary C-stick X/Y input and discards queued flick turns. The existing Aim Lock option still deliberately centres the sight.
+
+The main-menu OPTIONS entry now opens categories: Controls, Display, Graphics,
+Screen Effects, 3D Settings, Audio, Interface & Watch, Accessibility, and
+Experimental. Both screens use the same category and selected setting. Press A
+or tap to open a category; B/back returns to the category list before leaving
+options. Every shared setting appears once, and changing it still saves the same
+preference used by the watch.
+
+C-stick aiming uses the original weapon/crosshair damping from 0.9.5. Gyro and
+touch offsets follow that filter; enabling a motion mode no longer changes the
+stick to the desktop mouse response. The original stick mapping and deadzones
+are unchanged. Circular C-stick trajectories are compared point-for-point with
+the original engine with its 0.9.5 mouse-hook behavior.
+
+Crosshair styles are under **Main options → Interface & Watch** and
+**Watch → Game Options → Advanced → Crosshair**. Original keeps the ROM sprite;
+Dot, Cross, Cross + Dot, Circle, Circle + Dot, T-shape and Diamond use custom
+geometry with a dark outline and the selected colour. Styles follow the same
+aiming position, visibility rules and stereoscopic reticle placement. The style
+is saved as `crosshair_shape` in `native-options.ini`; older files use Original.
+
+The same Crosshair page has **Crosshair opacity**. Original uses the retail
+sprite alpha (110/255, about 43%); explicit values range from 0–100% in 10% steps.
+Opacity applies to the ROM sprite and all custom shapes, including their outlines.
+It is saved as `crosshair_opacity`; existing configurations default to Original.
+
+Experimental: Console watch time makes the physical watch hands show the console’s local clock, including the selected watch skin. It is off by default and saved with other preferences. Mission timers are unchanged.

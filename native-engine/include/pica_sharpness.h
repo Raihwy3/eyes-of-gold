@@ -204,6 +204,21 @@ static void sharp_present() {
         C3D_DrawArrays(GPU_TRIANGLES,POST_GRAIN_FIRST,6);
       }
     }
+    if(stereo_active){
+      const auto ghost=native_stereo_options::ghost(native_setting_stereo_ghost_contrast(),native_setting_stereo_black_floor());
+      if(ghost.active){
+        // The reference affine transform C*A+B needs one constant-colour
+        // blend, not another texture sample or a CPU image pass.
+        for(unsigned stage=0;stage<6;stage++){C3D_TexEnv env;C3D_TexEnvInit(&env);C3D_SetTexEnv(stage,&env);}
+        C3D_TexEnv *env=C3D_GetTexEnv(0);C3D_TexEnvSrc(env,C3D_Both,GPU_CONSTANT);
+        const unsigned a=unsigned(ghost.a*255.f+.5f),b=unsigned(ghost.b*255.f+.5f);
+        C3D_TexEnvColor(env,0xff000000u|b|(b<<8)|(b<<16));
+        C3D_BlendingColor(0xff000000u|a|(a<<8)|(a<<16));
+        C3D_AlphaBlend(GPU_BLEND_ADD,GPU_BLEND_ADD,GPU_ONE,GPU_CONSTANT_COLOR,GPU_ZERO,GPU_ONE);
+        C3D_SetScissor(GPU_SCISSOR_NORMAL,0,0,240*top_sample_scale,400);
+        C3D_DrawArrays(GPU_TRIANGLES,0,6);
+      }
+    }
   }
   C3D_TexEnvBufUpdate(C3D_Both,0);
   // Copy + positive detail - negative detail equals clamp(C+k*(C-B)).

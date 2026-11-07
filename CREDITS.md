@@ -18,7 +18,8 @@ https://github.com/JibbSmart/JoyShockMapper
 3D
 
 OneUp (oneup03) and RT64 contributors: the dynamic3d guidance and rt64-3ds
-stereo implementation used for convergence, depth sampling and reticle depth.
+stereo implementation used for convergence, depth sampling, reticle depth
+and the ghost-reduction contrast/black-floor transform.
 https://github.com/oneup03/3D-Skills/tree/main/dynamic3d
 https://github.com/oneup03/rt64-3ds
 The port adapts parts of this work; it does not include the complete RT64 renderer.
@@ -40,3 +41,9 @@ license documents. This credits file supplements those notices.
 
 The original game was made by Rare. GoldenEye 007 and its assets belong to
 their respective rights holders; game assets are supplied through the user's ROM.
+
+OpenDSP by Cellenseres (BSD 2-Clause) supplies the optional open DSP firmware,
+NDSP-compatible playback, DSP reverb and DSP-load statistics.
+https://github.com/Cellenseres/OpenDSP
+Pinned revision: a15c8615c1659f34bfb2b38df69a9860f4cc7080.
+The complete notice is included in licenses/OpenDSP.txt in the install package.

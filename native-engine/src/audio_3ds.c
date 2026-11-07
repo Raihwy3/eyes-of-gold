@@ -1,6 +1,8 @@
-/* NDSP output: channel 0 retains original wet/reverb and CPU overflow;
- * channels 1..23 combine independently enveloped dry voices on the DSP. */
+/* Baseline: channel 0 retains CPU reverb/overflow, channels 1..23 mix dry
+ * voices. OpenDSP FX reserves channel 23 for the isolated wet-effect feed. */
 #include <3ds.h>
+#include <opendsp.h>
+#include <opendsp/effects.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -10,10 +12,13 @@ extern void sysLogPrintf(int level,const char *fmt,...);
 extern void sysFatalError(const char *fmt,...) __attribute__((noreturn));
 #define BUFFERS 6
 #define BUFFER_BYTES 4096
+/* ~70 ms of queued audio: 23 ms more scheduling slack than the old target. */
+#define AUDIO_TARGET_FRAMES 1536
 #define CHANNELS (NATIVE_DSP_DRY_CHANNELS+1)
 static ndspWaveBuf waves[CHANNELS][BUFFERS];
 static unsigned char *pcm,*silence;
-static int ready,dsp_mode,dsp_requested=1;
+static int ready,dsp_mode,dsp_requested=1,opendsp_mode,reverb_mode;
+static void audio_firmware_exit(void){if(opendsp_mode)opendspExit();else ndspExit();}
 static LightLock audio_lock;
 static volatile int stopping,producer_parked;
 static unsigned pending[BUFFERS],callback_cursor;
@@ -28,7 +33,7 @@ int native_audio_shutdown(void) {
     if(ready) {
         if(dsp_mode)ndspSetCallback(NULL,NULL);
         for(unsigned ch=0;ch<(dsp_mode?CHANNELS:1);ch++)ndspChnWaveBufClear(ch);
-        ndspExit();ready=0;
+        audio_firmware_exit();ready=0;
     }
     LightLock_Unlock(&audio_lock);
     return 1;
@@ -51,7 +56,7 @@ static void audio_dsp_callback(void *unused) {
     LightLock_Unlock(&audio_lock);
 }
 void native_audio_configure(const char *directory,int mixer) {
-    char path[512];dsp_requested=mixer!=0;
+    char path[512];dsp_requested=mixer>=0 && mixer<=3?mixer:1;
     if(!directory)return;
     int n=snprintf(path,sizeof path,"%s/cpu-audio.flag",directory);
     if(n<0 || (unsigned)n>=sizeof path)return;
@@ -61,31 +66,50 @@ int native_audio_ready(void) {return ready;}
 int native_audio_init(void) {
     LightLock_Init(&audio_lock);
     native_dsp_mix_init(0);
-    Result result=ndspInit();
+    Result result;
+    if(dsp_requested>=2){
+        result=opendspInit();opendsp_mode=!R_FAILED(result);
+        if(!opendsp_mode){
+            sysLogPrintf(1,"OpenDSP init failed (%08lx); falling back to original NDSP",(unsigned long)result);
+            ndspUseComponent(NULL,0,0,0);result=ndspInit();
+        }
+    }else result=ndspInit();
     if (R_FAILED(result)) {
         sysLogPrintf(1,"NDSP unavailable (%08lx); original sound remains disabled",(unsigned long)result);return 0;
     }
-    dsp_mode=dsp_requested;
+    dsp_mode=dsp_requested!=0;
+    if(opendsp_mode && dsp_requested==3){
+        u32 caps=0;Result cap=opendspGetCapabilities(&caps);
+        opendspReverbConfig fx={.struct_size=sizeof(fx),.room_size=.65f,.decay_time=1.2f,
+            .damping=.4f,.diffusion=.75f,.width=0.f,.level=.65f};
+        Result effect=R_FAILED(cap) || !(caps&OPENDSP_CAP_REVERB)?-1:opendspReverbSet(0,&fx);
+        reverb_mode=!R_FAILED(effect);
+        if(reverb_mode)ndspAuxSetVolume(0,1.f);
+        else sysLogPrintf(1,"OpenDSP reverb unavailable (%08lx); keeping original CPU effect",(unsigned long)effect);
+    }
     pcm=linearAlloc((BUFFERS*(dsp_mode?CHANNELS:1)+(dsp_mode?1:0))*BUFFER_BYTES);
     if(!pcm && dsp_mode){dsp_mode=0;pcm=linearAlloc(BUFFERS*BUFFER_BYTES);}
-    if(dsp_mode && !native_dsp_mix_init(1)) {
+    if(dsp_mode && !native_dsp_mix_init(reverb_mode?2:1)) {
         dsp_mode=0;linearFree(pcm);pcm=linearAlloc(BUFFERS*BUFFER_BYTES);
     }
-    if(!pcm){ndspExit();sysLogPrintf(1,"NDSP buffer allocation failed; sound disabled");return 0;}
+    if(!pcm){audio_firmware_exit();sysLogPrintf(1,"NDSP buffer allocation failed; sound disabled");return 0;}
+    if(!dsp_mode && reverb_mode){opendspReverbSet(0,NULL);reverb_mode=0;}
     ndspSetOutputMode(NDSP_OUTPUT_STEREO);
     for(unsigned ch=0;ch<(dsp_mode?CHANNELS:1);ch++) {
         ndspChnReset(ch);ndspChnSetFormat(ch,NDSP_FORMAT_STEREO_PCM16);
         ndspChnSetRate(ch,22050.0f);ndspChnSetInterp(ch,NDSP_INTERP_LINEAR);
         /* Original main-bus mix multiplies dry by 0x7fff before adding wet. */
         float gain=ch?32767.0f/32768.0f:1.0f;
-        float mix[12]={gain,gain};ndspChnSetMix(ch,mix);
+        float mix[12]={gain,gain};
+        if(reverb_mode && ch==23){memset(mix,0,sizeof mix);mix[4]=mix[5]=1.f;}ndspChnSetMix(ch,mix);
     }
     if(dsp_mode) {
         silence=pcm+BUFFERS*CHANNELS*BUFFER_BYTES;memset(silence,0,BUFFER_BYTES);DSP_FlushDataCache(silence,BUFFER_BYTES);
     }
     ready=1;
     if(dsp_mode)ndspSetCallback(audio_dsp_callback,NULL);
-    sysLogPrintf(2,"Audio output: NDSP 22050 Hz stereo; %s",dsp_mode?"23 DSP dry voices + original CPU reverb/overflow":"original CPU mixer");return 1;
+    sysLogPrintf(2,"Audio output: firmware=%s mode=%s",opendsp_mode?"OpenDSP":"original NDSP",
+        reverb_mode?"22 DSP dry voices + DSP reverb + CPU overflow":dsp_mode?"23 DSP dry voices + CPU reverb/overflow":"original CPU mixer");return 1;
 }
 uint32_t audioGetAiLengthBytes(void) {
     audio_stop_boundary();
@@ -102,7 +126,8 @@ uint32_t audioGetAiLengthBytes(void) {
             if(pos<waves[0][i].nsamples)queued+=(waves[0][i].nsamples-pos)*4;
         }
     }
-    queued=queued>4096?queued-4096:0;
+    const uint32_t target_bytes=AUDIO_TARGET_FRAMES*4u;
+    queued=queued>target_bytes?queued-target_bytes:0;
     uint32_t result=queued>last_bytes?last_bytes:queued;
     LightLock_Unlock(&audio_lock);return result;
 }
@@ -118,7 +143,16 @@ void audioSetNextBuffer(const int16_t *buffer,uint32_t bytes) {
     audio_stop_boundary();
     if(!buffer || !bytes || (bytes&3) || bytes>BUFFER_BYTES)
         sysFatalError("Invalid native audio submission: %u bytes",(unsigned)bytes);
-    while(audio_slot_busy(cursor)){audio_stop_boundary();svcSleepThread(1000000);}
+    /* Six full buffers represent less than 280 ms at 22050 Hz. Never
+     * overwrite a live DSP buffer, or wait forever if a channel stops. */
+    unsigned waits=0;
+    while(audio_slot_busy(cursor)){
+        audio_stop_boundary();
+        if(++waits>=2000)
+            sysFatalError("Audio output stalled (%s). Try the NDSP mixer and restart.",
+                opendsp_mode?"OpenDSP":"NDSP");
+        svcSleepThread(1000000);
+    }
     LightLock_Lock(&audio_lock);
     if(__atomic_load_n(&stopping,__ATOMIC_ACQUIRE)){LightLock_Unlock(&audio_lock);audio_stop_boundary();}
     if(!ready){LightLock_Unlock(&audio_lock);return;}
@@ -128,7 +162,8 @@ void audioSetNextBuffer(const int16_t *buffer,uint32_t bytes) {
     for(unsigned ch=0;ch<(dsp_mode?CHANNELS:1);ch++) {
         ndspWaveBuf *wave=&waves[ch][cursor];memset(wave,0,sizeof *wave);
         const void *source=ch?NULL:buffer;
-        if(ch && job && (job->mask&(1u<<(ch-1))))source=job->pcm+(ch-1)*NATIVE_DSP_MIX_FRAMES*2;
+        if(ch && !(reverb_mode && ch==23) && job && (job->mask&(1u<<(ch-1))))source=job->pcm+(ch-1)*NATIVE_DSP_MIX_FRAMES*2;
+        if(reverb_mode && ch==23 && job && job->wet_written)source=job->wet_pcm;
         unsigned char *out=slot_base+ch*bytes;
         if(source){memcpy(out,source,bytes);flush_bytes=(ch+1)*bytes;wave->data_vaddr=out;}
         else wave->data_vaddr=silence;

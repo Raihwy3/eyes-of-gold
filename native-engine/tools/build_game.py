@@ -28,6 +28,8 @@ def main():
     audio_pcm_assets.generate()
     import check_audio_pcm
     check_audio_pcm.main()
+    import check_crosshair
+    check_crosshair.main()
     import check_dsp_audio
     check_dsp_audio.main()
     import check_guard_pose
@@ -87,9 +89,11 @@ def main():
     build_probe.run([build.CC,*arch,'-std=gnu11','-O2','-Wall','-Wextra','-Werror','-D__3DS__',
          '-I'+str(build.TARGET/'include'),'-I'+str(build.BUILD/'include'),'-I/opt/devkitpro/libctru/include',
          '-c',build.TARGET/'src/native_game_platform.c','-o',platform])
+    import opendsp_deps
+    opendsp_library=opendsp_deps.library()
     audio=out/'audio_3ds.o'
     build_probe.run([build.CC,*arch,'-std=gnu11','-O2','-Wall','-Wextra','-Werror','-D__3DS__',
-         '-I'+str(build.TARGET/'include'),'-I/opt/devkitpro/libctru/include',
+         '-I'+str(build.TARGET/'include'),'-I'+str(opendsp_deps.include()),'-I/opt/devkitpro/libctru/include',
          '-c',build.TARGET/'src/audio_3ds.c','-o',audio])
     # These support objects used to come from the last diagnostic build, which
     # could silently leave gameplay linked against stale implementations.
@@ -113,7 +117,7 @@ def main():
     build_probe.run([build.CC.with_name('arm-none-eabi-g++'),*arch,'-specs=3dsx.specs','-L/opt/devkitpro/libctru/lib',
        '-Wl,--gc-sections,--no-enum-size-warning,-Map,'+str(target.with_suffix('.map')),*objects,
        '-Wl,--start-group',*[build.BUILD/name for name in ('liboriginal-engine.a','liboriginal-rsp.a','libnative-os.a','libnative-mixer.a','libnative-baseline.a')],
-       '-Wl,--end-group',*updater_deps.libraries(),'-lcitro3d','-lctru','-lm','-o',target.with_suffix('.elf')])
+       '-Wl,--end-group',*updater_deps.libraries(),opendsp_library,'-lcitro3d','-lctru','-lm','-o',target.with_suffix('.elf')])
     symbols=build_probe.run([build.CC.with_name('arm-none-eabi-nm'),'--defined-only',target.with_suffix('.elf')]).stdout
     names={line.split()[-1] for line in symbols.splitlines() if line.split()}
     required={'init_menu00_legalscreen','init_menu04_goldeneyelogo','init_menu05_fileselect','constructor_menu0A_briefing','frontChangeMenu','bossEntry','bossMainloop','lvlStageLoad','gunTickGameplay','chrlvTickPatrol','chrlvTickAttackCommon','bondviewPlayerTickDamageAndHealth','handles_shot_actors','bheadUpdate'}

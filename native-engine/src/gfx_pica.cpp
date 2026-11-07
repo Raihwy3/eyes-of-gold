@@ -1,3 +1,4 @@
+#include "native_stereo_options.h"
 /* First PICA backend for the original Fast3D interpreter. No recreation code.
  * Unsupported material/framebuffer features fail explicitly during bring-up.
  */
@@ -1127,7 +1128,7 @@ static void draw(float *buf, size_t floats, size_t triangles) {
 /* This operation is always outside a C3D frame. Output replacement waits
  * for the previous GPU transfer before any old framebuffer is freed. Keep
  * both old eyes intact until both new allocations have succeeded. */
-static void invalidate_stereo_depth(){depth_frame.usable=false;auto_convergence.reset();aim_depth.reset();world_convergence=native_stereo::manual_convergence;reticle_shift=0;}
+static void invalidate_stereo_depth(){depth_frame.usable=false;auto_convergence.reset();aim_depth.reset();world_convergence=native_stereo_options::convergence(native_setting_stereo_convergence());reticle_shift=0;}
 static void discard_stereo_snapshot(){depth_frame.usable=false;}
 static bool configure_top_samples(int scale) {
   discard_stereo_snapshot();
@@ -1147,7 +1148,7 @@ static bool configure_top_samples(int scale) {
 #include "pica_sharpness.h"
 static void update_sharp_targets(int samples,int strength) {
   post_vignette=native_setting_vignette();post_vignette_mode=native_setting_vignette_mode();post_bloom=native_setting_bloom();post_grain=native_setting_grain();
-  bool wanted=strength || post_vignette || post_bloom || post_grain;
+  bool wanted=strength || post_vignette || post_bloom || post_grain || native_stereo_options::ghost(native_setting_stereo_ghost_contrast(),native_setting_stereo_black_floor()).active;
   if(wanted==sharp_enabled && samples==top_sample_scale){sharp_strength=strength;return;}
   if(!wanted && !sharp_enabled)return; // AA-only path remains unchanged.
   // Rebuild the small watch target last too. Keeping it in the middle of
@@ -1161,7 +1162,7 @@ static void update_sharp_targets(int samples,int strength) {
     sharp_strength=strength;sysLogPrintf(2,"Sharpness enabled: strength=%d samples=%d",strength,samples);return;
     }
   }
-  sharp_release_targets();native_setting_set_sharpness(0);native_setting_set_vignette(0);native_setting_set_bloom(0);native_setting_set_grain(0);sharp_strength=post_vignette=post_bloom=post_grain=0;
+  sharp_release_targets();native_setting_set_stereo_ghost_contrast(100);native_setting_set_stereo_black_floor(0);native_setting_set_sharpness(0);native_setting_set_vignette(0);native_setting_set_bloom(0);native_setting_set_grain(0);sharp_strength=post_vignette=post_bloom=post_grain=0;
   if(!configure_top_samples(samples)) {
     if(samples==1 || !configure_top_samples(1))sysFatalError("Native PICA: cannot restore screen targets");
     native_setting_set_aa(0);
@@ -1173,7 +1174,7 @@ static void update_sharp_targets(int samples,int strength) {
 /* Flush and queue a tiled depth copy before hands/HUD can overwrite it.
  * The next normal FrameBegin completes it; no extra wait or GPU readback fence. */
 static void queue_stereo_depth(){
- if(depth_copied || !stereo_active || frontend_ui || !depth_frame.usable || !depth_copy)return;
+ if((!native_setting_stereo_auto() && native_setting_stereo_crosshair_hud()) || depth_copied || !stereo_active || frontend_ui || !depth_frame.usable || !depth_copy)return;
  unsigned bytes=depth_frame.width*depth_frame.height*4;
  if(!bytes || bytes>DEPTH_COPY_CAPACITY){depth_frame.usable=false;return;}
  mesh_cache.flush();retained_meshes.flush();
@@ -1203,24 +1204,34 @@ static float read_stereo_depth(const StereoDepthFrame &f,float x,float y){
  return f.projection.distance(read_stereo_packed(f,x,y),f.scale,f.bias);
 }
 static void update_stereo_depth(float seconds){
+ const int automatic=native_setting_stereo_auto(),manual_percent=native_setting_stereo_convergence(),comfort=native_setting_stereo_comfort();
+ static int last_auto=-1,last_manual=-1,last_comfort=999;
+ if(automatic!=last_auto || manual_percent!=last_manual || comfort!=last_comfort){
+  invalidate_stereo_depth();last_auto=automatic;last_manual=manual_percent;last_comfort=comfort;
+ }
+ const float manual=native_stereo_options::convergence(manual_percent);
+ if(!automatic)world_convergence=manual;
+ const bool dynamic_reticle=!native_setting_stereo_crosshair_hud();
  if(!stereo_active || frontend_ui || !target){invalidate_stereo_depth();return;}
  if(watch_seen){depth_frame.usable=false;aim_depth.reset();reticle_shift=0;return;}
  // A missing world frame preserves convergence/aim history as in rt64-3ds.
- if(!reticle_seen)aim_depth.reset();
+ if(!reticle_seen || !dynamic_reticle)aim_depth.reset();
  if(!depth_frame.usable || depth_frame.target!=target || !depth_copied || !depth_frame.pixels){
-  reticle_shift=reticle_seen?aim_depth.shift(world_convergence,stereo_slider):0;return;
+  reticle_shift=reticle_seen && dynamic_reticle?aim_depth.shift(world_convergence,stereo_slider):0;return;
  }
  auto &f=depth_frame;
  if(R_FAILED(GSPGPU_InvalidateDataCache(f.pixels,f.bytes))){depth_frame.usable=false;return;}
  auto canonical=[&](float x,float y){return f.projection.canonical(read_stereo_packed(f,x,y),f.scale,f.bias);};
- float zp=native_stereo::near_depth(canonical,f.viewport[2],f.viewport[3]);
- float near=f.projection.distance_from_canonical(zp);
- world_convergence=auto_convergence.update(near,stereo_slider,seconds,f.projection.near_plane());
- if(reticle_seen){
+ if(automatic){
+  float zp=native_stereo::near_depth(canonical,f.viewport[2],f.viewport[3]);
+  float near=f.projection.distance_from_canonical(zp);
+  world_convergence=auto_convergence.update(near,stereo_slider,seconds,f.projection.near_plane(),manual,comfort);
+ }
+ if(reticle_seen && dynamic_reticle){
   auto read=[&](float x,float y){return read_stereo_depth(f,(x-f.viewport[0])/f.viewport[2],(y-f.viewport[1])/f.viewport[3]);};
   aim_depth.sample(read,reticle_x,reticle_y,float(f.viewport[2]),f.slider,f.convergence,seconds);
  }
- reticle_shift=reticle_seen?aim_depth.shift(world_convergence,stereo_slider):0;
+ reticle_shift=reticle_seen && dynamic_reticle?aim_depth.shift(world_convergence,stereo_slider):0;
  depth_frame.usable=false;
 }
 
@@ -1287,7 +1298,7 @@ static void start() {
   // Reallocate only at frame boundaries, before C3D_FrameBegin. Watch/menu
   // changes are atomically sampled once here, never during an active draw.
   int requested_samples=native_setting_aa()?2:1;
-  if(requested_samples!=top_sample_scale || bool(native_setting_sharpness() || native_setting_vignette() || native_setting_bloom() || native_setting_grain())!=sharp_enabled)discard_stereo_snapshot();
+  if(requested_samples!=top_sample_scale || bool(native_setting_sharpness() || native_setting_vignette() || native_setting_bloom() || native_setting_grain() || native_stereo_options::ghost(native_setting_stereo_ghost_contrast(),native_setting_stereo_black_floor()).active)!=sharp_enabled)discard_stereo_snapshot();
   update_sharp_targets(requested_samples,native_setting_sharpness());
   requested_samples=native_setting_aa()?2:1;
   if(!sharp_enabled && requested_samples!=top_sample_scale && !configure_top_samples(requested_samples)) {
@@ -1311,7 +1322,7 @@ static void start() {
   float stereo_dt=stereo_last_tick?float(stereo_now-stereo_last_tick)/SYSCLOCK_ARM11:1.f/60.f;
   stereo_last_tick=stereo_now;
   update_stereo_depth(stereo_dt);
-  if(stereo_active && !frontend_ui && !depth_copy && !depth_copy_failed){
+  if(stereo_active && !frontend_ui && (native_setting_stereo_auto() || !native_setting_stereo_crosshair_hud()) && !depth_copy && !depth_copy_failed){
    depth_copy=static_cast<uint32_t *>(linearAlloc(DEPTH_COPY_CAPACITY));
    depth_copy_failed=depth_copy==nullptr;
    if(depth_copy_failed)sysLogPrintf(2,"Adaptive stereo disabled: no depth snapshot memory");
@@ -1347,7 +1358,7 @@ static void start() {
   C3D_Mtx tilt;
   Mtx_OrthoTilt(&tilt, -1, 1, -1, 1, 0, 1, true);
   stereo_tilt[0]=tilt;
-  const float disparity=4.f*stereo_slider/400.f;
+  const float disparity=native_stereo_options::hud_pixels(native_setting_stereo_hud_depth())*stereo_slider/400.f;
   Mtx_OrthoTilt(&stereo_tilt[1],-1-disparity,1-disparity,-1,1,0,1,true);
   Mtx_OrthoTilt(&stereo_tilt[2],-1+disparity,1+disparity,-1,1,0,1,true);
   const float slider=stereo_slider;
@@ -1357,6 +1368,7 @@ static void start() {
   native_world_stereo(stereo_tilt[6],tilt,slider,true);
   native_depth_stereo(stereo_tilt[7],tilt,1.f,false,-reticle_shift*200.f);
   native_depth_stereo(stereo_tilt[8],tilt,1.f,true,-reticle_shift*200.f);
+  if(native_setting_stereo_crosshair_hud()){stereo_tilt[7]=stereo_tilt[1];stereo_tilt[8]=stereo_tilt[2];}
   native_sky_stereo(stereo_tilt[9],tilt,slider,false);
   native_sky_stereo(stereo_tilt[10],tilt,slider,true);
   C3D_FVUnifMtx4x4(

@@ -45,6 +45,7 @@ static void lifecycle_event(APT_HookType event,void *unused) {
 }
 extern unsigned native_graphics_phase(void);
 static FILE *log_file;
+int native_platform_log_active(void){return log_file!=NULL;}
 static struct NativeLogBuffer log_queue=NATIVE_LOG_INITIALIZER;
 static int log_worker_started;
 static volatile int log_worker_stop,log_worker_exited;
@@ -108,7 +109,10 @@ int native_platform_start_audio(void *(*entry)(void *),void *arg,size_t stack_si
     sysLogPrintf(2,"Audio core 1 allowance: requested=%u%% reported=%lu%% query=%08lx (allowance, not measured CPU use)",requested,(unsigned long)reported,(unsigned long)query);
   }
   native_audio_start.entry=entry;native_audio_start.arg=arg;native_audio_start.requested_core=requested_core;
-  Thread worker=threadCreate(native_audio_entry,&native_audio_start,stack_size,0x3f,requested_core,true);
+  /* Audio has a playback deadline. Run it above the game/render workers
+   * (0x3f); it blocks on the original message queues between audio blocks.
+   * Keep the existing affinity and synthesis cadence. */
+  Thread worker=threadCreate(native_audio_entry,&native_audio_start,stack_size,0x30,requested_core,true);
   sysLogPrintf(2,"Audio worker creation: requested core %d, %s",requested_core,worker?"created; entry will report actual core":"unavailable; using original pthread/core 0");
   return worker!=NULL;
 }

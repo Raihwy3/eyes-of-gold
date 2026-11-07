@@ -3,6 +3,26 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+int native_setting_gyro_filter(void);
+int native_setting_always_crosshair(void);
+int native_setting_vertical_sensitivity(void);
+void native_setting_set_gyro_filter(int);
+void native_setting_set_always_crosshair(int);
+void native_setting_set_vertical_sensitivity(int);
+int native_setting_stereo_auto(void);
+void native_setting_set_stereo_auto(int);
+int native_setting_stereo_convergence(void);
+void native_setting_set_stereo_convergence(int);
+int native_setting_stereo_comfort(void);
+void native_setting_set_stereo_comfort(int);
+int native_setting_stereo_hud_depth(void);
+void native_setting_set_stereo_hud_depth(int);
+int native_setting_stereo_crosshair_hud(void);
+void native_setting_set_stereo_crosshair_hud(int);
+int native_setting_stereo_ghost_contrast(void);
+void native_setting_set_stereo_ghost_contrast(int);
+int native_setting_stereo_black_floor(void);
+void native_setting_set_stereo_black_floor(int);
 int native_setting_stereo_strength(void);
 void native_setting_set_stereo_strength(int value);
 int native_setting_gyro_space(void);
@@ -39,6 +59,10 @@ int native_setting_audio_mixer(void);
 void native_setting_set_audio_mixer(int value);
 int native_setting_style(void);
 int native_setting_crosshair(void);
+int native_setting_crosshair_shape(void);
+int native_setting_crosshair_opacity(void);
+void native_setting_set_crosshair_opacity(int value);
+void native_setting_set_crosshair_shape(int value);
 int native_setting_watch(void);
 int native_setting_aspect(void);
 int native_setting_aa(void);
@@ -87,6 +111,12 @@ void native_setting_set_aspect(int value);
 void native_setting_set_aa(int value);
 const char *native_string(unsigned id);
 const char *native_colour_name(int watch,int value);
+
+/* Optional physical watch clock; fallback retains the original game timer. */
+int native_setting_watch_clock(void);
+void native_setting_set_watch_clock(int value);
+int native_watch_clock_time(int fallback);
+
 #ifdef __cplusplus
 }
 #endif

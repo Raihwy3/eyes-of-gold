@@ -8367,13 +8367,13 @@
       "unit": "front.c",
       "section": ".rodata.constructor_menu06_modesel.str1.4",
       "destination": ".data.eog_rom_strings_fc4fda9a92c8e054",
-      "bytes": 25,
-      "sha256": "108797adadc72589bd3050e31aa5bb19343ed8f1aefc41a7c221530fdff97167",
+      "bytes": 37,
+      "sha256": "18ce41f0778c294e2fcb51c4f33a0a9aec713607a5a2240fd37cb427d6d3f188",
       "rows": [
         {
           "unit": "front.c",
-          "symbol": "eog_rom_string_fc4fda9a92c8e054_8",
-          "link_name": "eog_rom_string_fc4fda9a92c8e054_8",
+          "symbol": "eog_rom_string_fc4fda9a92c8e054_14",
+          "link_name": "eog_rom_string_fc4fda9a92c8e054_14",
           "bytes": 4,
           "bank": "cdata",
           "source_offset": 190212,
@@ -8402,13 +8402,13 @@
           "hash": 1335349276,
           "pool_section": ".rodata.constructor_menu06_modesel.str1.4",
           "pool_destination": ".data.eog_rom_strings_fc4fda9a92c8e054",
-          "pool_offset": 8,
+          "pool_offset": 20,
           "storage": "zeroed-string-pool"
         },
         {
           "unit": "front.c",
-          "symbol": "eog_rom_string_fc4fda9a92c8e054_c",
-          "link_name": "eog_rom_string_fc4fda9a92c8e054_c",
+          "symbol": "eog_rom_string_fc4fda9a92c8e054_18",
+          "link_name": "eog_rom_string_fc4fda9a92c8e054_18",
           "bytes": 4,
           "bank": "cdata",
           "source_offset": 190216,
@@ -8437,13 +8437,13 @@
           "hash": 3331435427,
           "pool_section": ".rodata.constructor_menu06_modesel.str1.4",
           "pool_destination": ".data.eog_rom_strings_fc4fda9a92c8e054",
-          "pool_offset": 12,
+          "pool_offset": 24,
           "storage": "zeroed-string-pool"
         },
         {
           "unit": "front.c",
-          "symbol": "eog_rom_string_fc4fda9a92c8e054_10",
-          "link_name": "eog_rom_string_fc4fda9a92c8e054_10",
+          "symbol": "eog_rom_string_fc4fda9a92c8e054_1c",
+          "link_name": "eog_rom_string_fc4fda9a92c8e054_1c",
           "bytes": 4,
           "bank": "cdata",
           "source_offset": 190220,
@@ -8472,13 +8472,13 @@
           "hash": 1912617406,
           "pool_section": ".rodata.constructor_menu06_modesel.str1.4",
           "pool_destination": ".data.eog_rom_strings_fc4fda9a92c8e054",
-          "pool_offset": 16,
+          "pool_offset": 28,
           "storage": "zeroed-string-pool"
         },
         {
           "unit": "front.c",
-          "symbol": "eog_rom_string_fc4fda9a92c8e054_14",
-          "link_name": "eog_rom_string_fc4fda9a92c8e054_14",
+          "symbol": "eog_rom_string_fc4fda9a92c8e054_20",
+          "link_name": "eog_rom_string_fc4fda9a92c8e054_20",
           "bytes": 5,
           "bank": "cdata",
           "source_offset": 193244,
@@ -8512,7 +8512,7 @@
           "hash": 399541996,
           "pool_section": ".rodata.constructor_menu06_modesel.str1.4",
           "pool_destination": ".data.eog_rom_strings_fc4fda9a92c8e054",
-          "pool_offset": 20,
+          "pool_offset": 32,
           "storage": "zeroed-string-pool"
         }
       ]
@@ -9033,8 +9033,8 @@
       "unit": "front.c",
       "section": ".rodata.native_bottom_front_publish.part.0.str1.4",
       "destination": ".data.eog_rom_strings_0fcbcaa210e4e12a",
-      "bytes": 533,
-      "sha256": "40907ff6321b1e00c2dd3d6c18e6d9fc531c599bfb0a0c665871ec4b09612b33",
+      "bytes": 529,
+      "sha256": "1e1a4a28834e172c427efd08ab0c1d39c585d55ce05be790b32c790483a8dfbe",
       "rows": [
         {
           "unit": "front.c",
@@ -18144,13 +18144,38 @@
       "unit": "options.c",
       "section": ".rodata.native_menu_option_text.part.0.str1.4",
       "destination": ".data.eog_rom_strings_40a9d37ad92ea36d",
-      "bytes": 107,
-      "sha256": "0e6d803ec55f668d1f4cb2f7ac543f761b30b618e2a2757bf20ad870d3d6a919",
+      "bytes": 143,
+      "sha256": "c5ff8fda5d0809fdde8d750a36cada78eef5deba8f72b1def7a791cb794bf36c",
       "rows": [
         {
           "unit": "options.c",
-          "symbol": "eog_rom_string_40a9d37ad92ea36d_50",
-          "link_name": "eog_rom_string_40a9d37ad92ea36d_50",
+          "symbol": "eog_rom_string_40a9d37ad92ea36d_0",
+          "link_name": "eog_rom_string_40a9d37ad92ea36d_0",
+          "bytes": 2,
+          "bank": "cdata",
+          "source_offset": 41573,
+          "fields": [
+            [
+              0,
+              1,
+              "scalar"
+            ],
+            [
+              1,
+              1,
+              "scalar"
+            ]
+          ],
+          "hash": 1137529896,
+          "pool_section": ".rodata.native_menu_option_text.part.0.str1.4",
+          "pool_destination": ".data.eog_rom_strings_40a9d37ad92ea36d",
+          "pool_offset": 0,
+          "storage": "zeroed-string-pool"
+        },
+        {
+          "unit": "options.c",
+          "symbol": "eog_rom_string_40a9d37ad92ea36d_68",
+          "link_name": "eog_rom_string_40a9d37ad92ea36d_68",
           "bytes": 6,
           "bank": "cdata",
           "source_offset": 196252,
@@ -18189,7 +18214,7 @@
           "hash": 1048815200,
           "pool_section": ".rodata.native_menu_option_text.part.0.str1.4",
           "pool_destination": ".data.eog_rom_strings_40a9d37ad92ea36d",
-          "pool_offset": 80,
+          "pool_offset": 104,
           "storage": "zeroed-string-pool"
         }
       ]
@@ -18198,13 +18223,13 @@
       "unit": "options.c",
       "section": ".rodata.native_watch_options_draw.str1.4",
       "destination": ".data.eog_rom_strings_d3f3dbeb75408f82",
-      "bytes": 84,
-      "sha256": "4384bb838d6d0c41f1347363471f254b906d0b7a7ec8cb4a2cdab7eddce43661",
+      "bytes": 4,
+      "sha256": "f71e7285d43e4414430f311852dc32b471d8bfba64d01282af7dbc5f26699171",
       "rows": [
         {
           "unit": "options.c",
-          "symbol": "eog_rom_string_d3f3dbeb75408f82_50",
-          "link_name": "eog_rom_string_d3f3dbeb75408f82_50",
+          "symbol": "eog_rom_string_d3f3dbeb75408f82_0",
+          "link_name": "eog_rom_string_d3f3dbeb75408f82_0",
           "bytes": 4,
           "bank": "cdata",
           "source_offset": 208502,
@@ -18233,7 +18258,7 @@
           "hash": 1680307547,
           "pool_section": ".rodata.native_watch_options_draw.str1.4",
           "pool_destination": ".data.eog_rom_strings_d3f3dbeb75408f82",
-          "pool_offset": 80,
+          "pool_offset": 0,
           "storage": "zeroed-string-pool"
         }
       ]
@@ -19094,13 +19119,13 @@
       "unit": "reverb.c",
       "section": ".rodata.alFxPull.str1.4",
       "destination": ".data.eog_rom_strings_e91e1c8f7e98f580",
-      "bytes": 106,
-      "sha256": "932aeb07034e11fcfe1b6a9d26f50a90a1f669dcfd8d4d85fdfc04b561db5c07",
+      "bytes": 90,
+      "sha256": "76df0e07fae2ed8726cbc4a67bec381d1c892f9a0cb8477d24685c1be42cfc4e",
       "rows": [
         {
           "unit": "reverb.c",
-          "symbol": "eog_rom_string_e91e1c8f7e98f580_38",
-          "link_name": "eog_rom_string_e91e1c8f7e98f580_38",
+          "symbol": "eog_rom_string_e91e1c8f7e98f580_28",
+          "link_name": "eog_rom_string_e91e1c8f7e98f580_28",
           "bytes": 7,
           "bank": "cdata",
           "source_offset": 35780,
@@ -19144,13 +19169,13 @@
           "hash": 2669600520,
           "pool_section": ".rodata.alFxPull.str1.4",
           "pool_destination": ".data.eog_rom_strings_e91e1c8f7e98f580",
-          "pool_offset": 56,
+          "pool_offset": 40,
           "storage": "zeroed-string-pool"
         },
         {
           "unit": "reverb.c",
-          "symbol": "eog_rom_string_e91e1c8f7e98f580_40",
-          "link_name": "eog_rom_string_e91e1c8f7e98f580_40",
+          "symbol": "eog_rom_string_e91e1c8f7e98f580_30",
+          "link_name": "eog_rom_string_e91e1c8f7e98f580_30",
           "bytes": 42,
           "bank": "cdata",
           "source_offset": 35584,
@@ -19369,7 +19394,7 @@
           "hash": 3854689597,
           "pool_section": ".rodata.alFxPull.str1.4",
           "pool_destination": ".data.eog_rom_strings_e91e1c8f7e98f580",
-          "pool_offset": 64,
+          "pool_offset": 48,
           "storage": "zeroed-string-pool"
         }
       ]

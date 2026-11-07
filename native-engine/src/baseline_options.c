@@ -2,6 +2,7 @@
 #include <ultra64.h>
 #include "frontoptions.h"
 #include "game/options.h"
+#include "game/player.h"
 #include "native_aspect.h"
 #include "native_detail.h"
 #include "native_settings.h"
@@ -22,7 +23,11 @@ f32 portNativeAspect(void) {
 }
 f32 portScaleFovY(f32 value,s32 title){(void)title;return value;}
 s32 portHudScalePercent(void){return 100;}
-int portCrosshairPersistent(void){return 0;}
+int portCrosshairPersistent(void){
+    /* Extend visibility only in hipfire. Holding aim must use the original
+     * sight gate and moving reticle, independently of the visibility option. */
+    return native_setting_always_crosshair() && g_CurrentPlayer && !g_CurrentPlayer->insightaimmode;
+}
 int portCrosshairStyle(void){return 0;}
 f32 portCrosshairScale(void){return 1.0f;}
 void portCrosshairTint(s32 *r,s32 *g,s32 *b) {

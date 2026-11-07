@@ -165,7 +165,7 @@ static void native_bottom_watch_publish(void) {
         native_bottom_string(v.title,sizeof v.title,native_watch_options_title());
         for(int i=0;i<native_watch_option_count();i++) {
             int tag=native_watch_option_tag(i);char value[32];
-            const char *label=tag==NATIVE_WATCH_ACCESSIBILITY?"Accessibility":tag==NATIVE_WATCH_MOTION?"Controls":tag==NATIVE_WATCH_AUDIO?"Audio":tag==NATIVE_WATCH_ADVANCED?"Advanced":tag==NATIVE_WATCH_EXPERIMENTAL?"Experimental":tag==NATIVE_WATCH_BACK?"Back":native_menu_option_label(tag);
+            const char *label=tag==NATIVE_WATCH_CROSSHAIR?"Crosshair":tag==NATIVE_WATCH_STEREO?"3D settings":tag==NATIVE_WATCH_ACCESSIBILITY?"Accessibility":tag==NATIVE_WATCH_MOTION?"Controls":tag==NATIVE_WATCH_AUDIO?"Audio":tag==NATIVE_WATCH_ADVANCED?"Advanced":tag==NATIVE_WATCH_EXPERIMENTAL?"Experimental":tag==NATIVE_WATCH_BACK?"Back":native_menu_option_label(tag);
             native_bottom_row(&v,label,tag<NATIVE_WATCH_ADVANCED?native_menu_option_text(tag,value,sizeof value):"",tag,0);
         }
         v.selected=native_watch_nav.selected;

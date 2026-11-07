@@ -8,12 +8,14 @@
 static int idle,quit,suspended,presenting_stopped,gfx_stopped,unhooked,drains;
 static int log_worker_started=1,log_worker_exited=1,log_worker_stop;
 static int log_queue,log_file,lifecycle_cookie,sleeps;
-static int ready,stopping,audio_lock,locked,cleared,ndsp_stopped,dsp_mode;
+static int ready,stopping,audio_lock,locked,cleared,ndsp_stopped,dsp_mode,opendsp_mode,open_stopped;
 static void LightLock_Lock(int *p){assert(p==&audio_lock && !locked);locked=1;}
 static void LightLock_Unlock(int *p){assert(p==&audio_lock && locked);locked=0;}
 static void ndspChnWaveBufClear(int ch){assert(ch==cleared && locked && stopping);cleared++;}
 static void ndspSetCallback(void (*cb)(void *),void *data){assert(!cb && !data && locked && stopping);}
 static void ndspExit(void){assert(locked && stopping);ndsp_stopped++;}
+static void opendspExit(void){open_stopped++;ndspExit();}
+#include "native-audio-firmware-exit.h"
 #include "native-audio-shutdown.h"
 static void native_input_suspend(void){suspended=1;}
 static void native_game_request_quit(void){assert(suspended);quit=1;}
@@ -29,12 +31,13 @@ static int actual_shutdown(void) {
 #include "native-shutdown-body.h"
 }
 int main(void) {
- for(int mode=0;mode<2;mode++)for(int busy=0;busy<=1;busy++) {
-  dsp_mode=mode;
+ for(int mode=0;mode<4;mode++)for(int busy=0;busy<=1;busy++) {
+  dsp_mode=mode!=0;opendsp_mode=mode>=2;open_stopped=0;
   idle=!busy;quit=suspended=presenting_stopped=gfx_stopped=unhooked=drains=sleeps=0;
   stopping=log_worker_stop=cleared=ndsp_stopped=0;ready=1;
   assert(actual_shutdown()==0);
   assert(quit && suspended && !ready && stopping && !locked && cleared==(mode?CHANNELS:1) && ndsp_stopped==1);
+  assert(open_stopped==(mode>=2));
   assert(presenting_stopped==!busy && gfx_stopped==!busy && unhooked==1 && drains>=1 && log_worker_stop);
   assert(sleeps<=121);
  }

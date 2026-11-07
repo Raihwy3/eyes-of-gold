@@ -9,5 +9,5 @@
     "rt64_3ds.h": "874ea3efc439649d3876af49cb5fabb3e6eba99a605cfe60f2d43c5598b1872d",
     "LICENSE": "03d52856ed09784f7f57694f690ab0093d3cd40db69f9a318d45062f130f7116"
   },
-  "adaptation": "AutoConvergence and near_depth_statistic copied with inline linkage and standalone declarations. Aim candidate strip adapted from sample_aim_depth; viewport, projection and GPU queue integration are specific to Eyes of Gold. Tiny std::sort calls use bounded insertion sort to avoid GCC 16 ARM array-bounds diagnostics; unmodified algorithms are retained in tests/rt64_stereo_reference.h for comparison."
+  "adaptation": "AutoConvergence and near_depth_statistic copied with inline linkage and standalone declarations. Aim candidate strip adapted from sample_aim_depth; viewport, projection and GPU queue integration are specific to Eyes of Gold. Tiny std::sort calls use bounded insertion sort to avoid GCC 16 ARM array-bounds diagnostics; unmodified algorithms are retained in tests/rt64_stereo_reference.h for comparison. The ghost-reduction affine transform from the pinned context source is adapted in native_stereo_options.h and applied with a fixed-function per-eye blend in pica_sharpness.h."
 }

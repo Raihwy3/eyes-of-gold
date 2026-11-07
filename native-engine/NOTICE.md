@@ -24,3 +24,9 @@ License: JoyShockMapper.txt. The 3DS adapter uses camera degrees, pressure-nub t
 Thanks to IDrinkLava on GBAtemp for gyro feedback and reference suggestions,
 and OneUp on GBAtemp for the dynamic3d and rt64-3ds stereo references.
 See the root CREDITS.md for acknowledgements.
+
+OpenDSP by Cellenseres (BSD 2-Clause) supplies the optional open DSP firmware,
+NDSP-compatible playback, DSP reverb and DSP-load statistics.
+https://github.com/Cellenseres/OpenDSP
+Pinned revision: a15c8615c1659f34bfb2b38df69a9860f4cc7080.
+The complete notice is included in licenses/OpenDSP.txt in the install package.

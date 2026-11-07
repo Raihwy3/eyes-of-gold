@@ -103,6 +103,8 @@ def main():
     audio=(build.TARGET/'src/audio_3ds.c').read_text()
     a=audio.index('int native_audio_shutdown(void) {');b=audio.index('static uint32_t cursor',a)
     (out/'native-audio-shutdown.h').write_text(audio[a:b])
+    start=audio.index('static void audio_firmware_exit(');end=audio.index('\n',start)
+    (out/'native-audio-firmware-exit.h').write_text(audio[start:end])
     shutdown_binary=out/'native-shutdown-check'
     build_probe.run(['gcc','-std=c11','-O2','-Wall','-Wextra','-Werror','-I'+str(out),'-I'+str(build.TARGET/'include'),build.TARGET/'tests/native_shutdown_host.c','-o',shutdown_binary])
     print(build_probe.run([shutdown_binary]).stdout)
@@ -123,7 +125,8 @@ def main():
     end=movement.index('        if (g_CurrentPlayer->speedforwards > 1.0f)',start)
     (out/'native-movement-commit.h').write_text(movement[start:end])
     assert 'native_controls_adjust_look(&g_CurrentPlayer' not in movement
-    assert movement.count('native_controls_look_rate(g_CurrentPlayer->speed')==2
+    assert movement.count('native_controls_look_rate(g_CurrentPlayer->speed')==1
+    assert movement.count('native_controls_pitch_rate(g_CurrentPlayer->speed')==1
     a=movement.index('f32 sub_GAME_7F080228(');b=movement.index('Gfx *currentPlayerDrawFade(',a)
     (out/'native-aim-acceleration.h').write_text(movement[a:b])
     turn=movement.index('    if (moveData.canNaturalTurn)\n    {\n        ftemp_nostack_sp8C')
@@ -138,6 +141,17 @@ def main():
     end=source.index('void currentPlayerAdjustCrouchPos(',begin)
     (out/'native-lean-target.h').write_text(source[begin:end])
     (out/'native-lean-consumer.h').write_text(movement[lean:lean_end])
+    current_gun=build.source_path(Path('src/game/gunfire.c')).read_text()
+    original_gun=(build.UP/'src/game/gunfire.c').read_text()
+    reticle=[]
+    for source,reference in ((original_gun,True),(current_gun,False)):
+        for name in ('caclulate_gun_crosshair_position_rotation','sub_GAME_7F067FBC'):
+            begin=source.index('void '+name+'(');end=source.index('\n}',begin)+2
+            body=source[begin:end]
+            if reference:
+                body=body.replace('caclulate_gun_crosshair_position_rotation','reference_reticle').replace('sub_GAME_7F067FBC','reference_manual').replace('portMouseAimPdGetTurn','reference_motion_disabled')
+            reticle.append(body)
+    (out/'native-reticle-pipeline.h').write_text('\n'.join(reticle))
     control_objects=[]
     for source in (build.TARGET/'src/native_controls.c',build.TARGET/'src/native_settings.c',build.UP/'src/str.c',build.TARGET/'tests/native_controls_host.c'):
         obj=out/(source.name+'.controls.o')

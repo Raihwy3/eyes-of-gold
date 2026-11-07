@@ -21,5 +21,15 @@ int main(void) {
     native_dsp_mix_release(keys);native_dsp_mix_begin(keys+3,1024);assert(native_dsp_mix_target(1,1023,1));assert(!native_dsp_mix_target(1,1023,2));native_dsp_mix_advance(1024);native_dsp_mix_end();
     assert(!native_dsp_mix_peek(keys+3,128) && native_dsp_mix_peek(keys+3,1024));
     uint32_t a,b,c;native_dsp_mix_stats(&a,&b,&c);assert(a>23 && b>1000 && c>=2);
+    for(unsigned i=0;i<4;i++)native_dsp_mix_release(keys+i);
+    assert(native_dsp_mix_init(2));native_dsp_mix_begin(keys,128);
+    int16_t l[64],r[64];for(unsigned i=0;i<64;i++){l[i]=100+i;r[i]=-100-(int)i;}
+    assert(native_dsp_mix_capture_wet(l,r,64));assert(!native_dsp_mix_capture_wet(l,r,64));
+    native_dsp_mix_advance(64);assert(native_dsp_mix_capture_wet(r,l,64));
+    assert(!native_dsp_mix_target(23,0,64)); // Channel 23 is the isolated wet feed.
+    native_dsp_mix_end();job=native_dsp_mix_peek(keys,128);assert(job && job->wet_written==128);
+    for(unsigned i=0;i<64;i++){assert(job->wet_pcm[i*2]==l[i] && job->wet_pcm[i*2+1]==r[i]);assert(job->wet_pcm[128+i*2]==r[i] && job->wet_pcm[129+i*2]==l[i]);}
+    native_dsp_mix_release(keys);assert(native_dsp_mix_init(1));native_dsp_mix_begin(keys,128);
+    assert(!native_dsp_mix_capture_wet(l,r,64));native_dsp_mix_end();native_dsp_mix_release(keys);
     puts("PASS DSP voice sidecars: exact subframe offsets, partial voices/silence, 24th-voice CPU overflow, three-job lifetime and buffer bounds");
 }

@@ -69,3 +69,10 @@ License: JoyShockMapper.txt. The 3DS adapter uses camera degrees, pressure-nub t
 Stereo implementation guidance: dynamic3d by oneup03 (OneUp).
 https://github.com/oneup03/3D-Skills/tree/main/dynamic3d
 See CREDITS.txt for GBAtemp acknowledgements to IDrinkLava and OneUp.
+
+OpenDSP (BSD 2-Clause), Cellenseres:
+https://github.com/Cellenseres/OpenDSP
+Revision a15c8615c1659f34bfb2b38df69a9860f4cc7080.
+Includes its open-source firmware/opendsp.cdc and AAC/MP3 build tables; these
+are OpenDSP project files, not Nintendo firmware or ROM-extracted game data.
+Source hashes: native-engine/vendor/OpenDSP/source.json. License: OpenDSP.txt.

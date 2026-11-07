@@ -165,12 +165,17 @@ float native_controls_look_rate(float rate) {
     if(rate>1.f)rate=1.f;else if(rate< -1.f)rate=-1.f;
     return rate*(native_setting_sensitivity()*.01f);
 }
+float native_controls_pitch_rate(float rate) {
+    float scaled=native_controls_look_rate(rate);
+    if(!native_game_input_gameplay() || lvlGetControlsLockedFlag() || !disablePlayerActionsWhenPausedOrInMpMenu())return scaled;
+    return scaled*(float)native_setting_vertical_sensitivity()/native_setting_sensitivity();
+}
 void native_controls_adjust_look(float *yaw,float *pitch) {
-    *yaw=native_controls_look_rate(*yaw);*pitch=native_controls_look_rate(*pitch);
+    *yaw=native_controls_look_rate(*yaw);*pitch=native_controls_pitch_rate(*pitch);
 }
 
-/* Original gunfire calls this before drawing the reticle and weapon. Keep
- * the target in screen space and use its existing gun/shot-direction path. */
+/* Original gunfire calls this AFTER its stick/weapon damping. Inputs are
+ * normalized stock reticle positions; add motion without changing that filter. */
 int native_controls_aim_turn(float *x,float *y){
  if(get_cur_playernum()!=0)return 0;
  if( (!native_setting_gyro() && !native_setting_aim_lock() && !touch_aim_active) ||

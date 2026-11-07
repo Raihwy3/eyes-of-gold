@@ -3,7 +3,7 @@
 #include "native_result_ui.h"
 static struct EogBottomView native_bottom_front_view;
 static int native_bottom_front_focus,last_bottom_menu=-1;
-static int native_bottom_front_context(void){return current_menu+(native_front_is_open()?100:0);}
+static int native_bottom_front_context(void){return current_menu+(native_front_is_open()?100+(native_front_category+1)*100:0);}
 static void native_bottom_front_position(int tag) {
     if(current_menu==MENU_FILE_SELECT) {
         if(folder_selected_for_deletion>=0)folder_selected_for_deletion_choice=tag==101;
@@ -43,7 +43,7 @@ static void native_bottom_front_events(void) {
     while(native_bottom_take(context,&c)) {
         if(native_front_options_blocked())continue;
         if(c.kind==EOG_BOTTOM_BACK) {
-            if(native_front_is_open())native_front_close_options();
+            if(native_front_is_open())native_front_options_back();
             else if(native_input_press)native_input_press(B_BUTTON);
             return;
         }
@@ -53,7 +53,7 @@ static void native_bottom_front_events(void) {
         native_bottom_front_focus=c.index;
         if(native_front_is_open()) {
             native_front_state.selected=r->tag;
-            if(c.kind!=EOG_BOTTOM_SELECT)native_menu_option_change(native_menu_option_at(r->tag),c.kind==EOG_BOTTOM_CHANGE?c.direction:1);
+            if(c.kind!=EOG_BOTTOM_SELECT)native_front_category_action(r->tag,native_front_category<0?1:c.kind==EOG_BOTTOM_CHANGE?c.direction:1);
         } else {
             native_bottom_front_position(r->tag);
             if(c.kind==EOG_BOTTOM_ACTIVATE) {
@@ -73,8 +73,11 @@ static void native_bottom_front_publish(void) {
     native_bottom_copy_fonts();
     if(native_front_is_open()) {
         v.kind=EOG_BOTTOM_OPTIONS;v.selected=native_front_state.selected;
-        native_bottom_string(v.title,sizeof v.title,"OPTIONS");
-        for(int i=0;i<NATIVE_MENU_OPTIONS_COUNT;i++){char b[32];int row=native_menu_option_at(i);native_bottom_row(&v,native_menu_option_label(row),native_menu_option_text(row,b,sizeof b),i,0);}
+        native_bottom_string(v.title,sizeof v.title,native_menu_category_title(native_front_category));
+        for(int i=0;i<native_front_option_count();i++){
+            char b[32];int row=native_menu_category_option(native_front_category,i);
+            native_bottom_row(&v,native_front_category<0?native_menu_category_title(i):native_menu_option_label(row),native_front_category<0?"":native_menu_option_text(row,b,sizeof b),i,0);
+        }
     } else if(current_menu==MENU_FILE_SELECT) {
         native_bottom_string(v.title,sizeof v.title,folder_selected_for_deletion>=0?"DELETE FILE?":"SELECT FILE");
         if(folder_selected_for_deletion>=0){native_bottom_row(&v,"Delete file","",100,0);native_bottom_row(&v,"Cancel","",101,0);}

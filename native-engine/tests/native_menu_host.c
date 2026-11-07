@@ -93,42 +93,42 @@ static void check_bottom_watch(void) {
     native_bottom_watch_publish();assert(captured.count==11 && captured.rows[0].tag==3 && captured.rows[7].tag==NATIVE_WATCH_AUDIO && captured.rows[8].tag==NATIVE_WATCH_ADVANCED);
     int old=native_setting_crosshair();
     bottom_command=(struct EogBottomCommand){203,EOG_BOTTOM_ACTIVATE,8,1};command_pending=1;
-    native_bottom_watch_publish();assert(native_watch_advanced && captured.context==403 && captured.count==16);
+    native_bottom_watch_publish();assert(native_watch_advanced && captured.context==403 && captured.count==17);
     assert(native_watch_option_y(native_watch_option_count()-1)<=200);
-    const int grouped[]={14,10,13,22,23,21,16,17,24,18,19,12,20,11,NATIVE_WATCH_EXPERIMENTAL,NATIVE_WATCH_BACK};
+    const int grouped[]={14,10,13,22,23,21,16,17,24,18,19,12,20,NATIVE_WATCH_CROSSHAIR,NATIVE_WATCH_STEREO,NATIVE_WATCH_EXPERIMENTAL,NATIVE_WATCH_BACK};
     for(unsigned i=0;i<sizeof grouped/sizeof *grouped;i++)assert(captured.rows[i].tag==grouped[i]);
     native_watch_option_back();native_bottom_watch_publish();
     assert(captured.context==203 && captured.rows[9].tag==NATIVE_WATCH_MOTION);
     bottom_command=(struct EogBottomCommand){203,EOG_BOTTOM_ACTIVATE,9,1};command_pending=1;
-    native_bottom_watch_publish();assert(native_watch_motion && captured.context==1003 && captured.count==10);
-    assert(captured.rows[0].tag==15 && captured.rows[1].tag==31 && captured.rows[2].tag==29 && captured.rows[3].tag==30);
-    bottom_command=(struct EogBottomCommand){1003,EOG_BOTTOM_ADJUST,native_watch_option_y(1),1};command_pending=1;
+    native_bottom_watch_publish();assert(native_watch_motion && captured.context==1003 && captured.count==12);
+    assert(captured.rows[0].tag==15 && captured.rows[1].tag==42 && captured.rows[2].tag==31 && captured.rows[3].tag==29 && captured.rows[4].tag==30);
+    bottom_command=(struct EogBottomCommand){1003,EOG_BOTTOM_ADJUST,native_watch_option_y(2),1};command_pending=1;
     native_bottom_watch_publish();assert(native_setting_touch_sensitivity()==275);
-    bottom_command=(struct EogBottomCommand){1003,EOG_BOTTOM_ACTIVATE,2,1};command_pending=1;
-    native_bottom_watch_publish();assert(native_setting_gyro()==1);
     bottom_command=(struct EogBottomCommand){1003,EOG_BOTTOM_ACTIVATE,3,1};command_pending=1;
+    native_bottom_watch_publish();assert(native_setting_gyro()==1);
+    bottom_command=(struct EogBottomCommand){1003,EOG_BOTTOM_ACTIVATE,4,1};command_pending=1;
     native_bottom_watch_publish();assert(native_setting_gyro_sensitivity()==275);
-    bottom_command=(struct EogBottomCommand){1003,EOG_BOTTOM_ACTIVATE,6,1};command_pending=1;
+    bottom_command=(struct EogBottomCommand){1003,EOG_BOTTOM_ACTIVATE,8,1};command_pending=1;
     native_bottom_watch_publish();assert(calibration_requests==1 && calibration_state==1);
-    assert(strstr(captured.rows[6].value,"Keep still"));
+    assert(strstr(captured.rows[8].value,"Keep still"));
     calibration_state=2;calibration_percent=75;native_bottom_watch_publish();
-    assert(strstr(captured.rows[6].value,"75%"));
-    calibration_state=-2;native_bottom_watch_publish();assert(strstr(captured.rows[6].value,"Try again"));
-    calibration_state=-1;native_bottom_watch_publish();assert(strstr(captured.rows[6].value,"Calibrated"));
+    assert(strstr(captured.rows[8].value,"75%"));
+    calibration_state=-2;native_bottom_watch_publish();assert(strstr(captured.rows[8].value,"Try again"));
+    calibration_state=-1;native_bottom_watch_publish();assert(strstr(captured.rows[8].value,"Calibrated"));
     calibration_state=0;
-    assert(captured.rows[7].tag==32 && !native_setting_flick());
-    bottom_command=(struct EogBottomCommand){1003,EOG_BOTTOM_ACTIVATE,7,1};command_pending=1;
+    assert(captured.rows[9].tag==32 && !native_setting_flick());
+    bottom_command=(struct EogBottomCommand){1003,EOG_BOTTOM_ACTIVATE,9,1};command_pending=1;
     native_bottom_watch_publish();assert(native_setting_flick());
-    assert(captured.rows[8].tag==39 && !native_setting_aim_movement());
-    bottom_command=(struct EogBottomCommand){1003,EOG_BOTTOM_ACTIVATE,8,1};command_pending=1;
+    assert(captured.rows[10].tag==39 && !native_setting_aim_movement());
+    bottom_command=(struct EogBottomCommand){1003,EOG_BOTTOM_ACTIVATE,10,1};command_pending=1;
     native_bottom_watch_publish();assert(native_setting_aim_movement());
-    assert(strstr(captured.rows[8].value,"Classic"));
-    bottom_command=(struct EogBottomCommand){1003,EOG_BOTTOM_ACTIVATE,8,1};command_pending=1;
+    assert(strstr(captured.rows[10].value,"Classic"));
+    bottom_command=(struct EogBottomCommand){1003,EOG_BOTTOM_ACTIVATE,10,1};command_pending=1;
     native_bottom_watch_publish();assert(!native_setting_aim_movement());
     bottom_command=(struct EogBottomCommand){1003,EOG_BOTTOM_BACK,0,1};command_pending=1;
     native_bottom_watch_publish();assert(!native_watch_motion && captured.context==203 && native_watch_nav.selected==9);
     native_watch_option_action(NATIVE_WATCH_ACCESSIBILITY,1);native_bottom_watch_publish();
-    assert(captured.context==1203 && captured.count==4 && captured.rows[0].tag==36 && captured.rows[2].tag==38);
+    assert(captured.context==1203 && captured.count==5 && captured.rows[0].tag==36 && captured.rows[2].tag==38);
     bottom_command=(struct EogBottomCommand){1203,EOG_BOTTOM_ACTIVATE,0,1};command_pending=1;
     native_bottom_watch_publish();assert(native_setting_aim_lock());
     bottom_command=(struct EogBottomCommand){1203,EOG_BOTTOM_BACK,0,1};command_pending=1;
@@ -136,19 +136,50 @@ static void check_bottom_watch(void) {
     native_setting_set_aim_lock(0);
     native_watch_option_action(NATIVE_WATCH_ADVANCED,1);native_bottom_watch_publish();
     bottom_command=(struct EogBottomCommand){403,EOG_BOTTOM_ACTIVATE,13,1};command_pending=1;
+    native_bottom_watch_publish();assert(native_watch_crosshair && captured.context==1603);
+    bottom_command=(struct EogBottomCommand){1603,EOG_BOTTOM_ACTIVATE,1,1};command_pending=1;
     native_bottom_watch_publish();assert(native_setting_crosshair()==(old+1)%7);
-    bottom_command=(struct EogBottomCommand){403,EOG_BOTTOM_ACTIVATE,14,1};command_pending=1;
+    for(int option=1;option<=12;option++){
+        bottom_command=(struct EogBottomCommand){1603,EOG_BOTTOM_ADJUST,native_watch_option_y(2),1};command_pending=1;
+        native_bottom_watch_publish();assert(native_menu_option_value(52)==option%12);
+    }
+    bottom_command=(struct EogBottomCommand){1603,EOG_BOTTOM_BACK,0,1};command_pending=1;
+    native_bottom_watch_publish();assert(captured.context==403 && !native_watch_crosshair);
+    bottom_command=(struct EogBottomCommand){403,EOG_BOTTOM_ACTIVATE,15,1};command_pending=1;
     native_bottom_watch_publish();assert(native_watch_experimental && captured.context==803 && captured.count==4);
     int visibility=native_setting_guard_visibility(),rate=native_setting_guard_ai_hz();
     bottom_command=(struct EogBottomCommand){803,EOG_BOTTOM_ACTIVATE,0,1};command_pending=1;
     native_bottom_watch_publish();assert(native_setting_guard_visibility()==!visibility);
     bottom_command=(struct EogBottomCommand){803,EOG_BOTTOM_ACTIVATE,1,1};command_pending=1;
     native_bottom_watch_publish();assert(native_setting_guard_ai_hz()!=rate);
-    int depth=native_setting_stereo_strength();
+    int clock=native_setting_watch_clock();
     bottom_command=(struct EogBottomCommand){803,EOG_BOTTOM_ACTIVATE,2,1};command_pending=1;
-    native_bottom_watch_publish();assert(native_setting_stereo_strength()==(depth+25)%225);
+    native_bottom_watch_publish();assert(native_setting_watch_clock()==!clock);
     bottom_command=(struct EogBottomCommand){803,EOG_BOTTOM_BACK,0,1};command_pending=1;
-    native_bottom_watch_publish();assert(!native_watch_experimental && native_watch_advanced && captured.context==403 && native_watch_nav.selected==14);
+    native_bottom_watch_publish();assert(!native_watch_experimental && native_watch_advanced && captured.context==403 && native_watch_nav.selected==15);
+    bottom_command=(struct EogBottomCommand){403,EOG_BOTTOM_ACTIVATE,14,1};command_pending=1;
+    native_bottom_watch_publish();assert(native_watch_stereo && captured.context==1403 && captured.count==9);
+    int depth=native_setting_stereo_strength();
+    bottom_command=(struct EogBottomCommand){1403,EOG_BOTTOM_ACTIVATE,0,1};command_pending=1;
+    native_bottom_watch_publish();assert(native_setting_stereo_strength()==(depth+25)%225);
+    for(int row=1;row<8;row++){
+        int option=43+row,previous=native_menu_option_value(option);
+        bottom_command=(struct EogBottomCommand){1403,EOG_BOTTOM_ACTIVATE,row,1};command_pending=1;
+        native_bottom_watch_publish();assert(native_menu_option_value(option)!=previous);
+        assert(captured.rows[row].tag==option);
+    }
+    bottom_command=(struct EogBottomCommand){1403,EOG_BOTTOM_BACK,0,1};command_pending=1;
+    native_bottom_watch_publish();assert(!native_watch_stereo && native_watch_advanced && captured.context==403 && native_watch_nav.selected==14);
+    bottom_command=(struct EogBottomCommand){403,EOG_BOTTOM_ACTIVATE,13,1};command_pending=1;
+    native_bottom_watch_publish();assert(native_watch_crosshair && captured.context==1603 && captured.count==5);
+    assert(captured.rows[0].tag==51 && captured.rows[1].tag==11 && captured.rows[2].tag==52 && captured.rows[3].tag==43);
+    for(int shape=1;shape<=8;shape++){
+        bottom_command=(struct EogBottomCommand){1603,EOG_BOTTOM_ACTIVATE,0,1};command_pending=1;
+        native_bottom_watch_publish();assert(native_setting_crosshair_shape()==shape%8);
+    }
+    bottom_command=(struct EogBottomCommand){1603,EOG_BOTTOM_BACK,0,1};command_pending=1;
+    native_bottom_watch_publish();assert(!native_watch_crosshair && native_watch_advanced && native_watch_nav.selected==13);
+
     bottom_command=(struct EogBottomCommand){403,EOG_BOTTOM_BACK,0,1};command_pending=1;injected=0;
     native_bottom_watch_publish();assert(!native_watch_advanced && !injected && captured.context==203 && captured.count==11);
     bottom_command=(struct EogBottomCommand){203,EOG_BOTTOM_ACTIVATE,7,1};command_pending=1;
@@ -156,7 +187,7 @@ static void check_bottom_watch(void) {
     assert(captured.rows[0].tag==1 && captured.rows[1].tag==2 && captured.rows[2].tag==25);
     int mixer=native_setting_audio_mixer();
     bottom_command=(struct EogBottomCommand){603,EOG_BOTTOM_ACTIVATE,2,1};command_pending=1;
-    native_bottom_watch_publish();assert(native_setting_audio_mixer()==!mixer);
+    native_bottom_watch_publish();assert(native_setting_audio_mixer()==(mixer+1)%4);
     bottom_command=(struct EogBottomCommand){603,EOG_BOTTOM_BACK,0,0};command_pending=1;
     native_bottom_watch_publish();assert(!native_watch_audio && captured.context==203 && native_watch_nav.selected==7);
     bottom_command=(struct EogBottomCommand){203,EOG_BOTTOM_PAGE,4,0};command_pending=1;
@@ -175,6 +206,8 @@ static void check_bottom_watch(void) {
     bottom_command=(struct EogBottomCommand){203,EOG_BOTTOM_POINT,220,native_watch_option_y(8)};command_pending=1;
     native_bottom_watch_publish();assert(native_watch_advanced && captured.context==403);
     old=native_setting_crosshair();bottom_command=(struct EogBottomCommand){403,EOG_BOTTOM_POINT,220,native_watch_option_y(13)};command_pending=1;
+    native_bottom_watch_publish();assert(native_watch_crosshair && captured.context==1603);
+    bottom_command=(struct EogBottomCommand){1603,EOG_BOTTOM_POINT,220,native_watch_option_y(1)};command_pending=1;
     native_bottom_watch_publish();assert(native_setting_crosshair()==(old+1)%7);
     native_watch_options_reset();native_watch_nav.selected=8;watch_held=EOG_A;
     native_watch_options_input();assert(!native_watch_advanced);watch_held=0;native_watch_options_input();watch_held=EOG_A;
@@ -253,7 +286,7 @@ int main(void) {
     char directory[]="/tmp/eog-shared-options-XXXXXX";assert(mkdtemp(directory));
     native_settings_init(directory);
     char sensitivity_text[32];
-    for(int row=15;row<=31;row++)if(row==15 || row==30 || row==31){
+    for(int row=15;row<=31;row++)if(row==15 || row==31){
         assert(!strcmp(native_menu_option_text(row,sensitivity_text,sizeof sensitivity_text),"100%\n"));
         for(int i=0;i<30;i++)native_menu_option_change(row,1);
         assert(!strcmp(native_menu_option_text(row,sensitivity_text,sizeof sensitivity_text),"400%\n"));
@@ -262,9 +295,17 @@ int main(void) {
         for(int i=0;i<9;i++)native_menu_option_change(row,1);
         assert(!strcmp(native_menu_option_text(row,sensitivity_text,sizeof sensitivity_text),"100%\n"));
     }
+    native_setting_set_gyro_sensitivity(100);
+    assert(!strcmp(native_menu_option_text(30,sensitivity_text,sizeof sensitivity_text),"100%\n"));
+    native_setting_set_gyro_sensitivity(400);native_menu_option_change(30,1);
+    assert(!strcmp(native_menu_option_text(30,sensitivity_text,sizeof sensitivity_text),"25%\n"));
+    native_setting_set_gyro_sensitivity(250);
+    native_menu_option_change(41,1);assert(native_setting_gyro_filter());
+    native_menu_option_change(42,1);assert(native_setting_vertical_sensitivity()==275);
+    native_menu_option_change(43,1);assert(native_setting_always_crosshair());
     native_setting_set_sensitivity(100);native_setting_set_gyro_sensitivity(100);native_setting_set_touch_sensitivity(100);
     native_settings_init(directory);
-    for(int row=15;row<=31;row++)if(row==15 || row==30 || row==31)
+    for(int row=15;row<=31;row++)if(row==15 || row==31)
         assert(!strcmp(native_menu_option_text(row,sensitivity_text,sizeof sensitivity_text),"40%\n"));
     native_setting_set_sensitivity(250);native_setting_set_gyro_sensitivity(250);native_setting_set_touch_sensitivity(250);
     native_setting_set_style(8);native_setting_set_aspect(0);
@@ -302,7 +343,7 @@ int main(void) {
     native_setting_dynamic_lod(3);assert(native_setting_lod_strength()==3 && native_setting_lod()==4);
     native_menu_option_change(24,1);native_menu_option_change(24,1);native_menu_option_change(24,1);
     assert(native_setting_vignette_mode()==3 && !strcmp(native_menu_option_text(24,unused,sizeof unused),"Crouch/Zoom\n"));
-    native_menu_option_change(25,1);assert(native_setting_audio_mixer()==0);
+    native_menu_option_change(25,1);assert(native_setting_audio_mixer()==2);
     assert(!native_setting_unlock_all());
     native_menu_option_change(26,1);assert(native_setting_unlock_all());
     assert(!strcmp(native_menu_option_label(26),"Unlock everything\n"));
@@ -335,7 +376,7 @@ int main(void) {
     effects=0;native_menu_options_restore_audio();assert(effects==31129);
     sub_GAME_7F0A91A0(0);assert(effects==31129);
     char path[512];snprintf(path,sizeof path,"%s/native-options.ini",directory);assert(!unlink(path));assert(!rmdir(directory));
-    puts("PASS shared original watch/main options: all 41 choices survive reload, blue palettes, audio application, legacy save priority");
+    puts("PASS shared original watch/main options: all 54 choices survive reload, blue palettes, audio application, legacy save priority");
 }
 s16 viGetX(void){return 320;}
 s16 viGetY(void){return 240;}

@@ -27,3 +27,9 @@ __pycache__/
 
 *.cia
 *.cxi
+
+# OpenDSP codec tables are third-party open-source build inputs.
+!/native-engine/vendor/OpenDSP/firmware/aac_tables.bin
+!/native-engine/vendor/OpenDSP/firmware/mp3_tables.bin
+/native-engine/vendor/OpenDSP/library/build/
+/native-engine/vendor/OpenDSP/library/lib/

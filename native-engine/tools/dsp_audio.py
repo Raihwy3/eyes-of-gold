@@ -16,7 +16,21 @@ def mixer(text):
         }else {
 '''+old+'''
         }''')
+    text += """
+/* Native extension: preserve the original wet send, bypass only its CPU FX. */
+int native_audio_dsp_fx_pull(unsigned frames){
+    s16 *left=DMEM_S16(AL_AUX_L_OUT),*right=DMEM_S16(AL_AUX_R_OUT);
+    if(!native_dsp_mix_capture_wet(left,right,frames))return 0;
+    memset(left,0,frames*sizeof(*left));memset(right,0,frames*sizeof(*right));return 1;
+}
+"""
     return text
+
+def reverb(text):
+    text='#include "native_dsp_mix.h"\n'+text
+    old='    ptr = (*source->handler)(source, outp, outCount, sampleOffset, p);'
+    assert text.count(old)==1
+    return text.replace(old,old+'\n    if(native_audio_dsp_fx_pull(outCount))return ptr;')
 
 def synth(text):
     text='#include "native_dsp_mix.h"\n'+text

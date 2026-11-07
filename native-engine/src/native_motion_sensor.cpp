@@ -7,13 +7,18 @@
 #include <cmath>
 static GamepadMotion motion;
 static uint64_t previous;
+static int filter_enabled,last_space=-1,last_axis=-1;
+static float filtered_yaw,filtered_pitch,gravity[3];
+static bool gravity_ready;
+extern "C" void native_motion_set_filter(int enabled){__atomic_store_n(&filter_enabled,enabled!=0,__ATOMIC_RELAXED);}
+static void clear_output_filter(){filtered_yaw=filtered_pitch=0;last_space=last_axis=-1;}
 static int request,status,progress;
 static uint64_t calibration_started;
 static float still_time;
 static unsigned samples;
 static float mean_gyro[3],mean_accel[3];
 static void restart_window(){still_time=0;samples=0;__atomic_store_n(&progress,0,__ATOMIC_RELAXED);}
-extern "C" void native_motion_reset(void){motion.Reset();motion.ResetContinuousCalibration();motion.PauseContinuousCalibration();previous=calibration_started=0;restart_window();__atomic_store_n(&request,0,__ATOMIC_RELAXED);__atomic_store_n(&status,0,__ATOMIC_RELAXED);}
+extern "C" void native_motion_reset(void){motion.Reset();gravity_ready=false;clear_output_filter();motion.ResetContinuousCalibration();motion.PauseContinuousCalibration();previous=calibration_started=0;restart_window();__atomic_store_n(&request,0,__ATOMIC_RELAXED);__atomic_store_n(&status,0,__ATOMIC_RELAXED);}
 extern "C" void native_motion_calibrate(void){
  // Repeated activation while already sampling must not restart the countdown.
  if(__atomic_load_n(&status,__ATOMIC_RELAXED)>0)return;
@@ -25,7 +30,7 @@ extern "C" int native_motion_calibration_status(void){return __atomic_load_n(&st
 extern "C" int native_motion_calibration_progress(void){return __atomic_load_n(&progress,__ATOMIC_RELAXED);}
 extern "C" void native_motion_sample(uint64_t now,float gx,float gy,float gz,float ax,float ay,float az,int active,int space,int axis,float *yaw,float *pitch){
  *yaw=*pitch=0;
- if(__atomic_exchange_n(&request,0,__ATOMIC_RELAXED)){calibration_started=now;restart_window();motion.PauseContinuousCalibration();__atomic_store_n(&status,1,__ATOMIC_RELAXED);}
+ if(__atomic_exchange_n(&request,0,__ATOMIC_RELAXED)){calibration_started=now;gravity_ready=false;clear_output_filter();restart_window();motion.PauseContinuousCalibration();__atomic_store_n(&status,1,__ATOMIC_RELAXED);}
  uint64_t last=previous;previous=now;
  bool calibrating=native_motion_calibration_status()>0;
  // Check elapsed wall time even when all samples are missing, invalid or late.
@@ -35,7 +40,7 @@ extern "C" void native_motion_sample(uint64_t now,float gx,float gy,float gz,flo
   restart_window();__atomic_store_n(&status,-2,__ATOMIC_RELAXED);return;
  }
  if(!last || now<=last || now-last>100000){
-  motion.ResetMotion();
+  motion.ResetMotion();gravity_ready=false;clear_output_filter();
   if(calibrating){restart_window();__atomic_store_n(&status,1,__ATOMIC_RELAXED);}
   return;
  }
@@ -66,7 +71,7 @@ extern "C" void native_motion_sample(uint64_t now,float gx,float gy,float gz,flo
    __atomic_store_n(&status,2,__ATOMIC_RELAXED);
   }
  }
- if(!valid)return;
+ if(!valid){clear_output_filter();return;}
  // Never learn intentional slow aiming as drift. Menus/disengaged motion
  // permit the helper's hybrid stillness + sensor-fusion calibration.
  motion.SetCalibrationMode(active || calibrating?GamepadMotionHelpers::CalibrationMode::Manual:
@@ -82,15 +87,28 @@ extern "C" void native_motion_sample(uint64_t now,float gx,float gy,float gz,flo
   }
   return;
  }
+ if(!active){clear_output_filter();}
+ // Anchor the reference vertical to measured acceleration. Accumulating
+ // gyro orientation is unnecessary for this projection and can couple yaw
+ // into pitch when its estimate drifts. A short time-based low-pass rejects
+ // sensor noise; constant body yaw does not rotate the vertical vector.
+ float magnitude=std::sqrt(ax*ax+ay*ay+az*az);
+ if(magnitude>.1f && magnitude<8.f){
+  float a[3]={-ax/magnitude,-ay/magnitude,-az/magnitude};
+  float blend=gravity_ready?1.f-std::exp(-dt/.025f):1.f;
+  for(int i=0;i<3;i++)gravity[i]+=blend*(a[i]-gravity[i]);
+  float length=std::sqrt(gravity[0]*gravity[0]+gravity[1]*gravity[1]+gravity[2]*gravity[2]);
+  if(length>.0001f){for(float &v:gravity)v/=length;gravity_ready=true;}
+ }
  if(!active)return;
  float p=0,y=0,z=0;
  motion.GetCalibratedGyro(p,y,z);
  if(space){
-  float xg,yg,zg;motion.GetGravity(xg,yg,zg);
+  if(!gravity_ready){clear_output_filter();return;}
+  float xg=gravity[0],yg=gravity[1],zg=gravity[2];
   float length=std::sqrt(xg*xg+yg*yg+zg*zg);
-  // The helper eases gravity magnitude up from zero after ResetMotion.
-  // Projection needs its direction, otherwise startup weakens yaw/pitch.
-  if(length>.0001f){
+  // Both library projections require a normalized reference vertical.
+  if(gravity_ready && length>.0001f){
    xg/=length;yg/=length;zg/=length;
    if(space==1)GamepadMotion::CalculateWorldSpaceGyro(p,y,p,y,z,xg,yg,zg);
    else GamepadMotion::CalculatePlayerSpaceGyro(p,y,p,y,z,xg,yg,zg,1.f);
@@ -99,11 +117,20 @@ extern "C" void native_motion_sample(uint64_t now,float gx,float gy,float gz,flo
    y=-y;
   }
  }else if(axis){
-  // Local roll needs the same camera-space turn sign as gravity modes.
-  y=z;
+  // Tilting the left edge toward the player must turn left.
+  y=-z;
  }
  // Degrees in, degrees out: both axes have the same gain. No axis blending
  // in local space. Bound sensor spikes without changing normal sensitivity.
- *yaw=std::clamp(y,-600.f,600.f)*dt;
- *pitch=std::clamp(p,-600.f,600.f)*dt;
+ y=std::clamp(y,-600.f,600.f);p=std::clamp(p,-600.f,600.f);
+ if(__atomic_load_n(&filter_enabled,__ATOMIC_RELAXED)){
+  if(last_space!=space || last_axis!=axis)clear_output_filter();
+  // The same cutoff applies to both axes. Filter small hand/sensor jitter,
+  // then raise the cutoff with intentional movement to avoid a slow cursor.
+  float speed=std::sqrt(y*y+p*p);
+  float alpha=1.f-std::exp(-6.28318530718f*(4.f+speed)*dt);
+  filtered_yaw+=alpha*(y-filtered_yaw);filtered_pitch+=alpha*(p-filtered_pitch);
+  y=filtered_yaw;p=filtered_pitch;last_space=space;last_axis=axis;
+ }else clear_output_filter();
+ *yaw=y*dt;*pitch=p*dt;
 }

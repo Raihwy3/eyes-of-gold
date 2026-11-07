@@ -19,6 +19,9 @@ static u64 sysGetMicroseconds(void){return 0;}
 static s16 mixerClamp16(s32 x){return x<-32768?-32768:x>32767?32767:x;}
 #include "native-env-reference.h"
 #include "native-env-dsp.h"
+#define AL_AUX_L_OUT 1728
+#define AL_AUX_R_OUT 2048
+#include "native-fx-capture.h"
 struct State {s32 t[2],rate[2];s16 tgt[2],dry,wet;};
 static struct State reference_states[3],dsp_states[3];
 static int16_t reference_dry[128*2],base_dry[128*2],reference_wet[64*2];
@@ -59,5 +62,15 @@ int main(void) {
         for(unsigned i=0;i<256;i++)assert((int)base_dry[i]+job->pcm[i]+job->pcm[NATIVE_DSP_MIX_FRAMES*2+i]==reference_dry[i]);
         native_dsp_mix_release(&key);
     }
+    int key_fx;assert(native_dsp_mix_init(2));native_dsp_mix_begin(&key_fx,64);
+    for(unsigned i=0;i<64;i++){DMEM_S16(AL_AUX_L_OUT)[i]=100+i;DMEM_S16(AL_AUX_R_OUT)[i]=-100-(int)i;}
+    assert(native_audio_dsp_fx_pull(64));
+    for(unsigned i=0;i<64;i++)assert(!DMEM_S16(AL_AUX_L_OUT)[i] && !DMEM_S16(AL_AUX_R_OUT)[i]);
+    native_dsp_mix_end();const struct NativeDspMixJob *fx=native_dsp_mix_peek(&key_fx,64);assert(fx && fx->wet_written==64);
+    for(unsigned i=0;i<64;i++)assert(fx->wet_pcm[i*2]==100+(int)i && fx->wet_pcm[i*2+1]==-100-(int)i);
+    native_dsp_mix_release(&key_fx);assert(native_dsp_mix_init(1));native_dsp_mix_begin(&key_fx,64);
+    DMEM_S16(AL_AUX_L_OUT)[0]=321;DMEM_S16(AL_AUX_R_OUT)[0]=-123;
+    assert(!native_audio_dsp_fx_pull(64) && DMEM_S16(AL_AUX_L_OUT)[0]==321 && DMEM_S16(AL_AUX_R_OUT)[0]==-123);
+    native_dsp_mix_end();native_dsp_mix_release(&key_fx);
     puts("PASS actual DSP envelope/reference: isolated dry voices reconstruct original unsaturated sum; wet sends and saved envelope state remain byte-exact across INIT/CONTINUE, ramps, subframes and CPU overflow");
 }

@@ -7,6 +7,8 @@ struct sImageTableEntry *crosshairimage=&sight,*mainfolderimages=icons;
 static int colour[4];
 static struct sImageTableEntry *bound;
 static unsigned quits;
+static int changed_row=-1,changed_direction;
+void native_menu_option_change(int row,int direction){changed_row=row;changed_direction=direction;}
 static uint64_t test_now;
 uint64_t sysGetMicroseconds(void){return test_now;}
 unsigned native_input_menu_buttons(void){return EOG_A;}
@@ -69,5 +71,23 @@ int main(void) {
         cursor_h_pos=TABS_LEFT_EDGE+1;cursor_v_pos=PREVTAB_TAB_TOP+10;
         assert(native_mode_extra()==-1);
     }
+    native_front_open_options();test_now+=1000000;
+    assert(native_front_category==-1 && native_front_option_count()==NATIVE_MENU_CATEGORY_COUNT);
+    for(int category=0;category<NATIVE_MENU_CATEGORY_COUNT;category++){
+        native_front_state.selected=category;
+        native_front_category_action(category,1);
+        assert(native_front_category==category && native_front_state.selected==0);
+        assert(native_front_options_blocked());test_now+=1000000;
+        int count=native_front_option_count();
+        for(int row=0;row<count;row++){
+            native_front_category_action(row,-1);
+            assert(changed_row==native_menu_category_option(category,row) && changed_direction==-1);
+        }
+        native_front_options_back();
+        assert(native_front_state.open && native_front_category==-1 && native_front_state.selected==category);
+        assert(native_front_options_blocked());test_now+=1000000;
+    }
+    native_front_options_back();assert(!native_front_state.open);
+    puts("PASS frontend category entry/edit/back: correct shared setting IDs, parent focus and transition lock");
     puts("PASS original mode menu: Options/Exit follow Mission/Multiplayer, optional Cheats retained, matching hit regions, Previous-tab priority, no entries on other folders");
 }

@@ -4,6 +4,7 @@
 extern "C" {
 #endif
 void native_motion_reset(void);
+void native_motion_set_filter(int enabled);
 void native_motion_calibrate(void);
 /* 1: waiting for stillness; 2: sampling; 0: idle; -1: completed; -2: timed out. */
 int native_motion_calibration_status(void);

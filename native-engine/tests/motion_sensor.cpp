@@ -4,7 +4,7 @@
 #include <cstdio>
 #include <initializer_list>
 static uint64_t now;
-static void reset(){native_motion_reset();now=1000000;float y,p;native_motion_sample(now,0,0,0,0,1,0,0,0,0,&y,&p);}
+static void reset(){native_motion_reset();native_motion_set_filter(0);now=1000000;float y,p;native_motion_sample(now,0,0,0,0,1,0,0,0,0,&y,&p);}
 static void sample(float gx,float gy,float gz,int active,int space,int axis,float &y,float &p){now+=10000;native_motion_sample(now,gx,gy,gz,0,1,0,active,space,axis,&y,&p);}
 int main(){
  float y,p;
@@ -14,12 +14,12 @@ int main(){
   assert(fabs(yaw-30)<.01 && fabs(pitch-30)<.01);
  }
  reset();sample(10,20,100,1,0,0,y,p);assert(fabs(y-.2f)<.00001 && fabs(p-.1f)<.00001);
- sample(10,100,-20,1,0,1,y,p);assert(fabs(y+.2f)<.00001 && fabs(p-.1f)<.00001);
+ sample(10,100,-20,1,0,1,y,p);assert(fabs(y-.2f)<.00001 && fabs(p-.1f)<.00001);
  // Local roll uses the helper's Z axis. Its sign must match the
  // camera's horizontal convention, independently of pitch and local yaw.
  for(int direction: {-1,1}){
   reset();sample(10,100,direction*20.f,1,0,1,y,p);
-  assert(y*direction>0 && fabs(y-direction*.2f)<.00001f);
+  assert(y*direction<0 && fabs(y+direction*.2f)<.00001f);
   assert(fabs(p-.1f)<.00001f);
  }
  reset();for(int i=0;i<100;i++)sample(0,0,0,0,0,0,y,p);
@@ -34,6 +34,36 @@ int main(){
   assert(y*direction>0 && fabs(y-direction*.2f)<.005f);
   assert(p>0 && fabs(p-.1f)<.005f);
  }
+ // Real body yaw: angular velocity is parallel to vertical at every hold
+ // angle. Left/right turns must cancel without producing downward pitch.
+ for(int space=1;space<=2;space++)for(int hz: {30,60,100})for(float tilt: {0.f,.6f,1.2f}){
+  reset();float ay=cosf(tilt),az=sinf(tilt),total_y=0,total_p=0;
+  for(int i=0;i<20;i++){now+=1000000/hz;native_motion_sample(now,0,0,0,0,ay,az,1,space,0,&y,&p);}
+  for(int i=0;i<hz*4;i++){
+   float rate=(i<hz*2?1.f:-1.f)*45.f;
+   now+=1000000/hz;native_motion_sample(now,0,rate*ay,rate*az,0,ay,az,1,space,0,&y,&p);
+   assert(fabsf(p)<.001f);total_y+=y;total_p+=p;
+  }
+  assert(fabsf(total_y)<.05f && fabsf(total_p)<.01f);
+ }
+ // At a rolled holding angle World pitch rejects vertical-axis rotation;
+ // Player pitch deliberately retains local X, as the reference specifies.
+ float out_pitch[2];
+ for(int space=1;space<=2;space++){
+  reset();for(int i=0;i<30;i++){now+=10000;native_motion_sample(now,0,0,0,.6f,.8f,0,1,space,0,&y,&p);}
+  now+=10000;native_motion_sample(now,18,24,0,.6f,.8f,0,1,space,0,&y,&p);out_pitch[space-1]=p;
+ }
+ assert(fabsf(out_pitch[0])<.001f && fabsf(out_pitch[1]-.18f)<.001f);
+ // Optional jitter filter attenuates alternating noise, retains intentional
+ // steady turns, and discards its tail when aiming is disengaged.
+ reset();native_motion_set_filter(1);float noise=0;
+ for(int i=0;i<100;i++){sample(0,i%2?1.f:-1.f,0,1,0,0,y,p);noise+=fabsf(y);}
+ assert(noise<.25f);
+ float travel=0;for(int i=0;i<100;i++){sample(30,30,0,1,0,0,y,p);travel+=y;assert(fabsf(y-p)<.02f);}
+ assert(travel>29.f && travel<=30.f);
+ sample(0,0,0,0,0,0,y,p);sample(0,0,0,1,0,0,y,p);assert(y==0 && p==0);
+ native_motion_set_filter(0);
+ puts("PASS moving World/Player reference: multi-angle body yaw reversals at 30/60/100Hz, distinct pitch axes, optional jitter attenuation and disengage reset");
  sample(30,30,0,0,0,0,y,p);assert(y==0 && p==0);
  now+=1000000;native_motion_sample(now,30,30,0,0,1,0,1,0,0,&y,&p);assert(y==0 && p==0);
  reset();native_motion_calibrate();

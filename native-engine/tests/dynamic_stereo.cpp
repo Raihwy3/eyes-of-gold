@@ -1,4 +1,5 @@
 #include "native_dynamic_stereo.h"
+#include "native_stereo_options.h"
 #include "rt64_stereo_reference.h"
 #include "native_weapon_stereo.h"
 #include <cassert>
@@ -91,6 +92,23 @@ int main(){
   assert(std::fabs(std::fabs(sky.r[1].w)-separation*slider)<1.e-6f);
   assert(!memcmp(&sky.r[2],&flat.r[2],sizeof(Row)) && !memcmp(&sky.r[3],&flat.r[3],sizeof(Row)));
  }
+ for(int manual_percent:{10,50,100,200})for(int comfort:{-20,0,30}){
+  Convergence custom;eog_stereo_reference_test::AutoConvergence expected;
+  eog_stereo_reference_test::AutoConvTuning tune;float manual=native_stereo_options::convergence(manual_percent);
+  for(int frame=0;frame<200;frame++){
+   float z=frame<100?200.f:700.f;
+   float actual=custom.update(z,1,1.f/60,4,manual,comfort);
+   assert(fabsf(actual-expected.update(z,manual,separation,comfort,tune))<.005f);
+  }
+ }
+ assert(native_stereo_options::hud_pixels(50)==0 && native_stereo_options::hud_pixels(75)==4);
+ assert(native_stereo_options::convergence(100)==3000);
+ for(int c=50;c<=100;c+=5)for(int f=0;f<=20;f++)for(int colour=0;colour<=255;colour++){
+  auto ghost=native_stereo_options::ghost(c,f);float pixel=colour/255.f;
+  float expected=((pixel-.5f)*(c/100.f)+.5f)*(1-f/100.f)+f/100.f;
+  assert(fabsf(pixel*ghost.a+ghost.b-expected)<.000001f);
+ }
+ puts("PASS configurable convergence/pop-out against RT64, unchanged default HUD plane and independent ghost affine reference");
  assert(disparity(0,600,1)==separation && disparity(600,600,1)==0);
  puts("PASS adaptive stereo: scaled perspective/depth-range inversion, D24S8, tiled native/AA/filter targets, full 1500-sample grid, reference-equivalent convergence, recent-median cuts, 13x5x5 aim strip, sky hold, edge/outlier rejection, matching reticle/world eye signs");
  printf("PASS %u projection/depth round trips\n",cases);

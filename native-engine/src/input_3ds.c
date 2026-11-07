@@ -58,6 +58,7 @@ void inputUpdate(void) {
      * through its screen, Z toward its bottom edge (a right-handed basis).
      * Accelerometer raw units are 512 per g. */
     float yaw=0,pitch=0;
+    native_motion_set_filter(native_setting_gyro_filter());
     native_motion_sample(now,gyro_enabled?rate.x/gyro_coefficient:0,
         gyro_enabled?rate.z/gyro_coefficient:0,gyro_enabled?-rate.y/gyro_coefficient:0,
         gyro_enabled && accel_enabled?accel.x/512.f:0,
@@ -74,7 +75,7 @@ void inputUpdate(void) {
         menu_buttons=held;
     }
     if(native_bottom_seed_active && native_bottom_seed_active()){circle.dx=circle.dy=cstick.dx=cstick.dy=0;}
-    int use_flick=native_setting_flick() && native_setting_style()==8 && gameplay && (render_state&1);
+    int use_flick=native_setting_flick() && native_setting_style()==8 && gameplay && (render_state&1) && !aiming;
     native_flick_sample(&flick,now,cstick.dx,cstick.dy,use_flick);
     pad=native_pad_map(held,circle.dx,circle.dy,cstick.dx,cstick.dy,native_setting_style(),gameplay);
     if(use_flick)pad.x=pad.y=0;

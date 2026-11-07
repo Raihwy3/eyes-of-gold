@@ -68,7 +68,11 @@ static inline void native_flick_sample(struct NativeFlick *f,uint64_t now,int x,
      f->front_sample=0;
      f->sample_count=dt?(int)(64000/dt):4;
      if(f->sample_count<1)f->sample_count=1;else if(f->sample_count>64)f->sample_count=64;
-     f->started_flick=now;f->delta_flick=f->remaining=a;
+     /* Nub pressure commonly approaches a cardinal direction diagonally.
+      * Snap only the initial flick; keep continuous edge rotation unsnapped. */
+     float cardinal=roundf(a/90.f)*90.f;
+     float target=fabsf(a-cardinal)<=12.f?cardinal:a;
+     f->started_flick=now;f->delta_flick=f->remaining=target;
      f->flick_percent_done=0;f->remaining_us=100000;
      f->active=f->tracking=1;f->armed=0;
    }else if(f->active && radius>=48*48){

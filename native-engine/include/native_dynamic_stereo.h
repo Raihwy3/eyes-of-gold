@@ -49,8 +49,8 @@ inline unsigned tiled_index(unsigned x,unsigned y,unsigned width){
 struct Convergence {
  eog_rt64_stereo::AutoConvergence reference;
  float value=manual_convergence;
- void reset(){reference.reset();value=manual_convergence;}
- float update(float near,float slider,float seconds,float near_plane=4.f){
+ void reset(float manual=manual_convergence){reference.reset();value=manual;}
+ float update(float near,float slider,float seconds,float near_plane=4.f,float manual=manual_convergence,int comfort=0){
   eog_rt64_stereo::AutoConvTuning tune;
   // Reference rates at 60 Hz; preserve their time constants at 30 Hz.
   float ticks=std::clamp(seconds*60.f,.25f,6.f);
@@ -60,7 +60,7 @@ struct Convergence {
   tune.near_clamp=std::max(4.f,near_plane);
   if(!std::isfinite(near))near=0;
   // Reference default: nearest significant geometry stays at the LCD plane.
-  value=reference.update(near,manual_convergence,separation*std::clamp(slider,0.f,2.f),0,tune);
+  value=reference.update(near,manual,separation*std::clamp(slider,0.f,2.f),comfort,tune);
   return value;
  }
 };

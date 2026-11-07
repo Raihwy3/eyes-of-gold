@@ -64,6 +64,75 @@ static void original_touch_aim_rates(struct MoveData moveData){
 }
 
 extern unsigned native_game_render_state(void);
+/* Compare the generated pipeline against the upstream stick-only pipeline. */
+static WeaponStats pipeline_weapon;
+WeaponStats *get_ptr_item_statistics(ITEM_IDS item){(void)item;return &pipeline_weapon;}
+f32 getPlayer_c_screenleft(void){return 0;}
+f32 getPlayer_c_screentop(void){return 0;}
+void transformAndNormalizeByLength2Dto3D(struct coord2d *in,coord3d *out,f32 length){(void)in;(void)length;memset(out,0,sizeof *out);}
+void sub_GAME_7F067AB4(coord3d *coords){(void)coords;}
+int reference_motion_disabled(float *x,float *y){(void)x;(void)y;return 0;}
+#include "native-reticle-pipeline.h"
+static void check_reticle_pipeline(void){
+    struct player saved=player,reference;
+    for(int gyro=0;gyro<=2;gyro++)for(int weapon=0;weapon<3;weapon++){
+        native_setting_set_style(8);native_setting_set_aim_lock(0);native_setting_set_gyro(gyro);
+        player=(struct player){0};player.fovy=60;player.crouchpos=CROUCH_STAND;
+        player.insightaimmode=0;float ax=0,ay=0;native_controls_aim_turn(&ax,&ay);
+        player.insightaimmode=1;player.vv_theta=180;reference=player;
+        pipeline_weapon.CrosshairSpeed=weapon==0?.8f:weapon==1?.945f:.65f;
+        pipeline_weapon.AimLockSpeed=.9f;
+        for(int n=0;n<600;n++){
+            g_ClockTimer=n%5;float x=.65f*sinf(n*.071f),y=.65f*cosf(n*.053f);
+            gy=gp=0;sub_GAME_7F067FBC(x,y);
+            g_CurrentPlayer=&reference;reference_manual(x,y);g_CurrentPlayer=&player;
+            assert(player.guncrossdamp==pipeline_weapon.CrosshairSpeed);
+            assert(player.crosshair_x_pos==reference.crosshair_x_pos && player.crosshair_y_pos==reference.crosshair_y_pos);
+            assert(fabsf(player.crosshair_angle.x-reference.crosshair_angle.x)<.001f);
+            assert(fabsf(player.crosshair_angle.y-reference.crosshair_angle.y)<.001f);
+            assert(player.gun_azimuth_angle==reference.gun_azimuth_angle);
+            assert(fabsf(player.field_FFC.x-reference.field_FFC.x)<.001f);
+            assert(fabsf(player.field_FFC.y-reference.field_FFC.y)<.001f);
+            assert(fabsf(player.vv_theta-180)<.001f && fabsf(player.vv_verta)<.001f);
+        }
+    }
+    for(int gyro=0;gyro<=2;gyro++){
+        native_setting_set_gyro(gyro);native_setting_set_style(8);native_setting_set_aim_lock(0);
+        player=(struct player){0};player.fovy=60;
+        float ax=0,ay=0;native_controls_aim_turn(&ax,&ay);
+        player.insightaimmode=1;reference=player;
+        pipeline_weapon.CrosshairSpeed=.8f;pipeline_weapon.AimLockSpeed=.9f;
+        g_ClockTimer=1;unsigned quadrants=0;int crossings=0;float last_y=0;
+        for(int n=0;n<1440;n++){
+            float angle=n*.01745329252f;
+            struct NativePad sample=native_pad_map(EOG_L,0,0,(int)lroundf(156*cosf(angle)),(int)lroundf(156*sinf(angle)),8,1);
+            float x=sample.x*.65f/80,y=sample.y*.65f/80;
+            gy=gp=0;sub_GAME_7F067FBC(x,y);
+            g_CurrentPlayer=&reference;reference_manual(x,y);g_CurrentPlayer=&player;
+            assert(fabsf(player.crosshair_angle.x-reference.crosshair_angle.x)<.001f);
+            assert(fabsf(player.crosshair_angle.y-reference.crosshair_angle.y)<.001f);
+            float rx=player.crosshair_angle.x-160,ry=player.crosshair_angle.y-120;
+            if(n>360){
+                quadrants|=1u<<((rx>0?1:0)+(ry>0?2:0));
+                if(last_y<0 && ry>=0 && rx>0)crossings++;
+                assert(rx*rx+ry*ry>2500);
+            }
+            last_y=ry;
+        }
+        assert(quadrants==15 && crossings==3);
+    }
+    puts("PASS real mapped C-stick circles match 0.9.5 stock pipeline point-for-point: four quadrants, four continuous revolutions, gyro Off/Aim/Look+Aim");
+    player=(struct player){0};player.fovy=60;player.insightaimmode=0;
+    float ax=0,ay=0;native_controls_aim_turn(&ax,&ay);
+    player.insightaimmode=1;player.vv_theta=180;native_setting_set_gyro(2);native_setting_set_gyro_sensitivity(100);
+    g_ClockTimer=1;gy=-1;gp=0;sub_GAME_7F067FBC(0,0);
+    assert(player.crosshair_angle.x>160 && player.crosshair_x_pos==0 && player.vv_theta==180);
+    assert(player.guncrossdamp==pipeline_weapon.CrosshairSpeed);
+    float held=player.crosshair_angle.x;gy=gp=0;sub_GAME_7F067FBC(0,0);
+    assert(fabsf(player.crosshair_angle.x-held)<.001f);
+    player=saved;player.insightaimmode=0;ax=ay=0;native_controls_aim_turn(&ax,&ay);
+    puts("PASS 5400 actual original/generated reticle comparisons: stock stick and weapon damping unchanged with gyro Off/Aim/Look+Aim; motion offsets move and hold without changing stick state");
+}
 int main(void) {
     struct MoveData m;
     current_player=1;actions=EOG_RELOAD;mx=33;my=44;tx=12;ty=15;
@@ -143,12 +212,12 @@ int main(void) {
     player.insightaimmode=0;m=before_touch_aim;
     player.watch_animation_state=1;tx=50;ty=50;actions=EOG_RELOAD;
     native_controls_apply(&m);assert(m.analogTurn==25 && reloads==4 && tx==0 && ty==0);
-    player.watch_animation_state=0;native_setting_set_sensitivity(50);
+    player.watch_animation_state=0;native_setting_set_sensitivity(50);native_setting_set_vertical_sensitivity(50);
     float yaw=1.f,pitch=-.5f;native_controls_adjust_look(&yaw,&pitch);assert(yaw==.5f && pitch==-.25f);
-    native_setting_set_sensitivity(200);yaw=1;pitch=-.5f;native_controls_adjust_look(&yaw,&pitch);assert(yaw==2 && pitch==-1);
+    native_setting_set_sensitivity(200);native_setting_set_vertical_sensitivity(200);yaw=1;pitch=-.5f;native_controls_adjust_look(&yaw,&pitch);assert(yaw==2 && pitch==-1);
     player.watch_animation_state=1;yaw=1;pitch=-.5f;native_controls_adjust_look(&yaw,&pitch);assert(yaw==1 && pitch==-.5f);
     player.watch_animation_state=0;locked=1;native_controls_adjust_look(&yaw,&pitch);assert(yaw==1 && pitch==-.5f);locked=0;
-    native_setting_set_sensitivity(100);native_controls_adjust_look(&yaw,&pitch);assert(yaw==1 && pitch==-.5f);
+    native_setting_set_sensitivity(100);native_setting_set_vertical_sensitivity(100);native_controls_adjust_look(&yaw,&pitch);assert(yaw==1 && pitch==-.5f);
     // Run the original aim-speed easing at both corners, high sensitivity,
     // reversal and release. Consuming a rate must never amplify stored state.
     native_setting_set_sensitivity(1000);
@@ -250,6 +319,29 @@ int main(void) {
     menu=1;fy=90;native_controls_apply_gyro();assert(player.vv_theta==80 && fy==0);menu=11;
     native_setting_set_style(9);fy=90;native_controls_apply_gyro();assert(player.vv_theta==80);
     native_setting_set_style(8);native_setting_set_flick(0);fy=90;native_controls_apply_gyro();assert(player.vv_theta==80);
+    native_setting_set_sensitivity(250);native_setting_set_vertical_sensitivity(100);
+    assert(native_controls_look_rate(.4f)==1.f && fabsf(native_controls_pitch_rate(.4f)-.4f)<.00001f);
+    native_setting_set_gyro(0);player.insightaimmode=1;float sx=.2f,sy=.2f;
+    assert(!native_controls_aim_turn(&sx,&sy));assert(fabsf(sx-.2f)<.00001f && fabsf(sy-.2f)<.00001f);
+    player.insightaimmode=0;
+    puts("PASS independent free-look axes; original aiming input remains unscaled");
+    float aim_reference[20][2];
+    for(int persistent=0;persistent<=1;persistent++){
+        native_setting_set_always_crosshair(persistent);native_setting_set_aim_lock(0);native_setting_set_gyro(2);
+        native_setting_set_sensitivity(250);native_setting_set_vertical_sensitivity(250);
+        player.insightaimmode=0;float ax=0,ay=0;native_controls_aim_turn(&ax,&ay);
+        player.insightaimmode=1;player.guncrossdamp=.01f;player.crosshair_x_pos=player.crosshair_y_pos=0;
+        player.vv_theta=180;player.vv_verta=0;
+        for(int n=0;n<20;n++){
+            gy=n<10?.1f:-.1f;gp=n<10?.05f:-.05f;ax=ay=0;
+            assert(native_controls_aim_turn(&ax,&ay));
+            if(!persistent){aim_reference[n][0]=ax;aim_reference[n][1]=ay;}
+            else assert(fabsf(ax-aim_reference[n][0])<.00001f && fabsf(ay-aim_reference[n][1])<.00001f);
+        }
+        assert(!native_setting_aim_lock());
+    }
+    check_reticle_pipeline();
+    puts("PASS Always Crosshair leaves the moving gyro reticle trajectory and Aim Lock setting unchanged");
     puts("PASS Flick Stick camera: gyro-off turns, yaw wrap, consume-once and gameplay/style/lock gating");
     puts("PASS camera gyro: independent gain, aim-only, consume-once, locks, yaw wrap and pitch clamp");
     puts("PASS attract playback: recorded MoveData, control style and look speed preserved");

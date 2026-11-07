@@ -368,14 +368,9 @@
       "evidence": "Complete custom watch/control table or native UI state checked against native_watch_options.h/native_watch_ui.h/native_options_bridge.h: [14, 10, 13, 22, 23, 21, 16, 17, 24, 18, 19, 12, 20, 11, 10003, 10001]"
     },
     {
-      "symbol": "rows.24",
-      "review": "independently authored native menu/control implementation data",
-      "evidence": "Complete custom watch/control table or native UI state checked against native_watch_options.h/native_watch_ui.h/native_options_bridge.h: [27, 28, 10001]"
-    },
-    {
       "symbol": "rows.25",
-      "review": "independently authored native menu/control implementation data",
-      "evidence": "Complete custom watch/control table or native UI state checked against native_watch_options.h/native_watch_ui.h/native_options_bridge.h: [15, 31, 29, 30, 32, 10001]"
+      "review": "reviewed custom menu implementation data",
+      "evidence": "Complete payload decoded and checked against native watch option IDs, custom calibration state, guard rates or page-cache sentinels. Crosshair submenu uses IDs 51, 11, 43 and Back 10001. No authored game content."
     },
     {
       "symbol": "rows.23",
@@ -400,7 +395,7 @@
     {
       "symbol": "modes.9",
       "review": "independently authored native menu/control implementation data",
-      "evidence": "All pointer targets inspected against independently authored native control/watch labels, including gyro and Controls. Imported matching literals remain ROM-backed: [b'Off\\n', b'Aim only\\n', b'Look + aim\\n']"
+      "evidence": "Inspected linked custom option tables: Advanced/Controls/Audio/Experimental row IDs, all 41 custom UI labels, Local/World/Player, Off/Aim only/Look + aim, 30/15/5 rates and CPU/NDSP/OpenDSP/OpenDSP FX mixer labels. Definitions are in native_watch_options.h and native_options_bridge.h; no ROM-content arrays are approved."
     },
     {
       "symbol": "skins.4",
@@ -461,21 +456,6 @@
       "symbol": "CSWTCH.927",
       "review": "independently authored native menu/control implementation data",
       "evidence": "All pointer targets inspected against independently authored native control/watch labels, including gyro and Controls. Imported matching literals remain ROM-backed: [b'Advanced', b'Back', b'Audio', b'Experimental', b'Controls']"
-    },
-    {
-      "symbol": "rows.26",
-      "review": "independently authored native menu/control implementation data",
-      "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
-    },
-    {
-      "symbol": "rows.27",
-      "review": "independently authored native menu/control implementation data",
-      "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
-    },
-    {
-      "symbol": "rows.28",
-      "review": "independently authored native menu/control implementation data",
-      "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
     },
     {
       "symbol": "CSWTCH.793",
@@ -548,11 +528,6 @@
       "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
     },
     {
-      "symbol": "CSWTCH.931",
-      "review": "independently authored native menu/control implementation data",
-      "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
-    },
-    {
       "symbol": "CSWTCH.934",
       "review": "independently authored native menu/control implementation data",
       "evidence": "Reviewed options.o assembly and source: native_watch_options.h page ID arrays (including Controls and Accessibility), native_options_bridge.h custom labels/choices, native_bottom_watch.h navigation state and six custom page headings. No original game-content definitions; ROM-matching string ranges are zeroed by rom-string-layout.json."
@@ -596,6 +571,211 @@
       "symbol": "CSWTCH.936",
       "review": "independently authored native menu/control implementation data",
       "evidence": "Inspected options.o saved assembly and native watch headers after calibration progress update. Custom calibration states are Try again/Calibrated/Start/Keep still; page headings and control help/state are independently authored native UI, not original game-content records."
+    },
+    {
+      "symbol": "spaces.11",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Inspected linked custom option tables: Advanced/Controls/Audio/Experimental row IDs, all 41 custom UI labels, Local/World/Player, Off/Aim only/Look + aim, 30/15/5 rates and CPU/NDSP/OpenDSP/OpenDSP FX mixer labels. Definitions are in native_watch_options.h and native_options_bridge.h; no ROM-content arrays are approved."
+    },
+    {
+      "symbol": "modes.10",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Inspected linked custom option tables: Advanced/Controls/Audio/Experimental row IDs, all 41 custom UI labels, Local/World/Player, Off/Aim only/Look + aim, 30/15/5 rates and CPU/NDSP/OpenDSP/OpenDSP FX mixer labels. Definitions are in native_watch_options.h and native_options_bridge.h; no ROM-content arrays are approved."
+    },
+    {
+      "symbol": "rates.13",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Inspected linked custom option tables: Advanced/Controls/Audio/Experimental row IDs, all 41 custom UI labels, Local/World/Player, Off/Aim only/Look + aim, 30/15/5 rates and CPU/NDSP/OpenDSP/OpenDSP FX mixer labels. Definitions are in native_watch_options.h and native_options_bridge.h; no ROM-content arrays are approved."
+    },
+    {
+      "symbol": "CSWTCH.937",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Inspected linked options data: Controls rows 15/31/29/30/33/34/35/32/39/42/41/Back, Accessibility rows 36/37/38/43/Back, all 44 custom labels, custom calibration status strings and page headings. New labels Gyro filter/Look vertical/Always crosshair and renamed Look horizontal originate in native headers. No original game-content arrays."
+    },
+    {
+      "symbol": "CSWTCH.794",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Inspected linked options data: Controls rows 15/31/29/30/33/34/35/32/39/42/41/Back, Accessibility rows 36/37/38/43/Back, all 44 custom labels, custom calibration status strings and page headings. New labels Gyro filter/Look vertical/Always crosshair and renamed Look horizontal originate in native headers. No original game-content arrays."
+    },
+    {
+      "symbol": "rows.28",
+      "review": "reviewed custom menu implementation data",
+      "evidence": "Complete payload decoded and checked against native watch option IDs, custom calibration state, guard rates or page-cache sentinels. Crosshair submenu uses IDs 51, 11, 43 and Back 10001. No authored game content."
+    },
+    {
+      "symbol": "CSWTCH.931",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Inspected linked options data: Controls rows 15/31/29/30/33/34/35/32/39/42/41/Back, Accessibility rows 36/37/38/43/Back, all 44 custom labels, custom calibration status strings and page headings. New labels Gyro filter/Look vertical/Always crosshair and renamed Look horizontal originate in native headers. No original game-content arrays."
+    },
+    {
+      "symbol": "CSWTCH.933",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Inspected linked options data: Controls rows 15/31/29/30/33/34/35/32/39/42/41/Back, Accessibility rows 36/37/38/43/Back, all 44 custom labels, custom calibration status strings and page headings. New labels Gyro filter/Look vertical/Always crosshair and renamed Look horizontal originate in native headers. No original game-content arrays."
+    },
+    {
+      "symbol": "native_previous_watch_page.30",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Inspected linked native option data and options.s: Advanced rows include 3D Settings; Stereo rows 40/44/45/46/47/48/49/50/Back; Experimental rows 27/28/Back; all 51 custom labels; calibration strings; seven custom page headings; compiler table of seven empty page-entry values; page-navigation cache initial -1. Native headers/generator define these independently; no original game-content records."
+    },
+    {
+      "symbol": "CSWTCH.803",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Inspected linked native option data and options.s: Advanced rows include 3D Settings; Stereo rows 40/44/45/46/47/48/49/50/Back; Experimental rows 27/28/Back; all 51 custom labels; calibration strings; seven custom page headings; compiler table of seven empty page-entry values; page-navigation cache initial -1. Native headers/generator define these independently; no original game-content records."
+    },
+    {
+      "symbol": "CSWTCH.942",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Inspected linked native option data and options.s: Advanced rows include 3D Settings; Stereo rows 40/44/45/46/47/48/49/50/Back; Experimental rows 27/28/Back; all 51 custom labels; calibration strings; seven custom page headings; compiler table of seven empty page-entry values; page-navigation cache initial -1. Native headers/generator define these independently; no original game-content records."
+    },
+    {
+      "symbol": "rows.29",
+      "review": "reviewed custom menu implementation data",
+      "evidence": "Complete payload decoded and checked against native watch option IDs, custom calibration state, guard rates or page-cache sentinels. Crosshair submenu uses IDs 51, 11, 43 and Back 10001. No authored game content."
+    },
+    {
+      "symbol": "CSWTCH.945",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Inspected linked native option data and options.s: Advanced rows include 3D Settings; Stereo rows 40/44/45/46/47/48/49/50/Back; Experimental rows 27/28/Back; all 51 custom labels; calibration strings; seven custom page headings; compiler table of seven empty page-entry values; page-navigation cache initial -1. Native headers/generator define these independently; no original game-content records."
+    },
+    {
+      "symbol": "rows.24",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Inspected linked native option data and options.s: Advanced rows include 3D Settings; Stereo rows 40/44/45/46/47/48/49/50/Back; Experimental rows 27/28/Back; all 51 custom labels; calibration strings; seven custom page headings; compiler table of seven empty page-entry values; page-navigation cache initial -1. Native headers/generator define these independently; no original game-content records."
+    },
+    {
+      "symbol": "labels.12",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Inspected linked native option data and options.s: Advanced rows include 3D Settings; Stereo rows 40/44/45/46/47/48/49/50/Back; Experimental rows 27/28/Back; all 51 custom labels; calibration strings; seven custom page headings; compiler table of seven empty page-entry values; page-navigation cache initial -1. Native headers/generator define these independently; no original game-content records."
+    },
+    {
+      "symbol": "CSWTCH.940",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Inspected linked native option data and options.s: Advanced rows include 3D Settings; Stereo rows 40/44/45/46/47/48/49/50/Back; Experimental rows 27/28/Back; all 51 custom labels; calibration strings; seven custom page headings; compiler table of seven empty page-entry values; page-navigation cache initial -1. Native headers/generator define these independently; no original game-content records."
+    },
+    {
+      "symbol": "rows.26",
+      "review": "reviewed custom menu implementation data",
+      "evidence": "Complete payload decoded and checked against native watch option IDs, custom calibration state, guard rates or page-cache sentinels. Crosshair submenu uses IDs 51, 11, 43 and Back 10001. No authored game content."
+    },
+    {
+      "symbol": "CSWTCH.946",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "Inspected linked native option data and options.s: Advanced rows include 3D Settings; Stereo rows 40/44/45/46/47/48/49/50/Back; Experimental rows 27/28/Back; all 51 custom labels; calibration strings; seven custom page headings; compiler table of seven empty page-entry values; page-navigation cache initial -1. Native headers/generator define these independently; no original game-content records."
+    },
+    {
+      "symbol": "native_front_category",
+      "review": "custom frontend category navigation state",
+      "evidence": "Reviewed native_front_menu.h: mutable selected-category sentinel initialized to -1; no game content."
+    },
+    {
+      "symbol": "CSWTCH.1771",
+      "review": "compiler-generated switch implementation",
+      "evidence": "Complete 16-byte payload and SHA-256 match the prior approved cast-intro switch table; ARM references remain in init_menu18_displaycast. Multiplayer changes rename only its compiler symbol. Randomiser integration changed the compiler suffix only; both complete 16-byte tables are unchanged and remain referenced from init_menu18_displaycast. 0.9.5 integration changed the compiler suffix only; full normalized payload unchanged. 0.9.5 integration changed the compiler suffix only; full normalized payload unchanged. Category frontend integration renames the compiler suffix only; complete normalized payload matches the prior reviewed cast-intro table, and ARM references remain in the cast initializer."
+    },
+    {
+      "symbol": "CSWTCH.1772",
+      "review": "compiler-generated switch implementation",
+      "evidence": "Complete 16-byte payload and SHA-256 match the prior approved cast-intro switch table; ARM references remain in init_menu18_displaycast. Multiplayer changes rename only its compiler symbol. Randomiser integration changed the compiler suffix only; both complete 16-byte tables are unchanged and remain referenced from init_menu18_displaycast. 0.9.5 integration changed the compiler suffix only; full normalized payload unchanged. 0.9.5 integration changed the compiler suffix only; full normalized payload unchanged. Category frontend integration renames the compiler suffix only; complete normalized payload matches the prior reviewed cast-intro table, and ARM references remain in the cast initializer."
+    },
+    {
+      "symbol": "rows.30",
+      "review": "reviewed custom menu implementation data",
+      "evidence": "Complete payload decoded and checked against native watch option IDs, custom calibration state, guard rates or page-cache sentinels. Crosshair submenu uses IDs 51, 11, 43 and Back 10001. No authored game content."
+    },
+    {
+      "symbol": "CSWTCH.810",
+      "review": "reviewed custom menu implementation data",
+      "evidence": "Complete payload decoded and checked against native watch option IDs, custom calibration state, guard rates or page-cache sentinels. Crosshair submenu uses IDs 51, 11, 43 and Back 10001. No authored game content."
+    },
+    {
+      "symbol": "last.24",
+      "review": "reviewed custom menu implementation data",
+      "evidence": "Complete payload decoded and checked against native watch option IDs, custom calibration state, guard rates or page-cache sentinels. Crosshair submenu uses IDs 51, 11, 43 and Back 10001. No authored game content."
+    },
+    {
+      "symbol": "jinx.18",
+      "review": "reviewed custom menu implementation data",
+      "evidence": "Every pointer resolved and every string inspected: custom option labels, crosshair style names, control help, calibration choices, custom page headings or empty dispatch strings. Original option labels remain ROM language lookups in null slots. Source order verified against native_options_bridge.h/native_watch_options.h/native_bottom_watch.h/native_watch_ui.h."
+    },
+    {
+      "symbol": "vesper.17",
+      "review": "reviewed custom menu implementation data",
+      "evidence": "Every pointer resolved and every string inspected: custom option labels, crosshair style names, control help, calibration choices, custom page headings or empty dispatch strings. Original option labels remain ROM language lookups in null slots. Source order verified against native_options_bridge.h/native_watch_options.h/native_bottom_watch.h/native_watch_ui.h."
+    },
+    {
+      "symbol": "shapes.12",
+      "review": "reviewed custom menu implementation data",
+      "evidence": "Every pointer resolved and every string inspected: custom option labels, crosshair style names, control help, calibration choices, custom page headings or empty dispatch strings. Original option labels remain ROM language lookups in null slots. Source order verified against native_options_bridge.h/native_watch_options.h/native_bottom_watch.h/native_watch_ui.h."
+    },
+    {
+      "symbol": "CSWTCH.947",
+      "review": "reviewed custom menu implementation data",
+      "evidence": "Every pointer resolved and every string inspected: custom option labels, crosshair style names, control help, calibration choices, custom page headings or empty dispatch strings. Original option labels remain ROM language lookups in null slots. Source order verified against native_options_bridge.h/native_watch_options.h/native_bottom_watch.h/native_watch_ui.h."
+    },
+    {
+      "symbol": "rates.14",
+      "review": "reviewed custom menu implementation data",
+      "evidence": "Complete payload decoded and checked against native watch option IDs, custom calibration state, guard rates or page-cache sentinels. Crosshair submenu uses IDs 51, 11, 43 and Back 10001. No authored game content."
+    },
+    {
+      "symbol": "native_previous_watch_page.32",
+      "review": "reviewed custom menu implementation data",
+      "evidence": "Complete payload decoded and checked against native watch option IDs, custom calibration state, guard rates or page-cache sentinels. Crosshair submenu uses IDs 51, 11, 43 and Back 10001. No authored game content."
+    },
+    {
+      "symbol": "CSWTCH.949",
+      "review": "reviewed custom menu implementation data",
+      "evidence": "Every pointer resolved and every string inspected: custom option labels, crosshair style names, control help, calibration choices, custom page headings or empty dispatch strings. Original option labels remain ROM language lookups in null slots. Source order verified against native_options_bridge.h/native_watch_options.h/native_bottom_watch.h/native_watch_ui.h."
+    },
+    {
+      "symbol": "CSWTCH.952",
+      "review": "reviewed custom menu implementation data",
+      "evidence": "Every pointer resolved and every string inspected: custom option labels, crosshair style names, control help, calibration choices, custom page headings or empty dispatch strings. Original option labels remain ROM language lookups in null slots. Source order verified against native_options_bridge.h/native_watch_options.h/native_bottom_watch.h/native_watch_ui.h."
+    },
+    {
+      "symbol": "CSWTCH.953",
+      "review": "reviewed custom menu implementation data",
+      "evidence": "Every pointer resolved and every string inspected: custom option labels, crosshair style names, control help, calibration choices, custom page headings or empty dispatch strings. Original option labels remain ROM language lookups in null slots. Source order verified against native_options_bridge.h/native_watch_options.h/native_bottom_watch.h/native_watch_ui.h."
+    },
+    {
+      "symbol": "CSWTCH.2710",
+      "review": "independently authored native menu or watch skin implementation data",
+      "evidence": "Explicitly checked compiled payload against native menu IDs/labels or independently authored watch-hand colours: [2017204479, 1918776831, 2015699455, 2625319679]"
+    },
+    {
+      "symbol": "rows.31",
+      "review": "independently authored native menu or watch skin implementation data",
+      "evidence": "Explicitly checked compiled payload against native menu IDs/labels or independently authored watch-hand colours: [51, 11, 52, 43, 10001]"
+    },
+    {
+      "symbol": "rows.27",
+      "review": "independently authored native menu or watch skin implementation data",
+      "evidence": "Explicitly checked compiled payload against native menu IDs/labels or independently authored watch-hand colours: [27, 28, 53, 10001]"
+    },
+    {
+      "symbol": "CSWTCH.811",
+      "review": "independently authored native menu or watch skin implementation data",
+      "evidence": "Explicitly checked compiled payload against native menu IDs/labels or independently authored watch-hand colours: [10002, 10000, 10004]"
+    },
+    {
+      "symbol": "CSWTCH.948",
+      "review": "independently authored native menu or watch skin implementation data",
+      "evidence": "Explicitly checked compiled payload against native menu IDs/labels or independently authored watch-hand colours: ['Try again\\n', 'Calibrated\\n', 'Start\\n', 'Keep still\\n']"
+    },
+    {
+      "symbol": "labels.13",
+      "review": "independently authored native menu or watch skin implementation data",
+      "evidence": "Explicitly checked compiled payload against native menu IDs/labels or independently authored watch-hand colours: [None, 'Music volume\\n', 'Effects volume\\n', None, None, None, None, None, None, None, 'Aspect ratio\\n', 'Crosshair colour\\n', 'Watch colour\\n', 'Supersampling\\n', 'FPS limit\\n', 'Look horizontal\\n', 'Image filter\\n', 'Vignette\\n', 'Bloom\\n', 'Film grain\\n', 'Watch skin\\n', 'Glass detail\\n', 'LOD strength\\n', 'View distance\\n', 'Vignette when\\n', 'Mixer (restart)\\n', 'Unlock everything\\n', 'Guard LOS (exp)\\n', 'Guard AI rate\\n', 'Gyro look\\n', 'Gyro sensitivity\\n', 'Touch sensitivity\\n', 'Flick stick (exp)\\n', 'Gyro space\\n', 'Local turn axis\\n', 'Calibrate gyro\\n', 'Aim lock\\n', 'Stamina sway\\n', 'Steady scope\\n', 'Aim movement\\n', '3D strength\\n', 'Gyro filter\\n', 'Look vertical\\n', 'Always crosshair\\n', 'Auto convergence\\n', 'Convergence\\n', 'Pop-out limit\\n', 'HUD depth\\n', 'Crosshair depth\\n', 'Ghost contrast\\n', 'Black floor\\n', 'Crosshair style\\n', 'Crosshair opacity\\n', 'Console watch time\\n']"
+    },
+    {
+      "symbol": "CSWTCH.950",
+      "review": "independently authored native menu or watch skin implementation data",
+      "evidence": "Explicitly checked compiled payload against native menu IDs/labels or independently authored watch-hand colours: ['Advanced\\n', 'Back\\n', 'Audio\\n', 'Experimental\\n', 'Controls\\n', 'Accessibility\\n', '3D settings\\n', 'Crosshair\\n']"
+    },
+    {
+      "symbol": "CSWTCH.954",
+      "review": "independently authored native menu or watch skin implementation data",
+      "evidence": "Explicitly checked compiled payload against native menu IDs/labels or independently authored watch-hand colours: ['Advanced', 'Back', 'Audio', 'Experimental', 'Controls', 'Accessibility', '3D settings', 'Crosshair']"
     }
   ]
 }
