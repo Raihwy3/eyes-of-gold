@@ -49,7 +49,7 @@ def main():
             if scope is None:continue
             assert unit in sources,'Code state lacks a source unit'
             source=sources[unit];text=source.read_text()
-            if unit=='options.c':text=build.source_path(source.relative_to(build.UP)).read_text()+'\n'.join(p.read_text() for p in sorted((build.TARGET/'include').glob('native_*.h')))
+            if unit in ('options.c','front.c'):text=build.source_path(source.relative_to(build.UP)).read_text()+'\n'.join(p.read_text() for p in sorted((build.TARGET/'include').glob('native_*.h')))
             assert name.startswith('CSWTCH.') or name.split('.')[0] in text,(name,'source definition missing')
             record=dict(unit=unit,symbol=name,bytes=row['bytes'],sha256=hashlib.sha256(get(row['address'],row['bytes'])).hexdigest(),review=scope['review'],evidence=scope['evidence'],source_sha256={**pins,str(source.relative_to(build.ROOT)):hashlib.sha256(source.read_bytes()).hexdigest()})
             approved[(unit,name)]=record;new.append(name)

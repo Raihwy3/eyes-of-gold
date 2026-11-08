@@ -85,7 +85,7 @@ void native_controls_apply(struct MoveData *m) {
     /* Keep a press captured between game ticks, and consume it once.
      * The original btap consumer handles doors/panels and tank entry/exit. */
     if(modern || (actions&EOG_INTERACT))m->btap=(actions&EOG_INTERACT)!=0;
-    if(g_CurrentPlayer->insightaimmode && !native_setting_aim_lock()){
+    if(g_CurrentPlayer->insightaimmode && !native_setting_aim_lock() && g_PlayerIsInTank!=1){
         // Reticle deltas are consumed once by the original gun aiming hook.
         // Keep the target after the finger stops; only edge overflow pans.
         if(touch_x || touch_y){
@@ -115,12 +115,21 @@ void native_controls_apply(struct MoveData *m) {
         m->aimTurnLeftSpeed=m->aimTurnRightSpeed=m->speedVertaUp=m->speedVertaDown=0;
     }
     if(modern) {
-    m->analogStrafe=safe_axis(x);m->analogWalk=safe_axis(y);
-    m->rLeanLeft=m->rLeanRight=0;
-    m->digitalStepLeft=m->digitalStepRight=m->digitalStepForward=m->digitalStepBack=0;
-    /* These poorly named original flags also enable analog walking/strafe.
-     * disableLookAhead separately suppresses automatic camera levelling. */
-    m->disableLookAhead=1;m->canLookAhead=1;m->canTurnTank=1;
+        if(g_PlayerIsInTank==1) {
+            int look_turn=m->analogTurn;
+            m->analogTurn=safe_axis(x);
+            m->analogStrafe=look_turn;
+            m->analogWalk=safe_axis(y);
+            m->canNaturalTurn=1;
+        } else {
+            m->analogStrafe=safe_axis(x);
+            m->analogWalk=safe_axis(y);
+        }
+        m->rLeanLeft=m->rLeanRight=0;
+        m->digitalStepLeft=m->digitalStepRight=m->digitalStepForward=m->digitalStepBack=0;
+        /* These poorly named original flags also enable analog walking/strafe.
+         * disableLookAhead separately suppresses automatic camera levelling. */
+        m->disableLookAhead=1;m->canLookAhead=1;m->canTurnTank=1;
     }
     /* Do not let a camera stick also trigger the original aim+crouch shortcut. */
     if(actions&EOG_CROUCH) {
@@ -180,7 +189,8 @@ int native_controls_aim_turn(float *x,float *y){
  if(get_cur_playernum()!=0)return 0;
  if( (!native_setting_gyro() && !native_setting_aim_lock() && !touch_aim_active) ||
     !native_game_input_gameplay() || !g_CurrentPlayer->insightaimmode ||
-    lvlGetControlsLockedFlag() || !disablePlayerActionsWhenPausedOrInMpMenu()) {gyro_aim_active=touch_aim_active=0;touch_aim_dx=touch_aim_dy=0;return 0;}
+    lvlGetControlsLockedFlag() || !disablePlayerActionsWhenPausedOrInMpMenu() ||
+    g_PlayerIsInTank==1) {gyro_aim_active=touch_aim_active=0;touch_aim_dx=touch_aim_dy=0;return 0;}
  float yaw=0,pitch=0;if(native_input_take_gyro)native_input_take_gyro(&yaw,&pitch);
  if(!__builtin_isfinite(yaw) || !__builtin_isfinite(pitch))yaw=pitch=0;
  float gain=native_setting_gyro_sensitivity()*.01f;
@@ -236,6 +246,20 @@ void native_controls_apply_gyro(void){
  if(native_input_take_gyro)native_input_take_gyro(&yaw,&pitch);
  if(native_input_take_flick)native_input_take_flick(&flick);
  if(!native_game_input_gameplay() || lvlGetControlsLockedFlag() || !disablePlayerActionsWhenPausedOrInMpMenu())return;
+ if(g_PlayerIsInTank==1){
+   if(!g_CurrentPlayer->insightaimmode)return;
+   int mode=native_setting_gyro();
+   if(!mode || !__builtin_isfinite(yaw) || !__builtin_isfinite(pitch))return;
+   float gain=native_setting_gyro_sensitivity()*.01f;
+   float drad=-yaw*gain*(3.141592653589793f/180.f);
+   g_TankTurretAngle+=drad;
+   while(g_TankTurretAngle>=6.28318530718f)g_TankTurretAngle-=6.28318530718f;
+   while(g_TankTurretAngle<0)g_TankTurretAngle+=6.28318530718f;
+   g_CurrentPlayer->vv_verta-=pitch*gain;
+   if(g_CurrentPlayer->vv_verta>25.f)g_CurrentPlayer->vv_verta=25.f;
+   if(g_CurrentPlayer->vv_verta< -20.f)g_CurrentPlayer->vv_verta=-20.f;
+   return;
+ }
  if(native_setting_flick() && native_setting_style()==8 && __builtin_isfinite(flick)) {
    if(flick>360)flick=360;else if(flick< -360)flick=-360;
    g_CurrentPlayer->vv_theta+=flick;

@@ -22,6 +22,7 @@ s32 get_cur_playernum(void){return current_player;}
 static struct player player;
 struct player *g_CurrentPlayer=&player;
 s32 g_PlayerIsInTank;
+f32 g_TankTurretAngle, g_TankTurretOrientationAngleRad, g_TankTurretOrientationAngleDeg;
 struct player *g_playerPointers[4]={&player,NULL,NULL,NULL};
 enum CAMERAMODE g_CameraMode=CAMERAMODE_FP;
 static int menu=11,locked,allowed=1,mx,my,reloads;
@@ -309,6 +310,21 @@ int main(void) {
         native_setting_set_aim_movement(1);g_PlayerIsInTank=1;memset(&m,0,sizeof m);native_controls_apply(&m);assert(m.analogWalk==65);g_PlayerIsInTank=0;
     }
     native_setting_set_aim_movement(0);player.insightaimmode=0;mx=my=0;
+    for(int style=8;style<=9;style++){
+        native_setting_set_style(style);g_PlayerIsInTank=1;mx=75;my=-70;memset(&m,0,sizeof m);
+        m.analogTurn=40;m.analogPitch=-30;native_controls_apply(&m);
+        assert(m.analogTurn==70 && m.analogWalk==-65 && m.analogStrafe==40 && m.analogPitch==-30);
+        assert(m.canNaturalTurn && m.canTurnTank && m.canLookAhead);
+        player.vv_theta=100;gy=10;gp=5;native_controls_apply_gyro();assert(player.vv_theta==100);
+        float tax=0,tay=0;player.insightaimmode=1;native_setting_set_gyro(1);
+        assert(!native_controls_aim_turn(&tax,&tay));
+        g_TankTurretAngle=1.0f;player.vv_verta=0;gy=5;gp=2;
+        native_controls_apply_gyro();
+        assert(g_TankTurretAngle!=1.0f && player.vv_verta!=0);
+        player.insightaimmode=0;native_setting_set_gyro(0);
+        g_PlayerIsInTank=0;mx=my=0;
+    }
+    puts("PASS tank controls: Circle Pad drives and steers hull, C-stick turns and pitches turret, gyro driving bypass and aim mode gyro support");
     puts("PASS classic aim movement: Vesper/Jinx original lean targets, no walking/strafe, directional crouch/stand, neutral stance, scoped zoom, release/free movement and tank bypass");
     puts("PASS gyro reticle: centred camera, retained target, original aim-path handoff, bounded edge overflow and no idle edge drift");
     native_setting_set_gyro(0);
