@@ -199,6 +199,17 @@ static PicaOrderedDraw pending_draw;
 static unsigned gpu_draws,merged_draws;
 static void flush_draw() {
   if(!pending_draw.count)return;
+#ifdef __3DS__
+  u32 *cmd_buf = nullptr;
+  u32 cmd_size = 0, cmd_offset = 0;
+  GPUCMD_GetBuffer(&cmd_buf, &cmd_size, &cmd_offset);
+  if(cmd_size && cmd_offset + 2048 >= cmd_size) {
+    pending_draw.clear();
+    pending_indexed = false;
+    pending_elements = nullptr;
+    return;
+  }
+#endif
   const bool flat_overlay=watch_body; // physical watch and screen-space gauges
   const bool raised=(frontend_ui && !gpu_world) || watch_scope || ui_rect_scope || reticle_scope;
   const unsigned left_eye=flat_overlay?0:sky_scope?9:reticle_scope?7:viewmodel_scope?3:raised?1:5;
@@ -1175,6 +1186,15 @@ static void update_sharp_targets(int samples,int strength) {
  * The next normal FrameBegin completes it; no extra wait or GPU readback fence. */
 static void queue_stereo_depth(){
  if((!native_setting_stereo_auto() && native_setting_stereo_crosshair_hud()) || depth_copied || !stereo_active || frontend_ui || !depth_frame.usable || !depth_copy)return;
+#ifdef __3DS__
+ u32 *cmd_buf = nullptr;
+ u32 cmd_size = 0, cmd_offset = 0;
+ GPUCMD_GetBuffer(&cmd_buf, &cmd_size, &cmd_offset);
+ if(cmd_size && cmd_offset + 1024 >= cmd_size) {
+  depth_frame.usable = false;
+  return;
+ }
+#endif
  unsigned bytes=depth_frame.width*depth_frame.height*4;
  if(!bytes || bytes>DEPTH_COPY_CAPACITY){depth_frame.usable=false;return;}
  mesh_cache.flush();retained_meshes.flush();
@@ -1238,7 +1258,18 @@ static void update_stereo_depth(float seconds){
 static void init() {
 
   top_output_flags=native_display_prepare();
-  if (!C3D_Init(0x80000))sysFatalError("Native PICA: initialization failed");
+#ifdef __3DS__
+  u32 free_linear = linearSpaceFree();
+  size_t cmd_size = 0x200000;
+  if(free_linear < 0x800000) {
+    cmd_size = free_linear > 0x400000 ? 0x180000 : 0x100000;
+  }
+#else
+  size_t cmd_size = 0x200000;
+#endif
+  while(cmd_size >= 0x80000 && !C3D_Init(cmd_size)) cmd_size -= 0x40000;
+  if(cmd_size < 0x80000)sysFatalError("Native PICA: initialization failed");
+  sysLogPrintf(2,"PICA command buffer: %u KB (limit %u words)",(unsigned)(cmd_size/1024),(unsigned)(cmd_size/4));
   if(!configure_top_samples(native_setting_aa()?2:1)) {
     if(!native_setting_aa() || !configure_top_samples(1))sysFatalError("Native PICA: render target allocation failed");
     native_setting_set_aa(0);sysLogPrintf(2,"AA disabled: insufficient framebuffer memory");
