@@ -321,8 +321,10 @@ int main(void) {
         g_TankTurretAngle=1.0f;player.vv_verta=0;gy=5;gp=2;
         native_controls_apply_gyro();
         assert(g_TankTurretAngle!=1.0f && player.vv_verta!=0);
+        assert((native_game_render_state()&8u)==8u);
         player.insightaimmode=0;native_setting_set_gyro(0);
         g_PlayerIsInTank=0;mx=my=0;
+        assert((native_game_render_state()&8u)==0u);
     }
     puts("PASS tank controls: Circle Pad drives and steers hull, C-stick turns and pitches turret, gyro driving bypass and aim mode gyro support");
     puts("PASS classic aim movement: Vesper/Jinx original lean targets, no walking/strafe, directional crouch/stand, neutral stance, scoped zoom, release/free movement and tank bypass");

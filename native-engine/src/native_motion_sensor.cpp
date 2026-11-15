@@ -112,13 +112,10 @@ extern "C" void native_motion_sample(uint64_t now,float gx,float gy,float gz,flo
    xg/=length;yg/=length;zg/=length;
    if(space==1)GamepadMotion::CalculateWorldSpaceGyro(p,y,p,y,z,xg,yg,zg);
    else GamepadMotion::CalculatePlayerSpaceGyro(p,y,p,y,z,xg,yg,zg,1.f);
-   // Convert the helper's gravity-relative turn sign to the 3DS camera
-   // convention. Pitch and the exclusive local-axis path keep their signs.
-   y=-y;
   }
  }else if(axis){
-  // Tilting the left edge toward the player must turn left.
-  y=-z;
+  // Local roll maps CCW steering (left edge down, +Z) to turn left.
+  y=z;
  }
  // Degrees in, degrees out: both axes have the same gain. No axis blending
  // in local space. Bound sensor spikes without changing normal sensitivity.
@@ -132,5 +129,5 @@ extern "C" void native_motion_sample(uint64_t now,float gx,float gy,float gz,flo
   filtered_yaw+=alpha*(y-filtered_yaw);filtered_pitch+=alpha*(p-filtered_pitch);
   y=filtered_yaw;p=filtered_pitch;last_space=space;last_axis=axis;
  }else clear_output_filter();
- *yaw=y*dt;*pitch=p*dt;
+ *yaw=y*dt;*pitch=-p*dt;
 }

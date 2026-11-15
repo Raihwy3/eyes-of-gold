@@ -54,15 +54,15 @@ void inputUpdate(void) {
     unsigned render_state=native_game_render_state?native_game_render_state():(gameplay?1u:0u);
     int aiming=(render_state&4) || (held&KEY_L);
     uint64_t now=(uint64_t)(svcGetSystemTick()*(1000000.0/SYSCLOCK_ARM11));
-    /* libctru sensor axes -> helper axes: X across the handheld, Y up
-     * through its screen, Z toward its bottom edge (a right-handed basis).
-     * Accelerometer raw units are 512 per g. */
+    /* libctru sensor axes -> helper axes: X across the handheld (Look UP +),
+     * Y up through its screen (Turn LEFT +), Z toward its bottom edge
+     * (Roll LEFT +) in a right-handed basis; accel is proper (+Sky) at 512/g. */
     float yaw=0,pitch=0;
     native_motion_set_filter(native_setting_gyro_filter());
-    native_motion_sample(now,gyro_enabled?rate.x/gyro_coefficient:0,
+    native_motion_sample(now,gyro_enabled?-rate.x/gyro_coefficient:0,
         gyro_enabled?rate.z/gyro_coefficient:0,gyro_enabled?-rate.y/gyro_coefficient:0,
         gyro_enabled && accel_enabled?accel.x/512.f:0,
-        gyro_enabled && accel_enabled?accel.z/512.f:0,
+        gyro_enabled && accel_enabled?-accel.z/512.f:0,
         gyro_enabled && accel_enabled?-accel.y/512.f:0,
         gyro_enabled && gameplay && (render_state&1) && (mode==2 || (mode==1 && aiming)),
         native_setting_gyro_space(),native_setting_gyro_axis(),&yaw,&pitch);
@@ -75,7 +75,7 @@ void inputUpdate(void) {
         menu_buttons=held;
     }
     if(native_bottom_seed_active && native_bottom_seed_active()){circle.dx=circle.dy=cstick.dx=cstick.dy=0;}
-    int use_flick=native_setting_flick() && native_setting_style()==8 && gameplay && (render_state&1) && !aiming;
+    int use_flick=native_setting_flick() && native_setting_style()==8 && gameplay && (render_state&1) && !aiming && !(render_state&8u);
     native_flick_sample(&flick,now,cstick.dx,cstick.dy,use_flick);
     pad=native_pad_map(held,circle.dx,circle.dy,cstick.dx,cstick.dy,native_setting_style(),gameplay);
     if(use_flick)pad.x=pad.y=0;

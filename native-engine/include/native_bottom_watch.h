@@ -1,5 +1,6 @@
 #include "native_bottom_engine.h"
 #include "native_input.h"
+#include "native_mp_bot.h"
 #include "game/bondinv.h"
 extern u8 *get_text_for_objective(int);
 extern s32 get_difficulty_for_objective(s32);
@@ -22,7 +23,7 @@ void native_bottom_game_tick(void) {
     v.kind=EOG_BOTTOM_GAME;v.context=300;v.theme=native_setting_watch();
     if(getPlayerCount()>1) {
         native_bottom_string(v.title,sizeof v.title,"LOCAL MULTIPLAYER");
-        native_bottom_string(v.note,sizeof v.note,"Player 1 controlled. Player 2 idle.");
+        native_bottom_string(v.note,sizeof v.note,native_mp_bot_status_note());
         native_bottom_copy_fonts();native_bottom_publish(&v);return;
     }
     native_bottom_string(v.title,sizeof v.title,"MISSION OBJECTIVES");native_bottom_copy_fonts();

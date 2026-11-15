@@ -117,6 +117,10 @@ int native_setting_watch_clock(void);
 void native_setting_set_watch_clock(int value);
 int native_watch_clock_time(int fallback);
 
+/* Multiplayer AI bots (1 = AI controls players 2..N, 0 = Off). */
+int native_setting_mp_bots(void);
+void native_setting_set_mp_bots(int value);
+
 #ifdef __cplusplus
 }
 #endif

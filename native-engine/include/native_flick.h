@@ -12,7 +12,7 @@
  * The pressure nub needs release hysteresis rather than a second, stronger
  * rotation threshold. A brief neutral dropout must not start another flick. */
 struct NativeFlick {
- uint64_t last,neutral_since,started_flick;float angle,remaining,pending;
+ uint64_t last,neutral_since,started_flick;float angle,remaining,pending,snap_bias;
  float delta_flick,flick_percent_done,samples[64];int front_sample,sample_count;
  unsigned remaining_us;int active,armed,tracking,neutral_samples;
 };
@@ -53,11 +53,11 @@ static inline void native_flick_sample(struct NativeFlick *f,uint64_t now,int x,
    else {
      if(!f->neutral_samples)f->neutral_since=now;
      f->neutral_samples++;
-     if(f->neutral_samples>=2 && now-f->neutral_since>=20000){f->active=0;f->armed=1;}
+     if(f->neutral_samples>=2 && now-f->neutral_since>=20000){f->active=0;f->armed=1;f->snap_bias=0;}
    }
  }else {
    f->neutral_samples=0;
-   if(!f->active && f->armed && radius>=48*48){
+   if(!f->active && f->armed && radius>=40*40){
      float a=atan2f((float)x,(float)y)*57.2957795131f;
      f->angle=a;
      /* Finish any outstanding turn rather than delaying it a second time. */
@@ -69,15 +69,22 @@ static inline void native_flick_sample(struct NativeFlick *f,uint64_t now,int x,
      f->sample_count=dt?(int)(64000/dt):4;
      if(f->sample_count<1)f->sample_count=1;else if(f->sample_count>64)f->sample_count=64;
      /* Nub pressure commonly approaches a cardinal direction diagonally.
-      * Snap only the initial flick; keep continuous edge rotation unsnapped. */
+      * Snap only the initial flick and absorb settling into that cardinal. */
      float cardinal=roundf(a/90.f)*90.f;
      float target=fabsf(a-cardinal)<=12.f?cardinal:a;
+     f->snap_bias=target-a;
      f->started_flick=now;f->delta_flick=f->remaining=target;
      f->flick_percent_done=0;f->remaining_us=100000;
      f->active=f->tracking=1;f->armed=0;
-   }else if(f->active && radius>=48*48){
+   }else if(f->active && radius>=34*34){
      float a=atan2f((float)x,(float)y)*57.2957795131f;
-     if(f->tracking)rotation=native_flick_wrap(a-f->angle);
+     if(f->tracking){
+       rotation=native_flick_wrap(a-f->angle);
+       if(f->snap_bias*rotation>0){
+         if(fabsf(rotation)<=fabsf(f->snap_bias)){f->snap_bias-=rotation;rotation=0;}
+         else {rotation-=f->snap_bias;f->snap_bias=0;}
+       }else if(rotation!=0)f->snap_bias=0;
+     }
      f->angle=a;f->tracking=1;
    }else f->tracking=0;
  }

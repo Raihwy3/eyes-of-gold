@@ -9,13 +9,15 @@
 #include <assert.h>
 #include <stdio.h>
 angularRate test_gyro_rate;
-static unsigned held;
+accelVector test_accel_vector={0,0,-512};
+static unsigned held,render_state_extra;
 static int gameplay=1,rx,ry;
 void hidScanInput(void){}
 u32 hidKeysHeld(void){return held;}
 void hidCircleRead(circlePosition *p){p->dx=50;p->dy=-50;}
 void hidCstickRead(circlePosition *p){p->dx=rx;p->dy=ry;}
 int native_game_input_gameplay(void){return gameplay;}
+unsigned native_game_render_state(void){return gameplay?(1u|render_state_extra):0u;}
 extern void inputUpdate(void);
 extern unsigned inputComputePad(int,signed char *,signed char *);
 int main(void) {
@@ -167,6 +169,49 @@ int main(void) {
  assert(aim_x==80 && aim_y>35);
  float aim_flick=1;native_input_take_flick(&aim_flick);assert(aim_flick==0);
  held=0;rx=ry=0;inputUpdate();
+ /* Snapping a diagonal flick near a cardinal must absorb settling into that
+  * cardinal rather than adding another ~10 degrees on follow-up samples. */
+ struct NativeFlick settle={0};native_flick_sample(&settle,1000000,0,0,1);
+ native_flick_sample(&settle,1010000,48,8,1);
+ native_flick_sample(&settle,1120000,156,0,1);
+ assert(fabsf(settle.pending-90)<.01f);
+ /* Stiff New 3DS C-sticks peaking/sweeping around r=36..42 must start and
+  * keep tracking without dropping mid-sweep. */
+ struct NativeFlick nub={0};uint64_t nt=1000000;native_flick_sample(&nub,nt,0,0,1);
+ native_flick_sample(&nub,nt+=16667,0,42,1);
+ for(int i=0;i<8;i++)native_flick_sample(&nub,nt+=16667,0,42,1);
+ native_flick_sample(&nub,nt+=16667,36,0,1);
+ for(int i=0;i<8;i++)native_flick_sample(&nub,nt+=16667,36,0,1);
+ assert(fabsf(nub.pending-90)<1.f);
+ /* Tank mode (render_state bit 8) must keep C-stick turret control in Vesper Flick mode. */
+ render_state_extra=8u;native_input_init();gameplay=1;held=0;rx=156;ry=-80;inputUpdate();
+ inputComputePad(0,&aim_x,&aim_y);
+ assert(aim_x==80 && aim_y<-35);
+ aim_flick=1;native_input_take_flick(&aim_flick);assert(aim_flick==0);
+ render_state_extra=0;rx=ry=0;
+ /* Full HID gyro integration across Local+Roll, World and Player modes at
+  * flat, 45-degree and upright console poses. */
+ native_setting_set_gyro(2);native_setting_set_gyro_filter(0);
+ native_setting_set_gyro_space(0);native_setting_set_gyro_axis(1);native_input_init();
+ test_accel_vector=(accelVector){0,0,-512};
+ test_gyro_rate=(angularRate){0,0,-1438};
+ total_y=total_p=0;
+ for(int i=0;i<60;i++){inputUpdate();native_input_take_gyro(&gy,&gp);total_y+=gy;total_p+=gp;}
+ assert(total_y>95 && total_y<105 && fabsf(total_p)<.01f);
+ for(int space=1;space<=2;space++){
+  native_setting_set_gyro_space(space);native_setting_set_gyro_axis(0);
+  const accelVector poses[3]={{0,0,-512},{0,362,-362},{0,512,0}};
+  const angularRate rates[3]={{0,1438,0},{0,1017,1017},{0,0,1438}};
+  for(int p=0;p<3;p++){
+   native_input_init();test_accel_vector=poses[p];test_gyro_rate=(angularRate){0,0,0};
+   for(int i=0;i<20;i++){inputUpdate();native_input_take_gyro(&gy,&gp);}
+   test_gyro_rate=rates[p];total_y=total_p=0;
+   for(int i=0;i<60;i++){inputUpdate();native_input_take_gyro(&gy,&gp);total_y+=gy;total_p+=gp;}
+   assert(total_y>95 && total_y<105 && fabsf(total_p)<.25f);
+  }
+ }
+ test_accel_vector=(accelVector){0,0,-512};test_gyro_rate=(angularRate){0,0,0};
+ native_setting_set_gyro(0);native_setting_set_gyro_space(0);native_setting_set_gyro_axis(0);
  puts("PASS flick-stick aiming: held aim restores C-stick X/Y and discards queued flick turns");
  puts("PASS Flick Stick: directional angles, 30/60Hz timing, edge rotation/wrap, consume-once, unchanged movement, default stick look and menu/suspend/stall resets");
 

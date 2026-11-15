@@ -1,6 +1,7 @@
 /* Touch/frontend bridge, run only on the original game thread. */
 #include "native_bottom_engine.h"
 #include "native_result_ui.h"
+#include "native_mp_bot.h"
 static struct EogBottomView native_bottom_front_view;
 static int native_bottom_front_focus,last_bottom_menu=-1;
 static int native_bottom_front_context(void){return current_menu+(native_front_is_open()?100+(native_front_category+1)*100:0);}
@@ -17,7 +18,7 @@ static void native_bottom_front_position(int tag) {
         if(tag==100){cursor_h_pos=TABS_LEFT_EDGE+5;cursor_v_pos=STARTTAB_TAB_BOTTOM-5;tab_start_highlight=1;}
         else if(tag==101){cursor_h_pos=TABS_LEFT_EDGE+5;cursor_v_pos=PREVTAB_TAB_TOP+10;tab_prev_highlight=1;}
         else {
-            cursor_h_pos=170;cursor_v_pos=0x79+20*tag+5;
+            cursor_h_pos=170;cursor_v_pos=0x75+18*tag+5;
             if(tag==1)highlight_scenario=1;else if(tag==2)highlight_gameselect=1;
             else if(tag==3)highlight_gamelength=1;else if(tag==4)highlight_weaponselect=1;
             else if(tag==5)highlight_character=1;else if(tag==6)highlight_health=1;
@@ -56,7 +57,9 @@ static void native_bottom_front_events(void) {
             if(c.kind!=EOG_BOTTOM_SELECT)native_front_category_action(r->tag,native_front_category<0?1:c.kind==EOG_BOTTOM_CHANGE?c.direction:1);
         } else {
             native_bottom_front_position(r->tag);
-            if(c.kind==EOG_BOTTOM_ACTIVATE) {
+            if(c.kind==EOG_BOTTOM_CHANGE && current_menu==MENU_MP_OPTIONS && r->tag==9) {
+                native_mp_bot_toggle();
+            } else if(c.kind==EOG_BOTTOM_ACTIVATE) {
                 if(current_menu==MENU_MODE_SELECT && native_mode_extra()>=0)native_mode_activate();
                 else if(native_input_press)native_input_press(A_BUTTON);
             }
@@ -96,7 +99,7 @@ static void native_bottom_front_publish(void) {
         native_bottom_row(&v,"Back","",100,0);
     } else if(current_menu==MENU_MP_OPTIONS) {
         native_bottom_string(v.title,sizeof v.title,"LOCAL MULTIPLAYER");
-        native_bottom_string(v.note,sizeof v.note,"Player 1 controlled. Player 2 idle.");
+        native_bottom_string(v.note,sizeof v.note,native_mp_bot_status_note());
         native_bottom_row(&v,"Start match","",100,0);
         native_bottom_row(&v,"Arena",(char *)langGet(multi_stage_setups[MP_stage_selected].folder_text_preset),2,!unlock_stage_select);
         native_bottom_row(&v,"Scenario",(char *)langGet(mp_player_counts[scenario].stage),1,0);
@@ -106,6 +109,7 @@ static void native_bottom_front_publish(void) {
         native_bottom_row(&v,"Handicap","",6,!unlock_handicap);
         native_bottom_row(&v,"Control style","",7,!unlock_control_style);
         native_bottom_row(&v,"Aim adjustment","",8,!unlock_aim_sight);
+        native_bottom_row(&v,(char *)native_mp_bot_label(),native_mp_bot_value_text(),9,0);
         native_bottom_row(&v,"Back","",101,0);
     } else if(current_menu==MENU_MP_STAGE_SELECT) {
         native_bottom_string(v.title,sizeof v.title,"SELECT ARENA");

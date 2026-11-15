@@ -67,10 +67,16 @@ const char *native_randomiser_seed_text(void){static char text[8];snprintf(text,
 static int subsistence;
 int native_setting_subsistence(void){return __atomic_load_n(&subsistence,__ATOMIC_RELAXED);}
 const char *native_subsistence_label(void){return "Subsistence";}
-static int unlock_all,guard_visibility,guard_ai_hz=30;
+static int unlock_all,guard_visibility,guard_ai_hz=30,mp_bots;
 int native_setting_guard_visibility(void){return __atomic_load_n(&guard_visibility,__ATOMIC_RELAXED);}
 int native_setting_guard_ai_hz(void){return __atomic_load_n(&guard_ai_hz,__ATOMIC_RELAXED);}
 int native_setting_unlock_all(void){return __atomic_load_n(&unlock_all,__ATOMIC_RELAXED);}
+int native_setting_mp_bots(void){return __atomic_load_n(&mp_bots,__ATOMIC_RELAXED);}
+const char *native_mp_bot_label(void){return "Bots";}
+const char *native_mp_bot_value_text(void){return native_setting_mp_bots()?"On":"Off";}
+const char *native_mp_bot_status_note(void){return native_setting_mp_bots()?"Player 1 controlled. Player 2 AI bot.":"Player 1 controlled. Player 2 idle.";}
+int native_mp_bot_enabled(void){return native_setting_mp_bots()!=0;}
+void native_mp_bot_toggle(void){native_setting_set_mp_bots(!native_mp_bot_enabled());}
 static unsigned render_state;
 static int game_values[7]={-1,-1,-1,-1,-1,-1,-1};
 static int volumes[2]={-1,-1};
@@ -127,6 +133,7 @@ static void save(void) {
     if(fprintf(f,"randomiser=%d\nrandomiser_seed=%d\n",native_setting_randomiser(),native_setting_randomiser_seed())<0)ok=0;
     if(fprintf(f,"subsistence=%d\n",native_setting_subsistence())<0)ok=0;
     if(fprintf(f,"unlock_everything=%d\n",native_setting_unlock_all())<0)ok=0;
+    if(fprintf(f,"mp_bots=%d\n",native_setting_mp_bots())<0)ok=0;
     for(int i=0;i<7;i++)if(fprintf(f,"game_option_%d=%d\n",i,native_setting_game(i))<0)ok=0;
     if(fprintf(f,"music_volume=%d\neffects_volume=%d\n",native_setting_volume(0),native_setting_volume(1))<0)ok=0;
     if(fclose(f))ok=0;
@@ -149,6 +156,7 @@ void native_setting_set_randomiser(int v){update(&randomiser,v,0,1);}
 void native_setting_set_randomiser_seed(int v){update(&randomiser_seed,v,1,999999);}
 void native_setting_set_subsistence(int v){update(&subsistence,v,0,1);}
 void native_setting_set_unlock_all(int v){update(&unlock_all,v,0,1);}
+void native_setting_set_mp_bots(int v){update(&mp_bots,v,0,1);}
 void native_setting_set_audio_mixer(int v){update(&audio_mixer,v,0,3);}
 void native_setting_set_skin(int v){update(&skin,v,0,4);}
 void native_setting_set_lod(int v){if(v==4 && native_setting_lod()!=4)native_setting_dynamic_lod(1);update(&lod,v,0,4);}
@@ -200,7 +208,7 @@ void native_settings_init(const char *directory) {
     stereo_auto=1;stereo_convergence=100;stereo_comfort=0;stereo_hud_depth=75;stereo_crosshair_hud=0;stereo_ghost_contrast=100;stereo_black_floor=0;
     aim_movement=0;stereo_strength=100;
     gyro_filter=always_crosshair=0;vertical_sensitivity=250;flick_stick=0;gyro_mode=0;gyro_sensitivity=250;touch_sensitivity=250;
-    randomiser=0;randomiser_seed=1;subsistence=0;guard_visibility=0;guard_ai_hz=30;unlock_all=0;audio_mixer=1;dynamic_lod=1;vignette_mode=0;render_state=0;
+    randomiser=0;randomiser_seed=1;subsistence=0;guard_visibility=0;guard_ai_hz=30;unlock_all=0;mp_bots=0;audio_mixer=1;dynamic_lod=1;vignette_mode=0;render_state=0;
     style=-1;crosshair=watch_colour=0;aspect=-1;aa=1;fps_limit=60;sensitivity=250;sharpness=vignette=bloom=grain=skin=0;glass=1;lod=1;view_distance=2;settings_path[0]=0;config_missing=0;
     for(int i=0;i<7;i++)game_values[i]=-1;
     volumes[0]=volumes[1]=-1;
@@ -218,7 +226,7 @@ void native_settings_init(const char *directory) {
     int load_stereo_auto=1,load_stereo_convergence=100,load_stereo_comfort=0,load_stereo_hud_depth=75,load_stereo_crosshair_hud=0,load_stereo_ghost_contrast=100,load_stereo_black_floor=0;
     int strength=100;
     int space=0,axis=0,lock=0,sway=0,steady=1,aimmove=0;
-    int flick=0,touchsens=250,gyromode=0,gyrosens=250,mixer=1,unlocked=0,guardvisible=0,guardhz=30,subs=0,rando=0,seed=1;
+    int flick=0,touchsens=250,gyromode=0,gyrosens=250,mixer=1,unlocked=0,mpbots=0,guardvisible=0,guardhz=30,subs=0,rando=0,seed=1;
     int games[7]={-1,-1,-1,-1,-1,-1,-1},music=-1,effects=-1;
     int ok=fgets(line,sizeof line,f)!=NULL && !memcmp(line,"EOGSETTINGS1\n",13);
     unsigned found=0;
@@ -271,6 +279,7 @@ void native_settings_init(const char *directory) {
         else if(sscanf(line,"randomiser_seed=%d",&seed)==1){}
         else if(sscanf(line,"subsistence=%d",&subs)==1){}
         else if(sscanf(line,"unlock_everything=%d",&unlocked)==1){}
+        else if(sscanf(line,"mp_bots=%d",&mpbots)==1){}
         else if(sscanf(line,"audio_mixer=%d",&mixer)==1){}
         else {int index,value;if(sscanf(line,"game_option_%d=%d",&index,&value)==2 && index>=0 && index<7)games[index]=value;}
     }
@@ -280,7 +289,7 @@ void native_settings_init(const char *directory) {
     if(load_crosshair_shape<0 || load_crosshair_shape>7)ok=0;
     if(guardvisible<0 || guardvisible>1 || (guardhz!=30 && guardhz!=15 && guardhz!=5))ok=0;
     if(rando<0 || rando>1 || seed<1 || seed>999999)ok=0;
-    if(subs<0 || subs>1 || unlocked<0 || unlocked>1 || mixer<0 || mixer>3)ok=0;
+    if(subs<0 || subs>1 || unlocked<0 || unlocked>1 || mpbots<0 || mpbots>1 || mixer<0 || mixer>3)ok=0;
     if(fps!=30 && fps!=60)ok=0;
     if(space<0 || space>2 || axis<0 || axis>1 || lock<0 || lock>1 || sway<0 || sway>1 || steady<0 || steady>1)ok=0;
     if(aimmove<0 || aimmove>1)ok=0;
@@ -301,7 +310,7 @@ void native_settings_init(const char *directory) {
     for(int i=0;i<7;i++)if(games[i]<-1 || games[i]>(i==6?2:1))ok=0;
     if(music< -1 || music>32767 || effects< -1 || effects>32767)ok=0;
     fclose(f);
-    if(ok){watch_clock=load_watch_clock;crosshair_opacity=load_crosshair_opacity;crosshair_shape=load_crosshair_shape;stereo_auto=load_stereo_auto;stereo_convergence=load_stereo_convergence;stereo_comfort=load_stereo_comfort;stereo_hud_depth=load_stereo_hud_depth;stereo_crosshair_hud=load_stereo_crosshair_hud;stereo_ghost_contrast=load_stereo_ghost_contrast;stereo_black_floor=load_stereo_black_floor;gyro_filter=filter;always_crosshair=persistent;vertical_sensitivity=vertical;stereo_strength=strength;aim_movement=aimmove;gyro_space=space;gyro_axis=axis;aim_lock=lock;stamina_sway=sway;steady_scope=steady;flick_stick=flick;touch_sensitivity=touchsens;gyro_mode=gyromode;gyro_sensitivity=gyrosens>400?400:gyrosens;randomiser=rando;randomiser_seed=seed;subsistence=subs;guard_visibility=guardvisible;guard_ai_hz=guardhz;unlock_all=unlocked;audio_mixer=mixer;style=s;crosshair=c;watch_colour=w;aspect=a;aa=q;fps_limit=fps;sensitivity=sens;sharpness=sharp;vignette=vig;vignette_mode=vigmode;bloom=glow;grain=noise;skin=watchskin;glass=glassdetail==2?1:glassdetail;lod=lodstrength;view_distance=viewdistance;memcpy(game_values,games,sizeof games);volumes[0]=music;volumes[1]=effects;}
+    if(ok){watch_clock=load_watch_clock;crosshair_opacity=load_crosshair_opacity;crosshair_shape=load_crosshair_shape;stereo_auto=load_stereo_auto;stereo_convergence=load_stereo_convergence;stereo_comfort=load_stereo_comfort;stereo_hud_depth=load_stereo_hud_depth;stereo_crosshair_hud=load_stereo_crosshair_hud;stereo_ghost_contrast=load_stereo_ghost_contrast;stereo_black_floor=load_stereo_black_floor;gyro_filter=filter;always_crosshair=persistent;vertical_sensitivity=vertical;stereo_strength=strength;aim_movement=aimmove;gyro_space=space;gyro_axis=axis;aim_lock=lock;stamina_sway=sway;steady_scope=steady;flick_stick=flick;touch_sensitivity=touchsens;gyro_mode=gyromode;gyro_sensitivity=gyrosens>400?400:gyrosens;randomiser=rando;randomiser_seed=seed;subsistence=subs;guard_visibility=guardvisible;guard_ai_hz=guardhz;unlock_all=unlocked;mp_bots=mpbots;audio_mixer=mixer;style=s;crosshair=c;watch_colour=w;aspect=a;aa=q;fps_limit=fps;sensitivity=sens;sharpness=sharp;vignette=vig;vignette_mode=vigmode;bloom=glow;grain=noise;skin=watchskin;glass=glassdetail==2?1:glassdetail;lod=lodstrength;view_distance=viewdistance;memcpy(game_values,games,sizeof games);volumes[0]=music;volumes[1]=effects;}
 }
 int native_settings_apply_console_defaults(int model) {
     /* Existence, not parse success, controls first-launch detection. Never

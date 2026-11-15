@@ -49,7 +49,7 @@ unsigned native_game_render_state(void) {
     if(!native_game_input_gameplay() || lvlGetControlsLockedFlag() || !disablePlayerActionsWhenPausedOrInMpMenu())return 0;
     int crouch=controlled->crouchpos<CROUCH_STAND || controlled->autocrouchpos<CROUCH_STAND;
     int zoom=controlled->insightaimmode || (controlled->fovy>0 && controlled->fovy<59.f);
-    return 1u|(crouch?2u:0u)|(zoom?4u:0u);
+    return 1u|(crouch?2u:0u)|(zoom?4u:0u)|(g_PlayerIsInTank==1?8u:0u);
 }
 static int crouch_target=CROUCH_STAND;
 static int legacy_touch_crouch,classic_aim_previous;
@@ -170,13 +170,13 @@ void native_controls_apply(struct MoveData *m) {
  * original aiming path eases that state toward a target on subsequent ticks. */
 float native_controls_look_rate(float rate) {
     if(!__builtin_isfinite(rate))return 0.f;
-    if(!native_game_input_gameplay() || lvlGetControlsLockedFlag() || !disablePlayerActionsWhenPausedOrInMpMenu())return rate;
+    if(get_cur_playernum()!=0 || !native_game_input_gameplay() || lvlGetControlsLockedFlag() || !disablePlayerActionsWhenPausedOrInMpMenu())return rate;
     if(rate>1.f)rate=1.f;else if(rate< -1.f)rate=-1.f;
     return rate*(native_setting_sensitivity()*.01f);
 }
 float native_controls_pitch_rate(float rate) {
     float scaled=native_controls_look_rate(rate);
-    if(!native_game_input_gameplay() || lvlGetControlsLockedFlag() || !disablePlayerActionsWhenPausedOrInMpMenu())return scaled;
+    if(get_cur_playernum()!=0 || !native_game_input_gameplay() || lvlGetControlsLockedFlag() || !disablePlayerActionsWhenPausedOrInMpMenu())return scaled;
     return scaled*(float)native_setting_vertical_sensitivity()/native_setting_sensitivity();
 }
 void native_controls_adjust_look(float *yaw,float *pitch) {

@@ -31,7 +31,7 @@ def main():
         obj=out/(rel.replace('/','__')+'.o')
         build_probe.run(['g++' if cpp else 'gcc',*flags,*sanitize,'-I'+str(build.UP/'port/fast3d'),'-c',build.source_path(Path(rel)),'-o',obj])
         objects.append(obj)
-    for name in ('graphics_scene.c','native_room.c','native_motion.c','baseline_options.c','native_settings.c','native_controls.c','gfx_native.cpp','graphics_host_check.cpp','pica_inputs.cpp'):
+    for name in ('graphics_scene.c','native_room.c','native_motion.c','baseline_options.c','native_settings.c','native_controls.c','native_mp_bot.c','gfx_native.cpp','graphics_host_check.cpp','pica_inputs.cpp'):
         cpp=name.endswith('.cpp');flags=build_probe.engine_args(True)
         if name=='graphics_host_check.cpp':flags=['-std=gnu++20','-O1','-fno-pie','-ffunction-sections','-fdata-sections','-I'+str(build.TARGET/'include')]
         elif cpp:flags=[f for f in flags if f not in ('-std=gnu11','-fplan9-extensions','-fpermissive')]+['-std=gnu++20']

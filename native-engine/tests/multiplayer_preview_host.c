@@ -12,5 +12,11 @@ int main(void){
  for(int i=0;i<MAX_PLAYER_COUNT;i++)player_has_selected_char[i]=FALSE;
  native_preview_ready_idle();
  if(player_has_selected_char[0] || !player_has_selected_char[1] || player_has_selected_char[2] || player_has_selected_char[3])abort();
- puts("PASS actual multiplayer frontend: two engine slots, all eleven arenas plus Random, safe invalid indices, unchanged solo count and only idle P2 marked ready");
+ if(strcmp(native_mp_bot_label(),"Bots")!=0)abort();
+ if(native_mp_bot_enabled()!=0 || strcmp(native_mp_bot_value_text(),"Off")!=0)abort();
+ native_mp_bot_toggle();
+ if(native_mp_bot_enabled()!=1 || strcmp(native_mp_bot_value_text(),"On")!=0)abort();
+ native_mp_bot_toggle();
+ if(native_mp_bot_enabled()!=0 || strcmp(native_mp_bot_value_text(),"Off")!=0)abort();
+ puts("PASS actual multiplayer frontend: two engine slots, all eleven arenas plus Random, safe invalid indices, unchanged solo count, Bots toggle, and only idle P2 marked ready");
 }

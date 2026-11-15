@@ -9033,8 +9033,8 @@
       "unit": "front.c",
       "section": ".rodata.native_bottom_front_publish.part.0.str1.4",
       "destination": ".data.eog_rom_strings_0fcbcaa210e4e12a",
-      "bytes": 529,
-      "sha256": "1e1a4a28834e172c427efd08ab0c1d39c585d55ce05be790b32c790483a8dfbe",
+      "bytes": 493,
+      "sha256": "afd9184234324c561aea169d05c17698a6a4e1391db9702ad29f0575a5647d3d",
       "rows": [
         {
           "unit": "front.c",

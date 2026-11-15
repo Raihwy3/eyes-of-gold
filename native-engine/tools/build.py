@@ -100,10 +100,13 @@ def source_path(rel):
         for old,new in replacements.items():
             if text.count(old)!=1:raise ValueError('Original Full viewport boundary changed: '+old)
             text=text.replace(old,new)
-        text='#include "native_watch_environment.h"\n#include "native_controls.h"\n#include "native_demo.h"\n#include "native_theme.h"\n'+text
+        text='#include "native_watch_environment.h"\n#include "native_controls.h"\n#include "native_mp_bot.h"\n#include "native_demo.h"\n#include "native_theme.h"\n'+text
         old='    g_CurrentPlayer->field_D0 = 0;'
         if text.count(old)!=1:raise ValueError('Original movement hook boundary changed')
-        text=text.replace(old,'    native_controls_apply(&moveData);\n'+old)
+        text=text.replace(old,'    native_controls_apply(&moveData);\n    native_mp_bot_apply(&moveData);\n'+old)
+        respawn_old='                            if (joyGetButtons(get_cur_playernum(), 0xB000))'
+        if text.count(respawn_old)!=1:raise ValueError('Original MP respawn boundary changed')
+        text=text.replace(respawn_old,'                            if (native_mp_bot_should_respawn(cur, count, native_demo_active(), scenario, total) || joyGetButtons(get_cur_playernum(), 0xB000))')
         # Scale only the two manual camera angle integrators. Multiplying the
         # stored speed feeds gain back into original aim acceleration each tick.
         for axis in ('verta','theta'):
@@ -641,6 +644,43 @@ static f32 native_frontend_aspect(f32 authored) {
         text+='\n#include "native_front_menu.h"\n#include "native_bottom_front.h"\n'
         dest=BUILD/'overlay/front.c';dest.write_text(text)
         return dest
+    if str(rel)=='src/game/mpmenu.c':
+        text='#include "native_mp_bot.h"\n#include "native_demo.h"\n'+source.read_text()
+        old='            if (g_CurrentPlayer->mpmenuon != FALSE)\n            {'
+        if text.count(old)!=1:raise ValueError('Original MP menu tick boundary changed')
+        text=text.replace(old,old+'''
+                int bot_action = native_mp_bot_menu_action(player_num, player_count, native_demo_active(), g_gameOverFlag, g_CurrentPlayer->mpmenuon, g_CurrentPlayer->mpmenumode);
+                if (bot_action == NATIVE_MP_BOT_MENU_FINISH_GAME) {
+                    menu_count = 0;
+                    g_CurrentPlayer->mpmenumode = MENU_FINISHED;
+                    for (i = 0; i < player_count; i++) {
+                        if (g_playerPointers[i]->mpmenumode == MENU_FINISHED) {
+                            menu_count++;
+                        }
+                    }
+                    if (menu_count == player_count) {
+                        bossSetLoadedStage(LEVELID_TITLE);
+                    }
+                    return;
+                }
+                if (bot_action == NATIVE_MP_BOT_MENU_CLOSE_PAUSE) {
+                    g_CurrentPlayer->mpmenuon = FALSE;
+                    g_CurrentPlayer->healthdisplaytime = 0;
+                    if (get_cur_playernum() == who_paused) {
+                        g_pausedFlag = 0;
+                        lvlSetControlsLockedFlag(0);
+                    }
+                    return;
+                }
+                if (bot_action == NATIVE_MP_BOT_MENU_CONFIRM_QUIT) {
+                    g_CurrentPlayer->mpquitconfirm = 1;
+                    g_CurrentPlayer->mpmenuon = FALSE;
+                    g_CurrentPlayer->healthdisplaytime = 0;
+                    mpCalculateAwards(FALSE);
+                    return;
+                }''',1)
+        dest=BUILD/'overlay/mpmenu.c';dest.parent.mkdir(exist_ok=True);dest.write_text(text)
+        return dest
     if str(rel)=='src/game/title2.c':
         text=source.read_text();start=text.index('Gfx* titleRenderFolderMenuBackgroundLines(');end=text.index('\n\n/**',start)
         body=text[start:end]
@@ -1132,7 +1172,7 @@ def main():
         motion=BUILD/'native_motion_sensor.o'
         subprocess.run([str(CC.with_name('arm-none-eabi-g++')),'-std=gnu++20','-O2','-Wall','-Wextra','-Werror','-march=armv6k','-mtune=mpcore','-mfloat-abi=hard','-mtp=soft','-fno-rtti','-fno-exceptions','-ffunction-sections','-fdata-sections','-I'+str(TARGET/'include'),'-c',str(TARGET/'src/native_motion_sensor.cpp'),'-o',str(motion)],check=True)
         extras.append(str(motion))
-        for name in ('native_settings.c','native_controls.c'):
+        for name in ('native_settings.c','native_controls.c','native_mp_bot.c'):
             obj=BUILD/(name+'.o')
             subprocess.run([str(CC),*FLAGS,*['-D'+v for v in DEFS],*['-I'+str(v) for v in INCLUDES],'-include',str(TARGET/'include/prelude.h'),'-c',str(TARGET/'src'/name),'-o',str(obj)],check=True)
             extras.append(str(obj))
