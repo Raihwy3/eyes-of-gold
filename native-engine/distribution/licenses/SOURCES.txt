@@ -1,0 +1,78 @@
+Dependency license sources
+
+The linked game uses the inherited engine and PC port, Fast3D, libctru, Citro3D,
+newlib (C/math/system support) and GCC's libgcc/libstdc++ runtime support.
+Build-only tools are not shipped in this install archive; their original license
+files remain in their source/tool distributions. No OpenGL/glad runtime is linked
+in this 3DS build.
+
+Original Eyes of Gold native additions:
+MIT, Copyright (c) 2026 Eyes of Gold contributors.
+eyes-of-gold-MIT-LICENSE.txt is copied from native-engine/LICENSE.
+Scope: eyes-of-gold-LICENSE-NOTICE.txt.
+
+Original engine and PC-port revision:
+fda76b69837e6c5aae436e0d3e798989e49b06d2
+https://github.com/jkdansereau/goldeneye-pc-port
+The root upstream-LICENSE.txt, upstream-NOTICE.txt and fast3d-LICENSE.txt are
+copied directly from this pinned checkout at build time.
+
+libctru 2.7.0 (installed package 2.7.0-1):
+libctru-LICENSE.txt is the License section of:
+https://raw.githubusercontent.com/devkitPro/libctru/v2.7.0/README.md
+
+Citro3D 1.7.1 (installed package 1.7.1-2):
+https://raw.githubusercontent.com/devkitPro/citro3d/v1.7.1/LICENSE
+
+newlib (installed package 4.6.0.20260123-5):
+newlib-LICENSE.txt retains the upstream collection of copyright/license notices,
+including notices for other targets. It is not a claim that all those targets or
+implementations are linked. Snapshot retrieved 2026-10-27 from:
+https://raw.githubusercontent.com/devkitPro/newlib/master/COPYING.NEWLIB
+
+GCC 16.1.0 runtime (libgcc and libstdc++):
+Read gcc-runtime-GPL-3.0.txt together with gcc-runtime-exception.txt. The runtime
+exception is retained separately; a GPL-only label would omit relevant terms.
+https://raw.githubusercontent.com/gcc-mirror/gcc/releases/gcc-16.1.0/COPYING3
+https://raw.githubusercontent.com/gcc-mirror/gcc/releases/gcc-16.1.0/COPYING.RUNTIME
+
+The license documents retrieved from upstream text views preserve their wording;
+whitespace is normalized when saving them. This index explains their origin and
+does not replace any license or certify distribution rights for the whole game.
+
+Updater components:
+- curl 8.4.0, https://curl.se/ (curl license; curl.txt)
+- Mbed TLS 2.28.8, https://github.com/Mbed-TLS/mbedtls (Apache 2.0; mbedTLS.txt)
+- zlib 1.3.1, https://zlib.net/ (zlib license; zlib.txt)
+- MiniZip 1.1, https://github.com/madler/zlib/tree/v1.3.1/contrib/minizip (zlib license; minizip.txt)
+- jsmn, https://github.com/zserge/jsmn (MIT; jsmn.txt)
+- Mozilla CA roots, https://curl.se/docs/caextract.html (Mozilla MPL 2.0; Mozilla-MPL-2.0.txt)
+Vendor source fingerprints are recorded in native-engine/vendor/updater/sources.json.
+
+GamepadMotionHelpers (MIT):
+https://github.com/JibbSmart/GamepadMotionHelpers
+Used for motion fusion, gyro spaces and calibration. Vendored source hashes are
+recorded in native-engine/vendor/GamepadMotionHelpers/source.json.
+License: GamepadMotionHelpers.txt.
+
+rt64-3ds stereo math (MIT): https://github.com/oneup03/rt64-3ds
+Commit 0d783be0c9f51fa7edc696ac33a0992b5f021ecb. Convergence, patch statistic
+and reticle candidate-strip sampling; adapted to this renderer.
+License: rt64-stereo.txt. Fingerprints: vendor/rt64-stereo/source.json.
+
+Flick-stick timing and rotation smoothing use JoyShockMapper by Julian "Jibb" Smart and contributors (MIT).
+Source: https://github.com/JibbSmart/JoyShockMapper
+Revision: 980dc52c09fbdfb3378b04a8a1895ea3157c29e1
+Adapted functions: handleFlickStick and GetSmoothedStickRotation in JoyShockMapper/src/main.cpp.
+License: JoyShockMapper.txt. The 3DS adapter uses camera degrees, pressure-nub thresholds and debounced release.
+
+Stereo implementation guidance: dynamic3d by oneup03 (OneUp).
+https://github.com/oneup03/3D-Skills/tree/main/dynamic3d
+See CREDITS.txt for GBAtemp acknowledgements to IDrinkLava and OneUp.
+
+OpenDSP (BSD 2-Clause), Cellenseres:
+https://github.com/Cellenseres/OpenDSP
+Revision a15c8615c1659f34bfb2b38df69a9860f4cc7080.
+Includes its open-source firmware/opendsp.cdc and AAC/MP3 build tables; these
+are OpenDSP project files, not Nintendo firmware or ROM-extracted game data.
+Source hashes: native-engine/vendor/OpenDSP/source.json. License: OpenDSP.txt.

@@ -1,0 +1,143 @@
+/*
+ * 3DS 32-bit adaptation of PC port shim for PR/gbi.h (see docs/internals.md).
+ *
+ * The real header (include/PR/gbi.h) already has 64-bit-ready Gwords and
+ * gSP* macros that pack full 64-bit pointers into words.w1. However, the
+ * Gfx union's command members (Gdma, Gtri, Gloadtile, ...) are guarded by
+ * `IS_BIG_ENDIAN && !IS_64_BIT`, which is false on a little-endian 64-bit
+ * host, leaving Gfx with only the `words` member.
+ *
+ * Even if we fake those macros to expose the N64-layout members, they are
+ * FUNCTIONALLY WRONG on a 64-bit little-endian host: the N64 bitfield
+ * layouts read the wrong bytes. For example, the N64 Gdma puts `cmd` at
+ * bits 0-7, but the gSP* macros pack `cmd` at bits 24-31, so `dma.cmd`
+ * reads 0 instead of the command.
+ *
+ * This shim therefore:
+ *   1. Includes the real header with faked IS_BIG_ENDIAN/IS_64_BIT so all
+ *      the types and gSP* macros are available.
+ *   2. Defines LE-correct versions of the members the game code actually
+ *      reads: Gdma, Gtri/Tri, Gloadtile.
+ *   3. Defines a Gfx_le union with `words` + the LE-correct members + the
+ *      N64-layout members (for completeness).
+ *   4. #defines Gfx to Gfx_le so all game code and gSP* macros use it.
+ *
+ * The port layer (Phase 2+) is responsible for placing/convert-
+ * ing display-list data to match these layouts.
+ *
+ * Inert in the N64 build (no -DPORT): pure pass-through.
+ */
+#ifndef _PORT_SHIM_GBI_H_
+#define _PORT_SHIM_GBI_H_
+#if defined(PORT)
+/*
+ * The real header wraps Gwords and all command structs in
+ * `#if defined(_LANGUAGE_C) || defined(_LANGUAGE_C_PLUS_PLUS)`. This GCC
+ * does not define _LANGUAGE_C, so we define it here to pull in those types.
+ */
+#    ifndef _LANGUAGE_C
+#        define _LANGUAGE_C 1
+#    endif
+#    undef IS_BIG_ENDIAN
+#    undef IS_64_BIT
+#    define IS_BIG_ENDIAN 1
+#    define IS_64_BIT 0
+#    include "include/PR/gbi.h"
+#    undef IS_BIG_ENDIAN
+#    undef IS_64_BIT
+#    include <stdint.h>
+#    define IS_BIG_ENDIAN (__BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
+#    define IS_64_BIT (UINTPTR_MAX == 0xFFFFFFFFFFFFFFFFU)
+
+/* ------------------------------------------------------------------ */
+/* LE-correct command layouts for the members the game code reads.     */
+/* ------------------------------------------------------------------ */
+
+/*
+ * ARM32: w0 contains cmd:8/par:8/len:16, w1 contains the address.
+ * The desktop shim's widened padding/address fields must not be retained.
+ */
+/* 32-bit little-endian command fields: original 8-byte Gfx stride. */
+/* GBI opcodes such as G_ENDDL are negative signed-byte constants. */
+typedef struct {unsigned len:16;unsigned par:8;signed int cmd:8;uintptr_t addr;} Gdma_le;
+
+/*
+ * GE Fast3D packs G_TRI1 into w0 and vertex indices multiplied by ten into
+ * w1. The triangle payload starts at byte four; its three index bytes have
+ * reversed order in little-endian memory. The interpreter decodes words.
+ */
+typedef struct {
+    unsigned char v[3];   /* bytes 0-2 = vertex data (reversed on LE) */
+    unsigned char flag;   /* byte 3  = cmd (from packing)             */
+} Tri_le;
+
+typedef struct { uint32_t command; Tri_le tri; } Gtri_le;
+
+/*
+ * Gloadtile: the gSPLoadTile macro packs w0 = (cmd << 24) |
+ * (sl << 12) | tl | ... On a 64-bit LE host, that means:
+ *   bits 0-11   = tl
+ *   bits 12-23  = sl
+ *   bits 24-31  = cmd
+ *   bits 32-34  = tile
+ *   bits 35-39  = pad
+ *   bits 40-51  = sh
+ *   bits 52-63  = th
+ * So the LE-correct layout is:
+ */
+typedef struct {
+    unsigned int tl   : 12;  /* bits 0-11  */
+    unsigned int sl   : 12;  /* bits 12-23 */
+    unsigned int cmd  : 8;   /* bits 24-31 */
+    unsigned int tile : 3;   /* bits 32-34 */
+    unsigned int pad  : 5;   /* bits 35-39 */
+    unsigned int sh   : 12;  /* bits 40-51 */
+    unsigned int th   : 12;  /* bits 52-63 */
+} Gloadtile_le;
+
+/* ------------------------------------------------------------------ */
+/* LE-correct Gfx union.                                               */
+/* ------------------------------------------------------------------ */
+typedef union {
+    Gwords        words;
+    Gdma_le       dma;
+    Gtri_le       tri;
+    Gloadtile_le  loadtile;
+    /* N64-layout members (not used by game code, kept for completeness) */
+    Gline3D       line;
+    Gpopmtx       popmtx;
+    Gsegment      segment;
+    GsetothermodeH setothermodeH;
+    GsetothermodeL setothermodeL;
+    Gtexture      texture;
+    Gperspnorm    perspnorm;
+    Gsetimg       setimg;
+    Gsetcombine   setcombine;
+    Gsetcolor     setcolor;
+    Gfillrect     fillrect;
+    Gsettile      settile;
+    Gsettilesize  settilesize;
+    Gloadtlut     loadtlut;
+    long long int force_structure_alignment;
+} Gfx_le;
+
+#define Gfx Gfx_le
+
+/*
+ * The gDP* display-list macros in the real gbi.h use _SHIFTL/_SHIFTR, which
+ * the N64 headers define in PR/mbi.h. A port TU that includes <PR/gbi.h>
+ * without <ultra64.h> (e.g. port/src/video.c) never reaches mbi.h; on Linux
+ * no other header in its include chain pulls it in, so the gDP* calls expand
+ * to implicit _SHIFTL()/_SHIFTR() function calls and fail to link (D402).
+ * Define them if absent. Guarded so a TU that also reaches mbi.h keeps
+ * mbi.h's own definitions.
+ */
+#ifndef _SHIFTL
+#    define _SHIFTL(v, s, w) ((u32)(((u32)(v) & ((0x01 << (w)) - 1)) << (s)))
+#endif
+#ifndef _SHIFTR
+#    define _SHIFTR(v, s, w) ((u32)(((u32)(v) >> (s)) & ((0x01 << (w)) - 1)))
+#endif
+
+#endif /* defined(PORT) */
+#endif /* _PORT_SHIM_GBI_H_ */

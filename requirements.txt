@@ -1,0 +1,2 @@
+# Required by the build checks and executable-data audit.
+pyelftools

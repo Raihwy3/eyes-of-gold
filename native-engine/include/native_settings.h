@@ -1,0 +1,139 @@
+#ifndef EOG_NATIVE_SETTINGS_H
+#define EOG_NATIVE_SETTINGS_H
+#ifdef __cplusplus
+extern "C" {
+#endif
+int native_setting_gyro_filter(void);
+int native_setting_always_crosshair(void);
+int native_setting_vertical_sensitivity(void);
+void native_setting_set_gyro_filter(int);
+void native_setting_set_always_crosshair(int);
+void native_setting_set_vertical_sensitivity(int);
+int native_setting_stereo_auto(void);
+void native_setting_set_stereo_auto(int);
+int native_setting_stereo_convergence(void);
+void native_setting_set_stereo_convergence(int);
+int native_setting_stereo_comfort(void);
+void native_setting_set_stereo_comfort(int);
+int native_setting_stereo_hud_depth(void);
+void native_setting_set_stereo_hud_depth(int);
+int native_setting_stereo_crosshair_hud(void);
+void native_setting_set_stereo_crosshair_hud(int);
+int native_setting_stereo_ghost_contrast(void);
+void native_setting_set_stereo_ghost_contrast(int);
+int native_setting_stereo_black_floor(void);
+void native_setting_set_stereo_black_floor(int);
+int native_setting_stereo_strength(void);
+void native_setting_set_stereo_strength(int value);
+int native_setting_gyro_space(void);
+int native_setting_gyro_axis(void);
+int native_setting_aim_lock(void);
+int native_setting_aim_movement(void);
+void native_setting_set_aim_movement(int);
+int native_setting_stamina_sway(void);
+int native_setting_steady_scope(void);
+void native_setting_set_gyro_space(int);
+void native_setting_set_gyro_axis(int);
+void native_setting_set_aim_lock(int);
+void native_setting_set_stamina_sway(int);
+void native_setting_set_steady_scope(int);
+int native_setting_touch_sensitivity(void);
+void native_setting_set_touch_sensitivity(int value);
+int native_setting_randomiser(void);
+void native_setting_set_randomiser(int value);
+int native_setting_randomiser_seed(void);
+void native_setting_set_randomiser_seed(int value);
+const char *native_randomiser_label(void);
+const char *native_randomiser_seed_label(void);
+const char *native_randomiser_seed_text(void);
+int native_setting_subsistence(void);
+void native_setting_set_subsistence(int value);
+const char *native_subsistence_label(void);
+void native_settings_init(const char *directory);
+int native_settings_apply_console_defaults(int model);
+int native_setting_guard_visibility(void);
+void native_setting_set_guard_visibility(int value);
+int native_setting_guard_ai_hz(void);
+void native_setting_set_guard_ai_hz(int value);
+int native_setting_audio_mixer(void);
+void native_setting_set_audio_mixer(int value);
+int native_setting_style(void);
+int native_setting_crosshair(void);
+int native_setting_crosshair_shape(void);
+int native_setting_crosshair_opacity(void);
+void native_setting_set_crosshair_opacity(int value);
+void native_setting_set_crosshair_shape(int value);
+int native_setting_watch(void);
+int native_setting_aspect(void);
+int native_setting_aa(void);
+int native_setting_fps(void);
+int native_setting_sensitivity(void);
+int native_setting_flick(void);
+void native_setting_set_flick(int value);
+int native_setting_gyro(void);
+int native_setting_gyro_sensitivity(void);
+void native_setting_set_gyro(int value);
+void native_setting_set_gyro_sensitivity(int value);
+int native_setting_sharpness(void);
+int native_setting_vignette(void);
+int native_setting_bloom(void);
+int native_setting_grain(void);
+int native_setting_skin(void);
+int native_setting_glass(void);
+int native_setting_lod(void);
+int native_setting_lod_strength(void);
+void native_setting_dynamic_lod(int value);
+unsigned native_setting_render_state(void);
+void native_setting_set_render_state(unsigned state);
+int native_setting_vignette_mode(void);
+void native_setting_set_vignette_mode(int value);
+int native_setting_view_distance(void);
+void native_setting_set_lod(int value);
+void native_setting_set_view_distance(int value);
+void native_setting_set_glass(int value);
+void native_setting_set_skin(int value);
+void native_setting_set_grain(int value);
+void native_setting_set_vignette(int value);
+void native_setting_set_bloom(int value);
+void native_setting_set_sharpness(int value);
+void native_setting_set_sensitivity(int value);
+void native_setting_set_fps(int value);
+int native_setting_unlock_all(void);
+void native_setting_set_unlock_all(int value);
+int native_setting_game(int index);
+void native_setting_set_game(int index,int value);
+int native_setting_volume(int effects);
+void native_setting_set_volume(int effects,int value);
+void native_setting_set_style(int value);
+void native_setting_set_crosshair(int value);
+void native_setting_set_watch(int value);
+void native_setting_set_aspect(int value);
+void native_setting_set_aa(int value);
+const char *native_string(unsigned id);
+const char *native_colour_name(int watch,int value);
+
+/* Optional physical watch clock; fallback retains the original game timer. */
+int native_setting_watch_clock(void);
+void native_setting_set_watch_clock(int value);
+int native_watch_clock_time(int fallback);
+
+/* Multiplayer AI bots (1 = AI controls players 2..N, 0 = Off). */
+int native_setting_mp_bots(void);
+void native_setting_set_mp_bots(int value);
+
+/* 1.7 Custom full button/stick rebinding (slots 0..5: fire, aim, action, weapon, reload, crouch). */
+int native_setting_custom_sticks(void);
+void native_setting_set_custom_sticks(int value);
+int native_setting_custom_bind(int slot);
+void native_setting_set_custom_bind(int slot,int value);
+int native_setting_custom_digital_aim(void);
+void native_setting_set_custom_digital_aim(int value);
+int native_setting_custom_digital_move(void);
+void native_setting_set_custom_digital_move(int value);
+int native_setting_swap_sticks(void);
+void native_setting_set_swap_sticks(int value);
+
+#ifdef __cplusplus
+}
+#endif
+#endif
