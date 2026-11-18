@@ -248,6 +248,9 @@ static void check_bottom_watch(void) {
     assert(strstr(captured.objectives.text[4].text,"Failed"));
     assert(captured.objectives.text[5].colour==0xa0ffa0f0 && !strcmp(captured.objectives.text[5].text,"OBJECTIVES\n"));
     assert(native_objective_collecting==0 && native_objective_layout==NULL);
+    test_player_count=2;native_bottom_game_tick();
+    assert(captured.kind==EOG_BOTTOM_GAME && !strcmp(captured.title,"LOCAL MULTIPLAYER"));
+    test_player_count=1;
     ptrFontBankGothic=NULL;ptrFontBankGothicChars=NULL;
     puts("PASS closed-watch objective snapshot uses original watch layout, letters/status columns, colours and difficulty without changing watch/navigation state");
     puts("PASS original bottom/watch bridge: difficulty-filtered live objectives, health/armour, all watch tabs, inventory equip pulse, shared options and full briefing navigation");

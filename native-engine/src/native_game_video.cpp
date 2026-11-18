@@ -80,8 +80,8 @@ extern "C" void videoEndFrame(void) {
   __atomic_store_n(&render_busy, 0, __ATOMIC_RELEASE);
 }
 extern "C" void videoSyncSplitScreen(void) {
-  if (getPlayerCount() > 2)
-    sysFatalError("Native multiplayer preview supports two engine players");
+  if (getPlayerCount() > 4)
+    sysFatalError("Native multiplayer preview supports four engine players");
 }
 extern "C" void videoUpdateNativeResolution(int w, int h) {
   native_graphics_set_native_resolution(w,h);

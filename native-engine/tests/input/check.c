@@ -194,13 +194,13 @@ int main(void) {
  native_setting_set_gyro(2);native_setting_set_gyro_filter(0);
  native_setting_set_gyro_space(0);native_setting_set_gyro_axis(1);native_input_init();
  test_accel_vector=(accelVector){0,0,-512};
- test_gyro_rate=(angularRate){0,0,-1438};
+ test_gyro_rate=(angularRate){0,0,1438};
  total_y=total_p=0;
  for(int i=0;i<60;i++){inputUpdate();native_input_take_gyro(&gy,&gp);total_y+=gy;total_p+=gp;}
  assert(total_y>95 && total_y<105 && fabsf(total_p)<.01f);
- for(int space=1;space<=2;space++){
-  native_setting_set_gyro_space(space);native_setting_set_gyro_axis(0);
-  const accelVector poses[3]={{0,0,-512},{0,362,-362},{0,512,0}};
+ for(int space=1;space<=2;space++)for(int axis=0;axis<=1;axis++){
+  native_setting_set_gyro_space(space);native_setting_set_gyro_axis(axis);
+  const accelVector poses[3]={{0,0,-512},{0,-362,-362},{0,-512,0}};
   const angularRate rates[3]={{0,1438,0},{0,1017,1017},{0,0,1438}};
   for(int p=0;p<3;p++){
    native_input_init();test_accel_vector=poses[p];test_gyro_rate=(angularRate){0,0,0};

@@ -2,6 +2,7 @@
 #include "native_bottom_engine.h"
 #include "native_result_ui.h"
 #include "native_mp_bot.h"
+#include "native_settings.h"
 static struct EogBottomView native_bottom_front_view;
 static int native_bottom_front_focus,last_bottom_menu=-1;
 static int native_bottom_front_context(void){return current_menu+(native_front_is_open()?100+(native_front_category+1)*100:0);}
@@ -14,15 +15,17 @@ static void native_bottom_front_position(int tag) {
     else if(current_menu==MENU_MP_OPTIONS) {
         highlight_players=highlight_scenario=highlight_gameselect=highlight_gamelength=0;
         highlight_character=highlight_weaponselect=highlight_health=highlight_controlstyle=highlight_aimadjustment=0;
+        highlight_bots=0;
         tab_prev_highlight=tab_start_highlight=0;
         if(tag==100){cursor_h_pos=TABS_LEFT_EDGE+5;cursor_v_pos=STARTTAB_TAB_BOTTOM-5;tab_start_highlight=1;}
         else if(tag==101){cursor_h_pos=TABS_LEFT_EDGE+5;cursor_v_pos=PREVTAB_TAB_TOP+10;tab_prev_highlight=1;}
         else {
             cursor_h_pos=170;cursor_v_pos=0x75+18*tag+5;
-            if(tag==1)highlight_scenario=1;else if(tag==2)highlight_gameselect=1;
+            if(tag==0)highlight_players=1;else if(tag==1)highlight_scenario=1;else if(tag==2)highlight_gameselect=1;
             else if(tag==3)highlight_gamelength=1;else if(tag==4)highlight_weaponselect=1;
             else if(tag==5)highlight_character=1;else if(tag==6)highlight_health=1;
             else if(tag==7)highlight_controlstyle=1;else if(tag==8)highlight_aimadjustment=1;
+            else if(tag==9)highlight_bots=1;
         }
     } else if(current_menu==MENU_MP_STAGE_SELECT) {
         if(tag==100){cursor_h_pos=TABS_LEFT_EDGE+5;cursor_v_pos=PREVTAB_TAB_TOP+10;tab_prev_highlight=1;}
@@ -101,6 +104,7 @@ static void native_bottom_front_publish(void) {
         native_bottom_string(v.title,sizeof v.title,"LOCAL MULTIPLAYER");
         native_bottom_string(v.note,sizeof v.note,native_mp_bot_status_note());
         native_bottom_row(&v,"Start match","",100,0);
+        native_bottom_row(&v,native_mp_players_label(),native_mp_players_value_text(get_selected_num_players()),0,0);
         native_bottom_row(&v,"Arena",(char *)langGet(multi_stage_setups[MP_stage_selected].folder_text_preset),2,!unlock_stage_select);
         native_bottom_row(&v,"Scenario",(char *)langGet(mp_player_counts[scenario].stage),1,0);
         native_bottom_row(&v,"Weapons",(char *)langGet(*(getPtrMPWeaponSetTextID())),4,!unlock_weapon_select);

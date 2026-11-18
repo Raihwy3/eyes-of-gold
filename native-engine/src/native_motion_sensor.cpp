@@ -92,26 +92,34 @@ extern "C" void native_motion_sample(uint64_t now,float gx,float gy,float gz,flo
  // gyro orientation is unnecessary for this projection and can couple yaw
  // into pitch when its estimate drifts. A short time-based low-pass rejects
  // sensor noise; constant body yaw does not rotate the vertical vector.
+ float p=0,y=0,z=0;
+ motion.GetCalibratedGyro(p,y,z);
+ if(gravity_ready){
+  float k=.01745329252f*dt;
+  float gx=gravity[0],gy=gravity[1],gz=gravity[2];
+  gravity[0]=gx+k*(z*gy-y*gz);
+  gravity[1]=gy+k*(p*gz-z*gx);
+  gravity[2]=gz+k*(y*gx-p*gy);
+  float length=std::sqrt(gravity[0]*gravity[0]+gravity[1]*gravity[1]+gravity[2]*gravity[2]);
+  if(length>.0001f)for(float &v:gravity)v/=length;
+ }
  float magnitude=std::sqrt(ax*ax+ay*ay+az*az);
  if(magnitude>.1f && magnitude<8.f){
   float a[3]={-ax/magnitude,-ay/magnitude,-az/magnitude};
-  float blend=gravity_ready?1.f-std::exp(-dt/.025f):1.f;
+  float blend=gravity_ready?1.f-std::exp(-dt/.05f):1.f;
   for(int i=0;i<3;i++)gravity[i]+=blend*(a[i]-gravity[i]);
   float length=std::sqrt(gravity[0]*gravity[0]+gravity[1]*gravity[1]+gravity[2]*gravity[2]);
   if(length>.0001f){for(float &v:gravity)v/=length;gravity_ready=true;}
  }
  if(!active)return;
- float p=0,y=0,z=0;
- motion.GetCalibratedGyro(p,y,z);
  if(space){
-  if(!gravity_ready){clear_output_filter();return;}
-  float xg=gravity[0],yg=gravity[1],zg=gravity[2];
+  float xg=gravity_ready?gravity[0]:0.f,yg=gravity_ready?gravity[1]:-1.f,zg=gravity_ready?gravity[2]:0.f;
   float length=std::sqrt(xg*xg+yg*yg+zg*zg);
   // Both library projections require a normalized reference vertical.
-  if(gravity_ready && length>.0001f){
+  if(length>.0001f){
    xg/=length;yg/=length;zg/=length;
    if(space==1)GamepadMotion::CalculateWorldSpaceGyro(p,y,p,y,z,xg,yg,zg);
-   else GamepadMotion::CalculatePlayerSpaceGyro(p,y,p,y,z,xg,yg,zg,1.f);
+   else GamepadMotion::CalculatePlayerSpaceGyro(p,y,p,y,z,xg,yg,zg,1.41f);
   }
  }else if(axis){
   // Local roll maps CCW steering (left edge down, +Z) to turn left.

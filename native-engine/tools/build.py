@@ -160,6 +160,89 @@ def source_path(rel):
         gauges=gauges.replace('{\n','{\n    gDma0p(gdl++,0x3a,NATIVE_WATCH_BODY_SCOPE,0xffffffu);\n',1)
         gauges=gauges.replace('    return gdl;','    gDma0p(gdl++,0x3a,0,(~NATIVE_WATCH_BODY_SCOPE)&0xffffffu);\n    return gdl;')
         text=text[:a]+gauges+text[b:]
+        vp_a=text.index('s16 bondviewGetCurrentPlayerViewportWidth(void)')
+        vp_b=text.index('    if (cameraBufferToggle != 0)',text.index('s16 bondviewGetCurrentPlayerViewportUly(void)',vp_a))
+        vp=text[vp_a:vp_b]
+        single_guard='!(native_mp_bot_single_view && native_mp_bot_single_view(getPlayerCount(), native_demo_active()))'
+        assert vp.count('if (getPlayerCount() >= 3)')==2
+        assert vp.count('if (2 < getPlayerCount())')==1
+        assert vp.count('if (getPlayerCount() >= 2)')==1
+        assert vp.count('if (getPlayerCount() == 2)')==1
+        vp=vp.replace('if (getPlayerCount() >= 3)','if ((getPlayerCount() >= 3) && '+single_guard+')')
+        vp=vp.replace('if (2 < getPlayerCount())','if ((2 < getPlayerCount()) && '+single_guard+')')
+        vp=vp.replace('if (getPlayerCount() >= 2)','if ((getPlayerCount() >= 2) && '+single_guard+')')
+        vp=vp.replace('if (getPlayerCount() == 2)','if ((getPlayerCount() == 2) && '+single_guard+')')
+        text=text[:vp_a]+vp+text[vp_b:]
+        mp_a=text.index('Gfx *maybe_mp_interface(Gfx *gdl)')
+        mp_anchor='    if (g_CurrentPlayer->cameramode == 1)'
+        mp_b=text.index(mp_anchor,mp_a)
+        text=text[:mp_b]+'''    if (native_mp_bot_single_view && native_mp_bot_single_view(getPlayerCount(), native_demo_active()) && get_cur_playernum() != 0)
+    {
+        if (g_CurrentPlayer->cameramode != 1)
+        {
+            gunUpdateAndFireBothHands();
+            for (i = 0; i < 2; i++)
+            {
+                if (g_CurrentPlayer->hands[i].rocket != NULL && g_CurrentPlayer->hands[i].firedrocket != 0)
+                {
+                    g_CurrentPlayer->hands[i].rocket = NULL;
+                }
+            }
+            if (g_CurrentPlayer->bonddead != 0)
+            {
+                if (g_CurrentPlayer->deathanimfinished == 0)
+                {
+                    if (g_CurrentPlayer->bonddead == 1)
+                    {
+                        g_CurrentPlayer->bonddead = 2;
+                        die_blood_image_routine(0);
+                        set_missionstate(6);
+                    }
+                    else if (g_CurrentPlayer->redbloodfinished)
+                    {
+                        currentPlayerSetFadeColour(150, 0, 0, 0.7058824f);
+                    }
+                    else
+                    {
+                        if (die_blood_image_routine((g_ClockTimer > 0) ? 1 : 2))
+                        {
+                            g_CurrentPlayer->redbloodfinished = TRUE;
+                        }
+                    }
+                }
+                if ((modelGetAnimFrame(&g_CurrentPlayer->model) >= modelGetAnimEndFrame(&g_CurrentPlayer->model)) && g_CurrentPlayer->redbloodfinished)
+                {
+                    if (!g_CurrentPlayer->deathanimfinished)
+                    {
+                        g_CurrentPlayer->deathanimfinished = TRUE;
+                        currentPlayerAdjustFade(60.0f, 0, 0, 0, 1.0f);
+                        currentPlayerStartChrFade(120.0f, 0.0f);
+                    }
+                    if (currentPlayerIsFadeComplete())
+                    {
+                        scenario = get_scenario();
+                        cur      = get_cur_playernum();
+                        count    = getPlayerCount();
+                        total    = 0;
+                        for (i = 0; i < count; i++)
+                        {
+                            total += g_playerPlayerData[i].kill_counts[cur];
+                        }
+                        if ((scenario != SCENARIO_YOLT) || (total < 2))
+                        {
+                            if (native_mp_bot_should_respawn(cur, count, native_demo_active(), scenario, total) || joyGetButtons(get_cur_playernum(), 0xB000))
+                            {
+                                mp_respawn_handler();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return gdl;
+    }
+
+'''+text[mp_b:]
         text+='\n#include "native_watch_skin.h"\n'
         dest=BUILD/'overlay/bondview2.c';dest.parent.mkdir(exist_ok=True);dest.write_text(text)
         (dest.parent/'bondview2.patch').write_text(''.join(difflib.unified_diff(source.read_text().splitlines(True),text.splitlines(True),fromfile='upstream/src/game/bondview2.c',tofile='native/src/game/bondview2.c')))
@@ -810,13 +893,78 @@ static f32 native_frontend_aspect(f32 authored) {
         if text.count(old)!=1:raise ValueError('Original sky render boundary changed')
         text=text.replace(old,'            gDPSetScissor(DL++, G_SC_NON_INTERLACE, viGetViewLeft(), viGetViewTop(), viGetViewLeft()+viGetViewWidth(), viGetViewTop()+viGetViewHeight()); /* Keep sky inside the player viewport, after border clear. */\n'+old)
         at=text.index('void lvlStageLoad(s32 stage)')
-        text=text[:at]+'#include "native_distance_fog_emit.h"\n'+text[at:]
+        text=text[:at]+'#include "native_distance_fog_emit.h"\n#include "native_mp_bot.h"\n'+text[at:]
+        bot_anchor='            viSetAspect(g_CurrentPlayer->aspect);\n'
+        assert text.count(bot_anchor)==1
+        text=text.replace(bot_anchor,bot_anchor+'''
+            if (native_mp_bot_single_view && native_mp_bot_single_view(pcount, 0) && get_cur_playernum() != 0)
+            {
+                Gfx *bot_dl = DL;
+                DL = viSetupCurrentPlayerView(DL);
+                if (get_debug_render_raster() == DEB_BOND_VIEW)
+                {
+                    DL = bondviewRenderDebugBondView(DL);
+                }
+                bgRoomVisibilityRelated();
+                propsTick();
+                chraiUpdateOnscreenPropCount();
+                chrpropUpdateAutoaimTarget();
+                chraiCheckUseHeldItems();
+                if (bond_pressed_reload_activate() && bond_interact_object())
+                {
+                    attempt_reload_item_in_hand(GUNRIGHT);
+                    attempt_reload_item_in_hand(GUNLEFT);
+                }
+                propsTickPlayer();
+#if defined(BUGFIX_R1)
+                if (cheatIsActive(CHEAT_INFINITE_AMMO) != 0 && ((getCurrentPlayerWeaponId(GUNRIGHT) != ITEM_WATCHLASER) || (g_CurrentPlayer->trigger_down == 0)))
+#else
+                if (cheatIsActive(CHEAT_INFINITE_AMMO) != 0)
+#endif
+                {
+                    set_max_ammo_for_cur_player();
+                }
+                if (get_debug_render_raster() == DEB_BOND_VIEW)
+                {
+                    DL = maybe_mp_interface(DL);
+                }
+                DL = bot_dl;
+                continue;
+            }
+''')
+        screens_old='            DL = viSetupScreensForNumPlayers(DL);\n'
+        assert text.count(screens_old)==1
+        text=text.replace(screens_old,'''            if (native_mp_bot_single_view && native_mp_bot_single_view(pcount, 0))
+            {
+                if (viGetViewTop() > 0 || (viGetViewTop() + viGetViewHeight()) < viGetY())
+                {
+                    gDPSetCycleType(DL++, G_CYC_FILL);
+                    gDPSetScissor(DL++, G_SC_NON_INTERLACE, 0, 0, viGetX(), viGetY());
+                    gDPSetFillColor(DL++, ((GPACK_RGBA5551(0,0,0,1) << 16) | GPACK_RGBA5551(0,0,0,1)));
+                    if (viGetViewTop() > 0)
+                    {
+                        gDPFillRectangle(DL++, 0, 0, (viGetX() - 1), (viGetViewTop() - 1));
+                        gDPPipeSync(DL++);
+                    }
+                    if ((viGetViewTop() + viGetViewHeight()) < viGetY())
+                    {
+                        gDPFillRectangle(DL++, 0, (viGetViewTop() + viGetViewHeight()), (viGetX() - 1), (viGetY() - 1));
+                        gDPPipeSync(DL++);
+                    }
+                }
+            }
+            else
+            {
+                DL = viSetupScreensForNumPlayers(DL);
+            }
+''')
         old='            DL = skyRender(DL);'
         assert text.count(old)==1
         text=text.replace(old,'            struct NativeDistanceFog native_fog;\n            DL=native_distance_fog_current(&native_fog)?native_distance_fog_backdrop(DL):skyRender(DL);')
         import dynamic_stereo
         text=dynamic_stereo.level(text)
         dest=BUILD/'overlay/lv.c';dest.parent.mkdir(exist_ok=True);dest.write_text(text)
+        (dest.parent/'lv.patch').write_text(''.join(difflib.unified_diff(source.read_text().splitlines(True),text.splitlines(True),fromfile='upstream/src/game/lv.c',tofile='native/src/game/lv.c')))
         return dest
     if str(rel)=='src/game/indy_comms.c':
         text=source.read_text()

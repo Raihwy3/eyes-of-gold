@@ -1,4 +1,4 @@
-"""Use the original local two-player match with only physical pad 0 present."""
+"""Use the local multiplayer menu with physical pad 0 and 2-4 player slots."""
 import effect_lod
 
 def _replace_once(text, old, new):
@@ -6,17 +6,19 @@ def _replace_once(text, old, new):
     return text.replace(old, new, 1)
 
 def front(text):
-    # Only the frontend sees two available slots. Real controller input remains
-    # one connected pad, and the original second player's input stays neutral.
+    # Frontend sees four available slots so 2-4P matches can be configured.
+    # Real controller input remains one connected pad (slot 0); slots 1..3
+    # are idle or AI bot controlled.
     text=text.replace('joyGetControllerCount()','native_preview_controller_count()')
-    text='#include "native_mp_bot.h"\nstatic int native_preview_controller_count(void){return 2;}\nstatic int highlight_bots;\n'+text
+    text=_replace_once(text,'        numplayers = native_preview_controller_count();','        numplayers = 2;')
+    text='#include "native_mp_bot.h"\nstatic int native_preview_controller_count(void){return 4;}\nstatic int highlight_bots;\n'+text
     signature='s32 check_if_mp_stage_unlocked(s32 stage)'
     # All original selectable arenas are available for this local preview.
     text=effect_lod.prefix(text,signature,'    if(stage<MP_STAGE_RANDOM || stage>=MP_STAGE_SELECTED_MAX)return FALSE;\n    return TRUE;')
     text='static void native_preview_ready_idle(void);\n'+text
     for signature in ('void interface_menu0F_mpcharsel(void)','void interface_menu10_mphandicap(void)','void interface_menu11_mpcontrols(void)'):
         text=effect_lod.prefix(text,signature,'    native_preview_ready_idle();')
-    text+='\nstatic void native_preview_ready_idle(void){player_has_selected_char[PLAYER_2]=TRUE;}\n'
+    text+='\nstatic void native_preview_ready_idle(void){player_has_selected_char[PLAYER_2]=TRUE;player_has_selected_char[PLAYER_3]=TRUE;player_has_selected_char[PLAYER_4]=TRUE;}\n'
 
     # Compact MP Options rows slightly (18px step from 0x75..0x105) so row 9
     # ("Bots": Off/On at 0x117) fits cleanly inside the original folder area.

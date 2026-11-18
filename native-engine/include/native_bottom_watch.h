@@ -24,7 +24,9 @@ void native_bottom_game_tick(void) {
     if(getPlayerCount()>1) {
         native_bottom_string(v.title,sizeof v.title,"LOCAL MULTIPLAYER");
         native_bottom_string(v.note,sizeof v.note,native_mp_bot_status_note());
-        native_bottom_copy_fonts();native_bottom_publish(&v);return;
+        native_bottom_copy_fonts();
+        if(native_mp_watch_populate)native_mp_watch_populate(&v,ptrFontBankGothicChars,ptrFontBankGothic);
+        native_bottom_publish(&v);return;
     }
     native_bottom_string(v.title,sizeof v.title,"MISSION OBJECTIVES");native_bottom_copy_fonts();
     native_bottom_objectives(&v);native_capture_objectives(&v.objectives);native_bottom_publish(&v);

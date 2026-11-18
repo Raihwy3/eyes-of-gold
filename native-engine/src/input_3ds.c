@@ -60,7 +60,7 @@ void inputUpdate(void) {
     float yaw=0,pitch=0;
     native_motion_set_filter(native_setting_gyro_filter());
     native_motion_sample(now,gyro_enabled?-rate.x/gyro_coefficient:0,
-        gyro_enabled?rate.z/gyro_coefficient:0,gyro_enabled?-rate.y/gyro_coefficient:0,
+        gyro_enabled?rate.z/gyro_coefficient:0,gyro_enabled?rate.y/gyro_coefficient:0,
         gyro_enabled && accel_enabled?accel.x/512.f:0,
         gyro_enabled && accel_enabled?-accel.z/512.f:0,
         gyro_enabled && accel_enabled?-accel.y/512.f:0,

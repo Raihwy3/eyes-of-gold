@@ -80,10 +80,13 @@ int native_setting_guard_ai_hz(void){return __atomic_load_n(&guard_ai_hz,__ATOMI
 int native_setting_unlock_all(void){return __atomic_load_n(&unlock_all,__ATOMIC_RELAXED);}
 int native_setting_mp_bots(void){return __atomic_load_n(&mp_bots,__ATOMIC_RELAXED);}
 const char *native_mp_bot_label(void){return "Bots";}
-const char *native_mp_bot_value_text(void){return native_setting_mp_bots()?"On":"Off";}
-const char *native_mp_bot_status_note(void){return native_setting_mp_bots()?"Player 1 controlled. Player 2 AI bot.":"Player 1 controlled. Player 2 idle.";}
+const char *native_mp_bot_value_text(void){int v=native_setting_mp_bots();return v==2?"Full P1":v?"On":"Off";}
+const char *native_mp_bot_status_note(void){int v=native_setting_mp_bots();return v==2?"Player 1 fullscreen. Other players AI bots.":v?"Player 1 controlled. Other players AI bots.":"Player 1 controlled. Other players idle.";}
 int native_mp_bot_enabled(void){return native_setting_mp_bots()!=0;}
-void native_mp_bot_toggle(void){native_setting_set_mp_bots(!native_mp_bot_enabled());}
+int native_mp_bot_fullscreen(void){return native_setting_mp_bots()==2;}
+void native_mp_bot_toggle(void){native_setting_set_mp_bots((native_setting_mp_bots()+1)%3);}
+const char *native_mp_players_label(void){return "Players";}
+const char *native_mp_players_value_text(int count){return count==4?"4":count==3?"3":"2";}
 static unsigned render_state;
 static int game_values[7]={-1,-1,-1,-1,-1,-1,-1};
 static int volumes[2]={-1,-1};
@@ -167,7 +170,7 @@ void native_setting_set_randomiser(int v){update(&randomiser,v,0,1);}
 void native_setting_set_randomiser_seed(int v){update(&randomiser_seed,v,1,999999);}
 void native_setting_set_subsistence(int v){update(&subsistence,v,0,1);}
 void native_setting_set_unlock_all(int v){update(&unlock_all,v,0,1);}
-void native_setting_set_mp_bots(int v){update(&mp_bots,v,0,1);}
+void native_setting_set_mp_bots(int v){update(&mp_bots,v,0,2);}
 void native_setting_set_custom_sticks(int v){update(&custom_sticks,v,0,3);}
 void native_setting_set_custom_bind(int slot,int v){if(slot>=0 && slot<6)update(&custom_binds[slot],v,0,13);}
 void native_setting_set_custom_digital_aim(int v){update(&custom_digital_aim,v,0,2);}
@@ -320,7 +323,7 @@ void native_settings_init(const char *directory) {
     if(load_crosshair_shape<0 || load_crosshair_shape>7)ok=0;
     if(guardvisible<0 || guardvisible>1 || (guardhz!=30 && guardhz!=15 && guardhz!=5))ok=0;
     if(rando<0 || rando>1 || seed<1 || seed>999999)ok=0;
-    if(subs<0 || subs>1 || unlocked<0 || unlocked>1 || mpbots<0 || mpbots>1 || mixer<0 || mixer>3)ok=0;
+    if(subs<0 || subs>1 || unlocked<0 || unlocked>1 || mpbots<0 || mpbots>2 || mixer<0 || mixer>3)ok=0;
     if(fps!=30 && fps!=60)ok=0;
     if(space<0 || space>2 || axis<0 || axis>1 || lock<0 || lock>1 || sway<0 || sway>1 || steady<0 || steady>1)ok=0;
     if(aimmove<0 || aimmove>1)ok=0;

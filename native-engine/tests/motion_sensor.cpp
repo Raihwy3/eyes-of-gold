@@ -63,6 +63,18 @@ int main(){
  assert(travel>29.f && travel<=30.f);
  sample(0,0,0,0,0,0,y,p);sample(0,0,0,1,0,0,y,p);assert(y==0 && p==0);
  native_motion_set_filter(0);
+ for(int space=1;space<=2;space++)for(int axis: {0,1}){
+  reset();float ay=cosf(.7853982f),az=-sinf(.7853982f);
+  for(int i=0;i<20;i++){now+=10000;native_motion_sample(now,0,0,0,0,ay,az,1,space,axis,&y,&p);}
+  now+=10000;native_motion_sample(now,0,20.f*ay,20.f*az,0,ay,az,1,space,axis,&y,&p);
+  assert(fabsf(y-.2f)<.005f && fabsf(p)<.005f);
+ }
+ for(int space=1;space<=2;space++){
+  native_motion_reset();
+  now+=10000;native_motion_sample(now,0,0,0,0,0,0,0,space,0,&y,&p);
+  now+=10000;native_motion_sample(now,10,20,0,0,0,0,1,space,0,&y,&p);
+  assert(fabsf(y-.2f)<.001f && fabsf(p+.1f)<.001f);
+ }
  puts("PASS moving World/Player reference: multi-angle body yaw reversals at 30/60/100Hz, distinct pitch axes, optional jitter attenuation and disengage reset");
  sample(30,30,0,0,0,0,y,p);assert(y==0 && p==0);
  now+=1000000;native_motion_sample(now,30,30,0,0,1,0,1,0,0,&y,&p);assert(y==0 && p==0);

@@ -919,8 +919,8 @@
     },
     {
       "symbol": "CSWTCH.979",
-      "review": "independently authored native menu/control implementation data",
-      "evidence": "Independently authored 1.7 Rebind, 1.8 Natalya, Swap aim stick, and shifted local static tables in native_watch_options.h, native_watch_ui.h, native_bottom_watch.h, and native_options_bridge.h; no original game-content definitions."
+      "review": "independently authored native UI/render compiler lookup table",
+      "evidence": "Eight empty subtitle strings from native_watch_options.h category header switch."
     },
     {
       "symbol": "CSWTCH.982",
@@ -956,6 +956,46 @@
       "symbol": "CSWTCH.978",
       "review": "independently authored native menu/control implementation data",
       "evidence": "Independently authored 1.7 Rebind, 1.8 Natalya, Swap aim stick, and shifted local static tables in native_watch_options.h, native_watch_ui.h, native_bottom_watch.h, and native_options_bridge.h; no original game-content definitions."
+    },
+    {
+      "symbol": "CSWTCH.234",
+      "review": "independently authored native UI/render compiler lookup table",
+      "evidence": "GCC synthesized float LOD draw-distance lookup table (4000.0f, 2200.0f, 1200.0f), renumbered from CSWTCH.219 after Full P1 overlay update."
+    },
+    {
+      "symbol": "CSWTCH.2724",
+      "review": "independently authored native UI/render compiler lookup table",
+      "evidence": "Watch skin seconds-hand finish colour lookup generated from native_watch_skin_mesh.h, renumbered from CSWTCH.2710."
+    },
+    {
+      "symbol": "CSWTCH.836",
+      "review": "independently authored native UI/render compiler lookup table",
+      "evidence": "Watch page IDs (10002, 10000, 10004) from native_watch_options.h, renumbered from CSWTCH.834."
+    },
+    {
+      "symbol": "CSWTCH.971",
+      "review": "independently authored native UI/render compiler lookup table",
+      "evidence": "Calibration status labels ['Try again\\n', 'Calibrated\\n', 'Start\\n', 'Keep still\\n'] from native_watch_options.h, renumbered from CSWTCH.969."
+    },
+    {
+      "symbol": "CSWTCH.976",
+      "review": "independently authored native UI/render compiler lookup table",
+      "evidence": "Watch category titles with newlines ['Advanced\\n', 'Back\\n', 'Audio\\n', 'Experimental\\n', 'Controls\\n', 'Accessibility\\n', '3D settings\\n', 'Crosshair\\n'] from native_watch_options.h."
+    },
+    {
+      "symbol": "CSWTCH.980",
+      "review": "independently authored native UI/render compiler lookup table",
+      "evidence": "Watch category titles ['Advanced', 'Back', 'Audio', 'Experimental', 'Controls', 'Accessibility', '3D settings', 'Crosshair'] from native_watch_options.h."
+    },
+    {
+      "symbol": "CSWTCH.236",
+      "review": "independently authored native UI/render compiler lookup table",
+      "evidence": "GCC synthesized float LOD draw-distance lookup table (4000.0f, 2200.0f, 1200.0f), renumbered from CSWTCH.219 after Full P1 overlay update."
+    },
+    {
+      "symbol": "CSWTCH.2727",
+      "review": "independently authored native UI/render compiler lookup table",
+      "evidence": "Watch skin seconds-hand finish colour lookup generated from native_watch_skin_mesh.h, renumbered from CSWTCH.2710."
     }
   ]
 }

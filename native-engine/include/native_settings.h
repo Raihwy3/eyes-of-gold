@@ -117,9 +117,12 @@ int native_setting_watch_clock(void);
 void native_setting_set_watch_clock(int value);
 int native_watch_clock_time(int fallback);
 
-/* Multiplayer AI bots (1 = AI controls players 2..N, 0 = Off). */
+/* Multiplayer AI bots (0 = Off, 1 = On (Splitscreen), 2 = Full P1). */
 int native_setting_mp_bots(void);
 void native_setting_set_mp_bots(int value);
+int native_mp_bot_fullscreen(void);
+const char *native_mp_players_label(void);
+const char *native_mp_players_value_text(int count);
 
 /* 1.7 Custom full button/stick rebinding (slots 0..5: fire, aim, action, weapon, reload, crouch). */
 int native_setting_custom_sticks(void);

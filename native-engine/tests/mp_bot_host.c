@@ -10,6 +10,8 @@
 #include "game/stan.h"
 #include "game/mpmenu.h"
 #include "bondconstants.h"
+#include "native_bottom.h"
+#include "game/textrelated.h"
 #include "native_mp_bot.h"
 #include "native_settings.h"
 
@@ -19,9 +21,20 @@
 /* Minimal host stubs for native_mp_bot.c AI & menu/respawn verification. */
 struct player *g_CurrentPlayer;
 struct player *g_playerPointers[4];
+struct player_data g_playerPlayerData[4];
 PadRecord *g_Startpad[0x10];
 s32 startpadcount;
 f32 g_GlobalTimerDelta = 1.0f;
+
+static MPSCENARIOS mock_scenario = SCENARIO_NORMAL;
+static s32 mock_points[4] = { 5, 3, 2, 1 };
+MPSCENARIOS get_scenario(void) { return mock_scenario; }
+s32 get_points_for_mp_player(s32 playernum) { return (playernum >= 0 && playernum < 4) ? mock_points[playernum] : 0; }
+void textMeasure(s32 *height, s32 *width, char *text, struct fontchar *font1, struct font *font2, s32 lineheight) {
+    (void)font1; (void)font2; (void)lineheight;
+    if (height) *height = 10;
+    if (width) *width = text ? (s32)strlen(text) * 4 : 0;
+}
 
 static s32 mock_cur_player;
 static s32 mock_player_count = 2;
@@ -97,8 +110,22 @@ int main(void) {
     test_assert(!strcmp(native_mp_bot_value_text(), "Off"));
     native_mp_bot_toggle();
     test_assert(native_setting_mp_bots() == 1);
+    test_assert(!native_mp_bot_fullscreen());
     test_assert(!strcmp(native_mp_bot_value_text(), "On"));
+    native_mp_bot_toggle();
+    test_assert(native_setting_mp_bots() == 2);
+    test_assert(native_mp_bot_enabled());
+    test_assert(native_mp_bot_fullscreen());
+    test_assert(!strcmp(native_mp_bot_value_text(), "Full P1"));
+    test_assert(native_mp_bot_single_view(2, 0) == 1);
+    test_assert(native_mp_bot_single_view(4, 0) == 1);
+    test_assert(native_mp_bot_single_view(1, 0) == 0);
+    test_assert(native_mp_bot_single_view(2, 1) == 0);
     native_settings_init(dir);
+    test_assert(native_setting_mp_bots() == 2);
+    native_mp_bot_toggle();
+    test_assert(native_setting_mp_bots() == 0);
+    native_setting_set_mp_bots(1);
     test_assert(native_setting_mp_bots() == 1);
 
     /* 2. Predicates: P1 never bot, P2 bot only when enabled & >=2 players & !demo. */
@@ -312,6 +339,43 @@ int main(void) {
     m.analogWalk = 42;
     native_mp_bot_apply(&m);
     test_assert(m.analogWalk == 42);
+
+    /* Multiplayer Watch-like bottom HUD population across 2, 3 and 4 players. */
+    static struct font dummy_font;
+    struct EogBottomView view;
+    struct player p3, p4;
+    memset(&p3, 0, sizeof p3);
+    memset(&p4, 0, sizeof p4);
+    g_playerPointers[2] = &p3;
+    g_playerPointers[3] = &p4;
+    g_CurrentPlayer = &p1;
+    p1.bondhealth = 0.8f;
+    p1.bondarmour = 0.5f;
+    p1.bonddead = 0;
+
+    native_setting_set_mp_bots(0);
+    mock_player_count = 2;
+    memset(&view, 0, sizeof view);
+    native_mp_watch_populate(&view, dummy_font.chars, &dummy_font);
+    test_assert(view.objectives.count == 11);
+    test_assert(strstr(view.objectives.text[10].text, "View: 2P Splitscreen") != NULL);
+
+    mock_player_count = 3;
+    memset(&view, 0, sizeof view);
+    native_mp_watch_populate(&view, dummy_font.chars, &dummy_font);
+    test_assert(view.objectives.count == 13);
+    test_assert(strstr(view.objectives.text[12].text, "View: 3P Splitscreen") != NULL);
+
+    native_setting_set_mp_bots(2);
+    mock_player_count = 4;
+    memset(&view, 0, sizeof view);
+    native_mp_watch_populate(&view, dummy_font.chars, &dummy_font);
+    test_assert(view.objectives.count == 15);
+    test_assert(strstr(view.objectives.text[3].text, "HP 80% AP 50%") != NULL);
+    test_assert(strstr(view.objectives.text[5].text, "KF7 Soviet (30)") != NULL);
+    test_assert(strstr(view.objectives.text[6].text, "1: Player 1 (You)") != NULL);
+    test_assert(strstr(view.objectives.text[12].text, "4: Player 4 (Bot)") != NULL);
+    test_assert(strstr(view.objectives.text[14].text, "View: Fullscreen P1") != NULL);
 
     /* Remove temp dir files. */
     char path[512];

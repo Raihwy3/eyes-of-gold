@@ -1,5 +1,6 @@
 #include <ultra64.h>
 #include <math.h>
+#include <stdio.h>
 #include <string.h>
 #include "game/player.h"
 #include "game/gun.h"
@@ -7,7 +8,9 @@
 #include "game/stan.h"
 #include "game/lv.h"
 #include "game/mpmenu.h"
+#include "game/textrelated.h"
 #include "bondconstants.h"
+#include "native_bottom.h"
 #include "native_mp_bot.h"
 #include "native_settings.h"
 #include "native_demo.h"
@@ -23,6 +26,8 @@ extern s32 lvlGetControlsLockedFlag(void);
 extern ITEM_IDS get_next_weapon_in_cycle_for_hand(GUNHAND hand, s32 direction);
 extern void gunRequestHandWeaponChange(enum GUNHAND hand, s32 nextWeapon, s32 cycleDirection);
 extern struct PropRecord *chrpropGetActiveTail(void);
+extern MPSCENARIOS get_scenario(void);
+extern s32 get_points_for_mp_player(s32 playernum);
 
 #define BOT_MAX_PLAYERS 4
 #define BOT_PI 3.14159265358979323846f
@@ -251,6 +256,10 @@ static int bot_find_nearest_firearm_pickup(struct PropRecord *src, float *out_x,
 int native_mp_bot_is_active(int player_num, int player_count, int demo_active) {
     return native_setting_mp_bots() != 0 && !demo_active && player_count > 1 &&
            player_num >= 1 && player_num < player_count;
+}
+
+int native_mp_bot_single_view(int player_count, int demo_active) {
+    return native_setting_mp_bots() == 2 && !demo_active && !native_demo_active() && player_count > 1;
 }
 
 int native_mp_bot_should_respawn(int player_num, int player_count, int demo_active, int scenario, int deaths) {
@@ -653,4 +662,140 @@ void native_mp_bot_apply(struct MoveData *m) {
         m->analogWalk = bot_clampi((int)(fwd * 70.0f), -70, 70);
         m->analogStrafe = bot_clampi((int)(side * 70.0f), -70, 70);
     }
+}
+
+static const char *mp_watch_scenario_title(s32 sc) {
+    switch (sc) {
+    case SCENARIO_YOLT:  return "YOU ONLY LIVE TWICE\n";
+    case SCENARIO_TLD:   return "THE LIVING DAYLIGHTS\n";
+    case SCENARIO_MWTGG: return "THE GOLDEN GUN\n";
+    case SCENARIO_LTK:   return "LICENCE TO KILL\n";
+    case SCENARIO_2v2:   return "TEAM: 2 VS 2\n";
+    case SCENARIO_3v1:   return "TEAM: 3 VS 1\n";
+    case SCENARIO_2v1:   return "TEAM: 2 VS 1\n";
+    default:             return "MULTIPLAYER: NORMAL\n";
+    }
+}
+
+static const char *mp_watch_weapon_name(s32 item) {
+    switch (item) {
+    case ITEM_UNARMED:       return "Unarmed";
+    case ITEM_FIST:          return "Slappers";
+    case ITEM_KNIFE:         return "Knife";
+    case ITEM_THROWKNIFE:    return "T. Knife";
+    case ITEM_WPPK:          return "PP7";
+    case ITEM_WPPKSIL:       return "Sil. PP7";
+    case ITEM_TT33:          return "DD44";
+    case ITEM_SKORPION:      return "Klobb";
+    case ITEM_AK47:          return "KF7 Soviet";
+    case ITEM_UZI:           return "ZMG";
+    case ITEM_MP5K:          return "D5K";
+    case ITEM_MP5KSIL:       return "Sil. D5K";
+    case ITEM_SPECTRE:       return "Phantom";
+    case ITEM_M16:           return "AR33";
+    case ITEM_FNP90:         return "RC-P90";
+    case ITEM_SHOTGUN:       return "Shotgun";
+    case ITEM_AUTOSHOT:      return "Auto Shot";
+    case ITEM_SNIPERRIFLE:   return "Sniper";
+    case ITEM_RUGER:         return "Cougar";
+    case ITEM_GOLDENGUN:     return "Golden Gun";
+    case ITEM_SILVERWPPK:    return "Silver PP7";
+    case ITEM_GOLDWPPK:      return "Gold PP7";
+    case ITEM_LASER:         return "Moonraker";
+    case ITEM_GRENADELAUNCH: return "G. Launch";
+    case ITEM_ROCKETLAUNCH:  return "R. Launch";
+    case ITEM_GRENADE:       return "Grenade";
+    case ITEM_TIMEDMINE:     return "Timed Mine";
+    case ITEM_PROXIMITYMINE: return "Prox. Mine";
+    case ITEM_REMOTEMINE:    return "Rem. Mine";
+    case ITEM_TRIGGER:       return "Detonator";
+    case ITEM_TOKEN:         return "Flag";
+    default:                 return "Weapon";
+    }
+}
+
+static void mp_watch_add_text(struct EogObjectiveLayout *out, int x, int y, int w, int h,
+                              unsigned colour, const char *s) {
+    if (!out || out->count >= EOG_OBJECTIVE_TEXTS || !s) return;
+    struct EogObjectiveText *t = &out->text[out->count++];
+    t->x = x;
+    t->y = y;
+    t->width = w;
+    t->height = h;
+    t->lineheight = 10;
+    t->overlap = -1;
+    t->spacing = 0;
+    t->colour = colour;
+    snprintf(t->text, sizeof t->text, "%s", s);
+}
+
+void native_mp_watch_populate(struct EogBottomView *v, struct fontchar *chars, struct font *font) {
+    if (!v || !chars || !font || !g_CurrentPlayer) return;
+    struct player *p0 = g_playerPointers[0] ? g_playerPointers[0] : g_CurrentPlayer;
+    if (!p0) return;
+
+    s32 sc = get_scenario();
+    const char *title = mp_watch_scenario_title(sc);
+    s32 th = 0, tw = 0;
+    textMeasure(&th, &tw, (char *)title, chars, font, 0);
+    int box_left = ((0xaa - tw) / 2) + 0x4b;
+    if (box_left < 48) box_left = 48;
+    mp_watch_add_text(&v->objectives, box_left, 30, 220, 18, 0xa0ffa0f0u, title);
+    mp_watch_add_text(&v->objectives, 65, 42, 200, 18, 0xa0ffa0f0u, "P1 STATUS & STANDINGS\n");
+
+    char buf[128];
+    mp_watch_add_text(&v->objectives, 60, 58, 90, 18, 0x00ff00b0u, "a: Vitals\n");
+    if (p0->bonddead) {
+        snprintf(buf, sizeof buf, "KIA\n");
+    } else {
+        int hp = bot_clampi((int)(p0->bondhealth * 100.0f), 0, 100);
+        int ap = bot_clampi((int)(p0->bondarmour * 100.0f), 0, 100);
+        snprintf(buf, sizeof buf, "HP %d%% AP %d%%\n", hp, ap);
+    }
+    mp_watch_add_text(&v->objectives, 155, 58, 125, 18, p0->bonddead ? 0xff4040ffu : 0xa0ffa0f0u, buf);
+
+    s32 item = getCurrentPlayerWeaponId(GUNRIGHT);
+    const char *wname = mp_watch_weapon_name(item);
+    mp_watch_add_text(&v->objectives, 60, 73, 90, 18, 0x00ff00b0u, "b: Weapon\n");
+    if (item == ITEM_UNARMED || item == ITEM_FIST || item == ITEM_KNIFE ||
+        item == ITEM_LASER || item == ITEM_TRIGGER || item == ITEM_TOKEN) {
+        snprintf(buf, sizeof buf, "%s\n", wname);
+    } else {
+        s32 mag = get_ammo_in_hands_magazine(GUNRIGHT);
+        snprintf(buf, sizeof buf, "%s (%d)\n", wname, mag);
+    }
+    mp_watch_add_text(&v->objectives, 155, 73, 125, 18, 0xa0ffa0f0u, buf);
+
+    int count = getPlayerCount();
+    if (count > BOT_MAX_PLAYERS) count = BOT_MAX_PLAYERS;
+    for (int p = 0; p < count; p++) {
+        int y = 92 + p * 16;
+        if (p == 0) {
+            snprintf(buf, sizeof buf, "1: Player 1 (You)\n");
+        } else {
+            snprintf(buf, sizeof buf, "%d: Player %d (%s)\n",
+                     p + 1, p + 1, native_mp_bot_enabled() ? "Bot" : "Idle");
+        }
+        mp_watch_add_text(&v->objectives, 60, y, 115, 18, p == 0 ? 0xa0ffa0f0u : 0x00ff00b0u, buf);
+
+        s32 pts = get_points_for_mp_player(p);
+        const char *tag = "";
+        if (sc == SCENARIO_YOLT && g_playerPlayerData[p].order_out_in_yolt != 0) {
+            tag = " [OUT]";
+        } else if (sc == SCENARIO_TLD && g_playerPlayerData[p].have_token_or_goldengun != 0) {
+            tag = " [FLAG]";
+        } else if (sc == SCENARIO_MWTGG && g_playerPlayerData[p].have_token_or_goldengun != 0) {
+            tag = " [GG]";
+        }
+        snprintf(buf, sizeof buf, "%d pts%s\n", (int)pts, tag);
+        int dead = g_playerPointers[p] && g_playerPointers[p]->bonddead;
+        mp_watch_add_text(&v->objectives, 175, y, 105, 18, dead ? 0xff4040ffu : 0xa0ffa0f0u, buf);
+    }
+
+    if (native_mp_bot_single_view(count, native_demo_active())) {
+        snprintf(buf, sizeof buf, "View: Fullscreen P1\n");
+    } else {
+        snprintf(buf, sizeof buf, "View: %dP Splitscreen\n", count);
+    }
+    mp_watch_add_text(&v->objectives, 60, 166, 200, 18, 0xa0ffa0f0u, buf);
 }
