@@ -31,7 +31,7 @@
         "native-engine/include/native_convert.h": "b5b5c0652deb5c7659f6534d2b4d2d758ac37f13c1b565af0f24f1a3b18a073a",
         "native-engine/include/native_cpu_room_bounds.h": "c6be05a269ca0dcbd9609d354736cc0430c1c5b2d417aca2746b8b2ff93d2a02",
         "native-engine/include/native_crosshair_opacity.h": "e6acb28ae7a235196dc902a72639de27eabda498ef564bfaaaeb7964fd6b44fd",
-        "native-engine/include/native_crosshair_shapes.h": "8416abebebe51b443e6e20cbdd93f2fc4e1c30bfc037f651e5466af77908af6b",
+        "native-engine/include/native_crosshair_shapes.h": "871ed534adaca5061c9eb51eed1df2b094e831fdbec2c02dda2fb0b2396747d6",
         "native-engine/include/native_cull.h": "ac3b2c7104e270ab072a8d10809b5b08a322b874f7080d8caaeb081f44b28342",
         "native-engine/include/native_demo.h": "7bb7e6adf8bd665db903193869dab1bad4f287cac31b896c3f60fc45b9499b32",
         "native-engine/include/native_derived.h": "24b215bad66e65fae96ede7dfc4079bfe39305b5f6201908b5328d789b7a1f78",
@@ -109,7 +109,7 @@
         "native-engine/include/native_unorm.h": "231068f4df2f109146dd73d8969b847ebb24f9845e060266aee7b25ce9b4f3af",
         "native-engine/include/native_update.h": "108dcc09be8b3f852466e6181cc4d0d35185beeaa5c772b01c3d361badc4bbd6",
         "native-engine/include/native_update_http.h": "611c098fe9560310d90074b6f89f4c1c21331668bb2a186697d3655bc204b547",
-        "native-engine/include/native_version.h": "4437736da1face1889c4be107c49da1746fa69ac4b2db65d50cd78e34ece8265",
+        "native-engine/include/native_version.h": "d2b6c8fa95a39495647eea2bd9e837d459177562d76426d86106ec8c0b4efe55",
         "native-engine/include/native_viewmodel.h": "3a502848554a911e3ccbfa1c64a539fe4c89f84e7796d1344c0114cafaf02c51",
         "native-engine/include/native_vignette.h": "86451d3e4286a03d6b6e2ef715af11e8dea4a40954ad37993be1f3e098fa69ac",
         "native-engine/include/native_watch_environment.h": "a4ad66d11f969dc3e8999969d18951646f5cf1aba64d9ddff2471b0cc3685b72",
@@ -120,7 +120,8 @@
         "native-engine/include/native_watch_ui.h": "010403fdb3329bee78d773fb698a61e72a39b5687ef82a8e18306eb8c91a0e5a",
         "native-engine/include/native_weapon_stereo.h": "0bfc34bfc32fd6bb3e5bf57a0d5f3add01e6969c4513f3db25b6617f3fc57992",
         "native-engine/include/native_work_profile.h": "3a6c5b97251ed7a460cf02bd919bf82759bbf51648f409084dfa60d740730fb9",
-        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb"
+        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb",
+        "native-engine/include/native_crosshair_sdf.h": "465afb81d2aedb2ec09b1b5b05be9404d4cafd2a57ae69edfa66fda70126c308"
       }
     },
     {
@@ -152,7 +153,7 @@
         "native-engine/include/native_convert.h": "b5b5c0652deb5c7659f6534d2b4d2d758ac37f13c1b565af0f24f1a3b18a073a",
         "native-engine/include/native_cpu_room_bounds.h": "c6be05a269ca0dcbd9609d354736cc0430c1c5b2d417aca2746b8b2ff93d2a02",
         "native-engine/include/native_crosshair_opacity.h": "e6acb28ae7a235196dc902a72639de27eabda498ef564bfaaaeb7964fd6b44fd",
-        "native-engine/include/native_crosshair_shapes.h": "8416abebebe51b443e6e20cbdd93f2fc4e1c30bfc037f651e5466af77908af6b",
+        "native-engine/include/native_crosshair_shapes.h": "871ed534adaca5061c9eb51eed1df2b094e831fdbec2c02dda2fb0b2396747d6",
         "native-engine/include/native_cull.h": "ac3b2c7104e270ab072a8d10809b5b08a322b874f7080d8caaeb081f44b28342",
         "native-engine/include/native_demo.h": "7bb7e6adf8bd665db903193869dab1bad4f287cac31b896c3f60fc45b9499b32",
         "native-engine/include/native_derived.h": "24b215bad66e65fae96ede7dfc4079bfe39305b5f6201908b5328d789b7a1f78",
@@ -230,7 +231,7 @@
         "native-engine/include/native_unorm.h": "231068f4df2f109146dd73d8969b847ebb24f9845e060266aee7b25ce9b4f3af",
         "native-engine/include/native_update.h": "108dcc09be8b3f852466e6181cc4d0d35185beeaa5c772b01c3d361badc4bbd6",
         "native-engine/include/native_update_http.h": "611c098fe9560310d90074b6f89f4c1c21331668bb2a186697d3655bc204b547",
-        "native-engine/include/native_version.h": "4437736da1face1889c4be107c49da1746fa69ac4b2db65d50cd78e34ece8265",
+        "native-engine/include/native_version.h": "d2b6c8fa95a39495647eea2bd9e837d459177562d76426d86106ec8c0b4efe55",
         "native-engine/include/native_viewmodel.h": "3a502848554a911e3ccbfa1c64a539fe4c89f84e7796d1344c0114cafaf02c51",
         "native-engine/include/native_vignette.h": "86451d3e4286a03d6b6e2ef715af11e8dea4a40954ad37993be1f3e098fa69ac",
         "native-engine/include/native_watch_environment.h": "a4ad66d11f969dc3e8999969d18951646f5cf1aba64d9ddff2471b0cc3685b72",
@@ -241,7 +242,8 @@
         "native-engine/include/native_watch_ui.h": "010403fdb3329bee78d773fb698a61e72a39b5687ef82a8e18306eb8c91a0e5a",
         "native-engine/include/native_weapon_stereo.h": "0bfc34bfc32fd6bb3e5bf57a0d5f3add01e6969c4513f3db25b6617f3fc57992",
         "native-engine/include/native_work_profile.h": "3a6c5b97251ed7a460cf02bd919bf82759bbf51648f409084dfa60d740730fb9",
-        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb"
+        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb",
+        "native-engine/include/native_crosshair_sdf.h": "465afb81d2aedb2ec09b1b5b05be9404d4cafd2a57ae69edfa66fda70126c308"
       }
     },
     {
@@ -273,7 +275,7 @@
         "native-engine/include/native_convert.h": "b5b5c0652deb5c7659f6534d2b4d2d758ac37f13c1b565af0f24f1a3b18a073a",
         "native-engine/include/native_cpu_room_bounds.h": "c6be05a269ca0dcbd9609d354736cc0430c1c5b2d417aca2746b8b2ff93d2a02",
         "native-engine/include/native_crosshair_opacity.h": "e6acb28ae7a235196dc902a72639de27eabda498ef564bfaaaeb7964fd6b44fd",
-        "native-engine/include/native_crosshair_shapes.h": "8416abebebe51b443e6e20cbdd93f2fc4e1c30bfc037f651e5466af77908af6b",
+        "native-engine/include/native_crosshair_shapes.h": "871ed534adaca5061c9eb51eed1df2b094e831fdbec2c02dda2fb0b2396747d6",
         "native-engine/include/native_cull.h": "ac3b2c7104e270ab072a8d10809b5b08a322b874f7080d8caaeb081f44b28342",
         "native-engine/include/native_demo.h": "7bb7e6adf8bd665db903193869dab1bad4f287cac31b896c3f60fc45b9499b32",
         "native-engine/include/native_derived.h": "24b215bad66e65fae96ede7dfc4079bfe39305b5f6201908b5328d789b7a1f78",
@@ -351,7 +353,7 @@
         "native-engine/include/native_unorm.h": "231068f4df2f109146dd73d8969b847ebb24f9845e060266aee7b25ce9b4f3af",
         "native-engine/include/native_update.h": "108dcc09be8b3f852466e6181cc4d0d35185beeaa5c772b01c3d361badc4bbd6",
         "native-engine/include/native_update_http.h": "611c098fe9560310d90074b6f89f4c1c21331668bb2a186697d3655bc204b547",
-        "native-engine/include/native_version.h": "4437736da1face1889c4be107c49da1746fa69ac4b2db65d50cd78e34ece8265",
+        "native-engine/include/native_version.h": "d2b6c8fa95a39495647eea2bd9e837d459177562d76426d86106ec8c0b4efe55",
         "native-engine/include/native_viewmodel.h": "3a502848554a911e3ccbfa1c64a539fe4c89f84e7796d1344c0114cafaf02c51",
         "native-engine/include/native_vignette.h": "86451d3e4286a03d6b6e2ef715af11e8dea4a40954ad37993be1f3e098fa69ac",
         "native-engine/include/native_watch_environment.h": "a4ad66d11f969dc3e8999969d18951646f5cf1aba64d9ddff2471b0cc3685b72",
@@ -362,7 +364,8 @@
         "native-engine/include/native_watch_ui.h": "010403fdb3329bee78d773fb698a61e72a39b5687ef82a8e18306eb8c91a0e5a",
         "native-engine/include/native_weapon_stereo.h": "0bfc34bfc32fd6bb3e5bf57a0d5f3add01e6969c4513f3db25b6617f3fc57992",
         "native-engine/include/native_work_profile.h": "3a6c5b97251ed7a460cf02bd919bf82759bbf51648f409084dfa60d740730fb9",
-        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb"
+        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb",
+        "native-engine/include/native_crosshair_sdf.h": "465afb81d2aedb2ec09b1b5b05be9404d4cafd2a57ae69edfa66fda70126c308"
       }
     },
     {
@@ -394,7 +397,7 @@
         "native-engine/include/native_convert.h": "b5b5c0652deb5c7659f6534d2b4d2d758ac37f13c1b565af0f24f1a3b18a073a",
         "native-engine/include/native_cpu_room_bounds.h": "c6be05a269ca0dcbd9609d354736cc0430c1c5b2d417aca2746b8b2ff93d2a02",
         "native-engine/include/native_crosshair_opacity.h": "e6acb28ae7a235196dc902a72639de27eabda498ef564bfaaaeb7964fd6b44fd",
-        "native-engine/include/native_crosshair_shapes.h": "8416abebebe51b443e6e20cbdd93f2fc4e1c30bfc037f651e5466af77908af6b",
+        "native-engine/include/native_crosshair_shapes.h": "871ed534adaca5061c9eb51eed1df2b094e831fdbec2c02dda2fb0b2396747d6",
         "native-engine/include/native_cull.h": "ac3b2c7104e270ab072a8d10809b5b08a322b874f7080d8caaeb081f44b28342",
         "native-engine/include/native_demo.h": "7bb7e6adf8bd665db903193869dab1bad4f287cac31b896c3f60fc45b9499b32",
         "native-engine/include/native_derived.h": "24b215bad66e65fae96ede7dfc4079bfe39305b5f6201908b5328d789b7a1f78",
@@ -472,7 +475,7 @@
         "native-engine/include/native_unorm.h": "231068f4df2f109146dd73d8969b847ebb24f9845e060266aee7b25ce9b4f3af",
         "native-engine/include/native_update.h": "108dcc09be8b3f852466e6181cc4d0d35185beeaa5c772b01c3d361badc4bbd6",
         "native-engine/include/native_update_http.h": "611c098fe9560310d90074b6f89f4c1c21331668bb2a186697d3655bc204b547",
-        "native-engine/include/native_version.h": "4437736da1face1889c4be107c49da1746fa69ac4b2db65d50cd78e34ece8265",
+        "native-engine/include/native_version.h": "d2b6c8fa95a39495647eea2bd9e837d459177562d76426d86106ec8c0b4efe55",
         "native-engine/include/native_viewmodel.h": "3a502848554a911e3ccbfa1c64a539fe4c89f84e7796d1344c0114cafaf02c51",
         "native-engine/include/native_vignette.h": "86451d3e4286a03d6b6e2ef715af11e8dea4a40954ad37993be1f3e098fa69ac",
         "native-engine/include/native_watch_environment.h": "a4ad66d11f969dc3e8999969d18951646f5cf1aba64d9ddff2471b0cc3685b72",
@@ -483,7 +486,8 @@
         "native-engine/include/native_watch_ui.h": "010403fdb3329bee78d773fb698a61e72a39b5687ef82a8e18306eb8c91a0e5a",
         "native-engine/include/native_weapon_stereo.h": "0bfc34bfc32fd6bb3e5bf57a0d5f3add01e6969c4513f3db25b6617f3fc57992",
         "native-engine/include/native_work_profile.h": "3a6c5b97251ed7a460cf02bd919bf82759bbf51648f409084dfa60d740730fb9",
-        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb"
+        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb",
+        "native-engine/include/native_crosshair_sdf.h": "465afb81d2aedb2ec09b1b5b05be9404d4cafd2a57ae69edfa66fda70126c308"
       }
     },
     {
@@ -515,7 +519,7 @@
         "native-engine/include/native_convert.h": "b5b5c0652deb5c7659f6534d2b4d2d758ac37f13c1b565af0f24f1a3b18a073a",
         "native-engine/include/native_cpu_room_bounds.h": "c6be05a269ca0dcbd9609d354736cc0430c1c5b2d417aca2746b8b2ff93d2a02",
         "native-engine/include/native_crosshair_opacity.h": "e6acb28ae7a235196dc902a72639de27eabda498ef564bfaaaeb7964fd6b44fd",
-        "native-engine/include/native_crosshair_shapes.h": "8416abebebe51b443e6e20cbdd93f2fc4e1c30bfc037f651e5466af77908af6b",
+        "native-engine/include/native_crosshair_shapes.h": "871ed534adaca5061c9eb51eed1df2b094e831fdbec2c02dda2fb0b2396747d6",
         "native-engine/include/native_cull.h": "ac3b2c7104e270ab072a8d10809b5b08a322b874f7080d8caaeb081f44b28342",
         "native-engine/include/native_demo.h": "7bb7e6adf8bd665db903193869dab1bad4f287cac31b896c3f60fc45b9499b32",
         "native-engine/include/native_derived.h": "24b215bad66e65fae96ede7dfc4079bfe39305b5f6201908b5328d789b7a1f78",
@@ -593,7 +597,7 @@
         "native-engine/include/native_unorm.h": "231068f4df2f109146dd73d8969b847ebb24f9845e060266aee7b25ce9b4f3af",
         "native-engine/include/native_update.h": "108dcc09be8b3f852466e6181cc4d0d35185beeaa5c772b01c3d361badc4bbd6",
         "native-engine/include/native_update_http.h": "611c098fe9560310d90074b6f89f4c1c21331668bb2a186697d3655bc204b547",
-        "native-engine/include/native_version.h": "4437736da1face1889c4be107c49da1746fa69ac4b2db65d50cd78e34ece8265",
+        "native-engine/include/native_version.h": "d2b6c8fa95a39495647eea2bd9e837d459177562d76426d86106ec8c0b4efe55",
         "native-engine/include/native_viewmodel.h": "3a502848554a911e3ccbfa1c64a539fe4c89f84e7796d1344c0114cafaf02c51",
         "native-engine/include/native_vignette.h": "86451d3e4286a03d6b6e2ef715af11e8dea4a40954ad37993be1f3e098fa69ac",
         "native-engine/include/native_watch_environment.h": "a4ad66d11f969dc3e8999969d18951646f5cf1aba64d9ddff2471b0cc3685b72",
@@ -604,7 +608,8 @@
         "native-engine/include/native_watch_ui.h": "010403fdb3329bee78d773fb698a61e72a39b5687ef82a8e18306eb8c91a0e5a",
         "native-engine/include/native_weapon_stereo.h": "0bfc34bfc32fd6bb3e5bf57a0d5f3add01e6969c4513f3db25b6617f3fc57992",
         "native-engine/include/native_work_profile.h": "3a6c5b97251ed7a460cf02bd919bf82759bbf51648f409084dfa60d740730fb9",
-        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb"
+        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb",
+        "native-engine/include/native_crosshair_sdf.h": "465afb81d2aedb2ec09b1b5b05be9404d4cafd2a57ae69edfa66fda70126c308"
       }
     },
     {
@@ -636,7 +641,7 @@
         "native-engine/include/native_convert.h": "b5b5c0652deb5c7659f6534d2b4d2d758ac37f13c1b565af0f24f1a3b18a073a",
         "native-engine/include/native_cpu_room_bounds.h": "c6be05a269ca0dcbd9609d354736cc0430c1c5b2d417aca2746b8b2ff93d2a02",
         "native-engine/include/native_crosshair_opacity.h": "e6acb28ae7a235196dc902a72639de27eabda498ef564bfaaaeb7964fd6b44fd",
-        "native-engine/include/native_crosshair_shapes.h": "8416abebebe51b443e6e20cbdd93f2fc4e1c30bfc037f651e5466af77908af6b",
+        "native-engine/include/native_crosshair_shapes.h": "871ed534adaca5061c9eb51eed1df2b094e831fdbec2c02dda2fb0b2396747d6",
         "native-engine/include/native_cull.h": "ac3b2c7104e270ab072a8d10809b5b08a322b874f7080d8caaeb081f44b28342",
         "native-engine/include/native_demo.h": "7bb7e6adf8bd665db903193869dab1bad4f287cac31b896c3f60fc45b9499b32",
         "native-engine/include/native_derived.h": "24b215bad66e65fae96ede7dfc4079bfe39305b5f6201908b5328d789b7a1f78",
@@ -714,7 +719,7 @@
         "native-engine/include/native_unorm.h": "231068f4df2f109146dd73d8969b847ebb24f9845e060266aee7b25ce9b4f3af",
         "native-engine/include/native_update.h": "108dcc09be8b3f852466e6181cc4d0d35185beeaa5c772b01c3d361badc4bbd6",
         "native-engine/include/native_update_http.h": "611c098fe9560310d90074b6f89f4c1c21331668bb2a186697d3655bc204b547",
-        "native-engine/include/native_version.h": "4437736da1face1889c4be107c49da1746fa69ac4b2db65d50cd78e34ece8265",
+        "native-engine/include/native_version.h": "d2b6c8fa95a39495647eea2bd9e837d459177562d76426d86106ec8c0b4efe55",
         "native-engine/include/native_viewmodel.h": "3a502848554a911e3ccbfa1c64a539fe4c89f84e7796d1344c0114cafaf02c51",
         "native-engine/include/native_vignette.h": "86451d3e4286a03d6b6e2ef715af11e8dea4a40954ad37993be1f3e098fa69ac",
         "native-engine/include/native_watch_environment.h": "a4ad66d11f969dc3e8999969d18951646f5cf1aba64d9ddff2471b0cc3685b72",
@@ -725,7 +730,8 @@
         "native-engine/include/native_watch_ui.h": "010403fdb3329bee78d773fb698a61e72a39b5687ef82a8e18306eb8c91a0e5a",
         "native-engine/include/native_weapon_stereo.h": "0bfc34bfc32fd6bb3e5bf57a0d5f3add01e6969c4513f3db25b6617f3fc57992",
         "native-engine/include/native_work_profile.h": "3a6c5b97251ed7a460cf02bd919bf82759bbf51648f409084dfa60d740730fb9",
-        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb"
+        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb",
+        "native-engine/include/native_crosshair_sdf.h": "465afb81d2aedb2ec09b1b5b05be9404d4cafd2a57ae69edfa66fda70126c308"
       }
     },
     {
@@ -757,7 +763,7 @@
         "native-engine/include/native_convert.h": "b5b5c0652deb5c7659f6534d2b4d2d758ac37f13c1b565af0f24f1a3b18a073a",
         "native-engine/include/native_cpu_room_bounds.h": "c6be05a269ca0dcbd9609d354736cc0430c1c5b2d417aca2746b8b2ff93d2a02",
         "native-engine/include/native_crosshair_opacity.h": "e6acb28ae7a235196dc902a72639de27eabda498ef564bfaaaeb7964fd6b44fd",
-        "native-engine/include/native_crosshair_shapes.h": "8416abebebe51b443e6e20cbdd93f2fc4e1c30bfc037f651e5466af77908af6b",
+        "native-engine/include/native_crosshair_shapes.h": "871ed534adaca5061c9eb51eed1df2b094e831fdbec2c02dda2fb0b2396747d6",
         "native-engine/include/native_cull.h": "ac3b2c7104e270ab072a8d10809b5b08a322b874f7080d8caaeb081f44b28342",
         "native-engine/include/native_demo.h": "7bb7e6adf8bd665db903193869dab1bad4f287cac31b896c3f60fc45b9499b32",
         "native-engine/include/native_derived.h": "24b215bad66e65fae96ede7dfc4079bfe39305b5f6201908b5328d789b7a1f78",
@@ -835,7 +841,7 @@
         "native-engine/include/native_unorm.h": "231068f4df2f109146dd73d8969b847ebb24f9845e060266aee7b25ce9b4f3af",
         "native-engine/include/native_update.h": "108dcc09be8b3f852466e6181cc4d0d35185beeaa5c772b01c3d361badc4bbd6",
         "native-engine/include/native_update_http.h": "611c098fe9560310d90074b6f89f4c1c21331668bb2a186697d3655bc204b547",
-        "native-engine/include/native_version.h": "4437736da1face1889c4be107c49da1746fa69ac4b2db65d50cd78e34ece8265",
+        "native-engine/include/native_version.h": "d2b6c8fa95a39495647eea2bd9e837d459177562d76426d86106ec8c0b4efe55",
         "native-engine/include/native_viewmodel.h": "3a502848554a911e3ccbfa1c64a539fe4c89f84e7796d1344c0114cafaf02c51",
         "native-engine/include/native_vignette.h": "86451d3e4286a03d6b6e2ef715af11e8dea4a40954ad37993be1f3e098fa69ac",
         "native-engine/include/native_watch_environment.h": "a4ad66d11f969dc3e8999969d18951646f5cf1aba64d9ddff2471b0cc3685b72",
@@ -846,7 +852,8 @@
         "native-engine/include/native_watch_ui.h": "010403fdb3329bee78d773fb698a61e72a39b5687ef82a8e18306eb8c91a0e5a",
         "native-engine/include/native_weapon_stereo.h": "0bfc34bfc32fd6bb3e5bf57a0d5f3add01e6969c4513f3db25b6617f3fc57992",
         "native-engine/include/native_work_profile.h": "3a6c5b97251ed7a460cf02bd919bf82759bbf51648f409084dfa60d740730fb9",
-        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb"
+        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb",
+        "native-engine/include/native_crosshair_sdf.h": "465afb81d2aedb2ec09b1b5b05be9404d4cafd2a57ae69edfa66fda70126c308"
       }
     },
     {
@@ -878,7 +885,7 @@
         "native-engine/include/native_convert.h": "b5b5c0652deb5c7659f6534d2b4d2d758ac37f13c1b565af0f24f1a3b18a073a",
         "native-engine/include/native_cpu_room_bounds.h": "c6be05a269ca0dcbd9609d354736cc0430c1c5b2d417aca2746b8b2ff93d2a02",
         "native-engine/include/native_crosshair_opacity.h": "e6acb28ae7a235196dc902a72639de27eabda498ef564bfaaaeb7964fd6b44fd",
-        "native-engine/include/native_crosshair_shapes.h": "8416abebebe51b443e6e20cbdd93f2fc4e1c30bfc037f651e5466af77908af6b",
+        "native-engine/include/native_crosshair_shapes.h": "871ed534adaca5061c9eb51eed1df2b094e831fdbec2c02dda2fb0b2396747d6",
         "native-engine/include/native_cull.h": "ac3b2c7104e270ab072a8d10809b5b08a322b874f7080d8caaeb081f44b28342",
         "native-engine/include/native_demo.h": "7bb7e6adf8bd665db903193869dab1bad4f287cac31b896c3f60fc45b9499b32",
         "native-engine/include/native_derived.h": "24b215bad66e65fae96ede7dfc4079bfe39305b5f6201908b5328d789b7a1f78",
@@ -956,7 +963,7 @@
         "native-engine/include/native_unorm.h": "231068f4df2f109146dd73d8969b847ebb24f9845e060266aee7b25ce9b4f3af",
         "native-engine/include/native_update.h": "108dcc09be8b3f852466e6181cc4d0d35185beeaa5c772b01c3d361badc4bbd6",
         "native-engine/include/native_update_http.h": "611c098fe9560310d90074b6f89f4c1c21331668bb2a186697d3655bc204b547",
-        "native-engine/include/native_version.h": "4437736da1face1889c4be107c49da1746fa69ac4b2db65d50cd78e34ece8265",
+        "native-engine/include/native_version.h": "d2b6c8fa95a39495647eea2bd9e837d459177562d76426d86106ec8c0b4efe55",
         "native-engine/include/native_viewmodel.h": "3a502848554a911e3ccbfa1c64a539fe4c89f84e7796d1344c0114cafaf02c51",
         "native-engine/include/native_vignette.h": "86451d3e4286a03d6b6e2ef715af11e8dea4a40954ad37993be1f3e098fa69ac",
         "native-engine/include/native_watch_environment.h": "a4ad66d11f969dc3e8999969d18951646f5cf1aba64d9ddff2471b0cc3685b72",
@@ -967,7 +974,8 @@
         "native-engine/include/native_watch_ui.h": "010403fdb3329bee78d773fb698a61e72a39b5687ef82a8e18306eb8c91a0e5a",
         "native-engine/include/native_weapon_stereo.h": "0bfc34bfc32fd6bb3e5bf57a0d5f3add01e6969c4513f3db25b6617f3fc57992",
         "native-engine/include/native_work_profile.h": "3a6c5b97251ed7a460cf02bd919bf82759bbf51648f409084dfa60d740730fb9",
-        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb"
+        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb",
+        "native-engine/include/native_crosshair_sdf.h": "465afb81d2aedb2ec09b1b5b05be9404d4cafd2a57ae69edfa66fda70126c308"
       }
     },
     {
@@ -999,7 +1007,7 @@
         "native-engine/include/native_convert.h": "b5b5c0652deb5c7659f6534d2b4d2d758ac37f13c1b565af0f24f1a3b18a073a",
         "native-engine/include/native_cpu_room_bounds.h": "c6be05a269ca0dcbd9609d354736cc0430c1c5b2d417aca2746b8b2ff93d2a02",
         "native-engine/include/native_crosshair_opacity.h": "e6acb28ae7a235196dc902a72639de27eabda498ef564bfaaaeb7964fd6b44fd",
-        "native-engine/include/native_crosshair_shapes.h": "8416abebebe51b443e6e20cbdd93f2fc4e1c30bfc037f651e5466af77908af6b",
+        "native-engine/include/native_crosshair_shapes.h": "871ed534adaca5061c9eb51eed1df2b094e831fdbec2c02dda2fb0b2396747d6",
         "native-engine/include/native_cull.h": "ac3b2c7104e270ab072a8d10809b5b08a322b874f7080d8caaeb081f44b28342",
         "native-engine/include/native_demo.h": "7bb7e6adf8bd665db903193869dab1bad4f287cac31b896c3f60fc45b9499b32",
         "native-engine/include/native_derived.h": "24b215bad66e65fae96ede7dfc4079bfe39305b5f6201908b5328d789b7a1f78",
@@ -1077,7 +1085,7 @@
         "native-engine/include/native_unorm.h": "231068f4df2f109146dd73d8969b847ebb24f9845e060266aee7b25ce9b4f3af",
         "native-engine/include/native_update.h": "108dcc09be8b3f852466e6181cc4d0d35185beeaa5c772b01c3d361badc4bbd6",
         "native-engine/include/native_update_http.h": "611c098fe9560310d90074b6f89f4c1c21331668bb2a186697d3655bc204b547",
-        "native-engine/include/native_version.h": "4437736da1face1889c4be107c49da1746fa69ac4b2db65d50cd78e34ece8265",
+        "native-engine/include/native_version.h": "d2b6c8fa95a39495647eea2bd9e837d459177562d76426d86106ec8c0b4efe55",
         "native-engine/include/native_viewmodel.h": "3a502848554a911e3ccbfa1c64a539fe4c89f84e7796d1344c0114cafaf02c51",
         "native-engine/include/native_vignette.h": "86451d3e4286a03d6b6e2ef715af11e8dea4a40954ad37993be1f3e098fa69ac",
         "native-engine/include/native_watch_environment.h": "a4ad66d11f969dc3e8999969d18951646f5cf1aba64d9ddff2471b0cc3685b72",
@@ -1088,7 +1096,8 @@
         "native-engine/include/native_watch_ui.h": "010403fdb3329bee78d773fb698a61e72a39b5687ef82a8e18306eb8c91a0e5a",
         "native-engine/include/native_weapon_stereo.h": "0bfc34bfc32fd6bb3e5bf57a0d5f3add01e6969c4513f3db25b6617f3fc57992",
         "native-engine/include/native_work_profile.h": "3a6c5b97251ed7a460cf02bd919bf82759bbf51648f409084dfa60d740730fb9",
-        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb"
+        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb",
+        "native-engine/include/native_crosshair_sdf.h": "465afb81d2aedb2ec09b1b5b05be9404d4cafd2a57ae69edfa66fda70126c308"
       }
     },
     {
@@ -1120,7 +1129,7 @@
         "native-engine/include/native_convert.h": "b5b5c0652deb5c7659f6534d2b4d2d758ac37f13c1b565af0f24f1a3b18a073a",
         "native-engine/include/native_cpu_room_bounds.h": "c6be05a269ca0dcbd9609d354736cc0430c1c5b2d417aca2746b8b2ff93d2a02",
         "native-engine/include/native_crosshair_opacity.h": "e6acb28ae7a235196dc902a72639de27eabda498ef564bfaaaeb7964fd6b44fd",
-        "native-engine/include/native_crosshair_shapes.h": "8416abebebe51b443e6e20cbdd93f2fc4e1c30bfc037f651e5466af77908af6b",
+        "native-engine/include/native_crosshair_shapes.h": "871ed534adaca5061c9eb51eed1df2b094e831fdbec2c02dda2fb0b2396747d6",
         "native-engine/include/native_cull.h": "ac3b2c7104e270ab072a8d10809b5b08a322b874f7080d8caaeb081f44b28342",
         "native-engine/include/native_demo.h": "7bb7e6adf8bd665db903193869dab1bad4f287cac31b896c3f60fc45b9499b32",
         "native-engine/include/native_derived.h": "24b215bad66e65fae96ede7dfc4079bfe39305b5f6201908b5328d789b7a1f78",
@@ -1198,7 +1207,7 @@
         "native-engine/include/native_unorm.h": "231068f4df2f109146dd73d8969b847ebb24f9845e060266aee7b25ce9b4f3af",
         "native-engine/include/native_update.h": "108dcc09be8b3f852466e6181cc4d0d35185beeaa5c772b01c3d361badc4bbd6",
         "native-engine/include/native_update_http.h": "611c098fe9560310d90074b6f89f4c1c21331668bb2a186697d3655bc204b547",
-        "native-engine/include/native_version.h": "4437736da1face1889c4be107c49da1746fa69ac4b2db65d50cd78e34ece8265",
+        "native-engine/include/native_version.h": "d2b6c8fa95a39495647eea2bd9e837d459177562d76426d86106ec8c0b4efe55",
         "native-engine/include/native_viewmodel.h": "3a502848554a911e3ccbfa1c64a539fe4c89f84e7796d1344c0114cafaf02c51",
         "native-engine/include/native_vignette.h": "86451d3e4286a03d6b6e2ef715af11e8dea4a40954ad37993be1f3e098fa69ac",
         "native-engine/include/native_watch_environment.h": "a4ad66d11f969dc3e8999969d18951646f5cf1aba64d9ddff2471b0cc3685b72",
@@ -1209,7 +1218,8 @@
         "native-engine/include/native_watch_ui.h": "010403fdb3329bee78d773fb698a61e72a39b5687ef82a8e18306eb8c91a0e5a",
         "native-engine/include/native_weapon_stereo.h": "0bfc34bfc32fd6bb3e5bf57a0d5f3add01e6969c4513f3db25b6617f3fc57992",
         "native-engine/include/native_work_profile.h": "3a6c5b97251ed7a460cf02bd919bf82759bbf51648f409084dfa60d740730fb9",
-        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb"
+        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb",
+        "native-engine/include/native_crosshair_sdf.h": "465afb81d2aedb2ec09b1b5b05be9404d4cafd2a57ae69edfa66fda70126c308"
       }
     },
     {
@@ -1241,7 +1251,7 @@
         "native-engine/include/native_convert.h": "b5b5c0652deb5c7659f6534d2b4d2d758ac37f13c1b565af0f24f1a3b18a073a",
         "native-engine/include/native_cpu_room_bounds.h": "c6be05a269ca0dcbd9609d354736cc0430c1c5b2d417aca2746b8b2ff93d2a02",
         "native-engine/include/native_crosshair_opacity.h": "e6acb28ae7a235196dc902a72639de27eabda498ef564bfaaaeb7964fd6b44fd",
-        "native-engine/include/native_crosshair_shapes.h": "8416abebebe51b443e6e20cbdd93f2fc4e1c30bfc037f651e5466af77908af6b",
+        "native-engine/include/native_crosshair_shapes.h": "871ed534adaca5061c9eb51eed1df2b094e831fdbec2c02dda2fb0b2396747d6",
         "native-engine/include/native_cull.h": "ac3b2c7104e270ab072a8d10809b5b08a322b874f7080d8caaeb081f44b28342",
         "native-engine/include/native_demo.h": "7bb7e6adf8bd665db903193869dab1bad4f287cac31b896c3f60fc45b9499b32",
         "native-engine/include/native_derived.h": "24b215bad66e65fae96ede7dfc4079bfe39305b5f6201908b5328d789b7a1f78",
@@ -1319,7 +1329,7 @@
         "native-engine/include/native_unorm.h": "231068f4df2f109146dd73d8969b847ebb24f9845e060266aee7b25ce9b4f3af",
         "native-engine/include/native_update.h": "108dcc09be8b3f852466e6181cc4d0d35185beeaa5c772b01c3d361badc4bbd6",
         "native-engine/include/native_update_http.h": "611c098fe9560310d90074b6f89f4c1c21331668bb2a186697d3655bc204b547",
-        "native-engine/include/native_version.h": "4437736da1face1889c4be107c49da1746fa69ac4b2db65d50cd78e34ece8265",
+        "native-engine/include/native_version.h": "d2b6c8fa95a39495647eea2bd9e837d459177562d76426d86106ec8c0b4efe55",
         "native-engine/include/native_viewmodel.h": "3a502848554a911e3ccbfa1c64a539fe4c89f84e7796d1344c0114cafaf02c51",
         "native-engine/include/native_vignette.h": "86451d3e4286a03d6b6e2ef715af11e8dea4a40954ad37993be1f3e098fa69ac",
         "native-engine/include/native_watch_environment.h": "a4ad66d11f969dc3e8999969d18951646f5cf1aba64d9ddff2471b0cc3685b72",
@@ -1330,7 +1340,8 @@
         "native-engine/include/native_watch_ui.h": "010403fdb3329bee78d773fb698a61e72a39b5687ef82a8e18306eb8c91a0e5a",
         "native-engine/include/native_weapon_stereo.h": "0bfc34bfc32fd6bb3e5bf57a0d5f3add01e6969c4513f3db25b6617f3fc57992",
         "native-engine/include/native_work_profile.h": "3a6c5b97251ed7a460cf02bd919bf82759bbf51648f409084dfa60d740730fb9",
-        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb"
+        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb",
+        "native-engine/include/native_crosshair_sdf.h": "465afb81d2aedb2ec09b1b5b05be9404d4cafd2a57ae69edfa66fda70126c308"
       }
     },
     {
@@ -1362,7 +1373,7 @@
         "native-engine/include/native_convert.h": "b5b5c0652deb5c7659f6534d2b4d2d758ac37f13c1b565af0f24f1a3b18a073a",
         "native-engine/include/native_cpu_room_bounds.h": "c6be05a269ca0dcbd9609d354736cc0430c1c5b2d417aca2746b8b2ff93d2a02",
         "native-engine/include/native_crosshair_opacity.h": "e6acb28ae7a235196dc902a72639de27eabda498ef564bfaaaeb7964fd6b44fd",
-        "native-engine/include/native_crosshair_shapes.h": "8416abebebe51b443e6e20cbdd93f2fc4e1c30bfc037f651e5466af77908af6b",
+        "native-engine/include/native_crosshair_shapes.h": "871ed534adaca5061c9eb51eed1df2b094e831fdbec2c02dda2fb0b2396747d6",
         "native-engine/include/native_cull.h": "ac3b2c7104e270ab072a8d10809b5b08a322b874f7080d8caaeb081f44b28342",
         "native-engine/include/native_demo.h": "7bb7e6adf8bd665db903193869dab1bad4f287cac31b896c3f60fc45b9499b32",
         "native-engine/include/native_derived.h": "24b215bad66e65fae96ede7dfc4079bfe39305b5f6201908b5328d789b7a1f78",
@@ -1440,7 +1451,7 @@
         "native-engine/include/native_unorm.h": "231068f4df2f109146dd73d8969b847ebb24f9845e060266aee7b25ce9b4f3af",
         "native-engine/include/native_update.h": "108dcc09be8b3f852466e6181cc4d0d35185beeaa5c772b01c3d361badc4bbd6",
         "native-engine/include/native_update_http.h": "611c098fe9560310d90074b6f89f4c1c21331668bb2a186697d3655bc204b547",
-        "native-engine/include/native_version.h": "4437736da1face1889c4be107c49da1746fa69ac4b2db65d50cd78e34ece8265",
+        "native-engine/include/native_version.h": "d2b6c8fa95a39495647eea2bd9e837d459177562d76426d86106ec8c0b4efe55",
         "native-engine/include/native_viewmodel.h": "3a502848554a911e3ccbfa1c64a539fe4c89f84e7796d1344c0114cafaf02c51",
         "native-engine/include/native_vignette.h": "86451d3e4286a03d6b6e2ef715af11e8dea4a40954ad37993be1f3e098fa69ac",
         "native-engine/include/native_watch_environment.h": "a4ad66d11f969dc3e8999969d18951646f5cf1aba64d9ddff2471b0cc3685b72",
@@ -1451,7 +1462,8 @@
         "native-engine/include/native_watch_ui.h": "010403fdb3329bee78d773fb698a61e72a39b5687ef82a8e18306eb8c91a0e5a",
         "native-engine/include/native_weapon_stereo.h": "0bfc34bfc32fd6bb3e5bf57a0d5f3add01e6969c4513f3db25b6617f3fc57992",
         "native-engine/include/native_work_profile.h": "3a6c5b97251ed7a460cf02bd919bf82759bbf51648f409084dfa60d740730fb9",
-        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb"
+        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb",
+        "native-engine/include/native_crosshair_sdf.h": "465afb81d2aedb2ec09b1b5b05be9404d4cafd2a57ae69edfa66fda70126c308"
       }
     },
     {
@@ -1483,7 +1495,7 @@
         "native-engine/include/native_convert.h": "b5b5c0652deb5c7659f6534d2b4d2d758ac37f13c1b565af0f24f1a3b18a073a",
         "native-engine/include/native_cpu_room_bounds.h": "c6be05a269ca0dcbd9609d354736cc0430c1c5b2d417aca2746b8b2ff93d2a02",
         "native-engine/include/native_crosshair_opacity.h": "e6acb28ae7a235196dc902a72639de27eabda498ef564bfaaaeb7964fd6b44fd",
-        "native-engine/include/native_crosshair_shapes.h": "8416abebebe51b443e6e20cbdd93f2fc4e1c30bfc037f651e5466af77908af6b",
+        "native-engine/include/native_crosshair_shapes.h": "871ed534adaca5061c9eb51eed1df2b094e831fdbec2c02dda2fb0b2396747d6",
         "native-engine/include/native_cull.h": "ac3b2c7104e270ab072a8d10809b5b08a322b874f7080d8caaeb081f44b28342",
         "native-engine/include/native_demo.h": "7bb7e6adf8bd665db903193869dab1bad4f287cac31b896c3f60fc45b9499b32",
         "native-engine/include/native_derived.h": "24b215bad66e65fae96ede7dfc4079bfe39305b5f6201908b5328d789b7a1f78",
@@ -1561,7 +1573,7 @@
         "native-engine/include/native_unorm.h": "231068f4df2f109146dd73d8969b847ebb24f9845e060266aee7b25ce9b4f3af",
         "native-engine/include/native_update.h": "108dcc09be8b3f852466e6181cc4d0d35185beeaa5c772b01c3d361badc4bbd6",
         "native-engine/include/native_update_http.h": "611c098fe9560310d90074b6f89f4c1c21331668bb2a186697d3655bc204b547",
-        "native-engine/include/native_version.h": "4437736da1face1889c4be107c49da1746fa69ac4b2db65d50cd78e34ece8265",
+        "native-engine/include/native_version.h": "d2b6c8fa95a39495647eea2bd9e837d459177562d76426d86106ec8c0b4efe55",
         "native-engine/include/native_viewmodel.h": "3a502848554a911e3ccbfa1c64a539fe4c89f84e7796d1344c0114cafaf02c51",
         "native-engine/include/native_vignette.h": "86451d3e4286a03d6b6e2ef715af11e8dea4a40954ad37993be1f3e098fa69ac",
         "native-engine/include/native_watch_environment.h": "a4ad66d11f969dc3e8999969d18951646f5cf1aba64d9ddff2471b0cc3685b72",
@@ -1572,7 +1584,8 @@
         "native-engine/include/native_watch_ui.h": "010403fdb3329bee78d773fb698a61e72a39b5687ef82a8e18306eb8c91a0e5a",
         "native-engine/include/native_weapon_stereo.h": "0bfc34bfc32fd6bb3e5bf57a0d5f3add01e6969c4513f3db25b6617f3fc57992",
         "native-engine/include/native_work_profile.h": "3a6c5b97251ed7a460cf02bd919bf82759bbf51648f409084dfa60d740730fb9",
-        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb"
+        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb",
+        "native-engine/include/native_crosshair_sdf.h": "465afb81d2aedb2ec09b1b5b05be9404d4cafd2a57ae69edfa66fda70126c308"
       }
     },
     {
@@ -1604,7 +1617,7 @@
         "native-engine/include/native_convert.h": "b5b5c0652deb5c7659f6534d2b4d2d758ac37f13c1b565af0f24f1a3b18a073a",
         "native-engine/include/native_cpu_room_bounds.h": "c6be05a269ca0dcbd9609d354736cc0430c1c5b2d417aca2746b8b2ff93d2a02",
         "native-engine/include/native_crosshair_opacity.h": "e6acb28ae7a235196dc902a72639de27eabda498ef564bfaaaeb7964fd6b44fd",
-        "native-engine/include/native_crosshair_shapes.h": "8416abebebe51b443e6e20cbdd93f2fc4e1c30bfc037f651e5466af77908af6b",
+        "native-engine/include/native_crosshair_shapes.h": "871ed534adaca5061c9eb51eed1df2b094e831fdbec2c02dda2fb0b2396747d6",
         "native-engine/include/native_cull.h": "ac3b2c7104e270ab072a8d10809b5b08a322b874f7080d8caaeb081f44b28342",
         "native-engine/include/native_demo.h": "7bb7e6adf8bd665db903193869dab1bad4f287cac31b896c3f60fc45b9499b32",
         "native-engine/include/native_derived.h": "24b215bad66e65fae96ede7dfc4079bfe39305b5f6201908b5328d789b7a1f78",
@@ -1682,7 +1695,7 @@
         "native-engine/include/native_unorm.h": "231068f4df2f109146dd73d8969b847ebb24f9845e060266aee7b25ce9b4f3af",
         "native-engine/include/native_update.h": "108dcc09be8b3f852466e6181cc4d0d35185beeaa5c772b01c3d361badc4bbd6",
         "native-engine/include/native_update_http.h": "611c098fe9560310d90074b6f89f4c1c21331668bb2a186697d3655bc204b547",
-        "native-engine/include/native_version.h": "4437736da1face1889c4be107c49da1746fa69ac4b2db65d50cd78e34ece8265",
+        "native-engine/include/native_version.h": "d2b6c8fa95a39495647eea2bd9e837d459177562d76426d86106ec8c0b4efe55",
         "native-engine/include/native_viewmodel.h": "3a502848554a911e3ccbfa1c64a539fe4c89f84e7796d1344c0114cafaf02c51",
         "native-engine/include/native_vignette.h": "86451d3e4286a03d6b6e2ef715af11e8dea4a40954ad37993be1f3e098fa69ac",
         "native-engine/include/native_watch_environment.h": "a4ad66d11f969dc3e8999969d18951646f5cf1aba64d9ddff2471b0cc3685b72",
@@ -1693,7 +1706,8 @@
         "native-engine/include/native_watch_ui.h": "010403fdb3329bee78d773fb698a61e72a39b5687ef82a8e18306eb8c91a0e5a",
         "native-engine/include/native_weapon_stereo.h": "0bfc34bfc32fd6bb3e5bf57a0d5f3add01e6969c4513f3db25b6617f3fc57992",
         "native-engine/include/native_work_profile.h": "3a6c5b97251ed7a460cf02bd919bf82759bbf51648f409084dfa60d740730fb9",
-        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb"
+        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb",
+        "native-engine/include/native_crosshair_sdf.h": "465afb81d2aedb2ec09b1b5b05be9404d4cafd2a57ae69edfa66fda70126c308"
       }
     },
     {
@@ -1725,7 +1739,7 @@
         "native-engine/include/native_convert.h": "b5b5c0652deb5c7659f6534d2b4d2d758ac37f13c1b565af0f24f1a3b18a073a",
         "native-engine/include/native_cpu_room_bounds.h": "c6be05a269ca0dcbd9609d354736cc0430c1c5b2d417aca2746b8b2ff93d2a02",
         "native-engine/include/native_crosshair_opacity.h": "e6acb28ae7a235196dc902a72639de27eabda498ef564bfaaaeb7964fd6b44fd",
-        "native-engine/include/native_crosshair_shapes.h": "8416abebebe51b443e6e20cbdd93f2fc4e1c30bfc037f651e5466af77908af6b",
+        "native-engine/include/native_crosshair_shapes.h": "871ed534adaca5061c9eb51eed1df2b094e831fdbec2c02dda2fb0b2396747d6",
         "native-engine/include/native_cull.h": "ac3b2c7104e270ab072a8d10809b5b08a322b874f7080d8caaeb081f44b28342",
         "native-engine/include/native_demo.h": "7bb7e6adf8bd665db903193869dab1bad4f287cac31b896c3f60fc45b9499b32",
         "native-engine/include/native_derived.h": "24b215bad66e65fae96ede7dfc4079bfe39305b5f6201908b5328d789b7a1f78",
@@ -1803,7 +1817,7 @@
         "native-engine/include/native_unorm.h": "231068f4df2f109146dd73d8969b847ebb24f9845e060266aee7b25ce9b4f3af",
         "native-engine/include/native_update.h": "108dcc09be8b3f852466e6181cc4d0d35185beeaa5c772b01c3d361badc4bbd6",
         "native-engine/include/native_update_http.h": "611c098fe9560310d90074b6f89f4c1c21331668bb2a186697d3655bc204b547",
-        "native-engine/include/native_version.h": "4437736da1face1889c4be107c49da1746fa69ac4b2db65d50cd78e34ece8265",
+        "native-engine/include/native_version.h": "d2b6c8fa95a39495647eea2bd9e837d459177562d76426d86106ec8c0b4efe55",
         "native-engine/include/native_viewmodel.h": "3a502848554a911e3ccbfa1c64a539fe4c89f84e7796d1344c0114cafaf02c51",
         "native-engine/include/native_vignette.h": "86451d3e4286a03d6b6e2ef715af11e8dea4a40954ad37993be1f3e098fa69ac",
         "native-engine/include/native_watch_environment.h": "a4ad66d11f969dc3e8999969d18951646f5cf1aba64d9ddff2471b0cc3685b72",
@@ -1814,7 +1828,8 @@
         "native-engine/include/native_watch_ui.h": "010403fdb3329bee78d773fb698a61e72a39b5687ef82a8e18306eb8c91a0e5a",
         "native-engine/include/native_weapon_stereo.h": "0bfc34bfc32fd6bb3e5bf57a0d5f3add01e6969c4513f3db25b6617f3fc57992",
         "native-engine/include/native_work_profile.h": "3a6c5b97251ed7a460cf02bd919bf82759bbf51648f409084dfa60d740730fb9",
-        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb"
+        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb",
+        "native-engine/include/native_crosshair_sdf.h": "465afb81d2aedb2ec09b1b5b05be9404d4cafd2a57ae69edfa66fda70126c308"
       }
     },
     {
@@ -1846,7 +1861,7 @@
         "native-engine/include/native_convert.h": "b5b5c0652deb5c7659f6534d2b4d2d758ac37f13c1b565af0f24f1a3b18a073a",
         "native-engine/include/native_cpu_room_bounds.h": "c6be05a269ca0dcbd9609d354736cc0430c1c5b2d417aca2746b8b2ff93d2a02",
         "native-engine/include/native_crosshair_opacity.h": "e6acb28ae7a235196dc902a72639de27eabda498ef564bfaaaeb7964fd6b44fd",
-        "native-engine/include/native_crosshair_shapes.h": "8416abebebe51b443e6e20cbdd93f2fc4e1c30bfc037f651e5466af77908af6b",
+        "native-engine/include/native_crosshair_shapes.h": "871ed534adaca5061c9eb51eed1df2b094e831fdbec2c02dda2fb0b2396747d6",
         "native-engine/include/native_cull.h": "ac3b2c7104e270ab072a8d10809b5b08a322b874f7080d8caaeb081f44b28342",
         "native-engine/include/native_demo.h": "7bb7e6adf8bd665db903193869dab1bad4f287cac31b896c3f60fc45b9499b32",
         "native-engine/include/native_derived.h": "24b215bad66e65fae96ede7dfc4079bfe39305b5f6201908b5328d789b7a1f78",
@@ -1924,7 +1939,7 @@
         "native-engine/include/native_unorm.h": "231068f4df2f109146dd73d8969b847ebb24f9845e060266aee7b25ce9b4f3af",
         "native-engine/include/native_update.h": "108dcc09be8b3f852466e6181cc4d0d35185beeaa5c772b01c3d361badc4bbd6",
         "native-engine/include/native_update_http.h": "611c098fe9560310d90074b6f89f4c1c21331668bb2a186697d3655bc204b547",
-        "native-engine/include/native_version.h": "4437736da1face1889c4be107c49da1746fa69ac4b2db65d50cd78e34ece8265",
+        "native-engine/include/native_version.h": "d2b6c8fa95a39495647eea2bd9e837d459177562d76426d86106ec8c0b4efe55",
         "native-engine/include/native_viewmodel.h": "3a502848554a911e3ccbfa1c64a539fe4c89f84e7796d1344c0114cafaf02c51",
         "native-engine/include/native_vignette.h": "86451d3e4286a03d6b6e2ef715af11e8dea4a40954ad37993be1f3e098fa69ac",
         "native-engine/include/native_watch_environment.h": "a4ad66d11f969dc3e8999969d18951646f5cf1aba64d9ddff2471b0cc3685b72",
@@ -1935,7 +1950,8 @@
         "native-engine/include/native_watch_ui.h": "010403fdb3329bee78d773fb698a61e72a39b5687ef82a8e18306eb8c91a0e5a",
         "native-engine/include/native_weapon_stereo.h": "0bfc34bfc32fd6bb3e5bf57a0d5f3add01e6969c4513f3db25b6617f3fc57992",
         "native-engine/include/native_work_profile.h": "3a6c5b97251ed7a460cf02bd919bf82759bbf51648f409084dfa60d740730fb9",
-        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb"
+        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb",
+        "native-engine/include/native_crosshair_sdf.h": "465afb81d2aedb2ec09b1b5b05be9404d4cafd2a57ae69edfa66fda70126c308"
       }
     },
     {
@@ -1967,7 +1983,7 @@
         "native-engine/include/native_convert.h": "b5b5c0652deb5c7659f6534d2b4d2d758ac37f13c1b565af0f24f1a3b18a073a",
         "native-engine/include/native_cpu_room_bounds.h": "c6be05a269ca0dcbd9609d354736cc0430c1c5b2d417aca2746b8b2ff93d2a02",
         "native-engine/include/native_crosshair_opacity.h": "e6acb28ae7a235196dc902a72639de27eabda498ef564bfaaaeb7964fd6b44fd",
-        "native-engine/include/native_crosshair_shapes.h": "8416abebebe51b443e6e20cbdd93f2fc4e1c30bfc037f651e5466af77908af6b",
+        "native-engine/include/native_crosshair_shapes.h": "871ed534adaca5061c9eb51eed1df2b094e831fdbec2c02dda2fb0b2396747d6",
         "native-engine/include/native_cull.h": "ac3b2c7104e270ab072a8d10809b5b08a322b874f7080d8caaeb081f44b28342",
         "native-engine/include/native_demo.h": "7bb7e6adf8bd665db903193869dab1bad4f287cac31b896c3f60fc45b9499b32",
         "native-engine/include/native_derived.h": "24b215bad66e65fae96ede7dfc4079bfe39305b5f6201908b5328d789b7a1f78",
@@ -2045,7 +2061,7 @@
         "native-engine/include/native_unorm.h": "231068f4df2f109146dd73d8969b847ebb24f9845e060266aee7b25ce9b4f3af",
         "native-engine/include/native_update.h": "108dcc09be8b3f852466e6181cc4d0d35185beeaa5c772b01c3d361badc4bbd6",
         "native-engine/include/native_update_http.h": "611c098fe9560310d90074b6f89f4c1c21331668bb2a186697d3655bc204b547",
-        "native-engine/include/native_version.h": "4437736da1face1889c4be107c49da1746fa69ac4b2db65d50cd78e34ece8265",
+        "native-engine/include/native_version.h": "d2b6c8fa95a39495647eea2bd9e837d459177562d76426d86106ec8c0b4efe55",
         "native-engine/include/native_viewmodel.h": "3a502848554a911e3ccbfa1c64a539fe4c89f84e7796d1344c0114cafaf02c51",
         "native-engine/include/native_vignette.h": "86451d3e4286a03d6b6e2ef715af11e8dea4a40954ad37993be1f3e098fa69ac",
         "native-engine/include/native_watch_environment.h": "a4ad66d11f969dc3e8999969d18951646f5cf1aba64d9ddff2471b0cc3685b72",
@@ -2056,7 +2072,8 @@
         "native-engine/include/native_watch_ui.h": "010403fdb3329bee78d773fb698a61e72a39b5687ef82a8e18306eb8c91a0e5a",
         "native-engine/include/native_weapon_stereo.h": "0bfc34bfc32fd6bb3e5bf57a0d5f3add01e6969c4513f3db25b6617f3fc57992",
         "native-engine/include/native_work_profile.h": "3a6c5b97251ed7a460cf02bd919bf82759bbf51648f409084dfa60d740730fb9",
-        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb"
+        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb",
+        "native-engine/include/native_crosshair_sdf.h": "465afb81d2aedb2ec09b1b5b05be9404d4cafd2a57ae69edfa66fda70126c308"
       }
     },
     {
@@ -2088,7 +2105,7 @@
         "native-engine/include/native_convert.h": "b5b5c0652deb5c7659f6534d2b4d2d758ac37f13c1b565af0f24f1a3b18a073a",
         "native-engine/include/native_cpu_room_bounds.h": "c6be05a269ca0dcbd9609d354736cc0430c1c5b2d417aca2746b8b2ff93d2a02",
         "native-engine/include/native_crosshair_opacity.h": "e6acb28ae7a235196dc902a72639de27eabda498ef564bfaaaeb7964fd6b44fd",
-        "native-engine/include/native_crosshair_shapes.h": "8416abebebe51b443e6e20cbdd93f2fc4e1c30bfc037f651e5466af77908af6b",
+        "native-engine/include/native_crosshair_shapes.h": "871ed534adaca5061c9eb51eed1df2b094e831fdbec2c02dda2fb0b2396747d6",
         "native-engine/include/native_cull.h": "ac3b2c7104e270ab072a8d10809b5b08a322b874f7080d8caaeb081f44b28342",
         "native-engine/include/native_demo.h": "7bb7e6adf8bd665db903193869dab1bad4f287cac31b896c3f60fc45b9499b32",
         "native-engine/include/native_derived.h": "24b215bad66e65fae96ede7dfc4079bfe39305b5f6201908b5328d789b7a1f78",
@@ -2166,7 +2183,7 @@
         "native-engine/include/native_unorm.h": "231068f4df2f109146dd73d8969b847ebb24f9845e060266aee7b25ce9b4f3af",
         "native-engine/include/native_update.h": "108dcc09be8b3f852466e6181cc4d0d35185beeaa5c772b01c3d361badc4bbd6",
         "native-engine/include/native_update_http.h": "611c098fe9560310d90074b6f89f4c1c21331668bb2a186697d3655bc204b547",
-        "native-engine/include/native_version.h": "4437736da1face1889c4be107c49da1746fa69ac4b2db65d50cd78e34ece8265",
+        "native-engine/include/native_version.h": "d2b6c8fa95a39495647eea2bd9e837d459177562d76426d86106ec8c0b4efe55",
         "native-engine/include/native_viewmodel.h": "3a502848554a911e3ccbfa1c64a539fe4c89f84e7796d1344c0114cafaf02c51",
         "native-engine/include/native_vignette.h": "86451d3e4286a03d6b6e2ef715af11e8dea4a40954ad37993be1f3e098fa69ac",
         "native-engine/include/native_watch_environment.h": "a4ad66d11f969dc3e8999969d18951646f5cf1aba64d9ddff2471b0cc3685b72",
@@ -2177,7 +2194,8 @@
         "native-engine/include/native_watch_ui.h": "010403fdb3329bee78d773fb698a61e72a39b5687ef82a8e18306eb8c91a0e5a",
         "native-engine/include/native_weapon_stereo.h": "0bfc34bfc32fd6bb3e5bf57a0d5f3add01e6969c4513f3db25b6617f3fc57992",
         "native-engine/include/native_work_profile.h": "3a6c5b97251ed7a460cf02bd919bf82759bbf51648f409084dfa60d740730fb9",
-        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb"
+        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb",
+        "native-engine/include/native_crosshair_sdf.h": "465afb81d2aedb2ec09b1b5b05be9404d4cafd2a57ae69edfa66fda70126c308"
       }
     },
     {
@@ -2209,7 +2227,7 @@
         "native-engine/include/native_convert.h": "b5b5c0652deb5c7659f6534d2b4d2d758ac37f13c1b565af0f24f1a3b18a073a",
         "native-engine/include/native_cpu_room_bounds.h": "c6be05a269ca0dcbd9609d354736cc0430c1c5b2d417aca2746b8b2ff93d2a02",
         "native-engine/include/native_crosshair_opacity.h": "e6acb28ae7a235196dc902a72639de27eabda498ef564bfaaaeb7964fd6b44fd",
-        "native-engine/include/native_crosshair_shapes.h": "8416abebebe51b443e6e20cbdd93f2fc4e1c30bfc037f651e5466af77908af6b",
+        "native-engine/include/native_crosshair_shapes.h": "871ed534adaca5061c9eb51eed1df2b094e831fdbec2c02dda2fb0b2396747d6",
         "native-engine/include/native_cull.h": "ac3b2c7104e270ab072a8d10809b5b08a322b874f7080d8caaeb081f44b28342",
         "native-engine/include/native_demo.h": "7bb7e6adf8bd665db903193869dab1bad4f287cac31b896c3f60fc45b9499b32",
         "native-engine/include/native_derived.h": "24b215bad66e65fae96ede7dfc4079bfe39305b5f6201908b5328d789b7a1f78",
@@ -2287,7 +2305,7 @@
         "native-engine/include/native_unorm.h": "231068f4df2f109146dd73d8969b847ebb24f9845e060266aee7b25ce9b4f3af",
         "native-engine/include/native_update.h": "108dcc09be8b3f852466e6181cc4d0d35185beeaa5c772b01c3d361badc4bbd6",
         "native-engine/include/native_update_http.h": "611c098fe9560310d90074b6f89f4c1c21331668bb2a186697d3655bc204b547",
-        "native-engine/include/native_version.h": "4437736da1face1889c4be107c49da1746fa69ac4b2db65d50cd78e34ece8265",
+        "native-engine/include/native_version.h": "d2b6c8fa95a39495647eea2bd9e837d459177562d76426d86106ec8c0b4efe55",
         "native-engine/include/native_viewmodel.h": "3a502848554a911e3ccbfa1c64a539fe4c89f84e7796d1344c0114cafaf02c51",
         "native-engine/include/native_vignette.h": "86451d3e4286a03d6b6e2ef715af11e8dea4a40954ad37993be1f3e098fa69ac",
         "native-engine/include/native_watch_environment.h": "a4ad66d11f969dc3e8999969d18951646f5cf1aba64d9ddff2471b0cc3685b72",
@@ -2298,7 +2316,8 @@
         "native-engine/include/native_watch_ui.h": "010403fdb3329bee78d773fb698a61e72a39b5687ef82a8e18306eb8c91a0e5a",
         "native-engine/include/native_weapon_stereo.h": "0bfc34bfc32fd6bb3e5bf57a0d5f3add01e6969c4513f3db25b6617f3fc57992",
         "native-engine/include/native_work_profile.h": "3a6c5b97251ed7a460cf02bd919bf82759bbf51648f409084dfa60d740730fb9",
-        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb"
+        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb",
+        "native-engine/include/native_crosshair_sdf.h": "465afb81d2aedb2ec09b1b5b05be9404d4cafd2a57ae69edfa66fda70126c308"
       }
     },
     {
@@ -2330,7 +2349,7 @@
         "native-engine/include/native_convert.h": "b5b5c0652deb5c7659f6534d2b4d2d758ac37f13c1b565af0f24f1a3b18a073a",
         "native-engine/include/native_cpu_room_bounds.h": "c6be05a269ca0dcbd9609d354736cc0430c1c5b2d417aca2746b8b2ff93d2a02",
         "native-engine/include/native_crosshair_opacity.h": "e6acb28ae7a235196dc902a72639de27eabda498ef564bfaaaeb7964fd6b44fd",
-        "native-engine/include/native_crosshair_shapes.h": "8416abebebe51b443e6e20cbdd93f2fc4e1c30bfc037f651e5466af77908af6b",
+        "native-engine/include/native_crosshair_shapes.h": "871ed534adaca5061c9eb51eed1df2b094e831fdbec2c02dda2fb0b2396747d6",
         "native-engine/include/native_cull.h": "ac3b2c7104e270ab072a8d10809b5b08a322b874f7080d8caaeb081f44b28342",
         "native-engine/include/native_demo.h": "7bb7e6adf8bd665db903193869dab1bad4f287cac31b896c3f60fc45b9499b32",
         "native-engine/include/native_derived.h": "24b215bad66e65fae96ede7dfc4079bfe39305b5f6201908b5328d789b7a1f78",
@@ -2408,7 +2427,7 @@
         "native-engine/include/native_unorm.h": "231068f4df2f109146dd73d8969b847ebb24f9845e060266aee7b25ce9b4f3af",
         "native-engine/include/native_update.h": "108dcc09be8b3f852466e6181cc4d0d35185beeaa5c772b01c3d361badc4bbd6",
         "native-engine/include/native_update_http.h": "611c098fe9560310d90074b6f89f4c1c21331668bb2a186697d3655bc204b547",
-        "native-engine/include/native_version.h": "4437736da1face1889c4be107c49da1746fa69ac4b2db65d50cd78e34ece8265",
+        "native-engine/include/native_version.h": "d2b6c8fa95a39495647eea2bd9e837d459177562d76426d86106ec8c0b4efe55",
         "native-engine/include/native_viewmodel.h": "3a502848554a911e3ccbfa1c64a539fe4c89f84e7796d1344c0114cafaf02c51",
         "native-engine/include/native_vignette.h": "86451d3e4286a03d6b6e2ef715af11e8dea4a40954ad37993be1f3e098fa69ac",
         "native-engine/include/native_watch_environment.h": "a4ad66d11f969dc3e8999969d18951646f5cf1aba64d9ddff2471b0cc3685b72",
@@ -2419,7 +2438,8 @@
         "native-engine/include/native_watch_ui.h": "010403fdb3329bee78d773fb698a61e72a39b5687ef82a8e18306eb8c91a0e5a",
         "native-engine/include/native_weapon_stereo.h": "0bfc34bfc32fd6bb3e5bf57a0d5f3add01e6969c4513f3db25b6617f3fc57992",
         "native-engine/include/native_work_profile.h": "3a6c5b97251ed7a460cf02bd919bf82759bbf51648f409084dfa60d740730fb9",
-        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb"
+        "native-engine/tools/subsistence.py": "39f2d57f88919e46e6abcfb56034850be85fd77b9b42e907f3f47dd698e6aacb",
+        "native-engine/include/native_crosshair_sdf.h": "465afb81d2aedb2ec09b1b5b05be9404d4cafd2a57ae69edfa66fda70126c308"
       }
     }
   ]

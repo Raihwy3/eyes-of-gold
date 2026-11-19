@@ -15,6 +15,9 @@ def main():
     build_probe.run(['gcc','-std=gnu11','-O2','-Wall','-Wextra','-Werror','-Wno-misleading-indentation','-fno-strict-aliasing','-I'+str(out),'-I'+str(build.TARGET/'include'),build.TARGET/'tests/crosshair_draw_host.c',build.TARGET/'src/native_settings.c','-o',binary])
     print(build_probe.run([binary]).stdout)
     shapes=out/'shapes-check'
-    build_probe.run(['gcc',*build_probe.engine_args(True),'-no-pie','-Wl,--gc-sections',build.TARGET/'tests/crosshair_shapes_host.c',build.TARGET/'src/native_settings.c','-o',shapes])
+    build_probe.run(['gcc',*build_probe.engine_args(True),'-no-pie','-Wl,--gc-sections',build.TARGET/'tests/crosshair_shapes_host.c',build.TARGET/'src/native_settings.c','-lm','-o',shapes])
     print(build_probe.run([shapes]).stdout)
+    sdf=out/'sdf-check'
+    build_probe.run(['g++','-std=c++20','-O2','-Wall','-Wextra','-Werror','-I'+str(build.TARGET/'include'),build.TARGET/'tests/crosshair_sdf_host.cpp','-o',sdf])
+    print(build_probe.run([sdf]).stdout)
 if __name__=='__main__':main()

@@ -1,0 +1,10 @@
+{
+  "repository": "https://github.com/Raihwy3/Conker3DSRecomp",
+  "source_checkout": "conker-3ds-github",
+  "revision": "f4d90cc06548c576e1246e84434106dd456cdcd6",
+  "file": "renderer/src/renderer/rt64_3ds_context.cpp",
+  "sha256": "eaf8f621d12042f5481e0f744e317b15acde43ffa98705499f15c84660ca5d72",
+  "function": "draw_reticle",
+  "license": "MIT (renderer/LICENSE)",
+  "adaptation": "Conker SDF shapes and outline coverage, via the tested Perfect Engine Launcher adaptation. Immutable white/black masks are tinted by GoldenEye; original moving-reticle coordinates, aspect compensation and stereo scope remain in use."
+}

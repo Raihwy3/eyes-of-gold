@@ -4,57 +4,15 @@
 #include "native_settings.h"
 #include "native_crosshair_opacity.h"
 #include "native_reticle.h"
-/* Custom silhouettes are generated from geometry; Original remains the ROM
- * sprite. Coordinates are relative to the real bullet/reticle position. */
-static inline float native_crosshair_abs(float v){return v<0.f?-v:v;}
-static inline int native_crosshair_round(float v){return v>=0.f?(int)(v+.5f):(int)(v-.5f);}
-static inline float native_crosshair_sqrt(float v){
-    if(v<=0.f)return 0.f;
-    float x=v>1.f?v*.5f:1.f;
-    for(int i=0;i<6;i++)x=.5f*(x+v/x);
-    return x;
-}
-static inline int native_crosshair_pixel(int style,int x,int y){
-    int ax=x<0?-x:x,ay=y<0?-y:y,r=x*x+y*y;
-    if(style==1)return r<=2;
-    if(style==2 || style==3 || style==6){
-        int arms=(!y && ax>=3 && ax<=7) || (!x && ay>=3 && ay<=7 && (style!=6 || y>0));
-        return arms || (style==3 && !x && !y);
-    }
-    if(style==4 || style==5)return (r>=20 && r<=36) || (style==5 && !x && !y);
-    if(style==7)return ax+ay>=5 && ax+ay<=6;
-    return 0;
-}
-static inline Gfx *native_crosshair_rect_q(Gfx *g,int qx1,int qy1,int qx2,int qy2,int left,int top,int right,int bottom){
-    int ql=left*4,qt=top*4,qr=right*4,qb=bottom*4;
-    if(qx1<ql)qx1=ql;if(qy1<qt)qy1=qt;if(qx2>qr)qx2=qr;if(qy2>qb)qy2=qb;
-    if((qx2>>2)>(qx1>>2) && (qy2>>2)>(qy1>>2)){
-        g->words.w0=((unsigned)G_FILLRECT<<24)|(((unsigned)qx2&4095u)<<12)|((unsigned)qy2&4095u);
-        g->words.w1=(((unsigned)qx1&4095u)<<12)|((unsigned)qy1&4095u);
-        g++;
-    }
-    return g;
-}
+#include "native_crosshair_sdf.h"
+/* Cached procedural textures from the newer Conker3DSRecomp crosshairs.
+ * Original stays the ROM sprite; custom shapes use the real aiming position. */
+static uint32_t native_crosshair_masks[7][64*64] __attribute__((aligned(16)));
+static unsigned char native_crosshair_ready[7];
 static inline Gfx *native_crosshair_rect(Gfx *g,int x1,int y1,int x2,int y2,int left,int top,int right,int bottom){
-    return native_crosshair_rect_q(g,x1*4,y1*4,x2*4,y2*4,left,top,right,bottom);
-}
-static inline Gfx *native_crosshair_span(Gfx *g,float cx,float cy,float sx,float y,float x_lo,float x_hi,int left,int top,int right,int bottom){
-    int qx1=native_crosshair_round((cx+x_lo*sx)*4.f);
-    int qx2=native_crosshair_round((cx+x_hi*sx)*4.f);
-    int qy1=native_crosshair_round((cy+y)*4.f);
-    if((qx2>>2)<=(qx1>>2))qx2=((qx1>>2)+1)*4;
-    return native_crosshair_rect_q(g,qx1,qy1,qx2,qy1+4,left,top,right,bottom);
-}
-static inline Gfx *native_crosshair_ring_row(Gfx *g,float cx,float cy,float sx,float y,float r_in,float r_out,int left,int top,int right,int bottom){
-    float ay=native_crosshair_abs(y);
-    if(ay>=r_out)return g;
-    float outer=native_crosshair_sqrt(r_out*r_out-ay*ay);
-    if(r_in<=0.f || ay>=r_in){
-        return native_crosshair_span(g,cx,cy,sx,y,-outer,outer,left,top,right,bottom);
-    }
-    float inner=native_crosshair_sqrt(r_in*r_in-ay*ay);
-    g=native_crosshair_span(g,cx,cy,sx,y,-outer,-inner,left,top,right,bottom);
-    return native_crosshair_span(g,cx,cy,sx,y,inner,outer,left,top,right,bottom);
+    if(x1<left)x1=left;if(y1<top)y1=top;if(x2>right)x2=right;if(y2>bottom)y2=bottom;
+    if(x1<x2 && y1<y2)gDPFillRectangle(g++,x1,y1,x2,y2);
+    return g;
 }
 static inline Gfx *native_crosshair_draw(Gfx *g,int style,float cx,float cy,int width,int height,int left,int top,float aspect){
     if(style<1 || style>7 || width<=0 || height<=0)return g;
@@ -63,77 +21,41 @@ static inline Gfx *native_crosshair_draw(Gfx *g,int style,float cx,float cy,int 
     if(!native_setting_crosshair()){red=255;green=48;blue=48;}
     unsigned opacity=native_crosshair_alpha();
     float sx=aspect>0?(4.f/3.f)/aspect:1.f;
-    int right=left+width,bottom=top+height;
     gDma0p(g++,0x3a,NATIVE_RETICLE_SCOPE,0xffffffu);
     gDPPipeSync(g++);gDPSetCycleType(g++,G_CYC_1CYCLE);
     gDPSetRenderMode(g++,G_RM_XLU_SURF,G_RM_XLU_SURF2);
-    gDPSetCombineMode(g++,G_CC_PRIMITIVE,G_CC_PRIMITIVE);
     gDPSetAlphaCompare(g++,G_AC_NONE);
-    for(int pass=0;pass<2;pass++){
-        gDPPipeSync(g++);
-        gDPSetPrimColor(g++,0,0,pass?red:0,pass?green:0,pass?blue:0,pass?opacity:opacity*180/230);
-        float pad=pass?0.f:0.75f;
-        if(style==1){
-            float r=1.55f+pad;
-            for(int iy=-2;iy<=2;iy++)g=native_crosshair_ring_row(g,cx,cy,sx,(float)iy-.5f,0.f,r,left,top,right,bottom);
-        }else if(style==2 || style==3 || style==6){
-            float half=0.55f+pad;
-            /* Left and right horizontal arms */
-            int qy1=native_crosshair_round((cy-half)*4.f),qy2=native_crosshair_round((cy+half)*4.f);
-            if((qy2>>2)<=(qy1>>2))qy2=((qy1>>2)+1)*4;
-            int ql1=native_crosshair_round((cx+(-7.2f-pad)*sx)*4.f),ql2=native_crosshair_round((cx+(-2.6f+pad)*sx)*4.f);
-            int qr1=native_crosshair_round((cx+(2.6f-pad)*sx)*4.f),qr2=native_crosshair_round((cx+(7.2f+pad)*sx)*4.f);
-            if((ql2>>2)<=(ql1>>2))ql2=((ql1>>2)+1)*4;
-            if((qr2>>2)<=(qr1>>2))qr2=((qr1>>2)+1)*4;
-            g=native_crosshair_rect_q(g,ql1,qy1,ql2,qy2,left,top,right,bottom);
-            g=native_crosshair_rect_q(g,qr1,qy1,qr2,qy2,left,top,right,bottom);
-            /* Vertical arms */
-            int qx1=native_crosshair_round((cx-half*sx)*4.f),qx2=native_crosshair_round((cx+half*sx)*4.f);
-            if((qx2>>2)<=(qx1>>2))qx2=((qx1>>2)+1)*4;
-            if(style!=6){
-                int qt1=native_crosshair_round((cy-7.2f-pad)*4.f),qt2=native_crosshair_round((cy-2.6f+pad)*4.f);
-                if((qt2>>2)<=(qt1>>2))qt2=((qt1>>2)+1)*4;
-                g=native_crosshair_rect_q(g,qx1,qt1,qx2,qt2,left,top,right,bottom);
-            }
-            int qb1=native_crosshair_round((cy+2.6f-pad)*4.f),qb2=native_crosshair_round((cy+7.2f+pad)*4.f);
-            if((qb2>>2)<=(qb1>>2))qb2=((qb1>>2)+1)*4;
-            g=native_crosshair_rect_q(g,qx1,qb1,qx2,qb2,left,top,right,bottom);
-            if(style==3){
-                float dr=1.05f+pad;
-                for(int iy=-1;iy<=1;iy++)g=native_crosshair_ring_row(g,cx,cy,sx,(float)iy-.5f,0.f,dr,left,top,right,bottom);
-            }
-        }else if(style==4 || style==5){
-            float r_in=4.35f-pad,r_out=5.65f+pad;
-            if(r_in<0.f)r_in=0.f;
-            for(int iy=-6;iy<=6;iy++){
-                float y=(float)iy-.5f;
-                g=native_crosshair_ring_row(g,cx,cy,sx,y,r_in,r_out,left,top,right,bottom);
-            }
-            if(style==5){
-                float dr=1.05f+pad;
-                for(int iy=-1;iy<=1;iy++)g=native_crosshair_ring_row(g,cx,cy,sx,(float)iy-.5f,0.f,dr,left,top,right,bottom);
-            }
-        }else if(style==7){
-            float d_in=4.35f-pad,d_out=5.65f+pad;
-            for(int iy=-6;iy<=6;iy++){
-                float y=(float)iy-.5f,ay=native_crosshair_abs(y);
-                if(ay>=d_out)continue;
-                float outer=d_out-ay;
-                if(ay>=d_in){
-                    g=native_crosshair_span(g,cx,cy,sx,y,-outer,outer,left,top,right,bottom);
-                }else{
-                    float inner=d_in-ay;
-                    g=native_crosshair_span(g,cx,cy,sx,y,-outer,-inner,left,top,right,bottom);
-                    g=native_crosshair_span(g,cx,cy,sx,y,inner,outer,left,top,right,bottom);
-                }
-            }
-        }
+    gDPSetTexturePersp(g++,G_TP_NONE);
+    gDPSetTextureLOD(g++,G_TL_TILE);
+    gDPSetTextureLUT(g++,G_TT_NONE);
+    gDPSetTextureFilter(g++,G_TF_BILERP);
+    gDPSetScissor(g++,G_SC_NON_INTERLACE,left,top,left+width,top+height);
+    if(!native_crosshair_ready[style-1]){
+        native_crosshair_sdf_generate(style,native_crosshair_masks[style-1]);
+        native_crosshair_ready[style-1]=1;
+    }
+    /* The full tile avoids the legacy block-load cap of 2048 texels. */
+    gDPLoadTextureTile(g++,native_crosshair_masks[style-1],G_IM_FMT_RGBA,G_IM_SIZ_32b,
+        64,64,0,0,63,63,0,G_TX_CLAMP,G_TX_CLAMP,6,6,G_TX_NOLOD,G_TX_NOLOD);
+    gDPSetPrimColor(g++,0,0,red,green,blue,opacity);
+    gDPSetCombineLERP(g++,TEXEL0,0,PRIMITIVE,0,TEXEL0,0,PRIMITIVE,0,
+        TEXEL0,0,PRIMITIVE,0,TEXEL0,0,PRIMITIVE,0);
+    int start_x=(int)(cx-9.f*sx+.5f),start_y=(int)(cy-9.f+.5f);
+    int end_x=(int)(cx+9.f*sx+.5f),end_y=start_y+18;
+    int x1=start_x,y1=start_y,x2=end_x,y2=end_y;
+    if(x1<left)x1=left;if(y1<top)y1=top;
+    if(x2>left+width)x2=left+width;if(y2>top+height)y2=top+height;
+    if(x1<x2 && y1<y2 && end_x>start_x){
+        int dx=(64*1024+(end_x-start_x)/2)/(end_x-start_x);
+        int dy=(64*1024+9)/18;
+        int u=(x1-start_x)*64*32/(end_x-start_x),v=(y1-start_y)*64*32/18;
+        gSPTextureRectangle(g++,x1*4,y1*4,x2*4,y2*4,G_TX_RENDERTILE,u,v,dx,dy);
     }
     /* Multipart silhouettes must sample stereo depth at the aiming point,
      * not at the final outline segment. Alpha zero leaves the image intact. */
-    gDPPipeSync(g++);gDPSetPrimColor(g++,0,0,0,0,0,0);
+    gDPPipeSync(g++);gDPSetCombineMode(g++,G_CC_PRIMITIVE,G_CC_PRIMITIVE);gDPSetPrimColor(g++,0,0,0,0,0,0);
     int anchor_x=(int)(cx+.5f),anchor_y=(int)(cy+.5f);
-    g=native_crosshair_rect(g,anchor_x-1,anchor_y-1,anchor_x+1,anchor_y+1,left,top,right,bottom);
+    g=native_crosshair_rect(g,anchor_x-1,anchor_y-1,anchor_x+1,anchor_y+1,left,top,left+width,top+height);
     gDPPipeSync(g++);
     gDma0p(g++,0x3a,0,(~NATIVE_RETICLE_SCOPE)&0xffffffu);
     return g;

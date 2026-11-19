@@ -47,3 +47,15 @@ NDSP-compatible playback, DSP reverb and DSP-load statistics.
 https://github.com/Cellenseres/OpenDSP
 Pinned revision: a15c8615c1659f34bfb2b38df69a9860f4cc7080.
 The complete notice is included in licenses/OpenDSP.txt in the install package.
+
+Custom crosshairs
+
+
+The smooth procedural crosshairs and black outline coverage are reworked from
+Raihwy3's Conker3DSRecomp renderer, which evolved from Eyes of Gold's earlier
+crosshairs. This transfer uses the adaptation tested in Perfect Engine Launcher.
+Credit to Perfect Engine Launcher for the adapted crosshair implementation,
+and to RT64 contributors and Conker3DSRecomp contributors for the renderer.
+The renderer MIT notice is included in licenses/conker-reticle.txt.
+https://github.com/Raihwy3/perfect-engine-launcher
+https://github.com/Raihwy3/Conker3DSRecomp
