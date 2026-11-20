@@ -21,6 +21,17 @@ def main():
             {'name':'eyes-of-gold-launcher.zip','size':100,'digest':'sha256:'+'a'*64,'browser_download_url':'https://github.com/Raihwy3/eyes-of-gold/releases/download/v0.9.5/eyes-of-gold-launcher.zip'}]}
         def parse(d,ok):fixture.write_text(json.dumps(d));return run('release',fixture,'v0.9.4-r1',ok=ok)
         assert parse(release,True).splitlines()[0]=='v0.9.5'
+        mixed=copy.deepcopy(release)
+        mixed['assets'].append({'name':'eyes-of-gold-launcher-0.9.5.cia','size':200,'digest':'sha256:'+'b'*64,'browser_download_url':'https://github.com/Raihwy3/eyes-of-gold/releases/download/v0.9.5/eyes-of-gold-launcher-0.9.5.cia'})
+        fixture.write_text(json.dumps(mixed));assert run('release-cia',fixture,'v0.9.4-r1').splitlines()[1].endswith('.cia')
+        fixture.write_text(json.dumps(release));run('release-cia',fixture,'v0.9.4-r1',ok=False)
+        def make_cia(tid):
+            ncch=bytearray(0x200);ncch[0x100:0x104]=b'NCCH';struct.pack_into('<Q',ncch,0x118,tid)
+            hdr=struct.pack('<IHHIIIIQ',0x2020,0,0,64,64,64,0,len(ncch))+bytes(0x2040-32)
+            return hdr+bytes(64*3)+bytes(ncch)
+        good_cia=tmp/'good.cia';good_cia.write_bytes(make_cia(0x000400000E064D00));run('cia',good_cia)
+        bad_cia=tmp/'bad.cia';bad_cia.write_bytes(make_cia(0x000400000E0CBF00));run('cia',bad_cia,ok=False)
+        bad_hdr=tmp/'badhdr.cia';bad_hdr.write_bytes(b'not-a-cia'*128);run('cia',bad_hdr,ok=False)
         for key in ('draft','prerelease'):
             bad=copy.deepcopy(release);bad[key]=True;parse(bad,False)
         for key,value in [('digest','sha256:bad'),('size',999999999),('browser_download_url','http://github.com/evil.zip'),('browser_download_url','https://github.com/other/repo/releases/download/v0.9.5/eyes-of-gold-launcher.zip')]:

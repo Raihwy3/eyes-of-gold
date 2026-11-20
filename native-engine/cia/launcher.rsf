@@ -23,9 +23,9 @@ AccessControlInfo:
   SystemMode: 80MB
   SystemModeExt: 124MB
   IdealProcessor: 0
-  AffinityMask: 3
-  Priority: 48
-  MaxCpu: 50
+  AffinityMask: 1
+  Priority: 16
+  MaxCpu: 0xFF
   HandleTableSize: 0x200
   DisableDebug: false
   EnableForceDebug: false

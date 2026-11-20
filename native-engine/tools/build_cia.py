@@ -50,7 +50,7 @@ def validate(cia,elf,smdh,bnr):
         for p in loads:
             offset=p['p_vaddr']-base;assert entries['.code'][offset:offset+p['p_filesz']]==p.data()
     assert b'sdmc:/3ds/eyes-of-gold-native-game' in entries['.code']
-    assert b'LAUNCHER UPDATE' not in entries['.code']
+    assert b'LAUNCHER UPDATE' in entries['.code'] and b'launcher-update.cia' in entries['.code']
     return {'status':'passed','title_id':f'{title:016X}','bytes':len(raw),'exefs_files':sorted(entries),'elf_segments_match':True,'same_sd_folder':True,'romfs_bundled':False,'boot_logo':'makerom Homebrew (verified SHA-256)','console_tested':False}
 
 def main():
@@ -64,16 +64,18 @@ def main():
     build_probe.run([build.CC,*arch,'-std=gnu11','-O2','-Wall','-Wextra','-Werror','-D__3DS__','-DNATIVE_CIA_BUILD','-I'+str(build.TARGET/'include'),'-I'+str(build.BUILD/'include'),'-I/opt/devkitpro/libctru/include','-c',build.TARGET/'src/native_game_platform.c','-o',platform])
     objects=[]
     for name in re.findall(r'^LOAD (.+\.o)$',baseline.with_suffix('.map').read_text(),re.M):
-        if not name.startswith(str(build.BUILD)) or '/updater/' in name:continue
+        if not name.startswith(str(build.BUILD)):continue
         objects.append(platform if name==str(build.BUILD/'game/platform.o') else Path(name))
     assert platform in objects
+    import opendsp_deps,updater_deps
+    opendsp_library=opendsp_deps.library()
     target=build.BUILD/'eyes-of-gold-launcher-cia'
-    build_probe.run([build.CC.with_name('arm-none-eabi-g++'),*arch,'-specs=3dsx.specs','-L/opt/devkitpro/libctru/lib','-Wl,--gc-sections,--no-enum-size-warning,-Map,'+str(target.with_suffix('.map')),*objects,'-Wl,--start-group',*[build.BUILD/name for name in ('liboriginal-engine.a','liboriginal-rsp.a','libnative-os.a','libnative-mixer.a','libnative-baseline.a')],'-Wl,--end-group','-lcitro3d','-lctru','-lm','-o',target.with_suffix('.elf')])
+    build_probe.run([build.CC.with_name('arm-none-eabi-g++'),*arch,'-specs=3dsx.specs','-L/opt/devkitpro/libctru/lib','-Wl,--gc-sections,--no-enum-size-warning,-Map,'+str(target.with_suffix('.map')),*objects,'-Wl,--start-group',*[build.BUILD/name for name in ('liboriginal-engine.a','liboriginal-rsp.a','libnative-os.a','libnative-mixer.a','libnative-baseline.a')],'-Wl,--end-group',*updater_deps.libraries(),opendsp_library,'-lcitro3d','-lctru','-lm','-o',target.with_suffix('.elf')])
     import audit_original_data
     audit_original_data.require_clean_release(target.with_suffix('.elf'))
     shutil.copyfile(build.BUILD/'strict-release-data-audit.json',out/'strict-release-data-audit.json')
     version=re.search(r'NATIVE_ENGINE_VERSION "([^"]+)"',(build.TARGET/'include/native_version.h').read_text()).group(1)
-    major,minor,micro=map(int,version.split('.'));cia=target.with_suffix('.cia')
+    major,minor,micro=map(int,re.match(r'^(\d+)\.(\d+)\.(\d+)',version).groups());cia=target.with_suffix('.cia')
     result=build_probe.run([makerom,'-f','cia','-o',cia,'-elf',target.with_suffix('.elf'),'-rsf',build.TARGET/'cia/launcher.rsf','-icon',smdh,'-banner',bnr,'-exefslogo','-target','t','-major',str(major),'-minor',str(minor),'-micro',str(micro)])
     print(result.stdout,result.stderr)
     report=validate(cia,target.with_suffix('.elf'),smdh,bnr);report['version']=version;report['sha256']=hashlib.sha256(cia.read_bytes()).hexdigest()
@@ -89,8 +91,9 @@ You do not need to move or reconvert an existing 3DSX installation.
 For a fresh installation, put your legally backed-up US retail ROM in that
 folder, named GoldenEye.n64, GoldenEye.z64 or GoldenEye.v64.
 
-CIA updates must currently be installed manually. The 3DSX updater is
-omitted from this build; replacing a .3dsx cannot update an installed CIA.
+CIA updates are downloaded by the built-in updater as
+/3ds/eyes-of-gold-native-game/launcher-update.cia when a newer release
+includes a .cia asset. Close the game and install that file with FBI.
 The existing 3DSX version and its updater continue to work separately.
 
 Title ID: 000400000E064D00. This package contains the launcher and its

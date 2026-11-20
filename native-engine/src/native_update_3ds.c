@@ -11,6 +11,7 @@
 #include "native_launcher_ui.h"
 #include "native_update_ca.h"
 static PrintConsole *top_console,*bottom_console;
+static int cia_mode;
 static struct UpdateJob {
     int download,cancel,done,ok;
     unsigned received,total;
@@ -28,7 +29,7 @@ static void worker(void *unused) {
     if(job.download){url=job.release.url;t.file=job.file;t.expected=job.release.bytes;t.digest=job.release.digest;}
     else {t.memory=job.metadata;t.capacity=sizeof job.metadata;}
     job.ok=native_update_http(url,&t,native_update_ca,sizeof native_update_ca-1,job.error,sizeof job.error);
-    if(job.ok && !job.download)job.ok=native_update_release(job.metadata,t.length,NATIVE_RELEASE_TAG,&job.release);
+    if(job.ok && !job.download)job.ok=native_update_release_for(job.metadata,t.length,NATIVE_RELEASE_TAG,cia_mode,&job.release);
     socExit();free(socket_buffer);
 end:__atomic_store_n(&job.done,1,__ATOMIC_RELEASE);
 }
@@ -83,17 +84,26 @@ static int stage_progress(size_t done,size_t total) {
 }
 /* Returns zero only when the user chooses to leave without starting the game. */
 int native_update_startup(const char *directory,PrintConsole *top,PrintConsole *bottom) {
-    top_console=top;bottom_console=bottom;char error[160]={0},flag[640],archive[640];
+    top_console=top;bottom_console=bottom;cia_mode=!envIsHomebrew();char error[160]={0},flag[640],archive[640];
     if(!native_update_recover(directory,error,sizeof error))return prompt("UPDATE RECOVERY",error,"A: Continue    B: Exit")>0;
     snprintf(flag,sizeof flag,"%s/no-update-check.flag",directory);if(access(flag,F_OK)==0)return 1;
     u32 wifi=0;if(R_FAILED(acInit()))return 1;Result connected=ACU_GetWifiStatus(&wifi);acExit();if(R_FAILED(connected) || !wifi)return 1;
     if(!start_job(0) || !await_job(0))return aptMainLoop();
-    int choice=prompt("NEW RELEASE AVAILABLE","Install this launcher update?\n\nYour ROM, saves and settings\nare kept.","A: Install     B: Not now");
+    int choice=prompt("NEW RELEASE AVAILABLE",cia_mode?"Download the CIA update?\n\nInstall it with FBI after\nclosing the game. Saves and\nsettings stay in place.":"Install this launcher update?\n\nYour ROM, saves and settings\nare kept.",cia_mode?"A: Download    B: Not now":"A: Install     B: Not now");
     if(choice<=0)return choice<0;
-    snprintf(job.file,sizeof job.file,"%s/launcher-update.zip.part",directory);
+    snprintf(job.file,sizeof job.file,"%s/launcher-update.%s.part",directory,cia_mode?"cia":"zip");
     if(!start_job(1) || !await_job(1)) {
         if(!__atomic_load_n(&job.done,__ATOMIC_ACQUIRE))return aptMainLoop();
         return prompt("UPDATE NOT INSTALLED","Download failed. The current\n\n  launcher has not been replaced.","A: Play        B: Exit")>0;
+    }
+    if(cia_mode) {
+        if(!native_update_validate_cia(job.file,error,sizeof error)) {
+            remove(job.file);return prompt("UPDATE NOT SAVED",error,"A: Play        B: Exit")>0;
+        }
+        snprintf(archive,sizeof archive,"%s/launcher-update.cia",directory);
+        remove(archive);
+        if(rename(job.file,archive))return prompt("UPDATE NOT SAVED","Unable to save the CIA on SD card.","A: Play        B: Exit")>0;
+        return prompt("CIA UPDATE READY","Close the game. In FBI, install\n/3ds/eyes-of-gold-native-game/\nlauncher-update.cia. Saves and\nsettings stay in place.","A: Exit        B: Play")<0;
     }
     snprintf(archive,sizeof archive,"%s/launcher-update.zip",directory);
     remove(archive);
