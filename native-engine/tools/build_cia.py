@@ -12,16 +12,33 @@ def tool(name,variable):
     if not value:raise RuntimeError('Install '+name+' or set '+variable+' to its executable. See docs/cia.md.')
     return value
 
+def title_version(version):
+    """Monotonic 16-bit installed version, including the release revision.
+
+    2 major / 6 minor / 4 patch / 4 revision bits. Older CIA builds used
+    only the base version (151 for 0.9.7), so this also advances that series.
+    """
+    match=re.fullmatch(r'(\d+)\.(\d+)\.(\d+)(?:-r(\d+))?',version)
+    if not match:raise ValueError('Unsupported CIA release version: '+version)
+    major,minor,patch,revision=(int(value or 0) for value in match.groups())
+    if major>3 or minor>63 or patch>15 or revision>15:
+        raise ValueError('CIA version exceeds the installed metadata field limits')
+    return (major<<14)|(minor<<8)|(patch<<4)|revision
+
+
 def banner(out):
     from PIL import Image,ImageDraw,ImageFont
-    image=Image.new('RGB',(256,128),(12,13,15));draw=ImageDraw.Draw(image)
-    gold=(205,177,93);draw.rectangle((5,5,250,122),outline=gold,width=2)
-    icon=Image.open(build.ROOT/'launcher-icon.png').convert('RGBA');image.paste(icon,(104,14),icon)
-    # Text is drawn from a host font; no game artwork or font data is used.
-    try:font=ImageFont.truetype('DejaVuSans.ttf',19);small=ImageFont.truetype('DejaVuSans.ttf',11)
-    except OSError:font=small=ImageFont.load_default()
-    draw.text((128,71),'EYES OF GOLD',font=font,fill=gold,anchor='mt')
-    draw.text((128,99),'LAUNCHER',font=small,fill=(185,185,180),anchor='mt')
+    image=Image.new('RGBA',(256,128),(0,0,0,0));draw=ImageDraw.Draw(image)
+    icon=Image.open(build.TARGET/'cia/eye-transparent.png').convert('RGBA')
+    assert icon.getextrema()[3][0]==0, 'Banner artwork must retain transparency'
+    icon=icon.crop(icon.getbbox());icon.thumbnail((110,81),Image.Resampling.LANCZOS)
+    image.alpha_composite(icon,((256-icon.width)//2,3))
+    # Host script lettering, independently generated; no game font is bundled.
+    font_path=Path(os.environ.get('EOG_BANNER_FONT','/usr/share/fonts/gsfonts/Z003-MediumItalic.otf'))
+    if not font_path.is_file():raise RuntimeError('Set EOG_BANNER_FONT to an installed script font.')
+    font=ImageFont.truetype(str(font_path),34)
+    draw.text((129,92),'Eyes of Gold',font=font,fill=(104,67,15,255),anchor='mt')
+    draw.text((128,91),'Eyes of Gold',font=font,fill=(234,193,78,255),anchor='mt')
     image.save(out/'banner.png')
     with wave.open(str(out/'silence.wav'),'wb') as f:f.setparams((1,2,32000,0,'NONE','not compressed'));f.writeframes(bytes(6400))
 
@@ -30,6 +47,12 @@ def validate(cia,elf,smdh,bnr):
     raw=cia.read_bytes();header,kind,version,cert,ticket,tmd,meta,content=struct.unpack_from('<IHHIIIIQ',raw)
     align=lambda x:(x+63)&~63
     at=align(header)+align(cert)+align(ticket)+align(tmd)
+    tmd_at=align(header)+align(cert)+align(ticket)
+    signature=struct.unpack_from('>I',raw,tmd_at)[0]
+    signature_bytes={0x10000:0x240,0x10001:0x140,0x10002:0x80,0x10003:0x240,0x10004:0x140,0x10005:0x80}[signature]
+    installed_version=struct.unpack_from('>H',raw,tmd_at+signature_bytes+0x9c)[0]
+    version=re.search(r'NATIVE_ENGINE_VERSION "([^\"]+)"',(build.TARGET/'include/native_version.h').read_text()).group(1)
+    assert installed_version==title_version(version), 'CIA metadata version mismatch; use a corrected makerom build'
     ncch=raw[at:at+content];assert ncch[0x100:0x104]==b'NCCH'
     title=struct.unpack_from('<Q',ncch,0x118)[0];assert title==0x000400000E064D00
     assert ncch[0x18f]&4 # Unencrypted homebrew, so payload checks are possible.
@@ -51,7 +74,7 @@ def validate(cia,elf,smdh,bnr):
             offset=p['p_vaddr']-base;assert entries['.code'][offset:offset+p['p_filesz']]==p.data()
     assert b'sdmc:/3ds/eyes-of-gold-native-game' in entries['.code']
     assert b'LAUNCHER UPDATE' in entries['.code'] and b'launcher-update.cia' in entries['.code']
-    return {'status':'passed','title_id':f'{title:016X}','bytes':len(raw),'exefs_files':sorted(entries),'elf_segments_match':True,'same_sd_folder':True,'romfs_bundled':False,'boot_logo':'makerom Homebrew (verified SHA-256)','console_tested':False}
+    return {'status':'passed','installed_title_version':installed_version,'title_id':f'{title:016X}','bytes':len(raw),'exefs_files':sorted(entries),'elf_segments_match':True,'same_sd_folder':True,'romfs_bundled':False,'boot_logo':'makerom Homebrew (verified SHA-256)','console_tested':False}
 
 def main():
     makerom=tool('makerom','MAKEROM');bannertool=tool('bannertool','BANNERTOOL')
@@ -59,7 +82,9 @@ def main():
     if not baseline.with_suffix('.map').exists():raise RuntimeError('Build the native game first with make, or run make cia.')
     build.prepare();out=build.BUILD/'cia';out.mkdir(exist_ok=True)
     banner(out);bnr=out/'banner.bnr';smdh=baseline.with_suffix('.smdh')
-    build_probe.run([bannertool,'makebanner','-i',out/'banner.png','-a',out/'silence.wav','-o',bnr])
+    model=build.TARGET/'cia/banner.cgfx';model_bytes=model.read_bytes()
+    assert model_bytes[:4]==b'CGFX' and len(model_bytes)<=0x80000
+    build_probe.run([bannertool,'makebanner','-ci',model,'-a',out/'silence.wav','-o',bnr])
     arch=['-march=armv6k','-mtune=mpcore','-mfloat-abi=hard','-mtp=soft'];platform=out/'platform.o'
     build_probe.run([build.CC,*arch,'-std=gnu11','-O2','-Wall','-Wextra','-Werror','-D__3DS__','-DNATIVE_CIA_BUILD','-I'+str(build.TARGET/'include'),'-I'+str(build.BUILD/'include'),'-I/opt/devkitpro/libctru/include','-c',build.TARGET/'src/native_game_platform.c','-o',platform])
     objects=[]
@@ -75,10 +100,10 @@ def main():
     audit_original_data.require_clean_release(target.with_suffix('.elf'))
     shutil.copyfile(build.BUILD/'strict-release-data-audit.json',out/'strict-release-data-audit.json')
     version=re.search(r'NATIVE_ENGINE_VERSION "([^"]+)"',(build.TARGET/'include/native_version.h').read_text()).group(1)
-    major,minor,micro=map(int,re.match(r'^(\d+)\.(\d+)\.(\d+)',version).groups());cia=target.with_suffix('.cia')
-    result=build_probe.run([makerom,'-f','cia','-o',cia,'-elf',target.with_suffix('.elf'),'-rsf',build.TARGET/'cia/launcher.rsf','-icon',smdh,'-banner',bnr,'-exefslogo','-target','t','-major',str(major),'-minor',str(minor),'-micro',str(micro)])
+    cia=target.with_suffix('.cia')
+    result=build_probe.run([makerom,'-f','cia','-o',cia,'-elf',target.with_suffix('.elf'),'-rsf',build.TARGET/'cia/launcher.rsf','-icon',smdh,'-banner',bnr,'-exefslogo','-target','t','-ver',str(title_version(version))])
     print(result.stdout,result.stderr)
-    report=validate(cia,target.with_suffix('.elf'),smdh,bnr);report['version']=version;report['sha256']=hashlib.sha256(cia.read_bytes()).hexdigest()
+    report=validate(cia,target.with_suffix('.elf'),smdh,bnr);report['version']=version;report['banner']={'format':'CGFX','geometry_3d':True,'bytes':len(model_bytes),'sha256':hashlib.sha256(model_bytes).hexdigest(),'microphone_console_tested':False};report['sha256']=hashlib.sha256(cia.read_bytes()).hexdigest()
     (out/'validation.json').write_text(json.dumps(report,indent=2)+'\n')
     release=build.ROOT/'local/releases/cia';release.mkdir(exist_ok=True)
     name='eyes-of-gold-launcher-'+version+'.cia';shutil.copy2(cia,release/name)

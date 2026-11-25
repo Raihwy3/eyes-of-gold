@@ -241,7 +241,7 @@ static void boot_screen(const char *stage,unsigned done,unsigned total,int conve
   static unsigned overall;
   if(converting)overall=native_boot_total(stage,done,total,overall);
   unsigned bounded=native_launcher_percent(done,total);
-  consoleSelect(&top);consoleClear();
+  consoleSelect(&top);native_launcher_begin(&top);consoleClear();
   native_launcher_top("NATIVE GAME LAUNCHER",stage);
   if(converting && total) {
     native_launcher_bar(20,9,32,done,total);
@@ -251,7 +251,7 @@ static void boot_screen(const char *stage,unsigned done,unsigned total,int conve
   printf("\x1b[24;5HTOTAL PREPARATION %3u%%",overall);
   native_launcher_bar(26,5,40,overall,100);
   printf("\x1b[28;5HBuild " NATIVE_BUILD_ID);
-  consoleSelect(&bottom);consoleClear();
+  consoleSelect(&bottom);native_launcher_begin(&bottom);consoleClear();
   native_launcher_bottom(converting==2?"MISSION READY":"MISSION PREPARATION");
   native_launcher_text(8,5,"CONSOLE",32);
   native_launcher_text(9,5,native_console_name(console_model),32);
@@ -266,6 +266,7 @@ static void boot_screen(const char *stage,unsigned done,unsigned total,int conve
     native_launcher_text(20,5,converting?"Keep the console powered on.":"Preparing your mission...",32);
     if(converting)native_launcher_text(21,5,"B: Cancel preparation",32);
   }
+  native_launcher_decorate(&top,1);native_launcher_decorate(&bottom,0);
 }
 void native_platform_prepared(void) {
   boot_screen("Mission ready",1,1,2);

@@ -1,14 +1,19 @@
 {
-  "files": 420,
-  "bytes": 9539786,
+  "files": 609,
+  "bytes": 14348236,
   "python_syntax": "passed",
   "upstream_included": false,
-  "roms_or_generated_binaries_included": false,
-  "validation": "ARM engine build, input/menu/settings checks, shared launcher UI bounds and wrapping checks, updater checks and strict ROM-data release audit passed. The final binary has not been tested on a console.",
+  "roms_or_extracted_game_assets_included": false,
+  "custom_banner_model_included": true,
+  "validation": "ARM build, input/menu/settings, updater, launcher text/framebuffer bounds, strict ROM-data audit and package checks passed. Console verification of the microphone response and icon refresh is still needed.",
   "inventory": [
     {
       "path": ".gitignore",
-      "sha256": "c7cef1b477d59675ee501dc248e93ae5c3a39109c3c31732d245e914b1c3ecf1"
+      "sha256": "2fe7a7d79b21c0c131c145d1f4e996de24dc37b07703aea92d3f562a21df1848"
+    },
+    {
+      "path": "CREDITS.md",
+      "sha256": "474a428217f9f6aa11b425ee94d003b6cf24dcdb46fadfee9d96fd758efbd67c"
     },
     {
       "path": "LICENSE",
@@ -24,7 +29,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "25a7f724eafd47058daa7957edee2c6447b4102007bf6439c0112ef3030df058"
+      "sha256": "bc4ad35d05f7521691d7236bb909048ce4ce00bddfc2baa2fe658e740f44a0cf"
     },
     {
       "path": "SOURCE-RELEASE.md",
@@ -32,7 +37,7 @@
     },
     {
       "path": "docs/cia.md",
-      "sha256": "30111455352d4d39a78e9e8bca95210c1c4923180c194d4f0af4f991ed74fb95"
+      "sha256": "362416ddca89b4b696a1bea2f375570ab735a9be2054ccd69da8b183289f011a"
     },
     {
       "path": "docs/clean-build-test.md",
@@ -40,7 +45,11 @@
     },
     {
       "path": "docs/gyro-stereo.md",
-      "sha256": "d9d434756d6d4b3f2d56d9bf7f0dd899256fd8cdac6210dd2dbedb56b420d543"
+      "sha256": "191777ab5d13016bef55f86979229e868442491b0ea3345770c283f145bca78e"
+    },
+    {
+      "path": "docs/opendsp-audio.md",
+      "sha256": "7bcc602a17e4658e5e14505b458193f1701e2d3ddb50bffaca55d833cfb1225a"
     },
     {
       "path": "docs/randomiser.md",
@@ -56,11 +65,11 @@
     },
     {
       "path": "icon.png",
-      "sha256": "48e1e1812b24846592760a8d21d19f7cf8c1678923b9d1dc6625e26d48f63c0e"
+      "sha256": "5e07dc85097a2760d469155f2fe9827bf46aa63af0c93cdf085c64fa97607d72"
     },
     {
       "path": "launcher-icon.png",
-      "sha256": "48e1e1812b24846592760a8d21d19f7cf8c1678923b9d1dc6625e26d48f63c0e"
+      "sha256": "5e07dc85097a2760d469155f2fe9827bf46aa63af0c93cdf085c64fa97607d72"
     },
     {
       "path": "native-engine/CONSOLE-ASSET-CONVERSION.md",
@@ -72,19 +81,47 @@
     },
     {
       "path": "native-engine/NOTICE.md",
-      "sha256": "f1426bdf93ab0387da6fd1071f388d1d0ea5b3ff5f8879a127fa450c42d32f29"
+      "sha256": "188ea260643fdfaefd054ced4eb8d539125d828b8cbdacdffb810b6bbece988a"
     },
     {
       "path": "native-engine/README.md",
       "sha256": "27e9ad7e02d5537aea20936af73481591e4dd0b62b314e59fcf4ec57a004d99d"
     },
     {
+      "path": "native-engine/cia/banner-artwork.txt",
+      "sha256": "3615086e26354a2692bbd5093a910253a70ed05558fcf8e3d7605a2cc605da15"
+    },
+    {
+      "path": "native-engine/cia/banner.cgfx",
+      "sha256": "6372752c2f4c35e3052324ff01ef6527ed0302ed49ef11c1bbc66c2a0141c020"
+    },
+    {
+      "path": "native-engine/cia/eye-transparent.png",
+      "sha256": "fc8d59815565a3d72e2030bceaa05a004d76267ce76958f4f85efb47837f1078"
+    },
+    {
       "path": "native-engine/cia/launcher.rsf",
-      "sha256": "2b7b9449b318c9b16921170d8311b69950e6edbd416d9dcf659b86f96bed5cd5"
+      "sha256": "5ddc7114208d33cf49ca18f8073695d84bafc51291de1dc3970024a2d2b3e086"
+    },
+    {
+      "path": "native-engine/cia/make_banner.py",
+      "sha256": "111d6d3d398b57ab2f038449232cd4f977fa7616f7262fc8aa41c5c40903cb66"
     },
     {
       "path": "native-engine/cia/makerom-logo-LICENSE.txt",
       "sha256": "6e0183da4f7ae7b58aa838db92f565a99ce3b1d0bb31adcf06aa30291665cdd8"
+    },
+    {
+      "path": "native-engine/cia/makerom-version.patch",
+      "sha256": "7eb7d0e3668fb076300f9e7986803d8cba21a96476f361db80b438bbaf380538"
+    },
+    {
+      "path": "native-engine/cia/preview_banner.py",
+      "sha256": "87d809cb9324533d85a16b3edaf13eea1ff16b2284c93ce26094c7716307b339"
+    },
+    {
+      "path": "native-engine/distribution/CREDITS.txt",
+      "sha256": "96b2133b9479ccd1c1e2de8cb700af69bf02924b4f989b726880f9bd2a5caa31"
     },
     {
       "path": "native-engine/distribution/GAME-README.txt",
@@ -96,19 +133,35 @@
     },
     {
       "path": "native-engine/distribution/NOTICE.txt",
-      "sha256": "d719943e4556a4cbb92052378514d0feda71e2d6a629770c263b5fc95d818034"
+      "sha256": "b3f0f848999a20f1d43ba29077fa1689c9f8c376401aaf2dc5714457562926a2"
+    },
+    {
+      "path": "native-engine/distribution/licenses/GamepadMotionHelpers.txt",
+      "sha256": "cab235520dc9bda018e27ccc8c533ecf375766823f9ed918f3698fa52aaffa33"
+    },
+    {
+      "path": "native-engine/distribution/licenses/JoyShockMapper.txt",
+      "sha256": "5d2fa94b63c1de952aa38dd7c56b5f7e73f333e554443221e589b3861e89884c"
     },
     {
       "path": "native-engine/distribution/licenses/Mozilla-MPL-2.0.txt",
       "sha256": "66a3107d5ad6a058aab753eaac2047ccb2ed0e39465dd0fe5844da3e300d5172"
     },
     {
+      "path": "native-engine/distribution/licenses/OpenDSP.txt",
+      "sha256": "86ec2c259c5e45e84f3c5e5546506b55961e70ee20db8e3335e7cbd4d98f8150"
+    },
+    {
       "path": "native-engine/distribution/licenses/SOURCES.txt",
-      "sha256": "aebb166da25e426849014763be70a5c3efa65caeba2a276c30f7e632611d17e9"
+      "sha256": "05262ce29a389973c4b6420b6c84e0b805cd0dfa5290712dc5db1ee2bc0239db"
     },
     {
       "path": "native-engine/distribution/licenses/citro3d-LICENSE.txt",
       "sha256": "25dceef8628ad7869c8636d46d825eec187e1e5baa7521bc4ae2d18b39eef56e"
+    },
+    {
+      "path": "native-engine/distribution/licenses/conker-reticle.txt",
+      "sha256": "03d52856ed09784f7f57694f690ab0093d3cd40db69f9a318d45062f130f7116"
     },
     {
       "path": "native-engine/distribution/licenses/curl.txt",
@@ -155,12 +208,20 @@
       "sha256": "d088bd6a1210c4d4df829632a88c3f1a0ff2780f8409638199f777e17c766c4a"
     },
     {
+      "path": "native-engine/distribution/licenses/pycgfx.txt",
+      "sha256": "06e90f0e8eddf8eda7dfeea0ef12a39efa9b2fead9e8bbb2986c06bada5d16b2"
+    },
+    {
+      "path": "native-engine/distribution/licenses/rt64-stereo.txt",
+      "sha256": "03d52856ed09784f7f57694f690ab0093d3cd40db69f9a318d45062f130f7116"
+    },
+    {
       "path": "native-engine/distribution/licenses/zlib.txt",
       "sha256": "807c3a7dd7f6203b3dae80e28c3064f231c333685488541825b040081087fc4d"
     },
     {
       "path": "native-engine/engine-state-review.json",
-      "sha256": "249350f636e0d1e9b0400fe838a05c56684098df86c99d2e14a6b073c861315a"
+      "sha256": "8653a1b5f6fc9f897db108d4b14815bb38671b9f154d3bb56e5a295a17cfcef6"
     },
     {
       "path": "native-engine/include/PR/R4300.h",
@@ -236,11 +297,11 @@
     },
     {
       "path": "native-engine/include/native_bottom_front.h",
-      "sha256": "cdf1d6ad1c29544f1be47e706ef4f5c2080268980689b37635ca5c7888c8e030"
+      "sha256": "110d4317db508de4638c33d50cd9be191aad6ca4209d51a3162c38b92ddf0882"
     },
     {
       "path": "native-engine/include/native_bottom_watch.h",
-      "sha256": "6eff755d8a37e0c7312402757262ece3a6c612cb8e7d9f49ba5516b07e7518a1"
+      "sha256": "b7722833c9fcc19d6f48723f3aea29f2e771e32f57793f78805f8508c042d979"
     },
     {
       "path": "native-engine/include/native_cart.h",
@@ -260,7 +321,7 @@
     },
     {
       "path": "native-engine/include/native_controls.h",
-      "sha256": "6647c28cdce7da5a08e3d2c8ef5c1b17fd182ac46aeb6996ec90713a8dc5e750"
+      "sha256": "5256619b928956b8dbeafdd61e892de4a60aa050e8cf3e6b61c674c234032054"
     },
     {
       "path": "native-engine/include/native_convert.h",
@@ -269,6 +330,18 @@
     {
       "path": "native-engine/include/native_cpu_room_bounds.h",
       "sha256": "c6be05a269ca0dcbd9609d354736cc0430c1c5b2d417aca2746b8b2ff93d2a02"
+    },
+    {
+      "path": "native-engine/include/native_crosshair_opacity.h",
+      "sha256": "e6acb28ae7a235196dc902a72639de27eabda498ef564bfaaaeb7964fd6b44fd"
+    },
+    {
+      "path": "native-engine/include/native_crosshair_sdf.h",
+      "sha256": "465afb81d2aedb2ec09b1b5b05be9404d4cafd2a57ae69edfa66fda70126c308"
+    },
+    {
+      "path": "native-engine/include/native_crosshair_shapes.h",
+      "sha256": "871ed534adaca5061c9eb51eed1df2b094e831fdbec2c02dda2fb0b2396747d6"
     },
     {
       "path": "native-engine/include/native_cull.h",
@@ -304,11 +377,15 @@
     },
     {
       "path": "native-engine/include/native_dsp_mix.h",
-      "sha256": "765253aa835f5837e164919f6b6251708127b2dda7a987a61ccf3c692a5a57a3"
+      "sha256": "d33ce2fe44c96f58bf60f83134aba9ff39640255ae66ed484535d60ef89be896"
     },
     {
       "path": "native-engine/include/native_dynamic_lod.h",
       "sha256": "720ee785f8214e891d2fe47fad5130fe1587b9fe9d18171362c88a6b6bfc7c63"
+    },
+    {
+      "path": "native-engine/include/native_dynamic_stereo.h",
+      "sha256": "56f08c5362fc20f09c7b068203ad141ce0bf1baf3ff103c08de309a687f1069e"
     },
     {
       "path": "native-engine/include/native_effects.h",
@@ -316,7 +393,7 @@
     },
     {
       "path": "native-engine/include/native_flick.h",
-      "sha256": "acfdc62a7e88e916f8e96ddde0c2b38785d3655d83bd89bdadf7ee2ae9b235ca"
+      "sha256": "46df1194a8ae905dbeba729c87c9b269999b12c92904d878055ccb7f371ea8d9"
     },
     {
       "path": "native-engine/include/native_frame_limit.h",
@@ -324,7 +401,7 @@
     },
     {
       "path": "native-engine/include/native_front_menu.h",
-      "sha256": "f36154a241c8beb1b8620e0938dc4861e10681eb26db86ad9839c8062f5fe301"
+      "sha256": "1b65c840a061a1b7e62ab1644311c69f3f0804108647b41aca328d083fb34c9a"
     },
     {
       "path": "native-engine/include/native_game.h",
@@ -379,8 +456,12 @@
       "sha256": "a7610ca8a13bb8827ccff41de3eeab6d4484237952d4ec6044239c1ac29d5bc7"
     },
     {
+      "path": "native-engine/include/native_launcher_art.h",
+      "sha256": "0204f78e9ba73f353dd1c92a9ab4b1725ea569a63b3ad93dff4646bc1859e063"
+    },
+    {
       "path": "native-engine/include/native_launcher_ui.h",
-      "sha256": "4330698db3efd1f640d04f3914639fdf24a770ccd8fa1564e2d9e4e3f3d45671"
+      "sha256": "90ac8eb0a77ebaee79e67150c374bee1d1c3883f8cb86d213719d878e29e086d"
     },
     {
       "path": "native-engine/include/native_lod_scope.h",
@@ -400,7 +481,7 @@
     },
     {
       "path": "native-engine/include/native_menu_options.h",
-      "sha256": "fd21ddb7f8747de1adad72862d1e8bb39d258ba59764f47e0351f57a1d5fcecc"
+      "sha256": "3dacdebd9fb5eeaa2945f23f6b32e42cd5b1ea5c3b17af73610d6c1c156cf735"
     },
     {
       "path": "native-engine/include/native_menu_state.h",
@@ -419,6 +500,14 @@
       "sha256": "b3b991eb0910101961dd2652463a572cce2353f3d4a5b705e9f21962ce87f166"
     },
     {
+      "path": "native-engine/include/native_motion_sensor.h",
+      "sha256": "3de2462a73d17ff79232324bd739277adc7b781101cdabbdaca55bc568a4dff4"
+    },
+    {
+      "path": "native-engine/include/native_mp_bot.h",
+      "sha256": "930fcb0d4c2cdf797a72979ec7642e72f44a92c0880b62afa8ba1921885f175b"
+    },
+    {
       "path": "native-engine/include/native_object_batch.h",
       "sha256": "035a78a826f230826e17b8038888de74761659cb206fefaa63bfa54d3f68867c"
     },
@@ -432,15 +521,15 @@
     },
     {
       "path": "native-engine/include/native_options_bridge.h",
-      "sha256": "cadb7297574f5b7fed723457d68be6b85fff6e9ece2c59cc14beb68ac47dd147"
+      "sha256": "7df925cee852e5d48ab42e07d0be0fa6b980593c06b9a1a15e7dd97d166ba630"
     },
     {
       "path": "native-engine/include/native_pad.h",
-      "sha256": "e7a9de28f06524eaf09ecdb42be2a68179bac56128f001e143d9e805dcea257d"
+      "sha256": "edb8f3afc57c1c9f4f792e086816836b35dd9a43d4d6f1091f9e9a74d8bf7a94"
     },
     {
       "path": "native-engine/include/native_pickup.h",
-      "sha256": "e3d0512fd779aba52356747d615dbc382ffc445c30f1a953488750551dc84256"
+      "sha256": "0c9348f1c664e3f0ef1c834740eb3ea9ff7886bf8ed061581f392f6001d178a1"
     },
     {
       "path": "native-engine/include/native_prop_detail.h",
@@ -473,6 +562,10 @@
     {
       "path": "native-engine/include/native_retained_index.h",
       "sha256": "17a1b0fcf210e444cadefcf2675d55858f55f2197b188b2ab63137c0c15506a2"
+    },
+    {
+      "path": "native-engine/include/native_reticle.h",
+      "sha256": "e89b53f0702671fcc56f7eed8b18e6094af524c20a0a409a2d029ca33d81b452"
     },
     {
       "path": "native-engine/include/native_rle.h",
@@ -520,7 +613,7 @@
     },
     {
       "path": "native-engine/include/native_settings.h",
-      "sha256": "cc7cc3abe684d95ce8e33ab7ac61fc923fa9c39ee4ecefb9c52e45d95eeb7f68"
+      "sha256": "697a09d54e7c363984b1fd477d43e7c4ff786187b5d7f04d0bcbd21bdee04b0a"
     },
     {
       "path": "native-engine/include/native_setup_lod.h",
@@ -529,6 +622,14 @@
     {
       "path": "native-engine/include/native_stage_limits.h",
       "sha256": "318dc9adcfd1699dbcadd09002c39b4adc559c467d3f9c0f7dabeb57d84a1672"
+    },
+    {
+      "path": "native-engine/include/native_stereo_options.h",
+      "sha256": "ad67c8c5ff430bda8452dbb0e329ac50a732df12a6b74acb17d9b8118b0114f7"
+    },
+    {
+      "path": "native-engine/include/native_stereo_profile.h",
+      "sha256": "f7699414a4f1f6791594072615faeb3c312a56675d2f559a21dff9be3a5eba92"
     },
     {
       "path": "native-engine/include/native_subsistence.h",
@@ -548,7 +649,7 @@
     },
     {
       "path": "native-engine/include/native_update.h",
-      "sha256": "108dcc09be8b3f852466e6181cc4d0d35185beeaa5c772b01c3d361badc4bbd6"
+      "sha256": "eac7a1375156d2ac12563fb4c167e89a79130c08e118c292e365db8ce82fce4e"
     },
     {
       "path": "native-engine/include/native_update_http.h",
@@ -556,7 +657,7 @@
     },
     {
       "path": "native-engine/include/native_version.h",
-      "sha256": "c24559fa9f0a3d53d8fee257798ecb8f3e7ad08cf7c26d4373f3b2d27a9ac65a"
+      "sha256": "9323f6b0707e770df219a8d6b3bb97586bbe39701995f7abbb53acbdf6692a12"
     },
     {
       "path": "native-engine/include/native_viewmodel.h",
@@ -576,7 +677,7 @@
     },
     {
       "path": "native-engine/include/native_watch_options.h",
-      "sha256": "5ee6bfe04496ded362e3a253f6c517ac90868441bd6905b3a2f78668875e8622"
+      "sha256": "c187bdadae5e4a3d3d178fc9ec28a0ff4b1c31d2149a3f82191eb2e014a4f140"
     },
     {
       "path": "native-engine/include/native_watch_skin.h",
@@ -588,11 +689,11 @@
     },
     {
       "path": "native-engine/include/native_watch_ui.h",
-      "sha256": "0726aadbd6daf93fdac36d94967af8ba63f3dd1d356a7ebcfba9ffdd694b1c7f"
+      "sha256": "010403fdb3329bee78d773fb698a61e72a39b5687ef82a8e18306eb8c91a0e5a"
     },
     {
       "path": "native-engine/include/native_weapon_stereo.h",
-      "sha256": "8965174a98d18dcf889119da006ef8320d14ca60dcb725542dba01e086036594"
+      "sha256": "0bfc34bfc32fd6bb3e5bf57a0d5f3add01e6969c4513f3db25b6617f3fc57992"
     },
     {
       "path": "native-engine/include/native_work_profile.h",
@@ -648,7 +749,7 @@
     },
     {
       "path": "native-engine/include/pica_sharpness.h",
-      "sha256": "1d96473503a50e548980ef2009f0b224bf474a009b178383263322af21eb892d"
+      "sha256": "bca3a34486cea2506c22ddbcb2eb56ab92bfbc798ab0b08416e966f0e3b00a11"
     },
     {
       "path": "native-engine/include/pica_static_attributes.h",
@@ -684,11 +785,11 @@
     },
     {
       "path": "native-engine/rom-code-pool-review.json",
-      "sha256": "117d4be9e3116bd101fef5296b805c198824146e24ef2fe40661af9eeff6079b"
+      "sha256": "b935c52388946aea20a13cbe25ca5edb1d8dee8ce8915af70c2325c51ebd767d"
     },
     {
       "path": "native-engine/rom-data-code-review.json",
-      "sha256": "8bccf8a20d25024c042240512aa7327b6b25e1622af4613fff664c24f02a97f9"
+      "sha256": "918d93619173805c64170b0956939fcedb177689c78a4f9771e40f5f4cb73f1a"
     },
     {
       "path": "native-engine/rom-data-layout.json",
@@ -696,7 +797,7 @@
     },
     {
       "path": "native-engine/rom-string-layout.json",
-      "sha256": "712e190cd098c9c66ebd344ddb0ad335e68b0f7f427eb02d141ed64f596498b8"
+      "sha256": "8778badb37b1fedcfb9f697424755561c164b89c53a69352a33d1471336f5f60"
     },
     {
       "path": "native-engine/source-files.json",
@@ -704,11 +805,11 @@
     },
     {
       "path": "native-engine/src/audio_3ds.c",
-      "sha256": "a39a48122d05a069768df6738c849515c806952d4d4c6d9422e313acda059b5b"
+      "sha256": "508fb5a8b3a3e3debc41bcf90add0ec3c446ec8917f0c6a68dd6ece6af9dd467"
     },
     {
       "path": "native-engine/src/baseline_options.c",
-      "sha256": "962fffffad2444baba8a8ce118d20749a1129752880230adbef3bea03727ab03"
+      "sha256": "46584bbecbb638dfaf76d19e06a469bc305294a786386d93c964829c7d579be3"
     },
     {
       "path": "native-engine/src/bottom_3ds.c",
@@ -732,7 +833,7 @@
     },
     {
       "path": "native-engine/src/gfx_pica.cpp",
-      "sha256": "0a0f2919cd9040b6703d47d794e5ce7ac29cde956f5ea553fa0341432ad90966"
+      "sha256": "97753162d96cb4720130ca71a18e17c5b2a5ae9147b5c112b4778efeecbe3ea0"
     },
     {
       "path": "native-engine/src/graphics_host_check.cpp",
@@ -744,7 +845,7 @@
     },
     {
       "path": "native-engine/src/input_3ds.c",
-      "sha256": "1488621d4283fe9d7e02ef59820e6f728e96e72f006c1409544ff6b43bb47e1f"
+      "sha256": "e33146012a3e69119d8ba009881c8dfac3c11d5d012b5b4978d14469011e3cc3"
     },
     {
       "path": "native-engine/src/native_assets.c",
@@ -768,7 +869,7 @@
     },
     {
       "path": "native-engine/src/native_controls.c",
-      "sha256": "f2a3b742386d5505a80722988093acd54ddc7bb26988de62de269f3d22dcd503"
+      "sha256": "e24c184489c897333259283fabef0693f6e2808fad07b2dd106bb651b423c318"
     },
     {
       "path": "native-engine/src/native_convert.c",
@@ -780,7 +881,7 @@
     },
     {
       "path": "native-engine/src/native_dsp_mix.c",
-      "sha256": "8abce097e5325ca22beabaa3a8e0ce2e50f31175dbbe64fa16fbe11359c9928e"
+      "sha256": "264b1f6a75a6898cc012960ef0dc4e70f509a936a2c127a536d3ec32c47dee73"
     },
     {
       "path": "native-engine/src/native_effects.c",
@@ -792,15 +893,23 @@
     },
     {
       "path": "native-engine/src/native_game_platform.c",
-      "sha256": "c064f29aa948f9e7d88446f515a7afa67f2a9cdf880b92ff92b392a0a3f2421c"
+      "sha256": "c4f71ac82566ef9c499c59fc302430ada0a399588f6b6dfe7a800b8dd7fee2dc"
     },
     {
       "path": "native-engine/src/native_game_video.cpp",
-      "sha256": "684cbd909030f7ab94fc5a5742da02b7aca1f87dbd2306b02758b63395ada127"
+      "sha256": "1fd5e76fecdbe23f81d6e0612d0c261c324f93d35d8172e5551f3d3c4864f85f"
     },
     {
       "path": "native-engine/src/native_motion.c",
       "sha256": "8013ad06501c739eaa1968f5859f0e6d5233335b502b0a1dc3b221113884d838"
+    },
+    {
+      "path": "native-engine/src/native_motion_sensor.cpp",
+      "sha256": "e41b26600b72725b9fb28d2676d66108fd040f191a30773a1297a69891041bda"
+    },
+    {
+      "path": "native-engine/src/native_mp_bot.c",
+      "sha256": "197ab59081dc46727f9693a0f3e19e0ae81a571a514fc993665c6d46392b06f1"
     },
     {
       "path": "native-engine/src/native_muted_audio.c",
@@ -828,15 +937,15 @@
     },
     {
       "path": "native-engine/src/native_settings.c",
-      "sha256": "658f70654e24819c2e1494b6eb379e3ce24546ef30891cf650d5a5e184e742c6"
+      "sha256": "dbac942ca2cbb5e57a9506f57ce9e3f6a253336e5f027ce9b9e7aef4f3808c91"
     },
     {
       "path": "native-engine/src/native_update.c",
-      "sha256": "f22bf015bf7273659c3af157b7ecd19fb9ff3ec76a9732290d651ea873f447c3"
+      "sha256": "c5ee9f3a5b4d56c1c191ca0c4cc7a440a8c08f36180f5a3dee8a6c5656ebc780"
     },
     {
       "path": "native-engine/src/native_update_3ds.c",
-      "sha256": "03b4d1b95ba04f833c91e43ff25d0f9c2d8283100e6a4d5202032a7bae68910f"
+      "sha256": "03d308e57fe5d6937f54ecddaf37fae89335261509d8e29c1e4dd8a8b73e8b05"
     },
     {
       "path": "native-engine/src/native_update_http.c",
@@ -863,8 +972,20 @@
       "sha256": "2638c131f409d10fcb02a29f285bb81b324e2f8704b4a7de4d05805fc4699bd0"
     },
     {
+      "path": "native-engine/tests/audio_completion_host.c",
+      "sha256": "143b72b30d69b26affed93520f0fa0199996895f9a3fa59292daf71c12f0d198"
+    },
+    {
       "path": "native-engine/tests/audio_mock/3ds.h",
-      "sha256": "4794d348713c09405dd2cae24b4e57cb65d15b6d4d49a12a182ae4b132c6109f"
+      "sha256": "eedaa27bb86a73ac02da648df92817a56a3dd88042838a36e599be31a0cf532a"
+    },
+    {
+      "path": "native-engine/tests/audio_mock/opendsp.h",
+      "sha256": "a6bb7dbb649f73642465039177e1254e10846b5d70d69aca4e040955e8a041a8"
+    },
+    {
+      "path": "native-engine/tests/audio_mock/opendsp/effects.h",
+      "sha256": "1db3bf6f6987cd8c48557eb0386c3c9384ba29c2cbf00b80560cd6918f864e38"
     },
     {
       "path": "native-engine/tests/audio_pcm_host.c",
@@ -884,7 +1005,7 @@
     },
     {
       "path": "native-engine/tests/bottom/check.c",
-      "sha256": "e1d6ebeae78abaa475fec2593adc48f72c4a190992cf74f8795ef434bd4e8cae"
+      "sha256": "ffa48a230d7c737c4bfebec03e27a23f394ab4abe7d16546fcd35df5d28de5df"
     },
     {
       "path": "native-engine/tests/bottom/mock/3ds.h",
@@ -903,6 +1024,22 @@
       "sha256": "04a634f8174924c79deab70c32226e8be230d301ef6b9b1509485a085c519815"
     },
     {
+      "path": "native-engine/tests/conker_sdf_reference.h",
+      "sha256": "7d6b7c50fe820c8f6f4863cdbe1640c407bba67673eca9e04ab318372a6de8d0"
+    },
+    {
+      "path": "native-engine/tests/crosshair_draw_host.c",
+      "sha256": "2efd90a85438820c4cbd9bb591398c286417c87109a3f593847223eafb6788c7"
+    },
+    {
+      "path": "native-engine/tests/crosshair_sdf_host.cpp",
+      "sha256": "5fb83df4127cde36adeb25dd59b5c74d9416dd92376775d3b805e488b7da2ac3"
+    },
+    {
+      "path": "native-engine/tests/crosshair_shapes_host.c",
+      "sha256": "9f9db8a74a7026aeb1a7bc8876474aa68b8470737c0dc86c52d1f9acf51d9ff9"
+    },
+    {
       "path": "native-engine/tests/display/3ds.h",
       "sha256": "c03b98a156faff8898c9ea194bf4034e8be6ab82bb52a4bcf0cad63cde65d050"
     },
@@ -912,15 +1049,19 @@
     },
     {
       "path": "native-engine/tests/dsp_backend_host.c",
-      "sha256": "fa23fb7b7bcff8b2b8389923f1a9b329f5d1ce4e6d702fce593b70eefa1e0658"
+      "sha256": "a7c9abc452738cf3e71261f5c6310370bb9cb65f987d890649862b712169d058"
     },
     {
       "path": "native-engine/tests/dsp_envelope_host.c",
-      "sha256": "783fe1113e703ac8de6078763587fad927384a1be539e91b810d28166b6e73a4"
+      "sha256": "003c625f196d03ee4e7533f28308c0f1009bb045891023a8a408f9fb1312f602"
     },
     {
       "path": "native-engine/tests/dsp_mix_host.c",
-      "sha256": "f40c870ab7cb756dfbd19ae16ccf41f1b5757b0eef8a000a40bf4e2b6dff86d5"
+      "sha256": "da820f659e1ef12a1fbcab190cecfd2fe8c94fc91a66e717d96beaaac6a762f4"
+    },
+    {
+      "path": "native-engine/tests/dynamic_stereo.cpp",
+      "sha256": "cb723299c81871e2d77523604e83b07889b73192b01aa83c2e3ae0f38d2039f2"
     },
     {
       "path": "native-engine/tests/effect_lod_host.c",
@@ -956,11 +1097,15 @@
     },
     {
       "path": "native-engine/tests/input/check.c",
-      "sha256": "db31a367e448d771defccf6d27e12f9d1c70188ef4287ea7bb731a97710395d2"
+      "sha256": "f113c40166dd34ea67e609424e959d3ea352ca695e94c15413de2ab81f25e5ba"
+    },
+    {
+      "path": "native-engine/tests/input/jsm_smoothing_reference.h",
+      "sha256": "a1b9099d5e44fac0dcb90b99b6315abf844a052373637c8394c3f97c8e1ceb95"
     },
     {
       "path": "native-engine/tests/input/mock/3ds.h",
-      "sha256": "0262b27dc1abbd417fb1f1453e75e2cebdeeb6f03caeecd2177a52cb8a32f892"
+      "sha256": "61b9d64dc2a38df3dde5b8f4d845209460fa237932b2621c32c1eabc0a4ee06e"
     },
     {
       "path": "native-engine/tests/intro_scene_host.c",
@@ -979,8 +1124,16 @@
       "sha256": "a92be9afca903296fd94e619583da58b482116bd0f4ea71b0053ee2db0972271"
     },
     {
+      "path": "native-engine/tests/motion_sensor.cpp",
+      "sha256": "e8889ee8dbe558487c10aeb86d1974c7cdd230b30b34114ec0f2bee264e4ae0c"
+    },
+    {
+      "path": "native-engine/tests/mp_bot_host.c",
+      "sha256": "07d62e70858a37115dacb037b195adc17b53c85618fbdae39fe35a35ab1f629f"
+    },
+    {
       "path": "native-engine/tests/multiplayer_preview_host.c",
-      "sha256": "b2fe346f16571a8625b3eef7341b85aa60c751ebe699173a0735a7e14e4cd3ef"
+      "sha256": "7c565bfc1554c8368964ae0acea4b83851e5edd75ed97820c9909d87456ea121"
     },
     {
       "path": "native-engine/tests/music_load_host.c",
@@ -1012,7 +1165,7 @@
     },
     {
       "path": "native-engine/tests/native_controls_host.c",
-      "sha256": "968b30a6100e2242e6fa894d73c30a787de88b9aa9bb963b0429c72426760245"
+      "sha256": "290706d2d3e2b46039c05c8be3db56761103bf23f3948ab4d8216381e7d68190"
     },
     {
       "path": "native-engine/tests/native_convert_host.c",
@@ -1040,7 +1193,7 @@
     },
     {
       "path": "native-engine/tests/native_front_cursor_host.c",
-      "sha256": "c7f460742c41111da85a479dc6c196266da1e285a3c8cc1d98f76cb767a91a69"
+      "sha256": "f0c5f1d13aefb86bbbf946d106b340dc46b36bb58955f26fc578818c36a90438"
     },
     {
       "path": "native-engine/tests/native_game_layout.c",
@@ -1056,7 +1209,7 @@
     },
     {
       "path": "native-engine/tests/native_menu_host.c",
-      "sha256": "eeee03c690943986267804933012e126407c5c78d1ce4a0fc482873dde80fc7c"
+      "sha256": "4bdf6073a33a5729851fb995d9b35caff6bbfe672199189a414d5e4e6a2c8546"
     },
     {
       "path": "native-engine/tests/native_pickup_host.c",
@@ -1068,7 +1221,7 @@
     },
     {
       "path": "native-engine/tests/native_preferences_host.c",
-      "sha256": "71092e9ae6667473873129b6a27cd09ebcb10078c6d2d5254cf79a064f395b21"
+      "sha256": "36dcabbb05de8849eb020d68e1e952b5e97eab1d6c8504e4378b4c669469e059"
     },
     {
       "path": "native-engine/tests/native_prop_lod_host.c",
@@ -1080,7 +1233,7 @@
     },
     {
       "path": "native-engine/tests/native_shutdown_host.c",
-      "sha256": "13cb30a164fc8e088b3fbfcbc321d8d8e550fd29d81e07422c35b0a5bc623040"
+      "sha256": "7115ad46ec05bca00af438078238604a9bed637648cc55e2fbb205f8952e16b8"
     },
     {
       "path": "native-engine/tests/native_title_storage_host.c",
@@ -1092,7 +1245,7 @@
     },
     {
       "path": "native-engine/tests/native_worker_host.c",
-      "sha256": "e8c1a9ba599299374c837ff7310d62dfb64d4e2bb1851966ae5aa657d07cd8c0"
+      "sha256": "54a06e4adf94e247d4717441e2b2a6851c281663f6bc3c0ba5b9d01d59a5f94a"
     },
     {
       "path": "native-engine/tests/os_queue_host.c",
@@ -1104,11 +1257,11 @@
     },
     {
       "path": "native-engine/tests/pica_backend/check.cpp",
-      "sha256": "712256951e77b6a2712ecc22876035ba81062774c467f28c4535c3f6d306a59b"
+      "sha256": "266af87860c7880844a8142f096c2e68869b91ccb6a66dd40494995bfbeb30ea"
     },
     {
       "path": "native-engine/tests/pica_backend/mock/3ds.h",
-      "sha256": "760d5950958bd752f2b16bde7405d64e02c77657d37be6d898a1a116c79270b3"
+      "sha256": "bf56bc9b8affc5df013de4eafd27b91e8fb8cae9d6c5d4b3bba366bdd93dc246"
     },
     {
       "path": "native-engine/tests/pica_backend/mock/native_clip_shbin.h",
@@ -1147,6 +1300,10 @@
       "sha256": "155e8d98b7634206a97d6cca1688d7819f75c277dc5a710861359db362345523"
     },
     {
+      "path": "native-engine/tests/rt64_stereo_reference.h",
+      "sha256": "025f85bc8701629995ae79f63f9ade23b318a9667935cfec522eb2229db389a3"
+    },
+    {
       "path": "native-engine/tests/scenery_batches_host.cpp",
       "sha256": "2c548ed1216ae818e684554f1162da22ea92667e60767d553ecadb3d7fa1641a"
     },
@@ -1172,7 +1329,7 @@
     },
     {
       "path": "native-engine/tests/update_host.c",
-      "sha256": "88dbb7193e7b07ebce90c8fe9c349fffec57a6ceac6d6a4a40c2dddeefb26ef1"
+      "sha256": "aa935225afaa59866f20b86836ad10b38e6199f9a464b5f80b73fd7e53f2ccf6"
     },
     {
       "path": "native-engine/tests/update_rename.h",
@@ -1188,7 +1345,7 @@
     },
     {
       "path": "native-engine/tests/weapon_stereo.cpp",
-      "sha256": "385205955944b6a20f7fdb9db2f4ddb6b6eed493ecc143ee5f56242dd0d92078"
+      "sha256": "fcad9fe26cb0ade07fc57aecd10310a7c9e45ef19a2bffc9ec883a5180264c3a"
     },
     {
       "path": "native-engine/tests/work_profile_host.c",
@@ -1220,15 +1377,15 @@
     },
     {
       "path": "native-engine/tools/build.py",
-      "sha256": "7432cdfd3684d4810c893e2ebf8e6cb2a9a23857de940c41504f1174f52aa553"
+      "sha256": "8760a9d672018b5911f249e5f002dd5d7f619c3ee9e2cd4dfda1ea0d3fc39e8a"
     },
     {
       "path": "native-engine/tools/build_cia.py",
-      "sha256": "a97d9744265531c9459db14120f5de7d8cb6ba7ed6ddc159184897c25fdf0971"
+      "sha256": "85e919425b84215ae4a34abe15a7537478e2c6d76f70e2af480e798becc41727"
     },
     {
       "path": "native-engine/tools/build_game.py",
-      "sha256": "7becfedb1d2dce5397310b8597af4d127b54e73ee5d6c1b560a58363479980eb"
+      "sha256": "10c416f6c496b37ef7c9dac60e8b28924c113e618f2332dba598f99c1977e212"
     },
     {
       "path": "native-engine/tools/build_graphics.py",
@@ -1259,6 +1416,10 @@
       "sha256": "d17478303d2752d5be1382cd224bc25cedd4dac242363a77e2c8feee498e8673"
     },
     {
+      "path": "native-engine/tools/check_crosshair.py",
+      "sha256": "432295b7e2ea644993cfea46e344fccb424051fb06e932231e2f93fc2d143dac"
+    },
+    {
       "path": "native-engine/tools/check_derived.py",
       "sha256": "95ec420c9964a77c3dfef547f0affa4494f67531c2c2166cb5ff045dd2b83353"
     },
@@ -1272,7 +1433,7 @@
     },
     {
       "path": "native-engine/tools/check_dsp_audio.py",
-      "sha256": "5f143cf460886bfe12f82190109e7e66fd96cf8bc8191fe81c8f3c66a0f5e127"
+      "sha256": "61fc9f5609f9e4f5713f3991be8c4d2f7907c1edcf3569d843808b057e40a3c7"
     },
     {
       "path": "native-engine/tools/check_effect_lod.py",
@@ -1284,11 +1445,11 @@
     },
     {
       "path": "native-engine/tools/check_game_assets.py",
-      "sha256": "2cc4e728c3f6c0b92e9e353ec6264e39a0a7f0b28ed9d55c9b3a23b9c7e7602c"
+      "sha256": "5292f69e1aaf578687b347384b71f7af6378fdeb994b0219b5e47c9c162ba8a5"
     },
     {
       "path": "native-engine/tools/check_graphics_host.py",
-      "sha256": "3623dfed35e6d873c7e6e3fe7b4d34c8e6048178449f53f3fdbf35249d025fd2"
+      "sha256": "07c06464b4235cf74f985570809cefa82ff03eec795a211cb4e1bff55b060b3e"
     },
     {
       "path": "native-engine/tools/check_guard_activity.py",
@@ -1304,7 +1465,7 @@
     },
     {
       "path": "native-engine/tools/check_launcher_ui.py",
-      "sha256": "ca07515c6bdae3c41f8d38ad6408adcf48da3e0bcf2d5538624900d832104ed6"
+      "sha256": "f2cd440edabb0ca7bced47681a44c004794f2da0fd518daab3ef882f2cab8c57"
     },
     {
       "path": "native-engine/tools/check_model_bsp.py",
@@ -1312,7 +1473,7 @@
     },
     {
       "path": "native-engine/tools/check_multiplayer_preview.py",
-      "sha256": "b3e77ca0c86e56e506c18cba659308895fa84fb68e093c10c1a4071d033bea28"
+      "sha256": "573f74b1bba730e73aa332616d032337dcb6aa351e111ec5aa3367864782f4fb"
     },
     {
       "path": "native-engine/tools/check_music_load.py",
@@ -1356,7 +1517,7 @@
     },
     {
       "path": "native-engine/tools/check_updater.py",
-      "sha256": "2c391b7d3883fbc999cae8679952324d0561a3f579d78d268ab1a7acaeea4e96"
+      "sha256": "6566d939046ca4690209c081177266b7f209c95a6847dab4283c911dc4e93911"
     },
     {
       "path": "native-engine/tools/check_watch_skins.py",
@@ -1364,7 +1525,7 @@
     },
     {
       "path": "native-engine/tools/check_weapon_stereo.py",
-      "sha256": "12bcefa05fadad126b34e53c30c9c66e1423b08b15c77d85e2c2d3b5434a8dcb"
+      "sha256": "e2aad89c91a1e4191bdf18ac0b1327c349cd4679363437764ee41d7381d3b4e3"
     },
     {
       "path": "native-engine/tools/check_work_profile.py",
@@ -1408,7 +1569,11 @@
     },
     {
       "path": "native-engine/tools/dsp_audio.py",
-      "sha256": "1e6811b048190eb11b209144551c797949690b743a0d974c0fda69b63db8139d"
+      "sha256": "f1432422df6b728e33f6b89a0ecf3c9ef10c22e36e67b8e2337c1fd157f57194"
+    },
+    {
+      "path": "native-engine/tools/dynamic_stereo.py",
+      "sha256": "8ae831e9fcf8b360a181820dcc812ef2bace6a8976f04fe931138b279e567ec7"
     },
     {
       "path": "native-engine/tools/effect_lod.py",
@@ -1433,6 +1598,10 @@
     {
       "path": "native-engine/tools/intro_timing.py",
       "sha256": "c4128ef0ffb7a1b0987baa26cc1e0c0a19b76941caf3905e2940b47f968482f8"
+    },
+    {
+      "path": "native-engine/tools/launcher_art.py",
+      "sha256": "35a88eac3b94af5bcc3892ad5044e5eba6e165a0a5f49ec6e8429c80ab39f84e"
     },
     {
       "path": "native-engine/tools/link_audit.py",
@@ -1504,7 +1673,7 @@
     },
     {
       "path": "native-engine/tools/multiplayer_preview.py",
-      "sha256": "9ccc45e11d8e7976f6eeb73a86594a147262b86e8e5bfdbc3b84b768703739d2"
+      "sha256": "6af99ea02e8468b7dbd7980134a939859df9d7c3f0ea457d9afc236d24030dbd"
     },
     {
       "path": "native-engine/tools/native_fixture.py",
@@ -1521,6 +1690,10 @@
     {
       "path": "native-engine/tools/object_lod_assets.py",
       "sha256": "7e23a4d8f9451c307782ecd0cf567244ff2629937c0b0fbbc70d807839e89534"
+    },
+    {
+      "path": "native-engine/tools/opendsp_deps.py",
+      "sha256": "bbe74aaf025ebdeb862d547193b6389dfd2b842870702ce15cce60adff3e0b28"
     },
     {
       "path": "native-engine/tools/original_data_types.py",
@@ -1576,7 +1749,7 @@
     },
     {
       "path": "native-engine/tools/review_runtime_code.py",
-      "sha256": "01ed2e344dcc8ddf90001718df3aef5191433f997fe0ba7a98b8d3d1c541d7e9"
+      "sha256": "92af913832d230849f51ec6cb55d11661035b4719519bb11e17b8f33c4d6209e"
     },
     {
       "path": "native-engine/tools/rom_data_plan.py",
@@ -1657,6 +1830,590 @@
     {
       "path": "native-engine/tools/weapon_skin_assets.py",
       "sha256": "ff2701943ca7baeb5e22e8c318b80437649bbdb60dda869443de2241f9ae8c7a"
+    },
+    {
+      "path": "native-engine/vendor/GamepadMotionHelpers/GamepadMotion.hpp",
+      "sha256": "f070bb1327cf5b1fbc336d570382d4c088e5ffae9f031dd0af8f81153581e690"
+    },
+    {
+      "path": "native-engine/vendor/GamepadMotionHelpers/LICENSE",
+      "sha256": "cab235520dc9bda018e27ccc8c533ecf375766823f9ed918f3698fa52aaffa33"
+    },
+    {
+      "path": "native-engine/vendor/GamepadMotionHelpers/source.json",
+      "sha256": "5df372e4a3aef8c37e0b18d8155172969f74e7d2fe2b4c5c0a1bf39b1de77d38"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/LICENSE",
+      "sha256": "86ec2c259c5e45e84f3c5e5546506b55961e70ee20db8e3335e7cbd4d98f8150"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/README.md",
+      "sha256": "a46dfa82cd9b7842293e364632a1613edb6aba245b7e2dac4f0414974c8c6266"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/docs/AAC.md",
+      "sha256": "889a6de968ad6b160a2664a2f19226802c2e85ac9ef6e4aa166b28165f6e37a3"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/docs/AAC_DSP.md",
+      "sha256": "549f7b42b7891bab16aefde50db19c275fc63f63b87302594ddb8a7ad89602b4"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/docs/BUILDING.md",
+      "sha256": "47fdf6fecddf09dd84b36b58e0e7cf6f926fb2b5963d852ec9bb912444b54a91"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/docs/EXTENSIONS.md",
+      "sha256": "690f5348deb43b8db8b90058575fa4f89453aae07c5d68d28bcac1b379ae7728"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/docs/GUIDE.md",
+      "sha256": "bc8774fef099904253c131f0e370f58278b13240df88cd03d27fae7f40f2208d"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/docs/MP3.md",
+      "sha256": "37809e763a63b027a865f780e720dfcce098c21a932b66bd9b7cc9942aa467b9"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/docs/STREAMING.md",
+      "sha256": "d22af5f7e09af8bb67a41018a4533f499cbf027e79f6aa1380c55f6c4f58f1b0"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/docs/logo.png",
+      "sha256": "d8200c5bf1f6d6902a7f5f0ca4e22b38c9721e11217f38d643e582d1c593ddbf"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/docs/logo.svg",
+      "sha256": "1d0de699aca2b31e3d749a84900bbd31dfa7385d5cf2d3d8059ab3dc8a7dffca"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/Makefile",
+      "sha256": "ab5cfdf594d568b56f15bd55041e456dbbb1a08d3a554d15b4dac1ae04bb1f6f"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/aac/aac_arith.s",
+      "sha256": "39da5cb56294c9e8abc0ad216d8169e4e0e803e67eab794155bdf8a38a6ca0a4"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/aac/aac_bits.s",
+      "sha256": "e56db26653f8467323d8ddf8afdbe0d4c43e2e399393b7416bd1577036431f13"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/aac/aac_dequant.s",
+      "sha256": "f28c09b1cc66109780e4c8b2967447340140b622b7709f838d428feecc2059e1"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/aac/aac_dsp.h",
+      "sha256": "623a9bceef8a89631b35188034a1c94b7e88a837b083d4d9b7fe6bba03d82c85"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/aac/aac_fb.c",
+      "sha256": "fc4a44fd28ebf0f53be98fbc479bc26db09127b9753f0d8ee795b0e70a34e02d"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/aac/aac_fb.h",
+      "sha256": "a59c528e424062993714f94ed355dedc5b004396337a4e401e7b48272e3fb98b"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/aac/aac_fft.s",
+      "sha256": "03c1f9608073fdd79d7e5877abeecacd08b268612e4e6c478c351f9798ad3815"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/aac/aac_parse.c",
+      "sha256": "b54158196977e90a0a0eb946c1181f7d48fa44545b9ce596547913b22bb39bd1"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/aac/aac_stages.c",
+      "sha256": "d153a5c30a806880fe300ea1d5cc427578585ebf25866534f6da8df1d156a375"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/aac/aac_tables_dsp.c",
+      "sha256": "df49f3a819b54b04c0771ec75939d356fd5254fb70421112581cf39b75b04637"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/aac/aac_tables_dsp.h",
+      "sha256": "05fe83a2984e78f9b3bbf9d6045cb24c2a07d779f6d867ef9f8c482e4e263085"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/aac/aac_tns.s",
+      "sha256": "617f7c87225ebe1c03785fbc949fe1d6a99d356c2f577d259d4b6f5a42a45d3a"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/aac/aac_window.s",
+      "sha256": "9e24cdd232f0fdbff81815eb78052e40e8905d4c22458e5017a6cd249f55efc9"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/aac/aac_window_pcm.s",
+      "sha256": "425c05b950ef068dde7ce68266b96fa6794fb8c368a5c96aabba52d18cd8fa08"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/aac/mp3_stream.inc",
+      "sha256": "53f40e8cd7b0ed6927a906ee4d378f4f78385067f07d0906dbec5807d5d37233"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/aac/stream.c",
+      "sha256": "575083c862fb2e8a487c33fe97c85772bc0985ec1d0590c0f7d1bfd30934732d"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/aac/stream.h",
+      "sha256": "dc63d52e8b6f0769afa56e7d365e34ef6d432edb69e2ec129ec9abf4462651e1"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/aac/task.s",
+      "sha256": "3110967577ed77ce396f5d97fdce8c618f06d666162068def117826b40ba6fa4"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/aac_protocol.h",
+      "sha256": "66611027820c9b89bbc2156bbe7f63ce45475d0c37873fd625ce7b804de05112"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/aac_tables.bin",
+      "sha256": "6c5ae98d7cd198f26115760275999a17c4118e7dd8c91a5e872699856ad31500"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/crt0.s",
+      "sha256": "a2069b74034447dade0c3922137d49dd008bf4690bacba1b9b7eb64f8be481b5"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/dma.c",
+      "sha256": "653831b7a8f9edc69a4c72926d0c23b25dbdc2b218797a7c91a9cdbb7770377f"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/dma.h",
+      "sha256": "4c4753e89fb40610482e1bc6224a8a1290fae1d7c2006b16f945637d78770925"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/extension.h",
+      "sha256": "3a923c943ef841967ca09f257b4ef87d8fd06454fb6ec3a1bc546e75955df490"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/hw.h",
+      "sha256": "9929ebbb49692cd419a526cff601f830c8badac2cf85f3979457d92c3d93abe6"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/kernels.s",
+      "sha256": "9c78780fe7297a04583b2d45cdf6ad17fcbe0d54cd2b58cb856a3d65898d1e3c"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/link.ld",
+      "sha256": "fa5b18a18175ab0413d33ecdcb5d22bec4dc21b180e3760f98126ad76de2f8ab"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/mailbox.c",
+      "sha256": "587d242d89478c74c8b3af64bd4da23fbf11eead908c57d230fb24c635652e8a"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/mailbox.h",
+      "sha256": "7238515286830e11eadecca21ef1169b58c310db532e33ab47e5946e211fb858"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/main.c",
+      "sha256": "56a2817f1881e708a7ffcf231ba551dd24b6ba1efc66464d8c3a9c66a5021574"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/math.s",
+      "sha256": "4b2d5689d55fdd61b712676d98c56cfda3796f405b3d7b46a8e69e3f92226ddd"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/mixer.c",
+      "sha256": "90f760d0dba189c7b9bb18dff9580ef7b1e09b2030bdae62ad963090207a83a1"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/mixer.h",
+      "sha256": "ede538e699ab29a893fca566d9b5fc85bf191761b83cdd5ab56286d6b4a316b3"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/mp3/LICENSE.minimp3",
+      "sha256": "6a1ee543e5282cd9061881edf462e6fdab181f328da71fc2c9a6950a80e94d01"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/mp3/NOTICE",
+      "sha256": "2a0e0d233e8c0e9e986087930abb515aa8dec5c53f65b286ca9c744673d3327b"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/mp3/REFERENCES.md",
+      "sha256": "831bcd176840fc8c36a9f528580eaf4573544a716b8f39005bb3f1231836ea04"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/mp3/bits.s",
+      "sha256": "6b8f0b1de90e2708561ebd6ccba59b1fd9801d191e404785a21c0ae88f4ba527"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/mp3/decoder.c",
+      "sha256": "254b2d76ff9f08872ffc79a37ad69cb46c2f885977681a6854ee82ef5e3665fc"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/mp3/decoder.h",
+      "sha256": "a995ae290986ad4f00b796c0cc21fb0e6d786985b920a72795cb41ec18b10208"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/mp3/huffman.s",
+      "sha256": "e592cf28659003912ece8808d2786c9bd729012e660746db329929e44542d61b"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/mp3/hybrid.inc",
+      "sha256": "a883b890481b4ab3e30425f5d096514881e7b9d04d92920197d33cb98a0330d8"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/mp3/math.inc",
+      "sha256": "a97a7c77eb09f71e99b3816c742412cf3c0e436b716bc89eb130f9e65718f2b5"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/mp3/normalize.s",
+      "sha256": "e2576f6458f1cc031d1296588aff1d8cf163ffe81c915bea7d259e1f4c0fb3f5"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/mp3/product.s",
+      "sha256": "3b7431954c3283d7169a2f397b0be2def72ab0b66ee18816d2a748f724cc6b51"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/mp3/requant.s",
+      "sha256": "309c29a4d7bcb55afa8e1b2f1ca2af945b917139e2c8692d7aeae0d1c9745089"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/mp3/schedule.s",
+      "sha256": "4f8ff1a663d71717deb6c44f3685ba2aa2d2639bc3240f416a3db8faafb01eea"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/mp3/synth.s",
+      "sha256": "f935c7e39a1179c2b614af5c40aaadfcb40d3280c0a3cad2bad6c29ad693993d"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/mp3/table_layout.h",
+      "sha256": "d5b1580dfd5b54191f50e23f5cb0dc013bf3b96f8b9ac74e3d3368b830ebfd0c"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/mp3/tables.h",
+      "sha256": "e5087da7b8f016fb32f1475b08adfeca63f1c588ea49b312f86eca82bf6aaa2a"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/mp3/transforms.s",
+      "sha256": "707131a0aa513134164ab60ad0d6945d7872ba9983dd4b463036f60557a9ed1f"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/mp3/window.s",
+      "sha256": "8af6de75a151e98c69dd8f1453afe4b70fa0bcb80d878c51589436f5d6c7c899"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/mp3_protocol.h",
+      "sha256": "7d313a3ef4bb89002f14cd4ae0786aa9fc5068502f5777820c1d801de39d94e2"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/mp3_tables.bin",
+      "sha256": "bac18c06148e1e8ec0aeaf06df2703e9a0e4f7a92753696c513e52e375f4fb8d"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/opendsp.cdc",
+      "sha256": "c1653f02f19485c4ec8dc02e2f901d77ea4a7c07efb3ea908d082abb22a7877f"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/output.c",
+      "sha256": "3774709cd06e5b650e4fd86954ff84ec2ba42886f519391cf22b92319af2a9c4"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/output.h",
+      "sha256": "832aa73aceb66e7b7be4e2ee222d0dffa966de01028d10ce594554c93b3b760b"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/polyphase_table.h",
+      "sha256": "3673ac94f058736bacbff92b5387cc415cac53da35d4fb8b7b79c62140ed6e37"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/reverb.c",
+      "sha256": "d4cd1652b76195812e8724bae988823948ed6de86113c43f740dfd75c07c0c33"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/reverb.h",
+      "sha256": "6cd4d3314338371154ef9feea8f72f75693e53cac4dd46ba57703ac9fcc86e77"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/reverb_kernels.s",
+      "sha256": "b6097115272c7ad6e3c3fb62f2f1bd14df0f789e6174c0b310021e738e7eae51"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/shared_mem.h",
+      "sha256": "27ebe92d240b0c0ba2b878cc0fa877b87cfb04ac3565e494b4b34925552692a0"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/sleep.c",
+      "sha256": "40b62454815b36359d544f6d93702bbb5c772ae451907bf3e1d23df97d7e96a1"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/sleep.h",
+      "sha256": "3bb25fc42cdc6417fc033a2df30ad33779352808a28b872508b43bba7e93ae96"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/source.c",
+      "sha256": "baa88a3f3cea3bab0636e80cd28f39d8c9356818e400ec72ad3235d3a79cfcae"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/source.h",
+      "sha256": "fe4f79b36a27ae854819dd2613e8cec842a0d04872d9108f84f7aa988c31d560"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/stats.c",
+      "sha256": "a024edd1ccf22f14166bd94ea1d6574cfe3764e00425ca11c854399e56c6154f"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/stats.h",
+      "sha256": "e71642a5c332d73ae20d4186ac4d7da9f3d3e6685835d15ba22393db31ce74d7"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/surround.c",
+      "sha256": "d0adc3f595c42f5b0d9b0a51c4605571070fddfe0bc68329172fae3ba4c9d137"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/surround.h",
+      "sha256": "4cb2ce85b919c9fb30b40f8d2db235b3a5e6e84d417ee4b83cf728f828ed4f85"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/voice.c",
+      "sha256": "14fec5b926c49b645c2c4f48881b6c6bcc2912e287fb1005d18c63d62455f2c2"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/voice.h",
+      "sha256": "29203f952eb8c0b0cb27ff1cd6c59fb4f1802fe0d09a44064342458da0a02514"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/voice_state.c",
+      "sha256": "c0c598feff5a4f9c0568d7f6857bf7f7e1ef953e74847f19f1ebf0f7cf0e812f"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/firmware/voice_state.h",
+      "sha256": "5f34662716adfe6e3399320fa08235fe30ee8029cba4a5d6653abbac79e9a276"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/Makefile",
+      "sha256": "d1794fe157df336de53b410b93b08b986d1a2ea56f33f598e61f6cafab5e6368"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/include/opendsp.h",
+      "sha256": "089f989c45102a74409a53779cbd78c9ed6760993768505109bd5d18457a11e3"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/include/opendsp/aac.h",
+      "sha256": "7687272eb652e8acff167f738ddbea754f7cc2de6e10c15103ab23904a90eb5e"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/include/opendsp/audio.h",
+      "sha256": "ab2b0ce1966df06c8180096c7744121562069aadb2e1a595cb6732f5f1cbf6ea"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/include/opendsp/effects.h",
+      "sha256": "fd2bac738b88a5146d764b64e1125867b1b193e23052cc71b4b0baa73f8e4588"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/include/opendsp/mp3.h",
+      "sha256": "dc6b6e0203494588ac2ac40502b5be42e04220a4a34a66fd8698de98c5c05050"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/aac/aac.h",
+      "sha256": "69397b2ccd94c86d2e8df022f2af5c2b2b22e3caec0697aa828214f4dab1e564"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/aac/decoder.c",
+      "sha256": "497cc18e1579e42fe4923f032cf0e06306f2b2d30f22bd598e35b2c73c9191db"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/aac/filterbank.c",
+      "sha256": "993ba2f8debafb8e90eec99cbbd102888eb47cc1149dc65bb1f2dece20dad0c5"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/aac/internal.h",
+      "sha256": "0f1c94e019688e28aaa3596b5ee20ab82512de998409e75f3976ccf51dfa798e"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/aac/spectrum.c",
+      "sha256": "6a1fdd02d3063769ec142f66908a9ff6a5875f712b17cc3cc0a688fe7d916ac1"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/aac/syntax.c",
+      "sha256": "6be4136c6878862d81121f2862b0b410d0572ae4982b215bde64abd8af337751"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/aac/tables.c",
+      "sha256": "46609fed68e797aa8ad623474d9baa1aa1f5cc2f7939451bb9125bd5af46b228"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/aac/tables.h",
+      "sha256": "75b0319e089a48a4318d872020dceb8b76189663504cf4c59cedf11a2ee4269c"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/aac_api.c",
+      "sha256": "2568bc508e32a07c66b739601388b08a5b3f0360d166e5b8de8a707808f2a163"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/aac_backend.h",
+      "sha256": "8fecc1879dc9e9e1384cf77c6b91cedd24fc3733e56bb85f1294d299d29f69f8"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/aac_dsp.c",
+      "sha256": "c81ec76a6e6f46ccbb00ab1e655411ebdedeb4fd87c8fc1a2b99cd2fccb034b1"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/audio/aac.c",
+      "sha256": "bf31b6c2c0b98988852e3c7f4d3bdbdb0dbe13b7385e52cbbbc0712491018e88"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/audio/codec.c",
+      "sha256": "5b00160c130df4c21aa6d19b83ae9a52fe17975dbd21f595edef4df9058791c3"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/audio/codec.h",
+      "sha256": "14fe9c41b9e26be28a0b0f32d3ebd74699edec01592a1cd6c638184628253a85"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/audio/engine.c",
+      "sha256": "361811fdc978dce5e24378367ecbbbc644ec585d95f4ab0c53648037e189a902"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/audio/input.c",
+      "sha256": "b8efc44b3790c46b087ad5599f88919b0b927ca259fea953d3e0fa06915bbe26"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/audio/mp3.c",
+      "sha256": "f18a9166b573127abcad47216b004c0a15ced55710b5b5464ecbba6857c1937e"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/audio/mp3_arm11.c",
+      "sha256": "04165f920dfceb7e0f2a45091a22a4556ff3b2dafcc48a169f6357434f49963a"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/audio/output.c",
+      "sha256": "c7fec8fe2abf3f014b915d5d1b3a61a15e0210cc2c7408b8b5b29cd0bb3554a5"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/audio/output.h",
+      "sha256": "8f201f73503638c8b7744d8597ab7e45ee5ee773069bf5bd478f7474067a29e1"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/audio/wav.c",
+      "sha256": "40c52e917281106c206580a7e773ebb22b9e2c5b214ee2129f5a58e9de984065"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/codec_events.c",
+      "sha256": "224b6d6da5f5bcfd3806e24d85fb88d7887ce54921ca763572721e16412d6ee8"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/codec_events.h",
+      "sha256": "319c5d1e601ae52ce877ffb24e824c83bd9ec64b6fc205a2e5aed3fd04f0923c"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/effects.c",
+      "sha256": "6724cbd5dec0e29d61d44bdfe73754ed501069f275eda96b37116ccc7360bf0f"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/embedded.c",
+      "sha256": "777f42feb4073f2226421eac5359d8e6900b9ad58b51718953cf88c4a47b337e"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/firmware.s",
+      "sha256": "4c79a9b710a55693a63244a51d670a3ffed24a25a402095df6b5d9b8d0c1a368"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/internal.h",
+      "sha256": "e1aeff6e18ac95f26fb29a3aaba8fdfa4ec56b55add042815d7eea0ac2feee66"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/mailbox.c",
+      "sha256": "258f86ce0dc21038c0b6ea91aa01180842dab84099315a4f8e4a70167b043669"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/mp3_api.c",
+      "sha256": "c05104767f49cff571afb0c03143a85cef6f2575e1ed48d1e0569aded51edc78"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/mp3_arm11.c",
+      "sha256": "f1d3d4e9c74bc26efd06fce9ee77aff011b70446d84f029ada18cdd4f16a803d"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/mp3_arm11.h",
+      "sha256": "f498013954d83c02998e46e688e1bad317d076d8d77e31dc99d5ea23f7e1af88"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/library/source/opendsp.c",
+      "sha256": "ebd8ecf51988ecab2fb4aaa0771ac678a71f16a36b8465b01fefd33792b1e5aa"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/source.json",
+      "sha256": "49ebc04897617f6ce7e58acccf4ab97deb44ac36bdffa98153f03eb0a335ac9a"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/toolchain/build_teak_llvm.sh",
+      "sha256": "8017d94b49e53249a7e47d96f1085a7947409b55eaba1831b7b21ef0f8771730"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/toolchain/patches/0001-word-addressed-gep-offsets.patch",
+      "sha256": "b4573cf2c63f0948831d82161ce9446778277af0d17212a017c4090a897dc5e5"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/toolchain/patches/0002-word-addressed-memcpy-offsets.patch",
+      "sha256": "cbce01b2185ad2649919449e5cffff2ca6629d2c1db370bac157b1b266831860"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/toolchain/patches/0003-clang-16-bit-pointers.patch",
+      "sha256": "ff96e7207273a378c6d6ecc685be265916d03871fc6eb3bc51f08d9bbd0efd56"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/toolchain/patches/0004-r7-offset-hazard.patch",
+      "sha256": "48d15f136d5b8e4805da55b52ea57195ab3a69cb3fa1219e476621b10b0d4a0d"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/tools/aac_blob.py",
+      "sha256": "c2901519063d08053e1efbbaf46dff3590b4985e0d4235839766b3fdb0fcb739"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/tools/aac_codebooks.py",
+      "sha256": "506464877c946f7cf4a7291c91d234d55b20ae0a704002f39beebc0f00a6ae26"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/tools/check_cia.py",
+      "sha256": "37c873671596885ca06cc1399931032859f8262a73e0f412c41c08b117ab5d37"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/tools/check_mp3_codegen.py",
+      "sha256": "aa8517fa1d0f6fa8acdbdb60a142efeb6cb7d51cfea3fb64f442d4bfdbe2a4eb"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/tools/gen_aac_tables.py",
+      "sha256": "4bf6947ec329d342d6f3dc1498d9ec75ba7cdbf9d06899d4685ce0b649be681c"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/tools/gen_dsp_tables.py",
+      "sha256": "adecf557bfd1d69aff050f2fba9e24c611951cfb640e72b7116bec7bb3d5c667"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/tools/gen_polyphase.py",
+      "sha256": "b788536414760959596aec9464d77eaba60e6189b0e4938225afa487c2d48f76"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/tools/mkdsp1.py",
+      "sha256": "93e3c4ff610651471b8bcdd0d150238fd5609f5a6b5555f06ad6e2e5b92bc3e7"
+    },
+    {
+      "path": "native-engine/vendor/OpenDSP/tools/mp3_blob.py",
+      "sha256": "2d9b98891479ab7278e444b8e30cd2e0f67e70614e37795e5e1b933fea7e4603"
+    },
+    {
+      "path": "native-engine/vendor/conker-reticle/LICENSE",
+      "sha256": "03d52856ed09784f7f57694f690ab0093d3cd40db69f9a318d45062f130f7116"
+    },
+    {
+      "path": "native-engine/vendor/conker-reticle/source.json",
+      "sha256": "f5a2fa7c355c5786bdb4f23b11f4aacdc52877095c036363270179e6ff308361"
+    },
+    {
+      "path": "native-engine/vendor/rt64-stereo/LICENSE",
+      "sha256": "03d52856ed09784f7f57694f690ab0093d3cd40db69f9a318d45062f130f7116"
+    },
+    {
+      "path": "native-engine/vendor/rt64-stereo/source.json",
+      "sha256": "360da2dd83c01e929450f1b86325c7b050c04e0ec68bd3531d8622d58762dd0c"
+    },
+    {
+      "path": "native-engine/vendor/rt64-stereo/stereo_math.hpp",
+      "sha256": "72f37548d7c61067bacbeae9b947d6cf8560a85f7551bbf0e50a99f4698e3bf3"
     },
     {
       "path": "native-engine/vendor/updater/README.md",

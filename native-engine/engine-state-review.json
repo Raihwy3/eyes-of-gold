@@ -996,6 +996,26 @@
       "symbol": "CSWTCH.2727",
       "review": "independently authored native UI/render compiler lookup table",
       "evidence": "Watch skin seconds-hand finish colour lookup generated from native_watch_skin_mesh.h, renumbered from CSWTCH.2710."
+    },
+    {
+      "symbol": "CSWTCH.989",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "options.s inspected: custom watch submenu heading pointers (Advanced/Back/Audio/Experimental/Controls/Accessibility/3D settings/Crosshair/Deadzones/Gyro), empty-value pointers, and native watch page tracker initialized to -1. Definitions in native_watch_options.h/native_bottom_watch.h and advanced_watch.py."
+    },
+    {
+      "symbol": "CSWTCH.992",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "options.s inspected: custom watch submenu heading pointers (Advanced/Back/Audio/Experimental/Controls/Accessibility/3D settings/Crosshair/Deadzones/Gyro), empty-value pointers, and native watch page tracker initialized to -1. Definitions in native_watch_options.h/native_bottom_watch.h and advanced_watch.py."
+    },
+    {
+      "symbol": "CSWTCH.993",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "options.s inspected: custom watch submenu heading pointers (Advanced/Back/Audio/Experimental/Controls/Accessibility/3D settings/Crosshair/Deadzones/Gyro), empty-value pointers, and native watch page tracker initialized to -1. Definitions in native_watch_options.h/native_bottom_watch.h and advanced_watch.py."
+    },
+    {
+      "symbol": "native_previous_watch_page.39",
+      "review": "independently authored native menu/control implementation data",
+      "evidence": "options.s inspected: custom watch submenu heading pointers (Advanced/Back/Audio/Experimental/Controls/Accessibility/3D settings/Crosshair/Deadzones/Gyro), empty-value pointers, and native watch page tracker initialized to -1. Definitions in native_watch_options.h/native_bottom_watch.h and advanced_watch.py."
     }
   ]
 }

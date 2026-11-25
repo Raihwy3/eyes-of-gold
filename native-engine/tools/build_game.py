@@ -131,7 +131,7 @@ def main():
     version_header=(build.TARGET/'include/native_version.h').read_text()
     metadata={key:re.search(r'^#define '+key+r' "([^"]+)"',version_header,re.M).group(1)
               for key in ('NATIVE_LAUNCHER_TITLE','NATIVE_LAUNCHER_DESCRIPTION')}
-    build_probe.run(['/opt/devkitpro/tools/bin/smdhtool','--create',metadata['NATIVE_LAUNCHER_TITLE'],metadata['NATIVE_LAUNCHER_DESCRIPTION'],'Eyes of Gold',build.ROOT/'launcher-icon.png',target.with_suffix('.smdh')])
+    build_probe.run(['/opt/devkitpro/tools/bin/smdhtool','--create',metadata['NATIVE_LAUNCHER_TITLE'],metadata['NATIVE_LAUNCHER_DESCRIPTION'],'Raihwy3',build.ROOT/'launcher-icon.png',target.with_suffix('.smdh')])
     package=target.with_suffix('.package.elf')
     tokens=prepare_package_elf(target.with_suffix('.elf'),package)
     print('Fixed N64 tokens preserved:',len(tokens))

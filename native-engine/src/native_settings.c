@@ -12,6 +12,8 @@
 #include <time.h>
 #include <sys/time.h>
 static int style=-1,crosshair,watch_colour,aspect=-1,aa=1,fps_limit=60,sensitivity=250,sharpness=0,vignette=0,bloom=0,grain=0,skin=0,glass=1,lod=1,view_distance=2;
+static int stick_deadzone[2]={8,8};
+int native_setting_stick_deadzone(int stick){return __atomic_load_n(&stick_deadzone[stick!=0],__ATOMIC_RELAXED);}
 static int watch_clock;
 int native_setting_watch_clock(void){return __atomic_load_n(&watch_clock,__ATOMIC_RELAXED);}
 int native_watch_clock_time(int fallback){
@@ -121,6 +123,7 @@ static void save(void) {
     FILE *f=fopen(temporary,"w");if(!f)return;
     int ok=fprintf(f,"EOGSETTINGS1\ncontrol_style=%d\ncrosshair_colour=%d\nwatch_colour=%d\naspect=%d\nn64_aa=%d\nfps_limit=%d\nlook_sensitivity=%d\nsharpness=%d\nvignette=%d\nbloom=%d\nfilm_grain=%d\nwatch_skin=%d\nglass_detail=%d\nlod_strength=%d\nview_distance=%d\nvignette_mode=%d\n",
                    native_setting_style(),native_setting_crosshair(),native_setting_watch(),native_setting_aspect(),native_setting_aa(),native_setting_fps(),native_setting_sensitivity(),native_setting_sharpness(),native_setting_vignette(),native_setting_bloom(),native_setting_grain(),native_setting_skin(),native_setting_glass(),native_setting_lod(),native_setting_view_distance(),native_setting_vignette_mode())>0;
+    if(fprintf(f,"circle_pad_deadzone=%d\nc_stick_deadzone=%d\n",native_setting_stick_deadzone(0),native_setting_stick_deadzone(1))<0)ok=0;
     if(fprintf(f,"watch_console_time=%d\n",native_setting_watch_clock())<0)ok=0;
     if(fprintf(f,"crosshair_opacity=%d\n",native_setting_crosshair_opacity())<0)ok=0;
     if(fprintf(f,"crosshair_shape=%d\n",native_setting_crosshair_shape())<0)ok=0;
@@ -190,6 +193,7 @@ void native_setting_set_vignette(int v){update(&vignette,v,0,2);}
 void native_setting_set_grain(int v){update(&grain,v,0,2);}
 void native_setting_set_bloom(int v){update(&bloom,v,0,2);}
 void native_setting_set_sharpness(int v){update(&sharpness,v,0,6);}
+void native_setting_set_stick_deadzone(int stick,int v){update(&stick_deadzone[stick!=0],v,0,30);}
 void native_setting_set_touch_sensitivity(int v){if(v%25==0)update(&touch_sensitivity,v,25,1000);}
 void native_setting_set_gyro_space(int v){update(&gyro_space,v,0,2);}
 void native_setting_set_gyro_axis(int v){update(&gyro_axis,v,0,1);}
@@ -220,6 +224,7 @@ void native_setting_set_watch_clock(int v){update(&watch_clock,v,0,1);}
 void native_setting_set_crosshair_shape(int v){update(&crosshair_shape,v,0,7);}
 void native_setting_set_crosshair_opacity(int v){if(v==-1 || v%10==0)update(&crosshair_opacity,v,-1,100);}
 void native_settings_init(const char *directory) {
+    stick_deadzone[0]=stick_deadzone[1]=8;
     watch_clock=0;
     crosshair_opacity=-1;
     crosshair_shape=0;
@@ -245,6 +250,7 @@ void native_settings_init(const char *directory) {
     char line[128]={0};int s=-1,c=0,w=0,a=-1,q=1,fps=60,sens=250,sharp=0,vig=0,glow=0,noise=0,watchskin=0,glassdetail=1,lodstrength=1,viewdistance=2,vigmode=0;
     int load_watch_clock=0,filter=0,persistent=0,vertical=-1,load_crosshair_shape=0,load_crosshair_opacity=-1;
     int load_stereo_auto=1,load_stereo_convergence=100,load_stereo_comfort=0,load_stereo_hud_depth=75,load_stereo_crosshair_hud=0,load_stereo_ghost_contrast=100,load_stereo_black_floor=0;
+    int deadzones[2]={8,8};
     int strength=100;
     int space=0,axis=0,lock=0,sway=0,steady=1,aimmove=0;
     int flick=0,touchsens=250,gyromode=0,gyrosens=250,mixer=1,unlocked=0,mpbots=0,guardvisible=0,guardhz=30,subs=0,rando=0,seed=1;
@@ -255,6 +261,8 @@ void native_settings_init(const char *directory) {
     while(ok && fgets(line,sizeof line,f)) {
         if(sscanf(line,"control_style=%d",&s)==1)found|=1;
         else if(sscanf(line,"crosshair_colour=%d",&c)==1)found|=2;
+        else if(sscanf(line,"circle_pad_deadzone=%d",&deadzones[0])==1){}
+        else if(sscanf(line,"c_stick_deadzone=%d",&deadzones[1])==1){}
         else if(sscanf(line,"watch_console_time=%d",&load_watch_clock)==1){}
         else if(sscanf(line,"crosshair_opacity=%d",&load_crosshair_opacity)==1){}
         else if(sscanf(line,"crosshair_shape=%d",&load_crosshair_shape)==1){}
@@ -318,6 +326,7 @@ void native_settings_init(const char *directory) {
     ok=ok && !ferror(f) && (found&15)==15 && s>=-1 && s<=11 && c>=0 && c<=6 && w>=0 && w<=6 && a>=-1 && a<=2 && q>=0 && q<=1;
     if(csticks<0 || csticks>3 || cdigaim<0 || cdigaim>2 || cdigmove<0 || cdigmove>2 || cswap<0 || cswap>1)ok=0;
     for(int i=0;i<6;i++)if(cbinds[i]<0 || cbinds[i]>13)ok=0;
+    if(deadzones[0]<0 || deadzones[0]>30 || deadzones[1]<0 || deadzones[1]>30)ok=0;
     if(load_watch_clock<0 || load_watch_clock>1)ok=0;
     if(load_crosshair_opacity!=-1 && (load_crosshair_opacity<0 || load_crosshair_opacity>100 || load_crosshair_opacity%10))ok=0;
     if(load_crosshair_shape<0 || load_crosshair_shape>7)ok=0;
@@ -344,7 +353,7 @@ void native_settings_init(const char *directory) {
     for(int i=0;i<7;i++)if(games[i]<-1 || games[i]>(i==6?2:1))ok=0;
     if(music< -1 || music>32767 || effects< -1 || effects>32767)ok=0;
     fclose(f);
-    if(ok){swap_sticks=cswap;custom_sticks=csticks;custom_digital_aim=cdigaim;custom_digital_move=cdigmove;memcpy(custom_binds,cbinds,sizeof custom_binds);watch_clock=load_watch_clock;crosshair_opacity=load_crosshair_opacity;crosshair_shape=load_crosshair_shape;stereo_auto=load_stereo_auto;stereo_convergence=load_stereo_convergence;stereo_comfort=load_stereo_comfort;stereo_hud_depth=load_stereo_hud_depth;stereo_crosshair_hud=load_stereo_crosshair_hud;stereo_ghost_contrast=load_stereo_ghost_contrast;stereo_black_floor=load_stereo_black_floor;gyro_filter=filter;always_crosshair=persistent;vertical_sensitivity=vertical;stereo_strength=strength;aim_movement=aimmove;gyro_space=space;gyro_axis=axis;aim_lock=lock;stamina_sway=sway;steady_scope=steady;flick_stick=flick;touch_sensitivity=touchsens;gyro_mode=gyromode;gyro_sensitivity=gyrosens>400?400:gyrosens;randomiser=rando;randomiser_seed=seed;subsistence=subs;guard_visibility=guardvisible;guard_ai_hz=guardhz;unlock_all=unlocked;mp_bots=mpbots;audio_mixer=mixer;style=s;crosshair=c;watch_colour=w;aspect=a;aa=q;fps_limit=fps;sensitivity=sens;sharpness=sharp;vignette=vig;vignette_mode=vigmode;bloom=glow;grain=noise;skin=watchskin;glass=glassdetail==2?1:glassdetail;lod=lodstrength;view_distance=viewdistance;memcpy(game_values,games,sizeof games);volumes[0]=music;volumes[1]=effects;}
+    if(ok){stick_deadzone[0]=deadzones[0];stick_deadzone[1]=deadzones[1];swap_sticks=cswap;custom_sticks=csticks;custom_digital_aim=cdigaim;custom_digital_move=cdigmove;memcpy(custom_binds,cbinds,sizeof custom_binds);watch_clock=load_watch_clock;crosshair_opacity=load_crosshair_opacity;crosshair_shape=load_crosshair_shape;stereo_auto=load_stereo_auto;stereo_convergence=load_stereo_convergence;stereo_comfort=load_stereo_comfort;stereo_hud_depth=load_stereo_hud_depth;stereo_crosshair_hud=load_stereo_crosshair_hud;stereo_ghost_contrast=load_stereo_ghost_contrast;stereo_black_floor=load_stereo_black_floor;gyro_filter=filter;always_crosshair=persistent;vertical_sensitivity=vertical;stereo_strength=strength;aim_movement=aimmove;gyro_space=space;gyro_axis=axis;aim_lock=lock;stamina_sway=sway;steady_scope=steady;flick_stick=flick;touch_sensitivity=touchsens;gyro_mode=gyromode;gyro_sensitivity=gyrosens>400?400:gyrosens;randomiser=rando;randomiser_seed=seed;subsistence=subs;guard_visibility=guardvisible;guard_ai_hz=guardhz;unlock_all=unlocked;mp_bots=mpbots;audio_mixer=mixer;style=s;crosshair=c;watch_colour=w;aspect=a;aa=q;fps_limit=fps;sensitivity=sens;sharpness=sharp;vignette=vig;vignette_mode=vigmode;bloom=glow;grain=noise;skin=watchskin;glass=glassdetail==2?1:glassdetail;lod=lodstrength;view_distance=viewdistance;memcpy(game_values,games,sizeof games);volumes[0]=music;volumes[1]=effects;}
 }
 int native_settings_apply_console_defaults(int model) {
     /* Existence, not parse success, controls first-launch detection. Never
@@ -380,15 +389,15 @@ const char *native_string(unsigned id) {
 
 /* UI order is independent of persistent option identifiers. */
 int native_menu_option_at(int index) {
-    static const unsigned char rows[]={0,15,42,31,29,30,33,34,41,35,32,39,36,37,38,43,3,4,5,6,7,9,14,10,13,22,23,21,27,28,40,44,45,46,47,48,49,50,8,11,16,17,24,18,19,12,20,1,2,25,26,51,52,53,54,55,56,57,58,59,60,61,62,63};
+    static const unsigned char rows[]={0,15,42,31,29,30,33,34,41,35,32,39,36,37,38,43,3,4,5,6,7,9,14,10,13,22,23,21,27,28,40,44,45,46,47,48,49,50,8,11,16,17,24,18,19,12,20,1,2,25,26,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65};
     return index>=0 && index<(int)sizeof rows?rows[index]:-1;
 }
 
 /* Frontend categories contain each shared option exactly once. Watch pages
  * still use the same option IDs and setters, so preferences remain shared. */
 #include "native_menu_options.h"
-static const int native_category_rows[][18]={
-    {0,3,4,5,7,15,42,31,29,30,33,34,41,35,32,39,63,-1},
+static const int native_category_rows[][20]={
+    {0,3,4,5,7,15,42,31,NATIVE_MENU_GYRO_ENTRY,32,39,63,64,65,-1},
     {9,10,14,13,-1},
     {22,23,21,-1},
     {16,17,24,18,19,-1},
@@ -397,18 +406,19 @@ static const int native_category_rows[][18]={
     {6,8,51,11,52,12,20,-1},
     {36,37,38,43,-1},
     {27,28,53,26,-1},
-    {54,55,56,57,58,59,60,61,62,-1}
+    {54,55,56,57,58,59,60,61,62,-1},
+    {29,30,33,34,41,35,-1}
 };
 int native_menu_category_count(int category){
-    if(category<0 || category>=NATIVE_MENU_CATEGORY_COUNT)return NATIVE_MENU_CATEGORY_COUNT;
-    int count=0;while(count<18 && native_category_rows[category][count]>=0)count++;
+    if(category<0 || category>NATIVE_MENU_GYRO_CATEGORY)return NATIVE_MENU_CATEGORY_COUNT;
+    int count=0;while(count<20 && native_category_rows[category][count]>=0)count++;
     return count;
 }
 int native_menu_category_option(int category,int index){
-    if(category<0 || category>=NATIVE_MENU_CATEGORY_COUNT || index<0 || index>=native_menu_category_count(category))return -1;
+    if(category<0 || category>NATIVE_MENU_GYRO_CATEGORY || index<0 || index>=native_menu_category_count(category))return -1;
     return native_category_rows[category][index];
 }
 const char *native_menu_category_title(int category){
-    static const char *const titles[]={"CONTROLS\n","DISPLAY\n","GRAPHICS\n","SCREEN EFFECTS\n","3D SETTINGS\n","AUDIO\n","INTERFACE & WATCH\n","ACCESSIBILITY\n","EXPERIMENTAL\n","1.7 REBIND\n"};
-    return category>=0 && category<NATIVE_MENU_CATEGORY_COUNT?titles[category]:"OPTIONS\n";
+    static const char *const titles[]={"CONTROLS\n","DISPLAY\n","GRAPHICS\n","SCREEN EFFECTS\n","3D SETTINGS\n","AUDIO\n","INTERFACE & WATCH\n","ACCESSIBILITY\n","EXPERIMENTAL\n","1.7 REBIND\n","GYRO\n"};
+    return category>=0 && category<=NATIVE_MENU_GYRO_CATEGORY?titles[category]:"OPTIONS\n";
 }

@@ -101,24 +101,25 @@ static void check_guard_preferences(void) {
     puts("PASS guard options: Off/30Hz defaults, every saved toggle/rate, invalid setters/config rejection and legacy-file fallback");
 }
 int main(void) {
-    uint64_t seen=0;
-    unsigned long long category_seen=0;
-    for(int category=0;category<NATIVE_MENU_CATEGORY_COUNT;category++){
+    unsigned char seen[NATIVE_MENU_OPTIONS_COUNT]={0};
+    unsigned char category_seen[NATIVE_MENU_OPTIONS_COUNT]={0};
+    for(int category=0;category<=NATIVE_MENU_GYRO_CATEGORY;category++){
         assert(strlen(native_menu_category_title(category))>1);
-        int count=native_menu_category_count(category);assert(count>0 && count<=18);
+        int count=native_menu_category_count(category);assert(count>0 && count<=20);
         for(int index=0;index<count;index++){
             int row=native_menu_category_option(category,index);
+            if(row==NATIVE_MENU_GYRO_ENTRY){assert(category==0);continue;}
             assert(row>=0 && row<NATIVE_MENU_OPTIONS_COUNT);
-            assert(!(category_seen&(1ull<<row)));category_seen|=1ull<<row;
+            assert(!category_seen[row]);category_seen[row]=1;
         }
         assert(native_menu_category_option(category,count)==-1);
     }
-    assert(category_seen==(~0ull>>(64-NATIVE_MENU_OPTIONS_COUNT)));
+    for(int i=0;i<NATIVE_MENU_OPTIONS_COUNT;i++)assert(category_seen[i]);
     assert(native_menu_category_count(-1)==NATIVE_MENU_CATEGORY_COUNT);
     assert(native_menu_category_option(-1,0)==-1);
     puts("PASS frontend categories: all shared settings appear once, bounded rows and invalid access");
-    for(int i=0;i<NATIVE_MENU_OPTIONS_COUNT;i++){int row=native_menu_option_at(i);assert(row>=0 && row<NATIVE_MENU_OPTIONS_COUNT && !(seen&(1ull<<row)));seen|=1ull<<row;}
-    assert(seen==(~0ull>>(64-NATIVE_MENU_OPTIONS_COUNT)));
+    for(int i=0;i<NATIVE_MENU_OPTIONS_COUNT;i++){int row=native_menu_option_at(i);assert(row>=0 && row<NATIVE_MENU_OPTIONS_COUNT && !seen[row]);seen[row]=1;}
+    for(int i=0;i<NATIVE_MENU_OPTIONS_COUNT;i++)assert(seen[i]);
     assert(native_menu_option_at(25)==22 && native_menu_option_at(26)==23 && native_menu_option_at(27)==21);
     assert(native_menu_option_at(41)==17 && native_menu_option_at(42)==24);
     assert(native_menu_option_at(45)==12 && native_menu_option_at(46)==20);
@@ -143,6 +144,15 @@ int main(void) {
     assert(native_setting_style()==-1 && native_setting_aspect()==-1);
     assert(!native_setting_crosshair() && !native_setting_watch() && native_setting_aa()==1);
     assert(native_setting_sensitivity()==250 && native_setting_gyro()==0 && native_setting_gyro_sensitivity()==250 && native_setting_touch_sensitivity()==250);
+    assert(native_setting_stick_deadzone(0)==8 && native_setting_stick_deadzone(1)==8);
+    for(int v=0;v<=30;v++){
+        native_setting_set_stick_deadzone(0,v);native_setting_set_stick_deadzone(1,30-v);
+        native_settings_init(directory);
+        assert(native_setting_stick_deadzone(0)==v && native_setting_stick_deadzone(1)==30-v);
+    }
+    native_setting_set_stick_deadzone(0,-1);native_setting_set_stick_deadzone(1,31);
+    assert(native_setting_stick_deadzone(0)==30 && native_setting_stick_deadzone(1)==0);
+    native_setting_set_stick_deadzone(0,8);native_setting_set_stick_deadzone(1,8);
     assert(!native_setting_aim_movement());
     native_setting_set_aim_movement(1);native_settings_init(directory);assert(native_setting_aim_movement()==1);
     native_setting_set_aim_movement(2);assert(native_setting_aim_movement()==1);
@@ -285,7 +295,7 @@ int main(void) {
     p=native_pad_map(EOG_A|EOG_Y|EOG_X|EOG_B,0,0,0,0,9,1);assert(!p.x && !p.y);
     p=native_pad_map(EOG_A|EOG_B|EOG_X|EOG_Y|EOG_L,156,-156,50,-50,0,1);
     assert((p.buttons&0xc01f)==0xc01d && p.x==80 && p.y==-80);
-    assert(!native_pad_axis(11) && !native_pad_axis(-11) && native_pad_axis(1000)==80);
+    assert(!native_pad_deadzone(11,8) && !native_pad_deadzone(-11,8) && native_pad_axis(1000)==80);
     puts("PASS native controls: independent axes, face-camera diamond, action separation, original mapping, menu A/B and deadzones");
     puts("PASS native preferences: restart roundtrip, invalid/truncated rejection, colour isolation and style names");
 }

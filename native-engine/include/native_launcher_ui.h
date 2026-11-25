@@ -4,7 +4,31 @@
 #include <stdint.h>
 #include <string.h>
 #include "native_version.h"
-/* Console-only chrome shared by boot and update, before game assets exist.
+#ifdef __3DS__
+#include <3ds.h>
+#include "native_launcher_art.h"
+static PrintConsole *native_launcher_console;
+static inline void native_launcher_begin(PrintConsole *console){native_launcher_console=console;}
+static inline void native_launcher_pixel(int x,int y,uint16_t colour){
+    if(native_launcher_console && x>=0 && x<native_launcher_console->consoleWidth*8 && y>=0 && y<240)
+        native_launcher_console->frameBuffer[x*240+239-y]=colour;
+}
+static inline void native_launcher_rect(int x,int y,int w,int h,uint16_t colour){
+    for(int yy=y;yy<y+h;yy++)for(int xx=x;xx<x+w;xx++)native_launcher_pixel(xx,yy,colour);
+}
+static inline void native_launcher_decorate(PrintConsole *console,int top_screen){
+    native_launcher_begin(console);
+    for(int x=0;x<console->consoleWidth*8;x++)for(int y=0;y<240;y++){
+        uint16_t *pixel=&console->frameBuffer[x*240+239-y];
+        if(!*pixel)*pixel=0x0041; /* same ink-dark background as the artwork */
+        else if(*pixel==0xaaa0 || *pixel==0xffe0)*pixel=0xe609;
+    }
+    const uint16_t *art=top_screen?native_launcher_logo:native_launcher_eye;
+    int w=top_screen?200:32,h=top_screen?100:32,left=top_screen?100:24,top=top_screen?0:4;
+    for(int y=0;y<h;y++)for(int x=0;x<w;x++)native_launcher_pixel(left+x,top+y,art[y*w+x]);
+}
+#endif
+/* Shared boot/update layout, available before game assets exist.
  * Coordinates use the SDK's 8px font: top 50x30, bottom 40x30. */
 static inline void native_launcher_line(int row,int column,int width) {
     printf("\x1b[33m\x1b[%d;%dH",row,column);
@@ -26,20 +50,21 @@ static inline void native_launcher_bar(int row,int column,int width,unsigned don
     printf("\x1b[33m\x1b[%d;%dH[",row,column);
     for(int i=0;i<width;i++)putchar((unsigned)i<filled?'=':'-');
     printf("]\x1b[0m");
+#ifdef __3DS__
+    int x=(column-1)*8,y=(row-1)*8;
+    native_launcher_rect(x,y,(width+2)*8,8,0x0041);
+    native_launcher_rect(x,y+2,(width+2)*8,4,0x39a5);
+    native_launcher_rect(x+1,y+3,(int)((uint64_t)native_launcher_percent(done,total)*((width+2)*8-2)/100),2,0xe609);
+#endif
 }
 static inline void native_launcher_top(const char *subtitle,const char *stage) {
-    printf("\x1b[33m"
-           "\x1b[3;5H+----------------------------------------+"
-           "\x1b[4;5H|             FIELD OPERATIONS           |"
-           "\x1b[5;5H+----------------------------------------+"
-           "\x1b[8;23H  |  \x1b[9;23H--O--\x1b[10;23H  |  "
-           "\x1b[12;14HE Y E S   O F   G O L D\x1b[0m");
+    printf("\x1b[33m");native_launcher_text(12,18,"Eyes of Gold",26);printf("\x1b[0m");
     native_launcher_text(14,16,subtitle,32);
     native_launcher_text(18,9,stage,34);
 }
 static inline void native_launcher_bottom(const char *title) {
-    printf("\x1b[33m");native_launcher_text(3,5,title,32);printf("\x1b[0m");
-    native_launcher_line(5,5,32);
+    printf("\x1b[33m");native_launcher_text(3,9,title,28);printf("\x1b[0m");
+    native_launcher_line(6,5,32);
     native_launcher_line(24,5,32);
     native_launcher_text(26,5,"Eyes of Gold " NATIVE_ENGINE_VERSION,32);
 }

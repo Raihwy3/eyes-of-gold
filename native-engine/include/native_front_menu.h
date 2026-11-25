@@ -28,11 +28,18 @@ static void native_front_category_action(int ordinal,int direction) {
         native_front_state.direction=native_front_state.ticks=0;
         native_options_ready_at=sysGetMicroseconds()+1000000;
         native_front_state.previous=native_input_menu_buttons();
+    }else if(native_menu_category_option(native_front_category,ordinal)==NATIVE_MENU_GYRO_ENTRY){
+        if(direction<0)return;
+        native_front_category=NATIVE_MENU_GYRO_CATEGORY;native_front_state.selected=0;
+        native_front_state.direction=native_front_state.ticks=0;
+        native_options_ready_at=sysGetMicroseconds()+1000000;
+        native_front_state.previous=native_input_menu_buttons();
     }else native_menu_option_change(native_menu_category_option(native_front_category,ordinal),direction);
 }
 static void native_front_options_back(void) {
     if(native_front_category<0){native_front_close_options();return;}
-    native_front_state.selected=native_front_category;native_front_category=-1;
+    if(native_front_category==NATIVE_MENU_GYRO_CATEGORY){native_front_category=0;native_front_state.selected=8;}
+    else {native_front_state.selected=native_front_category;native_front_category=-1;}
     native_front_state.open=1;native_front_state.direction=native_front_state.ticks=0;
     native_front_state.previous=native_input_menu_buttons();
     native_options_ready_at=sysGetMicroseconds()+1000000;

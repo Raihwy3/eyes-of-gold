@@ -37,6 +37,8 @@ void native_setting_set_gyro_axis(int);
 void native_setting_set_aim_lock(int);
 void native_setting_set_stamina_sway(int);
 void native_setting_set_steady_scope(int);
+int native_setting_stick_deadzone(int stick);
+void native_setting_set_stick_deadzone(int stick,int value);
 int native_setting_touch_sensitivity(void);
 void native_setting_set_touch_sensitivity(int value);
 int native_setting_randomiser(void);

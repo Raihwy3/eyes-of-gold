@@ -31,12 +31,38 @@ int main(void){
 }''')
         subprocess.run(['gcc','-std=c11','-Wall','-Wextra','-Werror','-I'+str(ROOT/'include'),str(source),'-o',str(binary)],check=True)
         output=subprocess.check_output([binary],text=True).split('\f');assert len(output)==4
-        top=screen(output[0],50);assert 'FIELD OPERATIONS' in top[3] and '[==============================]' in top[19]
+        top=screen(output[0],50);assert 'Eyes of Gold' in top[11] and '[==============================]' in top[19]
         for index in (1,2,3):
             bottom=screen(output[index],40)
             assert ('LAUNCHER UPDATE' if index!=2 else 'MISSION PREPARATION') in bottom[2] and 'Eyes of Gold' in bottom[25]
             for row in range(2,27):assert bottom[row][2]==' ' and bottom[row][37]==' '
             if index==1:assert 'A: Install' in bottom[20] and 'B: Not now' in bottom[20] and 'are kept.' in '\n'.join(bottom)
             if index==3:assert 'B: Exit' in bottom[20] and 'A: Continue' in bottom[20]
+    with tempfile.TemporaryDirectory(prefix='eog-launcher-pixels-') as name:
+        folder=Path(name)
+        (folder/'3ds.h').write_text('#include <stdint.h>\ntypedef struct {uint16_t *frameBuffer;int consoleWidth;} PrintConsole;\n')
+        source=folder/'pixels.c';binary=folder/'pixels'
+        source.write_text(r'''#include "native_launcher_ui.h"
+#include <assert.h>
+#include <stdlib.h>
+int main(void){
+ for(int width=320;width<=400;width+=80){
+  uint16_t *storage=calloc((size_t)width*240+2,sizeof(uint16_t));assert(storage);
+  storage[0]=storage[width*240+1]=0xbeef;
+  PrintConsole c={storage+1,width/8};native_launcher_begin(&c);
+  native_launcher_bar(22,5,30,0xffffffffu,1);
+  native_launcher_decorate(&c,width==400);
+  assert(storage[0]==0xbeef && storage[width*240+1]==0xbeef);
+  int x=width==400?100:24,y=width==400?0:4;
+  assert(c.frameBuffer[x*240+239-y]==(width==400?native_launcher_logo[0]:native_launcher_eye[0]));
+  native_launcher_rect(-10,-10,width+20,260,0x1234);
+  assert(storage[0]==0xbeef && storage[width*240+1]==0xbeef);
+  free(storage);
+ }
+ return 0;
+}''')
+        subprocess.run(['gcc','-std=c11','-Wall','-Wextra','-Werror','-D__3DS__','-I'+str(folder),'-I'+str(ROOT/'include'),str(source),'-o',str(binary)],check=True)
+        subprocess.run([str(binary)],check=True,stdout=subprocess.DEVNULL)
+    print('PASS launcher artwork: rotated RGB565 addressing, top/bottom dimensions, clipped drawing and intact framebuffer guards')
     print('PASS shared launcher UI: top/bottom bounds, simple gold styling, wrapped notices/errors, clear margins and touch-button positions')
 if __name__=='__main__':main()

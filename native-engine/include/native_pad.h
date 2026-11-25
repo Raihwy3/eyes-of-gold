@@ -20,8 +20,11 @@ struct NativeCustomBinds {
     int sticks,fire,aim,action,weapon,reload,crouch,digital_aim,digital_move;
 };
 struct NativePad { unsigned buttons,actions;int x,y,move_x,move_y; };
+static inline int native_pad_deadzone(int value,int percent) {
+    int threshold=percent*156/100;
+    return value> -threshold && value<threshold?0:value;
+}
 static inline int native_pad_axis(int value) {
-    if(value>-12 && value<12)return 0;
     value=value*80/156;
     return value>80?80:value< -80?-80:value;
 }

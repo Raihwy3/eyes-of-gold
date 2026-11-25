@@ -38,14 +38,14 @@ static int start_job(int download) {
     return threadCreate(worker,NULL,128*1024,0x3f,0,true)!=NULL;
 }
 static void draw(const char *stage,const char *message,const char *action,unsigned done,unsigned total) {
-    consoleSelect(top_console);consoleClear();
+    consoleSelect(top_console);native_launcher_begin(top_console);consoleClear();
     native_launcher_top("LAUNCHER UPDATE",stage);
     if(total){native_launcher_bar(20,9,30,done,total);printf("\x1b[22;23H%3u%%",native_launcher_percent(done,total));}
     else native_launcher_text(20,14,"UPDATE SERVICE",30);
     native_launcher_text(24,5,"OPTIONAL LAUNCHER UPDATE",40);
     native_launcher_line(26,5,40);
     native_launcher_text(28,5,"Installed " NATIVE_RELEASE_TAG,40);
-    consoleSelect(bottom_console);consoleClear();
+    consoleSelect(bottom_console);native_launcher_begin(bottom_console);consoleClear();
     native_launcher_bottom("LAUNCHER UPDATE");
     native_launcher_text(8,5,"INSTALLED",15);
     native_launcher_text(9,5,NATIVE_RELEASE_TAG,15);
@@ -55,6 +55,7 @@ static void draw(const char *stage,const char *message,const char *action,unsign
     }
     native_launcher_message(13,message,5);
     native_launcher_actions(action);
+    native_launcher_decorate(top_console,1);native_launcher_decorate(bottom_console,0);
     gfxFlushBuffers();gfxSwapBuffers();
 }
 static int buttons(void) {

@@ -38,6 +38,9 @@ void inputUpdate(void) {
     u32 held=hidKeysHeld();circlePosition circle,cstick;
     menu_buttons=held;
     hidCircleRead(&circle);hidCstickRead(&cstick);
+    int circle_deadzone=native_setting_stick_deadzone(0),cstick_deadzone=native_setting_stick_deadzone(1);
+    circle.dx=native_pad_deadzone(circle.dx,circle_deadzone);circle.dy=native_pad_deadzone(circle.dy,circle_deadzone);
+    cstick.dx=native_pad_deadzone(cstick.dx,cstick_deadzone);cstick.dy=native_pad_deadzone(cstick.dy,cstick_deadzone);
     int gameplay=native_game_input_gameplay?native_game_input_gameplay():0;
     int mode=native_setting_gyro(),sensor_needed=mode || native_motion_calibration_status()>0;
     if(sensor_needed && !gyro_enabled && !gyro_failed){

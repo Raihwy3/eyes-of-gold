@@ -18110,13 +18110,13 @@
       "unit": "options.c",
       "section": ".rodata.native_menu_option_label.str1.4",
       "destination": ".data.eog_rom_strings_765c43c0594fe5df",
-      "bytes": 2,
-      "sha256": "102b51b9765a56a3e899f7cf0ee38e5251f9c503b357b330a49183eb7b155604",
+      "bytes": 10,
+      "sha256": "e3f3ffc64aaa06e3a65225a4d7cec1331a968070ada71aeaf067c80a1a60f4cc",
       "rows": [
         {
           "unit": "options.c",
-          "symbol": "eog_rom_string_765c43c0594fe5df_0",
-          "link_name": "eog_rom_string_765c43c0594fe5df_0",
+          "symbol": "eog_rom_string_765c43c0594fe5df_8",
+          "link_name": "eog_rom_string_765c43c0594fe5df_8",
           "bytes": 2,
           "bank": "cdata",
           "source_offset": 6334,
@@ -18135,22 +18135,22 @@
           "hash": 2374983655,
           "pool_section": ".rodata.native_menu_option_label.str1.4",
           "pool_destination": ".data.eog_rom_strings_765c43c0594fe5df",
-          "pool_offset": 0,
+          "pool_offset": 8,
           "storage": "zeroed-string-pool"
         }
       ]
     },
     {
       "unit": "options.c",
-      "section": ".rodata.native_menu_option_text.part.0.str1.4",
-      "destination": ".data.eog_rom_strings_40a9d37ad92ea36d",
+      "section": ".rodata.native_menu_option_text.str1.4",
+      "destination": ".data.eog_rom_strings_b23b146a42b03eba",
       "bytes": 143,
-      "sha256": "24ee1b0224dc2aa5a061fc9c435259fcf0817451e76692565339508b192506f2",
+      "sha256": "7ab9822f52ef90d0759fbb3632177580ed10fb82eaf99954aaabf67e204b934c",
       "rows": [
         {
           "unit": "options.c",
-          "symbol": "eog_rom_string_40a9d37ad92ea36d_0",
-          "link_name": "eog_rom_string_40a9d37ad92ea36d_0",
+          "symbol": "eog_rom_string_b23b146a42b03eba_0",
+          "link_name": "eog_rom_string_b23b146a42b03eba_0",
           "bytes": 2,
           "bank": "cdata",
           "source_offset": 41573,
@@ -18167,15 +18167,15 @@
             ]
           ],
           "hash": 1137529896,
-          "pool_section": ".rodata.native_menu_option_text.part.0.str1.4",
-          "pool_destination": ".data.eog_rom_strings_40a9d37ad92ea36d",
+          "pool_section": ".rodata.native_menu_option_text.str1.4",
+          "pool_destination": ".data.eog_rom_strings_b23b146a42b03eba",
           "pool_offset": 0,
           "storage": "zeroed-string-pool"
         },
         {
           "unit": "options.c",
-          "symbol": "eog_rom_string_40a9d37ad92ea36d_68",
-          "link_name": "eog_rom_string_40a9d37ad92ea36d_68",
+          "symbol": "eog_rom_string_b23b146a42b03eba_68",
+          "link_name": "eog_rom_string_b23b146a42b03eba_68",
           "bytes": 6,
           "bank": "cdata",
           "source_offset": 196252,
@@ -18212,8 +18212,8 @@
             ]
           ],
           "hash": 1048815200,
-          "pool_section": ".rodata.native_menu_option_text.part.0.str1.4",
-          "pool_destination": ".data.eog_rom_strings_40a9d37ad92ea36d",
+          "pool_section": ".rodata.native_menu_option_text.str1.4",
+          "pool_destination": ".data.eog_rom_strings_b23b146a42b03eba",
           "pool_offset": 104,
           "storage": "zeroed-string-pool"
         }
@@ -18267,13 +18267,13 @@
       "unit": "options.c",
       "section": ".rodata.str1.4",
       "destination": ".data.eog_rom_strings_e9a9d8b2d00906ec",
-      "bytes": 2422,
-      "sha256": "219db40cbbcea8da97163fdf61f0b005eca8834d28b2cee783aec5f054525f78",
+      "bytes": 2498,
+      "sha256": "83767d070fbd5d282df51f6f103b672e74963dc09f3d22492e6a8c95e0813746",
       "rows": [
         {
           "unit": "options.c",
-          "symbol": "eog_rom_string_e9a9d8b2d00906ec_2b4",
-          "link_name": "eog_rom_string_e9a9d8b2d00906ec_2b4",
+          "symbol": "eog_rom_string_e9a9d8b2d00906ec_2d4",
+          "link_name": "eog_rom_string_e9a9d8b2d00906ec_2d4",
           "bytes": 3,
           "bank": "cdata",
           "source_offset": 126588,
@@ -18297,13 +18297,13 @@
           "hash": 1846448950,
           "pool_section": ".rodata.str1.4",
           "pool_destination": ".data.eog_rom_strings_e9a9d8b2d00906ec",
-          "pool_offset": 692,
+          "pool_offset": 724,
           "storage": "zeroed-string-pool"
         },
         {
           "unit": "options.c",
-          "symbol": "eog_rom_string_e9a9d8b2d00906ec_2b8",
-          "link_name": "eog_rom_string_e9a9d8b2d00906ec_2b8",
+          "symbol": "eog_rom_string_e9a9d8b2d00906ec_2d8",
+          "link_name": "eog_rom_string_e9a9d8b2d00906ec_2d8",
           "bytes": 3,
           "bank": "cdata",
           "source_offset": 82952,
@@ -18327,13 +18327,13 @@
           "hash": 2330612647,
           "pool_section": ".rodata.str1.4",
           "pool_destination": ".data.eog_rom_strings_e9a9d8b2d00906ec",
-          "pool_offset": 696,
+          "pool_offset": 728,
           "storage": "zeroed-string-pool"
         },
         {
           "unit": "options.c",
-          "symbol": "eog_rom_string_e9a9d8b2d00906ec_2c0",
-          "link_name": "eog_rom_string_e9a9d8b2d00906ec_2c0",
+          "symbol": "eog_rom_string_e9a9d8b2d00906ec_2e0",
+          "link_name": "eog_rom_string_e9a9d8b2d00906ec_2e0",
           "bytes": 3,
           "bank": "rom",
           "source_offset": 9421462,
@@ -18357,13 +18357,13 @@
           "hash": 3017214158,
           "pool_section": ".rodata.str1.4",
           "pool_destination": ".data.eog_rom_strings_e9a9d8b2d00906ec",
-          "pool_offset": 704,
+          "pool_offset": 736,
           "storage": "zeroed-string-pool"
         },
         {
           "unit": "options.c",
-          "symbol": "eog_rom_string_e9a9d8b2d00906ec_2c4",
-          "link_name": "eog_rom_string_e9a9d8b2d00906ec_2c4",
+          "symbol": "eog_rom_string_e9a9d8b2d00906ec_2e4",
+          "link_name": "eog_rom_string_e9a9d8b2d00906ec_2e4",
           "bytes": 3,
           "bank": "rom",
           "source_offset": 10606643,
@@ -18387,7 +18387,7 @@
           "hash": 277228041,
           "pool_section": ".rodata.str1.4",
           "pool_destination": ".data.eog_rom_strings_e9a9d8b2d00906ec",
-          "pool_offset": 708,
+          "pool_offset": 740,
           "storage": "zeroed-string-pool"
         }
       ]

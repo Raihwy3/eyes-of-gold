@@ -5,6 +5,7 @@ extern void native_motion_calibrate(void) __attribute__((weak));
 extern int native_motion_calibration_status(void) __attribute__((weak));
 extern int native_motion_calibration_progress(void) __attribute__((weak));
 int native_menu_option_value(int row) {
+    if(row==64 || row==65)return native_setting_stick_deadzone(row-64);
     if(row==63)return native_setting_swap_sticks();
     if(row==54)return native_setting_custom_sticks();
     if(row>=55 && row<=60)return native_setting_custom_bind(row-55);
@@ -57,6 +58,7 @@ int native_menu_option_value(int row) {
 }
 void native_menu_option_change(int row,int direction) {
     if(row<0 || row>=NATIVE_MENU_OPTIONS_COUNT)return;
+    if(row==64 || row==65){int v=native_setting_stick_deadzone(row-64)+direction;if(v<0)v=0;if(v>30)v=30;native_setting_set_stick_deadzone(row-64,v);return;}
     if(row==63){native_setting_set_swap_sticks(!native_setting_swap_sticks());return;}
     if(row==54){native_setting_set_custom_sticks((native_setting_custom_sticks()+direction+4)%4);return;}
     if(row>=55 && row<=60){native_setting_set_custom_bind(row-55,(native_setting_custom_bind(row-55)+direction+14)%14);return;}
@@ -113,13 +115,16 @@ void native_menu_option_change(int row,int direction) {
     else native_setting_set_vignette_mode(value);
 }
 const char *native_menu_option_label(int row) {
-    static const char *const labels[]={0,"Music volume\n","Effects volume\n",0,0,0,0,0,0,0,"Aspect ratio\n","Crosshair colour\n","Watch colour\n","Supersampling\n","FPS limit\n","Look horizontal\n","Image filter\n","Vignette\n","Bloom\n","Film grain\n","Watch skin\n","Glass detail\n","LOD strength\n","View distance\n","Vignette when\n","Mixer (restart)\n","Unlock everything\n","Guard LOS (exp)\n","Guard AI rate\n","Gyro look\n","Gyro sensitivity\n","Touch sensitivity\n","Flick stick (exp)\n","Gyro space\n","Local turn axis\n","Calibrate gyro\n","Aim lock\n","Stamina sway\n","Steady scope\n","Aim movement\n","3D strength\n","Gyro filter\n","Look vertical\n","Always crosshair\n","Auto convergence\n","Convergence\n","Pop-out limit\n","HUD depth\n","Crosshair depth\n","Ghost contrast\n","Black floor\n","Crosshair style\n","Crosshair opacity\n","Console watch time\n","1.7 Sticks\n","1.7 Fire\n","1.7 Aim\n","1.7 Action\n","1.7 Weapon\n","1.7 Reload\n","1.7 Crouch\n","1.7 Digital aim\n","1.7 Digital move\n","Swap aim stick\n"};
+    if(row==NATIVE_MENU_GYRO_ENTRY)return "Gyro\n";
+    static const char *const labels[]={0,"Music volume\n","Effects volume\n",0,0,0,0,0,0,0,"Aspect ratio\n","Crosshair colour\n","Watch colour\n","Supersampling\n","FPS limit\n","Look horizontal\n","Image filter\n","Vignette\n","Bloom\n","Film grain\n","Watch skin\n","Glass detail\n","LOD strength\n","View distance\n","Vignette when\n","Mixer (restart)\n","Unlock everything\n","Guard LOS (exp)\n","Guard AI rate\n","Gyro look\n","Gyro sensitivity\n","Touch sensitivity\n","Flick stick (exp)\n","Gyro space\n","Local turn axis\n","Calibrate gyro\n","Aim lock\n","Stamina sway\n","Steady scope\n","Aim movement\n","3D strength\n","Gyro filter\n","Look vertical\n","Always crosshair\n","Auto convergence\n","Convergence\n","Pop-out limit\n","HUD depth\n","Crosshair depth\n","Ghost contrast\n","Black floor\n","Crosshair style\n","Crosshair opacity\n","Console watch time\n","1.7 Sticks\n","1.7 Fire\n","1.7 Aim\n","1.7 Action\n","1.7 Weapon\n","1.7 Reload\n","1.7 Crouch\n","1.7 Digital aim\n","1.7 Digital move\n","Swap aim stick\n","Circle Pad deadzone\n","C-stick deadzone\n"};
     if(row==0)return (const char *)langGet(getStringID(LOPTIONS,OPTION_STR_32_CONTROLSTYLE_LF));
     if(row>=3 && row<=9)return (const char *)langGet(game_options_entries[row-3].text[0]);
     return row>=0 && row<NATIVE_MENU_OPTIONS_COUNT?labels[row]:"\n";
 }
 const char *native_menu_option_text(int row,char *buffer,unsigned size) {
+    if(row==NATIVE_MENU_GYRO_ENTRY)return "";
     if(row<0 || row>=NATIVE_MENU_OPTIONS_COUNT)return "\n";
+    if(row==64 || row==65){snprintf(buffer,size,"%d%%\n",native_setting_stick_deadzone(row-64));return buffer;}
     if(row==63)return native_setting_swap_sticks()?"On\n":"Off\n";
     if(row==54){static const char *const sticks[]={"Pad+C\n","Southpaw\n","Pad Move\n","Pad Look\n"};return sticks[native_setting_custom_sticks()];}
     if(row>=55 && row<=60){static const char *const btns[]={"None\n","A\n","B\n","X\n","Y\n","L\n","R\n","ZL\n","ZR\n","D-Up\n","D-Down\n","D-Left\n","D-Right\n","Select\n"};return btns[native_setting_custom_bind(row-55)];}

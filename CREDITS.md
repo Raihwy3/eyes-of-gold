@@ -59,3 +59,10 @@ and to RT64 contributors and Conker3DSRecomp contributors for the renderer.
 The renderer MIT notice is included in licenses/conker-reticle.txt.
 https://github.com/Raihwy3/perfect-engine-launcher
 https://github.com/Raihwy3/Conker3DSRecomp
+
+HOME Menu banner
+
+The 3D eye and title use mesh-building helpers adapted from ThieviusCTR.
+CGFX conversion uses Floogle’s MIT-licensed pycgfx:
+https://github.com/skyfloogle/pycgfx
+Its license is included as licenses/pycgfx.txt in the install packages.

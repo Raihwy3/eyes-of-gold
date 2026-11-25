@@ -1,7 +1,9 @@
 #ifndef EOG_NATIVE_MENU_OPTIONS_H
 #define EOG_NATIVE_MENU_OPTIONS_H
-#define NATIVE_MENU_OPTIONS_COUNT 64
+#define NATIVE_MENU_OPTIONS_COUNT 66
 #define NATIVE_MENU_CATEGORY_COUNT 10
+#define NATIVE_MENU_GYRO_CATEGORY 10
+#define NATIVE_MENU_GYRO_ENTRY 10009
 int native_menu_category_count(int category);
 int native_menu_category_option(int category,int index);
 const char *native_menu_category_title(int category);

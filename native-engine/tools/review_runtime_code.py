@@ -13,6 +13,8 @@ from review_port_data import normalizer
 from audit_original_data import inventory,anonymous_inventory
 
 POOL_REVIEWS={
+('options.c','.data.eog_rom_strings_765c43c0594fe5df'):'Inspected native Gyro heading followed only by zeroed ROM string storage.',
+('options.c','.data.eog_rom_strings_b23b146a42b03eba'):'Inspected native option values and calibration formats (Original, 5:4, HUD, Dynamic, Free, Gravity, Start, Roll, Yaw, Classic and printf formats); ROM-imported ranges remain zero.',
 ('front.c','.data.eog_rom_strings_0fcbcaa210e4e12a'):'The 39 nonzero UI literals were checked against native_bottom_front.h, native_result_ui.h and the custom Change seed label. Existing ROM-imported ranges remain zero; unchanged from the previous reviewed payload.',
 ('boss.c','.data.eog_rom_strings_df862bba1b3a874d'):'Native boot progress and command-line formatting added by the port.',
 ('boss.c','.data.eog_rom_strings_947e6b9361d4feae'):'Port/native diagnostics, supported-stage error and sampled performance logging.',

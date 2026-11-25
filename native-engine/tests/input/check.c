@@ -22,6 +22,15 @@ extern void inputUpdate(void);
 extern unsigned inputComputePad(int,signed char *,signed char *);
 int main(void) {
  native_settings_init(NULL);
+ native_setting_set_style(8);native_input_init();rx=20;ry=-20;
+ native_setting_set_stick_deadzone(0,30);native_setting_set_stick_deadzone(1,15);inputUpdate();
+ signed char dead_x,dead_y;int move_x,move_y;unsigned dead_actions;
+ inputComputePad(0,&dead_x,&dead_y);native_input_take_motion(&move_x,&move_y,&dead_actions);
+ assert(dead_x==0 && dead_y==0 && move_x>0 && move_y<0);
+ native_setting_set_stick_deadzone(0,0);native_setting_set_stick_deadzone(1,0);inputUpdate();
+ inputComputePad(0,&dead_x,&dead_y);assert(dead_x>0 && dead_y<0);
+ native_setting_set_stick_deadzone(0,8);native_setting_set_stick_deadzone(1,8);rx=ry=0;
+
  for(int style=8;style<=9;style++) {
   native_setting_set_style(style);native_input_init();
   unsigned key=style==8?EOG_A:EOG_DRIGHT;

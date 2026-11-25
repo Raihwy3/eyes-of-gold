@@ -80,8 +80,22 @@ int main(void) {
         assert(native_front_options_blocked());test_now+=1000000;
         int count=native_front_option_count();
         for(int row=0;row<count;row++){
+            int option=native_menu_category_option(category,row);
             native_front_category_action(row,-1);
-            assert(changed_row==native_menu_category_option(category,row) && changed_direction==-1);
+            if(option==NATIVE_MENU_GYRO_ENTRY){
+                assert(native_front_category==0); /* Left must not open a page. */
+                native_front_category_action(row,1);
+                assert(native_front_category==NATIVE_MENU_GYRO_CATEGORY && native_front_state.selected==0);
+                assert(native_front_options_blocked());test_now+=1000000;
+                assert(native_front_option_count()==6);
+                for(int i=0;i<6;i++){
+                    native_front_category_action(i,1);
+                    assert(changed_row==native_menu_category_option(NATIVE_MENU_GYRO_CATEGORY,i) && changed_direction==1);
+                }
+                native_front_options_back();
+                assert(native_front_category==0 && native_front_state.selected==row);
+                assert(native_front_options_blocked());test_now+=1000000;
+            }else assert(changed_row==option && changed_direction==-1);
         }
         native_front_options_back();
         assert(native_front_state.open && native_front_category==-1 && native_front_state.selected==category);
